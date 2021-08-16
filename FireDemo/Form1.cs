@@ -11,16 +11,16 @@ using System.Windows.Forms;
 
 namespace FireDemo
 {
-	struct ColorRange
-	{
-		public ColorRange(Color color, int range)
-		{
-			this.color = color;
-			this.range = range;
-		}
-		public int range;
-		public readonly Color color;
-	}
+	//struct ColorRange
+	//{
+	//	public ColorRange(Color color, int range)
+	//	{
+	//		this.color = color;
+	//		this.range = range;
+	//	}
+	//	public int range;
+	//	public readonly Color color;
+	//}
 
 	public partial class Form1 : Form
 	{
