@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FireDemo
 {
-    class AbstractDynamicSprite
+    class DynamicSprite
     {
     }
 }
