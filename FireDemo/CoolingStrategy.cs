@@ -36,7 +36,9 @@ namespace FireDemo
     class CoolingStrategyMap : CoolingStrategy
     {
         // map random width height rotate shift density min max smoothing iCoolingOffset iFrame
-        int[] coolingMap = null;
+        int[] coolingMap = null; // the map used for the current frame
+        int[] rotatingCoolingMap; // the smoothed version
+        int[] originalCoolingMap; // not yet smoothed
         readonly Random rng;
         int iCoolingOffset = 0;
         int iFrame = 0;
@@ -60,6 +62,10 @@ namespace FireDemo
 
         public void progressOneFrame()
         {
+            // I think I got shift/rotate backwards in the squeak implementation, as in I'm just using the wrong words
+            // C#: shift means calculate an entirely new map, and rotate means move it up one line per frame.
+            // Squeak: rorate means calculate a new line, and shift means move it up one line per frame?
+            // Hmm, not exactly. Rotate does mean recalculate a new map. Shift DOES mean move it up by one line per frame.
             if (this.shift)
             {
                 ++iFrame;
@@ -73,10 +79,37 @@ namespace FireDemo
 
             if (this.rotate && iFrame > height)
             {
-                this.fillCoolingMap(coolingMap, iCoolingOffset + 1, width);
+                // this.fillCoolingMap(coolingMap, iCoolingOffset + 1, width);
+                UpdateRotatingCoolingMap();
             }
         }
 
+        /// <summary>
+        /// Probably should rename this, but creating a new "initialize" method to allow changing the values on the fly
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="bRotate"></param>
+        /// <param name="bShift"></param>
+        /// <param name="nDensity"></param>
+        /// <param name="nMin"></param>
+        /// <param name="nMax"></param>
+        /// <param name="nSmoothing"></param>
+        void SetMapParameters(int w, int h, bool bRotate, bool bShift, int nDensity, int nMin, int nMax, int nSmoothing)
+        {
+            width = w;
+            height = h;
+            rotate = bRotate;
+            shift = bShift;
+            density = nDensity;
+            min = nMin;
+            max = nMax;
+            smoothing = nSmoothing;
+
+            InitializeCoolingMap();
+        }
+
+#if false // safe to delete once verified the remaining code works
         void initializeCoolingMap(int w, int h, bool bRotate, bool bShift, int nDensity, int nMin, int nMax, int nSmoothing)
         {
             width = w;
@@ -101,10 +134,10 @@ namespace FireDemo
         {
             for (int i = start; i < end; ++i)
             {
-                coolingMap[i] = 0;
-
-                if (rng.Next(100) < this.density)
+                if (this.density > rng.Next(100))
                     coolingMap[i] = min + rng.Next(max - min + 1) - 1;
+                else
+                    coolingMap[i] = 0;
     		}
         }
 
@@ -126,6 +159,7 @@ namespace FireDemo
 
             destMap = null;
         }
+#endif
 
         private void SmoothCoolingMap(ref int[] sourceMap, ref int[] destinationMap)
         {
@@ -234,5 +268,103 @@ namespace FireDemo
             destinationMap[width * height - width] = (p5 + p2 + p4 + p6 + p9) / 5; // bottom left
             destinationMap[width * height - 1] = (p4 + p1 + p3 + p5 + p8) / 5; // bottom right
         }
+
+
+#region Cooling Map
+
+        private void FillCoolingMap(int[] theMap, int start, int end)
+        {
+            for (int i = start; i < end; ++i)
+            {
+                if (this.density > rng.Next(100))
+                    theMap[i] = rng.Next(this.min, this.max + 1);
+                else
+                    theMap[i] = 0;
+            }
+        }
+        private void UpdateRotatingCoolingMap()
+        {
+            int fireSize = height * width;
+            int rotatingCoolingMapSize = fireSize * 2;
+            if (originalCoolingMap == null || originalCoolingMap.Length != rotatingCoolingMapSize
+                || rotatingCoolingMap == null || rotatingCoolingMap.Length != rotatingCoolingMapSize
+                || coolingMap == null || coolingMap.Length != fireSize)
+            {
+                originalCoolingMap = new int[rotatingCoolingMapSize];
+                rotatingCoolingMap = new int[rotatingCoolingMapSize];
+                coolingMap = new int[fireSize];
+                FillCoolingMap(originalCoolingMap, 0, rotatingCoolingMapSize);
+            }
+            else
+            {
+                for (int ii = 0; ii < fireSize; ++ii)
+                {
+                    originalCoolingMap[ii] = originalCoolingMap[ii + fireSize];
+                }
+                FillCoolingMap(originalCoolingMap, fireSize, rotatingCoolingMapSize);
+            }
+
+            if (this.smoothing == 0)
+            {
+                for (int ii = 0; ii < coolingMap.Length; ++ii)
+                {
+                    coolingMap[ii] = originalCoolingMap[ii];
+                }
+                return;
+            }
+            else
+            {
+                SmoothCoolingMap(ref originalCoolingMap, ref rotatingCoolingMap);
+            }
+
+            if (this.smoothing > 1)
+            {
+                SmoothCoolingMapDoubleBuffer(ref rotatingCoolingMap, this.smoothing - 1);
+            }
+
+            // TODO: JRDV: Optimize.  For now, just copy over the bits
+            for (int ii = 0; ii < coolingMap.Length; ++ii)
+            {
+                coolingMap[ii] = rotatingCoolingMap[ii];
+            }
+        }
+
+        // TODO: JRDV: Shift cooling map each frame?  Make the cooling map accessible via the UI.
+        private void InitializeCoolingMap()
+        {
+            if (rotate && coolingMap != null)
+                return;
+
+            int size = height * width;
+            if (coolingMap == null || coolingMap.Length != size)
+                coolingMap = new int[size];
+
+            FillCoolingMap(coolingMap, 0, size);
+
+            SmoothCoolingMapDoubleBuffer(this.smoothing);
+        }
+
+        private void SmoothCoolingMapDoubleBuffer(ref int[] source, int cIterations)
+        {
+            int[] destinationMap = new int[source.Length];
+            for (int i = 0; i < cIterations; ++i)
+            {
+                int[] swapMap;
+                SmoothCoolingMap(ref source, ref destinationMap);
+                swapMap = source;
+                source = destinationMap;
+                destinationMap = swapMap;
+                swapMap = null;
+            }
+            destinationMap = null;
+        }
+        private void SmoothCoolingMapDoubleBuffer(int cIterations)
+        {
+            SmoothCoolingMapDoubleBuffer(ref coolingMap, cIterations);
+        }
+
+#endregion
+
+
     }
 }

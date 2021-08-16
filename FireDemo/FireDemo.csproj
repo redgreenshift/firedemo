@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractDynamicSprite.cs" />
+    <Compile Include="BitCanvas.cs" />
     <Compile Include="ColorRange.cs" />
     <Compile Include="CoolingStrategy.cs" />
     <Compile Include="Form1.cs">
