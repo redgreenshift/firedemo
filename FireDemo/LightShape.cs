@@ -13,7 +13,7 @@ namespace FireDemo
         /// Render this shape to a canvas
         /// </summary>
         /// <param name="bc"></param>
-        void DrawOn(BitCanvas bc);
+        void DrawOn(IBitCanvas bc);
     }
 
     abstract class LightShapeBase : ILightShape
@@ -30,17 +30,17 @@ namespace FireDemo
         {
             this.pen = pen;
         }
-        abstract public void DrawOn(BitCanvas bc);
+        abstract public void DrawOn(IBitCanvas bc);
         #endregion // LightShape implementation
 
         #region Internal Drawing Methods
-        protected void DrawPixel(int x, int y, BitCanvas bc)
+        protected void DrawPixel(int x, int y, IBitCanvas bc)
         {
             if (pen.FShouldDrawNext())
                 bc.Put(x, y, pen.NextValue());
         }
 
-        protected void DrawCircle(int xCenter, int yCenter, int radius, BitCanvas bc)
+        protected void DrawCircle(int xCenter, int yCenter, int radius, IBitCanvas bc)
         {
             // "draw a circle from source to destination using the pen"
 
@@ -65,7 +65,7 @@ namespace FireDemo
             }
         }
 
-        protected void DrawLine(int x0, int y0, int x1, int y1, BitCanvas bc)
+        protected void DrawLine(int x0, int y0, int x1, int y1, IBitCanvas bc)
         {
             // "draw a line from source to destination using the pen"
 
@@ -135,16 +135,65 @@ namespace FireDemo
 
     class LightShapeCandle : LightShapeBase
     {
-        override public void DrawOn(BitCanvas bc)
+        override public void DrawOn(IBitCanvas bc)
         {
             // "Draw the seed coal values for a candle flame"
-
             // "Set the next row of random coals to keep the fire going."
-
-            int width, height;
-            width = bc.Width;
-            height = bc.Height;
+            int width = bc.Width;
+            int height = bc.Height;
             this.DrawLine(0, height - 1, width - 1, height - 1, bc);
         }
     }
+
+    class LightShapeBatman : LightShapeBase
+    {
+        override public void DrawOn(IBitCanvas bc)
+        {
+            // "Draw the seed coal values for a candle flame"
+            // "Set the next row of random coals to keep the fire going."
+            int width = bc.Width;
+            int height = bc.Height;
+            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+        }
+    }
+
+    class LightShapeLightning : LightShapeBase
+    {
+        override public void DrawOn(IBitCanvas bc)
+        {
+            // "Draw the seed coal values for a candle flame"
+            // "Set the next row of random coals to keep the fire going."
+            int width = bc.Width;
+            int height = bc.Height;
+            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+        }
+    }
+
+    // TODO: JRDV: Should I put all Borg stuff in the same file? Move the file structure to align the pieces together?
+    // NO! I think maybe it's better to keep the hierarchy together, not bundling across hierarchies
+    #region Borg Light Drawing
+    class LightShapeBorgPlasma : LightShapeLightning
+    {
+        override public void DrawOn(IBitCanvas bc)
+        {
+            // "Draw the seed coal values for a candle flame"
+            // "Set the next row of random coals to keep the fire going."
+            int width = bc.Width;
+            int height = bc.Height;
+            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+        }
+    }
+
+    class LightShapeBorgRing : LightShapeBase
+    {
+        override public void DrawOn(IBitCanvas bc)
+        {
+            // "Draw the seed coal values for a candle flame"
+            // "Set the next row of random coals to keep the fire going."
+            int width = bc.Width;
+            int height = bc.Height;
+            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+        }
+    }
+    #endregion // Borg Light Drawing
 }

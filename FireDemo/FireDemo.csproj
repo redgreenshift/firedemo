@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractDynamicSprite.cs" />
+    <Compile Include="DynamicSprite.cs" />
     <Compile Include="BitCanvas.cs" />
     <Compile Include="ColorRange.cs" />
     <Compile Include="CoolingStrategy.cs" />

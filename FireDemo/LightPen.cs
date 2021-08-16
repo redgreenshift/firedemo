@@ -5,7 +5,12 @@ using System.Text;
 
 namespace FireDemo
 {
-    class LightPen
+    interface ILightPen
+    {
+        int NextValue();
+        bool FShouldDrawNext();
+    }
+    class LightPen : ILightPen
     {
         readonly Random rng;
         readonly float percentFill;

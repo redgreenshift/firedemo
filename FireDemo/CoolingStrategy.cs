@@ -5,13 +5,13 @@ using System.Text;
 
 namespace FireDemo
 {
-    interface CoolingStrategy
+    interface ICoolingStrategy
     {
         int at(int x, int y);
         void progressOneFrame();
     }
 
-    class CoolingStrategyConst : CoolingStrategy
+    class CoolingStrategyConst : ICoolingStrategy
     {
         private readonly int coolingFactor;
         CoolingStrategyConst(int value)
@@ -33,7 +33,7 @@ namespace FireDemo
         public void progressOneFrame() { /* do nothing*/ }
     };
 
-    class CoolingStrategyMap : CoolingStrategy
+    class CoolingStrategyMap : ICoolingStrategy
     {
         // map random width height rotate shift density min max smoothing iCoolingOffset iFrame
         int[] coolingMap = null; // the map used for the current frame

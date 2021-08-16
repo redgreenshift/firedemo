@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FireDemo
 {
-    interface BitCanvas
+    interface IBitCanvas
     {
         int Width { get; }
         int Height { get; }
@@ -13,14 +13,14 @@ namespace FireDemo
         void Put(int x, int y, int val);
     }
 
-    class BitCanvas8Bit : BitCanvas
+    class BitCanvas8Bit : IBitCanvas
     {
         public int Width { get; }
         public int Height { get; }
         int[] intensityMatrixFront;
         int[] intensityMatrixBackBuffer;
 
-        BitCanvas8Bit(int w, int h)
+        public BitCanvas8Bit(int w, int h)
         {
             Width = w;
             Height = h;
