@@ -7,7 +7,7 @@ namespace FireDemo
 {
     interface ILightShape
     {
-        void SetPen(LightPen pen);
+        void SetPen(ILightPen pen);
 
         /// <summary>
         /// Render this shape to a canvas
@@ -18,7 +18,7 @@ namespace FireDemo
 
     abstract class LightShapeBase : ILightShape
     {
-        LightPen pen;
+        ILightPen pen;
 
         public LightShapeBase()
         {
@@ -26,7 +26,7 @@ namespace FireDemo
         }
 
         #region LightShape implementation
-        public void SetPen(LightPen pen)
+        public void SetPen(ILightPen pen)
         {
             this.pen = pen;
         }
@@ -141,7 +141,7 @@ namespace FireDemo
             // "Set the next row of random coals to keep the fire going."
             int width = bc.Width;
             int height = bc.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+            this.DrawLine(0, height - 1, width - 1, height - 1, bc); // TODO: JRDV: Unsure Why I had to subtract 2?!
         }
     }
 

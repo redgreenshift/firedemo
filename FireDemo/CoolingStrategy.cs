@@ -14,7 +14,7 @@ namespace FireDemo
     class CoolingStrategyConst : ICoolingStrategy
     {
         private readonly int coolingFactor;
-        CoolingStrategyConst(int value)
+        public CoolingStrategyConst(int value)
         {
             this.coolingFactor = value;
         }
@@ -36,9 +36,9 @@ namespace FireDemo
     class CoolingStrategyMap : ICoolingStrategy
     {
         // map random width height rotate shift density min max smoothing iCoolingOffset iFrame
-        int[] coolingMap = null; // the map used for the current frame
-        int[] rotatingCoolingMap; // the smoothed version
-        int[] originalCoolingMap; // not yet smoothed
+        int[] coolingMap = null; // the map used for the current frame (always the truth)
+        int[] rotatingCoolingMap; // the smoothed version (calculation scratch space to generate the values to fill into coolingMap)
+        int[] originalCoolingMap; // not yet smoothed (additional scratch space)
         readonly Random rng;
         int iCoolingOffset = 0;
         int iFrame = 0;
@@ -50,14 +50,16 @@ namespace FireDemo
         int min;
         int max;
         int smoothing;
-        CoolingStrategyMap()
+        public CoolingStrategyMap()
         {
             rng = new Random();
         }
 
         public int at(int x, int y)
         {
-            return 1;
+            int i = (y * width + x + iCoolingOffset) % (width * height);
+            return coolingMap[i];
+            //rotatingCoolingMap;
         }
 
         public void progressOneFrame()
@@ -95,7 +97,7 @@ namespace FireDemo
         /// <param name="nMin"></param>
         /// <param name="nMax"></param>
         /// <param name="nSmoothing"></param>
-        void SetMapParameters(int w, int h, bool bRotate, bool bShift, int nDensity, int nMin, int nMax, int nSmoothing)
+        public void SetMapParameters(int w, int h, bool bRotate, bool bShift, int nDensity, int nMin, int nMax, int nSmoothing)
         {
             width = w;
             height = h;

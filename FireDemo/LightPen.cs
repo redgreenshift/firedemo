@@ -20,11 +20,21 @@ namespace FireDemo
 
         public LightPen()
         {
+            //LightPen(1.0f, 0, 255, false);
             rng = new Random();
             percentFill = 1.0f;
             minIntensity = 0;
             maxIntensity = 255;
             useFullRange = false;
+        }
+
+        public LightPen(float fill, int min, int max, bool bUseFullRange)
+        {
+            rng = new Random();
+            percentFill = fill;
+            minIntensity = min;
+            maxIntensity = max;
+            useFullRange = bUseFullRange;
         }
 
         public int NextValue()

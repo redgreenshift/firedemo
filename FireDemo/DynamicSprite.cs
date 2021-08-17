@@ -12,19 +12,24 @@ namespace FireDemo
         protected Color[] thePalette;
         public int height;
         public int width;
-        protected int magnification;
+        public int magnification;
         public Point Position { get; set; }
 
-        void Initialize(int w, int h)
+        public virtual void Initialize(int width, int height, int magnification)
         {
             Position = new Point(0, 0);
-            magnification = 1;
-            width = w;
-            height = h;
+            this.magnification = magnification;
+            this.width = width;
+            this.height = height;
             //front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
             front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             // TODO: JRDV: How do I set the palette? How did I do it in the main program?I just used 32bit. No need to use palette inside the bitmap
             thePalette = PaletteGenerator.GetRealPalette();
+        }
+
+        public void SetPalette(Color[] pal)
+        {
+            thePalette = pal;
         }
 
         public abstract void RenderOneFrameToScreen(Graphics graph);
@@ -47,6 +52,18 @@ namespace FireDemo
         public AbstractRealtimeLightEffect()
         {
             rng = new Random();
+            Initialize(10, 10, 1); // TODO: JRDV: I think I want to delete this. The caller MUST specify the size before use!!
+        }
+
+        public override void Initialize(int width, int height, int magnification)
+        {
+            base.Initialize(width, height, magnification);
+            // TODO: JRDV: How do I call super class method implemetation? How do I call other constructors???
+            // OVERRIDE INITIALIZE and call super???
+            OnSize();
+        }
+        public void OnSize()
+        {
             intensityMatrix = new BitCanvas8Bit(width, height);
         }
 
@@ -88,10 +105,10 @@ namespace FireDemo
         {
             //"
             //{ For flame effect scroll through every pixel and  }
-            //            { choose some other pixels around it. Divide by    }
-            //            { the ammount of pixels you added up and then      }
-            //            { subtract a decay ammount.                        }
-            //            "
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+            //"
 
 
             //" Average these pixels:
@@ -102,7 +119,7 @@ namespace FireDemo
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
             //"I get an out of bounds error when calculating the edge.  need to do outside the loop"
-            for (int y = 2; y < height - 2; ++y)
+            for (int y = 2; y < height - 1; ++y)
             {
                 //3 to: (height - 1) do: [:y |
                 p2 = intensityMatrix.Get(1, y + 1);
