@@ -34,12 +34,152 @@ namespace FireDemo
 
         public abstract void RenderOneFrameToScreen(Graphics graph);
 
-        public void displayToScreen(Graphics graph)
+        public void DisplayToScreen(Graphics graph)
         {
-            // TODO: Bicubic intrpolation??
-            //graph.DrawImage(this.bmToDraw, this.drawingX, this.drawingY, this.drawnWidth, this.drawnHeight);
-            graph.DrawImage(front, Location.X, Location.Y, width * magnification, height * magnification);
+            bool fInterpolate = true;
+            if (fInterpolate && magnification > 1)
+            {
+                DisplayToScreenInterpolated(graph);
+            }
+            else
+            {
+                graph.DrawImage(front, Location.X, Location.Y, width * magnification, height * magnification);
+            }
         }
+
+        // Bicubic interpolation was a fun experiment, and it does look a little better,
+        // but it's WAY too slow for what I want to do. I doubt I could optimize it enough
+        // given the benefits are not as great as I had hoped.
+        #region EXPERIMENTAL Bicubic Interpolation is too slow
+        private void DisplayToScreenInterpolated(Graphics graph)
+        {
+            // Bicubic interpolation?? Would like to improve the graphics quality
+            //graph.DrawImage(this.bmToDraw, this.drawingX, this.drawingY, this.drawnWidth, this.drawnHeight);
+            if (magnification > 1)
+            {
+                int finalWidth = width * magnification;
+                int finalHeight = height * magnification;
+                Bitmap bmToShow = new Bitmap(finalWidth, finalHeight, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                for (int y = 0; y < finalHeight; ++y)
+                {
+                    for (int x = 0; x < finalWidth; ++x)
+                    {
+                        float u = (float)(x) / finalWidth;
+                        float v = (float)(y) / finalHeight;
+                        Color color = BicubicInterpolate(u, v);
+                        bmToShow.SetPixel(x, y, color);
+                    }
+                }
+
+                graph.DrawImage(bmToShow, Location.X, Location.Y, width * magnification, height * magnification);
+            }
+            else
+            {
+                graph.DrawImage(front, Location.X, Location.Y, width * magnification, height * magnification);
+            }
+        }
+
+        private float CubicPolate(float v0, float v1, float v2, float v3, float fracty)
+        {
+            float A = (v3 - v2) - (v0 - v1);
+            float B = (v0 - v1) - A;
+            float C = v2 - v0;
+            float D = v1;
+
+            //return (float)(A * Math.Pow(fracty, 3) + B * Math.Pow(fracty, 2) + C * fracty + D);
+            return D + fracty * (C + fracty * (B + fracty * A));
+        }
+
+        private float CubicPolate(byte v0, byte v1, byte v2, byte v3, float fracty)
+        {
+            float f0 = v0 / 255.0f;
+            float f1 = v1 / 255.0f;
+            float f2 = v2 / 255.0f;
+            float f3 = v3 / 255.0f;
+
+            float result = CubicPolate(f0, f1, f2, f3, fracty);
+
+            return result;
+        }
+
+        private Color GetPixelInternal(int x, int y)
+        {
+            if (x < 0)
+                x = 0;
+            if (x >= width)
+                x = width - 1;
+            if (y < 0)
+                y = 0;
+            if (y >= height)
+                y = height - 1;
+            return this.front.GetPixel(x, y);
+        }
+
+        byte ConvertFloatToByte(float f)
+        {
+            if (f < 0.0f)
+                f = 0.0f;
+            else if (f > 1.0f)
+                f = 1.0f;
+
+            return (byte)(f * 255.0f);
+        }
+        private Color BicubicInterpolate(float u, float v)
+        {
+            float x = (u * this.width) - 0.5f;
+            int xint = (int)(x);
+            float fractx = (float)(x - Math.Floor(x));
+
+            float y = (v * this.height) - 0.5f;
+            int yint = (int)(y);
+            float fracty = (float)(y - Math.Floor(y));
+
+            // 1st row
+            Color p00 = GetPixelInternal(xint - 1, yint - 1);
+            Color p10 = GetPixelInternal(xint + 0, yint - 1);
+            Color p20 = GetPixelInternal(xint + 1, yint - 1);
+            Color p30 = GetPixelInternal(xint + 2, yint - 1);
+
+            // 2nd row
+            Color p01 = GetPixelInternal(xint - 1, yint + 0);
+            Color p11 = GetPixelInternal(xint + 0, yint + 0);
+            Color p21 = GetPixelInternal(xint + 1, yint + 0);
+            Color p31 = GetPixelInternal(xint + 2, yint + 0);
+
+            // 3rd row
+            Color p02 = GetPixelInternal(xint - 1, yint + 1);
+            Color p12 = GetPixelInternal(xint + 0, yint + 1);
+            Color p22 = GetPixelInternal(xint + 1, yint + 1);
+            Color p32 = GetPixelInternal(xint + 2, yint + 1);
+
+            // 4th row
+            Color p03 = GetPixelInternal(xint - 1, yint + 2);
+            Color p13 = GetPixelInternal(xint + 0, yint + 2);
+            Color p23 = GetPixelInternal(xint + 1, yint + 2);
+            Color p33 = GetPixelInternal(xint + 2, yint + 2);
+
+            float x1 = CubicPolate(p00.R, p10.R, p20.R, p30.R, fractx);
+            float x2 = CubicPolate(p01.R, p11.R, p21.R, p31.R, fractx);
+            float x3 = CubicPolate(p02.R, p12.R, p22.R, p32.R, fractx);
+            float x4 = CubicPolate(p03.R, p13.R, p23.R, p33.R, fractx);
+
+            float R = CubicPolate(x1, x2, x3, x4, fracty);
+
+            x1 = CubicPolate(p00.G, p10.G, p20.G, p30.G, fractx);
+            x2 = CubicPolate(p01.G, p11.G, p21.G, p31.G, fractx);
+            x3 = CubicPolate(p02.G, p12.G, p22.G, p32.G, fractx);
+            x4 = CubicPolate(p03.G, p13.G, p23.G, p33.G, fractx);
+            float G = CubicPolate(x1, x2, x3, x4, fracty);
+
+            x1 = CubicPolate(p00.B, p10.B, p20.B, p30.B, fractx);
+            x2 = CubicPolate(p01.B, p11.B, p21.B, p31.B, fractx);
+            x3 = CubicPolate(p02.B, p12.B, p22.B, p32.B, fractx);
+            x4 = CubicPolate(p03.B, p13.B, p23.B, p33.B, fractx);
+            float B = CubicPolate(x1, x2, x3, x4, fracty);
+
+            return Color.FromArgb(ConvertFloatToByte(R), ConvertFloatToByte(G), ConvertFloatToByte(B));
+        }
+        #endregion
     }
 
     abstract class AbstractRealtimeLightEffect : AbstractDynamicSprite
@@ -71,7 +211,7 @@ namespace FireDemo
         {
             this.renderStage1SeedShapes();
             this.RenderStage2And3();
-            this.displayToScreen(graph);
+            this.DisplayToScreen(graph);
             coolingStrategy.progressOneFrame();
         }
 
