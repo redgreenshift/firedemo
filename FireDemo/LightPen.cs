@@ -13,19 +13,29 @@ namespace FireDemo
     class LightPen : ILightPen
     {
         readonly Random rng;
+        /// <summary>
+        /// Range of 0.0 to 1.0 for probability a given pixel will be drawn on average
+        /// </summary>
         readonly float percentFill;
+
+        /// <summary>
+        /// Range of 0 to 255 for the minimum value to draw
+        /// </summary>
         readonly int minIntensity;
+
+        /// <summary>
+        /// Range of 0 to 255 for the maximum value to draw
+        /// </summary>
         readonly int maxIntensity;
+
+        /// <summary>
+        ///  True if any value between min and max are allowed.
+        ///  False if ONLY the min and max values should be used.
+        /// </summary>
         readonly bool useFullRange;
 
-        public LightPen()
+        public LightPen() : this(fill: 1.0f, min: 0, max: 255, bUseFullRange: false)
         {
-            //LightPen(1.0f, 0, 255, false);
-            rng = new Random();
-            percentFill = 1.0f;
-            minIntensity = 0;
-            maxIntensity = 255;
-            useFullRange = false;
         }
 
         public LightPen(float fill, int min, int max, bool bUseFullRange)
@@ -37,10 +47,12 @@ namespace FireDemo
             useFullRange = bUseFullRange;
         }
 
+        /// <summary>
+        /// return a random value between the min and max intensity
+        /// </summary>
+        /// <returns></returns>
         public int NextValue()
         {
-            // "return a random value between the min and max intensity"
-
             if (useFullRange)
                 return rng.Next(minIntensity, maxIntensity);
             else if (rng.NextDouble() < 0.5)
@@ -49,10 +61,12 @@ namespace FireDemo
                 return maxIntensity;
         }
 
+        /// <summary>
+        /// return a boolean value indicating whether or not a new value shoudl be drawn
+        /// </summary>
+        /// <returns></returns>
         public bool FShouldDrawNext()
         {
-            // "return a boolean value indicating whether or not a new value shoudl be drawn"
-
             return rng.NextDouble() < percentFill;
         }
     }
