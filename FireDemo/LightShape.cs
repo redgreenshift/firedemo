@@ -141,7 +141,7 @@ namespace FireDemo
             // "Set the next row of random coals to keep the fire going."
             int width = bc.Width;
             int height = bc.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, bc); // TODO: JRDV: Unsure Why I had to subtract 2?!
+            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
         }
     }
 
