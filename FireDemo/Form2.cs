@@ -88,18 +88,7 @@ namespace FireDemo
                 //if (rotateCoolingMapCheckBox.Checked)
                 //    UpdateRotatingCoolingMap();
 
-                //Bitmap bmEmpty = new Bitmap(fireWidth, fireHeight, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-
-                //for (int xx = 0; xx < fireWidth; ++xx)
-                //    for (int yy = 0; yy < fireHeight; ++yy)
-                //    {
-                //        bmEmpty.SetPixel(xx, yy, Color.Black);
-                //    }
-
-                //Bitmap bmEmpty = new Bitmap(this.Width, this.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                //m_graph.DrawImage(bmEmpty, 0, 0, this.Width, this.Height);
                 this.BackColor = Color.Black;
-
                 buttonDemo.Text = "Stop!";
                 timer1.Interval = (int)(1000 / m_framesPerSecond);
                 timer1.Enabled = true;
@@ -108,14 +97,8 @@ namespace FireDemo
             {
                 timer1.Enabled = false;
                 buttonDemo.Text = "Start!";
+                this.BackColor = Color.DarkGray;
             }
-
-            // Now loop and render?
-            //for (int yyy = 0; yyy < 500; ++yyy)
-            //{
-            //    dbCandle.RenderOneFrameToScreen(m_graph);
-            //    graph.DrawImage(bmEmpty, left, top, maxWidth * magnification, maxHeight * magnification);
-            //}
         }
 
         private void timer1_Tick(object sender, EventArgs e)
