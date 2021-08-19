@@ -13,7 +13,7 @@ namespace FireDemo
     {
         Graphics m_graph;
         Color[] m_palette;
-        ICoolingStrategy m_coolingStrategy;
+        CoolingStrategyMap m_coolingStrategy;
         ILightPen m_lightPen;
         ILightShape m_lightShape;
         AbstractDynamicSprite m_dbSprite;
@@ -48,13 +48,12 @@ namespace FireDemo
 
             Color[] palCandle = PaletteGenerator.GetRealPalette();
 
-            ICoolingStrategy coolingStrategy = new CoolingStrategyMap();
-            //coolingStrategy = new CoolingStrategyConst(2); // JRDV: Temporary just to get this refactor working!
-            CoolingStrategyMap coolingStrategyMap = new CoolingStrategyMap();
-            coolingStrategyMap.SetMapParameters(fireWidth, fireHeight,
+            ICoolingStrategy coolingStrategy;
+            m_coolingStrategy = new CoolingStrategyMap();
+            m_coolingStrategy.SetMapParameters(fireWidth, fireHeight,
                 bRotate: true, bShift: true,
                 nDensity: 40, nMin: 5, nMax: 13, nSmoothing: 5);
-            coolingStrategy = coolingStrategyMap;
+            coolingStrategy = m_coolingStrategy;
 
             ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, bUseFullRange: true);
             ILightShape lsCandle = new LightShapeCandle();
@@ -62,8 +61,8 @@ namespace FireDemo
 
             //AbstractDynamicSprite
             AbstractRealtimeLightEffect dbCandle = new RealtimeCandleflame();
-            //m_genericFlame = new GenericRealtimeFlame();
-            //dbCandle = m_genericFlame;
+            m_genericFlame = new GenericRealtimeFlame();
+            dbCandle = m_genericFlame;
             dbCandle.Initialize(fireWidth, fireHeight, magnification);
             dbCandle.SetCoolingStrategy(coolingStrategy);
             dbCandle.SetPalette(palCandle);
@@ -72,7 +71,6 @@ namespace FireDemo
             top = (this.Height - fireHeight * magnification) / 2;
             dbCandle.Location = new Point(x: left, y: top);
 
-            m_coolingStrategy = coolingStrategy;
             m_palette = palCandle;
             m_lightPen = lpCandle;
             m_lightShape = lsCandle;
@@ -110,21 +108,30 @@ namespace FireDemo
             //}
 
             // Draw the frame once per tick.
-            // Select 32bit vs pallete color algorithm... and flame decay, intensity, color, etc...
             m_dbSprite.RenderOneFrameToScreen(m_graph);
         }
 
+
+        bool m_largerFlame = false;
+        /// <summary>
+        /// Just a proof-of-concept that I can still change things on the fly, even in the refactored form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonChange_Click(object sender, EventArgs e)
         {
-            int len = m_palette.Length;
-            for (int i = 0; i < len / 2; ++i)
-            {
-                Color temp = m_palette[i];
-                m_palette[i] = m_palette[len - i - 1];
-                m_palette[len - i - 1] = temp;
-            }
-            //m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-            //m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true, f8: true);
+            //int len = m_palette.Length;
+            //for (int i = 0; i < len / 2; ++i)
+            //{
+            //    Color temp = m_palette[i];
+            //    m_palette[i] = m_palette[len - i - 1];
+            //    m_palette[len - i - 1] = temp;
+            //}
+            m_largerFlame = !m_largerFlame;
+            if (m_largerFlame)
+                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+            else
+                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true, f8: true);
         }
     }
 }
