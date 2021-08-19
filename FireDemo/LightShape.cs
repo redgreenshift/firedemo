@@ -10,7 +10,7 @@ namespace FireDemo
         void SetPen(ILightPen pen);
 
         /// <summary>
-        /// Render this shape to a canvas
+        /// Render this seed shape to a canvas
         /// </summary>
         /// <param name="bc"></param>
         void DrawOn(IBitCanvas bc);

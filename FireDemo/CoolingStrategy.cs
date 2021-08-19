@@ -33,8 +33,6 @@ namespace FireDemo
         public void progressOneFrame() { /* do nothing*/ }
     };
 
-    // SIGH: figured it out. The lightPen intensity was set to 200/255, and the original demo starts with 54/255 and *that* is why it had more fluctuation!
-    // At least I now have unit tests!
     public class CoolingStrategyMap : ICoolingStrategy
     {
         // map random width height rotate shift density min max smoothing iCoolingOffset iFrame
