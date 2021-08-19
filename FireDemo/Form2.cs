@@ -56,7 +56,7 @@ namespace FireDemo
                 nDensity: 40, nMin: 5, nMax: 13, nSmoothing: 5);
             coolingStrategy = coolingStrategyMap;
 
-            ILightPen lpCandle = new LightPen(fill: 1.0f, min: 200, max: 255, bUseFullRange: true);
+            ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, bUseFullRange: true);
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 

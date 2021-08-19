@@ -33,10 +33,6 @@ namespace FireDemo
         public void progressOneFrame() { /* do nothing*/ }
     };
 
-    // This does NOT work as well as the original.
-    //  I think this is one of the next things I need to fix before porting too many more things.
-    // But it's shifting and rotating correctly (verify rotation!) so I'm not sure why it doesn't look quite as natural...
-    // Must be the calculation! I suspect the density
     // SIGH: figured it out. The lightPen intensity was set to 200/255, and the original demo starts with 54/255 and *that* is why it had more fluctuation!
     // At least I now have unit tests!
     public class CoolingStrategyMap : ICoolingStrategy
