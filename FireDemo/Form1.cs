@@ -246,6 +246,7 @@ namespace FireDemo
 				originalCoolingMap = new int[rotatingCoolingMapSize];
 				rotatingCoolingMap = new int[rotatingCoolingMapSize];
 				coolingMap = new int[fireSize];
+				//rng = new Random(1); // Revert this!!! Just generating the test data for unit tests
 				FillCoolingMap(originalCoolingMap, 0, rotatingCoolingMapSize);
 			}
 			else
@@ -279,6 +280,18 @@ namespace FireDemo
 			{
 				coolingMap[ii] = rotatingCoolingMap[ii];
 			}
+
+			//// Revert this!!! Just generating the test data for unit tests
+			//string result = "int[] expectedCoolingMap = { ";
+			//for (int ii = 0; ii < coolingMap.Length; ++ii)
+			//{
+			//    result += string.Format(" {0},", coolingMap[ii]);
+			//}
+
+			//result = result.Substring(0, result.Length - 1);
+			//result += "};";
+
+			//string final = result;
 		}
 
 		// TODO: JRDV: Shift cooling map each frame?  Make the cooling map accessible via the UI.
@@ -1063,6 +1076,17 @@ namespace FireDemo
 			m_fOverrideEnabledForSpecialFlame = true;
 
 			SetPaleteFromColorRange(colorRangeBlueWhiteOrangeRed_WithIntensity_Modified);
+
+			// Revert this! Just generating the test data for unit tests
+			//string result = "Color[] theRealPalette = { ";
+			//foreach (Color c in thePalette)
+			//{
+			//	result += string.Format("Color.FromArgb({0}, {1}, {2}), ", c.R, c.G, c.B);
+			//}
+			//result = result.Substring(0, result.Length - 1);
+			//result += "};";
+
+			//string final = result;
 		}
 
 		private void InitializeRealisticFlameOld()
