@@ -33,7 +33,7 @@ namespace FireDemo
         public void progressOneFrame() { /* do nothing*/ }
     };
 
-    class CoolingStrategyMap : ICoolingStrategy
+    public class CoolingStrategyMap : ICoolingStrategy
     {
         // map random width height rotate shift density min max smoothing iCoolingOffset iFrame
         int[] coolingMap = null; // the map used for the current frame (always the truth)
@@ -45,14 +45,27 @@ namespace FireDemo
         int width;
         int height;
         int density;
+
+        /// <summary>
+        /// Move the map up one row per frame to give the appearance of rising air currents.
+        /// </summary>
         bool shift = false;
+
+        /// <summary>
+        /// Periodically generate an entirely new map, so the flame doesn't look like a video on repeat.
+        /// </summary>
         bool rotate = false;
+
         int min;
         int max;
         int smoothing;
-        public CoolingStrategyMap()
+        public CoolingStrategyMap() : this(new Random())
         {
-            rng = new Random();
+        }
+
+        public CoolingStrategyMap(Random rng)
+        {
+            this.rng = rng;
         }
 
         public int at(int x, int y)

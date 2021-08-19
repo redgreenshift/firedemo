@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FireDemo
 {
-    class PaletteGenerator
+    public class PaletteGenerator
     {
         public static Color[] GetRealPalette()
         {
