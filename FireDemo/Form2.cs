@@ -32,18 +32,78 @@ namespace FireDemo
         {
             //SimpleCandle();
             DemoBatman();
+            DemoLightning();
+            DemoBorg();
+        }
+
+        private void DemoBorg()
+        {
+            int fireWidth = 129;
+            int fireHeight = 131;
+            int magnification = 2;
+            int left, top;
+
+            Color[] palBorg = PaletteGenerator.GetHardCodedBorgPalette();
+            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
+            ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, bUseFullRange: false);
+            ILightShape lsBorgRing = new LightShapeBorgRing();
+            ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
+            lsBorgRing.SetPen(lpPlasma);
+            lsBorgPlasma.SetPen(lpPlasma);
+
+            AbstractRealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
+            dbPlasmaDisc.Initialize(fireWidth, fireHeight, magnification);
+            dbPlasmaDisc.SetCoolingStrategy(coolingStrategy);
+            dbPlasmaDisc.SetPalette(palBorg);
+            dbPlasmaDisc.AddShape(lsBorgPlasma);
+            dbPlasmaDisc.AddShape(lsBorgRing);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbPlasmaDisc.Location = new Point(x: left, y: top);
+
+            m_palette = palBorg;
+            m_lightPen = lpPlasma;
+            m_lightShape = lsBorgPlasma; // TODO: JRDV: need to track multiple
+            m_dbSprite = dbPlasmaDisc;
+        }
+
+        private void DemoLightning()
+        {
+            int fireWidth = 132;
+            int fireHeight = 200;
+            int magnification = 2;
+            int left, top;
+
+            Color[] palLightning = PaletteGenerator.GetHardCodedLightningPalette();
+            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(27);
+            ILightPen lpLightning = new LightPen(fill: 1.0f, min: 255, max: 255, bUseFullRange: false);
+            ILightShape lsLightning = new LightShapeLightning();
+            lsLightning.SetPen(lpLightning);
+
+            AbstractRealtimeLightEffect dbLightning = new RealtimeLightning();
+            dbLightning.Initialize(fireWidth, fireHeight, magnification);
+            dbLightning.SetCoolingStrategy(coolingStrategy);
+            dbLightning.SetPalette(palLightning);
+            dbLightning.AddShape(lsLightning);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbLightning.Location = new Point(x: left, y: top);
+
+            m_palette = palLightning;
+            m_lightPen = lpLightning;
+            m_lightShape = lsLightning;
+            m_dbSprite = dbLightning;
         }
 
         private void DemoBatman()
         {
+            int left, top;
             int fireWidth = 500;
             int fireHeight = 300;
             int magnification = 1;
             //fireWidth = 250;
             //fireHeight = 150;
             //magnification = 2;
-            int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
-            int left = buttonDemo.Location.X + buttonDemo.Size.Width;
 
             Color[] palFire = PaletteGenerator.GetHardCodedFirePalette();
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(2);
@@ -51,7 +111,6 @@ namespace FireDemo
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
-            //AbstractDynamicSprite
             AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
             dbBatman.Initialize(fireWidth, fireHeight, magnification);
             dbBatman.SetCoolingStrategy(coolingStrategy);
