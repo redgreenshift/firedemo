@@ -238,58 +238,9 @@ namespace FireDemo
         }
     }
 
-    class RealtimeCandleflame : AbstractRealtimeLightEffect
-    {
-        public override void RenderStage2And3()
-        {
-            //"
-            //{ For flame effect scroll through every pixel and  }
-            //{ choose some other pixels around it. Divide by    }
-            //{ the ammount of pixels you added up and then      }
-            //{ subtract a decay ammount.                        }
-            //"
-
-
-            //" Average these pixels:
-            //.X.
-            //.X.
-            //X X X
-            //"
-            int calc, p1, p2, p3, p5, p8, coolingFactor;
-
-            for (int y = 1; y < height - 1; ++y)
-            {
-                p2 = intensityMatrix.Get(0, y + 1);
-                p3 = intensityMatrix.Get(1, y + 1);
-
-                for (int x = 1; x < width - 1; ++x)
-                {
-                    //"Add the surrounding pixels"
-                    p1 = p2;
-                    p2 = p3;
-                    p8 = intensityMatrix.Get(x, y - 1);
-                    p5 = intensityMatrix.Get(x, y);
-                    p3 = intensityMatrix.Get(x + 1, y + 1);
-
-                    //"Average the colors"
-                    calc = p8 + p5 + p1 + p2 + p3;
-                    calc /=  5;
-
-                    //"Subtract the coolingFactor value, if necessary"
-                    coolingFactor = coolingStrategy.at(x, y);
-                    if (calc > coolingFactor)
-                        calc -= coolingFactor;
-                    else
-                        calc = 0;
-
-                    intensityMatrix.Put(x, y, calc);
-                    front.SetPixel(x, y, this.thePalette[calc]);
-                }
-            }
-        }
-    }
-
-
+    /// <summary>
+    /// Generalized implementation that allows changing the flame algorithm at runtime. Potentially slower, but more versatile.
+    /// </summary>
     class GenericRealtimeFlame : AbstractRealtimeLightEffect
     {
         bool f1, f2, f3, f4, f5, f6, f7, f8, f9;
@@ -391,5 +342,113 @@ namespace FireDemo
             }
         }
     }
+
+    /// <summary>
+    ///  Optimized for a single small flame, like a candle
+    /// </summary>
+    class RealtimeCandleflame : AbstractRealtimeLightEffect
+    {
+        public override void RenderStage2And3()
+        {
+            //"
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+            //"
+
+
+            //" Average these pixels:
+            //.X.
+            //.X.
+            //X X X
+            //"
+            int calc, p1, p2, p3, p5, p8, coolingFactor;
+
+            for (int y = 1; y < height - 1; ++y)
+            {
+                p2 = intensityMatrix.Get(0, y + 1);
+                p3 = intensityMatrix.Get(1, y + 1);
+
+                for (int x = 1; x < width - 1; ++x)
+                {
+                    // Add the surrounding pixels
+                    p1 = p2;
+                    p2 = p3;
+                    p8 = intensityMatrix.Get(x, y - 1);
+                    p5 = intensityMatrix.Get(x, y);
+                    p3 = intensityMatrix.Get(x + 1, y + 1);
+
+                    // Average the colors
+                    calc = p8 + p5 + p1 + p2 + p3;
+                    calc /=  5;
+
+                    //"Subtract the coolingFactor value, if necessary"
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.Put(x, y, calc);
+                    front.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Optimized for regular flames
+    /// </summary>
+    class RealtimeFire : AbstractRealtimeLightEffect
+    {
+        public override void RenderStage2And3()
+        {
+            //"
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+            //"
+
+
+            //" Average these pixels:
+            //...
+            //.X.
+            //X X X
+            //"
+            int calc, p1, p2, p3, p5, coolingFactor;
+
+            for (int y = 1; y < height - 1; ++y)
+            {
+                p2 = intensityMatrix.Get(0, y + 1);
+                p3 = intensityMatrix.Get(1, y + 1);
+
+                for (int x = 1; x < width - 1; ++x)
+                {
+                    // Add the surrounding pixels
+                    p1 = p2;
+                    p2 = p3;
+                    p5 = intensityMatrix.Get(x, y);
+                    p3 = intensityMatrix.Get(x + 1, y + 1);
+
+                    // Average the colors
+                    calc = p5 + p1 + p2 + p3;
+                    calc /= 4;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.Put(x, y, calc);
+                    front.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+        }
+    }
+
 
 }
