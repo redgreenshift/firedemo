@@ -465,11 +465,9 @@ namespace FireDemo
             bool doDraw, doInnerCheck;
             int y0inner;
 
-
             deadZone = 0;
             endZone = width + 1;
             startOpt = (int)(height / 3);
-
 
             // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
             // But in any case needs to be retuned to whatever values we use in the LightShapeBatman
@@ -498,7 +496,6 @@ namespace FireDemo
             x1inner = (int)(42.0f / 52 * (width - 1) + 1);
             y1inner = (int)(5.9f / 18 * (height * 3 / 4) + (height / 4));
 
-
             for (int y = 1; y < height - 1; ++y)
             {
                 // There are large areas of pixels that will NEVER change in the Bat Logo.
@@ -518,13 +515,12 @@ namespace FireDemo
                     }
                 }
 
-                //	"doShoulderCheck := (y > y0wing) & (y <= y1wing)."
+                //	"doShoulderCheck := (y > y0wing) && (y <= y1wing)."
 
                 doInnerCheck = (y > y0inner) && (y <= y1inner);
 
                 p2 = intensityMatrix.Get(x: 0, y: y + 1);
                 p3 = intensityMatrix.Get(x: 1, y: y + 1);
-
 
                 for (int x = 1; x < width - 1; ++x)
                 {
@@ -534,9 +530,8 @@ namespace FireDemo
                     doDraw = (x >= deadZone) && (x <= endZone);
                     if (doDraw && doInnerCheck)
                         doDraw = (x < x0inner) || (x > x1inner);
-                    //"doDraw & doShoulderCheck ifTrue: [
-
-                    //doDraw:= (x < x0wing) | (x > x1rightWing) | ((x > x1wing) & (x < x0rightWing)).
+                    //"doDraw && doShoulderCheck ifTrue: [
+                    //doDraw:= (x < x0wing) || (x > x1rightWing) || ((x > x1wing) && (x < x0rightWing)).
                     //	]."
 
                     if (doDraw)
@@ -548,15 +543,13 @@ namespace FireDemo
                         //p2:= (flameArr at: x at: y + 1).
                         //p3:= (flameArr at: x + 1 at: y + 1).
 
-
                         p1 = p2;
                         p2 = p3;
                         p5 = intensityMatrix.Get(x, y);
                         p3 = intensityMatrix.Get(x + 1, y + 1);
 
-                        calc = p5 + p1 + p2 + p3;
-
                         // Average the colors
+                        calc = p5 + p1 + p2 + p3;
                         calc /= 4;
 
                         // Subtract the coolingFactor value, if necessary
