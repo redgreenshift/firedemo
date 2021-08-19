@@ -516,7 +516,6 @@ namespace FireDemo
                 }
 
                 //	"doShoulderCheck := (y > y0wing) && (y <= y1wing)."
-
                 doInnerCheck = (y > y0inner) && (y <= y1inner);
 
                 p2 = intensityMatrix.Get(x: 0, y: y + 1);

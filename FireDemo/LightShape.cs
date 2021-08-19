@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -145,42 +146,271 @@ namespace FireDemo
         }
     }
 
+    // TODO: JRDV: Implement Batman for real!
     class LightShapeBatman : LightShapeBase
     {
         override public void DrawOn(IBitCanvas bc)
         {
-            // "Draw the seed coal values for a candle flame"
-            // "Set the next row of random coals to keep the fire going."
-            int width = bc.Width;
-            int height = bc.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+            // Draw the seed coal values for a Flaming Batman Logo!
+
+            int x0, x1, y0, y1;
+            List<PointF> batArray;
+            List<Point> batLogo;
+            int width, height;
+
+            width = bc.Width;
+            height = bc.Height;
+
+            //        batArray:= {
+            //                0@0. 17.1@0. 18@2. 20@3.9. 22.5@4. 23.5@3.9. 24@2.8.
+            //       "Middle"
+            //       24.5@0.9. 25@2.5. 27@2.5. 27.5@0.9.
+            //       28@2.8. 28.5@3.9. 29.5@4. 32@3.9. 34@2. 34.9@0. 52@0.
+
+            //"Bottom Half"
+            //       46@4. 44@8. 44.5@10.2. 40@10. 36@10.3. 32@11.5. 28@14.
+            //       26@18. "Middle of tail"
+            //       24@14. 20@11.5. 16@10.3. 12@10. 7.5@10.2. 8@8. 6@4.
+            //       0@0.
+            //       }.
+
+            batArray = new List<PointF>{
+            new PointF(0, 0),
+            new PointF(1, 1)
+        };
+
+            batArray = new List<PointF>{
+            new PointF(0,0), new PointF(17.1f, 0), new PointF(18,2), new PointF(20, 3.9f),
+            new PointF(22.5f, 4), new PointF(23.5f, 3.9f), new PointF(24, 2.8f),
+        // Middle
+        new PointF(24.5f, 0.9f), new PointF(25, 2.5f), new PointF(27, 2.5f), new PointF(27.5f, 0.9f),
+        new PointF(28, 2.8f), new PointF(28.5f, 3.9f), new PointF(29.5f, 4), new PointF(32, 3.9f),
+            new PointF(34, 2), new PointF(34.9f, 0), new PointF(52, 0),
+        
+        // Bottom Half
+        new PointF(46, 4), new PointF(44, 8), new PointF(44.5f, 10.2f), new PointF(40, 10), new PointF(36, 10.3f), new PointF(32, 11.5f), new PointF(28, 14),
+        new PointF(26, 18), // Middle of tail
+        new PointF(24, 14), new PointF(20, 11.5f), new PointF(16, 10.3f), new PointF(12, 10), new PointF(7.5f, 10.2f), new PointF(8, 8), new PointF(6, 4),
+        new PointF(0, 0)
+        };
+
+            //batArray := {0@0. 52@18}.
+            //batArray:= { 0@0. 26@18. 52@18. 26@0. 0@0}.
+
+            batLogo = new List<Point>(batArray.Count);
+
+            //1 to: batArray size do: [:pos|
+            for (int pos = 0; pos < batArray.Count; ++pos)
+            {
+                x0 = (int)(batArray[pos].X / 52 * (width - 1) + 1);
+                y0 = (int)(batArray[pos].Y / 18 * (height * 3.0f / 4.0f) + (height / 4.0f));
+
+                batLogo[pos] = new Point(x0, y0);
+            }
+
+            //TODO:
+            //            Map 0@0 to 0@height / 4
+            //Map 0@52
+
+            x1 = batLogo[0].X;
+            y1 = batLogo[0].Y;
+
+            //2 to: batLogo size do: [:pos|
+            for (int pos = 1; pos < batLogo.Count; ++pos)
+            {
+                x0 = x1;
+                y0 = y1;
+                x1 = batLogo[pos].X;
+                y1 = batLogo[pos].Y;
+                this.DrawLine(x0, y0, x1, y1, bc);
+            }
         }
     }
 
+    // TODO: JRDV: Implement Borg for real!
     class LightShapeLightning : LightShapeBase
     {
+        protected Random rng;
+
+        public LightShapeLightning()
+        {
+            rng = new Random();
+        }
+ 
         override public void DrawOn(IBitCanvas bc)
         {
-            // "Draw the seed coal values for a candle flame"
-            // "Set the next row of random coals to keep the fire going."
-            int width = bc.Width;
-            int height = bc.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+            if (rng.Next(25) == 1)
+                DrawOneBolt(bc);
+        }
+
+        protected void DrawOneBolt(IBitCanvas bc)
+        {
+            // Copied from Seed8BitLightning_Branching_Cheap_LINES()
+            int fireWidth = bc.Width;
+            int fireHeight = bc.Height;
+            List<int> nodes = new List<int>(1);
+
+            nodes.Add(fireWidth / 2);
+
+            int yBranchMore = fireHeight * 2 / 3;
+
+            // Randomly seed the lightning path
+            for (int y = 0; y < fireHeight - 1; ++y)
+            {
+                /// FIDDLE WITH THE RARITY!
+                /// Fork the bolt sometimes.
+                /// 
+                if (rng.Next(y > yBranchMore ? 50 : 360) == 0)
+                {
+                    int nodeToFork = rng.Next(nodes.Count);
+
+                    if (nodes[nodeToFork] > 1 && nodes[nodeToFork] < fireWidth - 2)
+                    {
+                        int diff1 = rng.Next(2, 4);
+                        int diff2 = rng.Next(2, 4);
+                        nodes.Add(nodes[nodeToFork] + diff1);
+                        nodes[nodeToFork] -= diff2;
+                    }
+                }
+
+                for (int n = 0; n < nodes.Count; ++n)
+                {
+                    int diff = rng.Next(-2, 3);
+
+                    int x = nodes[n];
+                    x += diff;
+                    if (x < 0)
+                        x = 0;
+                    if (x > fireWidth)
+                        x = fireWidth;
+
+                    //nodes[n] = x;
+
+                    //flameIntensityMatrixFront[x + y * fireWidth] = 255;
+
+                    int delta = x - nodes[n];
+                    int step = 0;
+                    if (delta < 0)
+                        step = -1;
+                    else if (delta > 0)
+                        step = 1;
+
+                    int eachx = nodes[n];
+                    bool isFirstIteration = true;
+                    do
+                    {
+                        if (!isFirstIteration)
+                            eachx += step;
+
+                        isFirstIteration = false;
+
+                        //flameIntensityMatrixFront[eachx + y * fireWidth] = 255;
+                        bc.Put(eachx, y, 255);
+                    } while (eachx != x);
+
+                    nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
+                }
+            }
+        }
+
+        protected void DrawOneBolt(int xCenter, int yCenter, int rotationAngle, int radius, IBitCanvas callback)
+        {
+            int fireWidth = callback.Width;
+            //int fireHeight = callback.Height;
+            // Copied from Seed8BitLightning_ForkingBorg_RandomRotation_EXPERIMENT
+            List<int> nodes = new List<int>(1);
+
+            //int xCenter = fireWidth / 2;
+            //int yCenter = fireHeight / 2;
+            //int radius = Math.Min(xCenter, yCenter) - 2;
+            //int rotationAngle = rng.Next(0, 360);
+
+            nodes.Add(xCenter);
+
+            // Randomly seed the lightning path
+            for (int y = yCenter; y < yCenter + radius; ++y)
+            {
+                /// FIDDLE WITH THE RARITY!
+                /// Fork the bolt sometimes.
+                /// 
+                if (rng.Next(106) == 0)
+                {
+                    int nodeToFork = rng.Next(nodes.Count);
+
+                    if (nodes[nodeToFork] > 1 && nodes[nodeToFork] < fireWidth - 2)
+                    {
+                        int diff1 = rng.Next(1, 4);
+                        int diff2 = rng.Next(1, 4);
+                        nodes.Add(nodes[nodeToFork] + diff1);
+                        nodes[nodeToFork] -= diff2;
+                    }
+                }
+
+                for (int n = 0; n < nodes.Count; ++n)
+                {
+                    int diff = rng.Next(-2, 3);
+
+                    int x = nodes[n];
+                    x += diff;
+                    if (x < 0)
+                        x = 0;
+                    if (x > fireWidth)
+                        x = fireWidth;
+
+
+                    int delta = x - nodes[n];
+                    int step = 0;
+                    if (delta < 0)
+                        step = -1;
+                    else if (delta > 0)
+                        step = 1;
+
+                    int eachx = nodes[n];
+                    bool isFirstIteration = true;
+                    do
+                    {
+                        if (!isFirstIteration)
+                            eachx += step;
+
+                        isFirstIteration = false;
+
+                        int xTemp = eachx - xCenter;
+                        int yTemp = y - yCenter;
+
+                        // if we exceed teh ring DONE!
+                        if (xTemp * xTemp + yTemp * yTemp > radius * radius)
+                            return;
+
+                        int xRender = (int)(xTemp * Math.Cos(rotationAngle) - yTemp * Math.Sin(rotationAngle)) + xCenter;
+                        int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
+
+                        //flameIntensityMatrixFront[xRender + yRender * fireWidth] = 255;
+                        callback.Put(xRender, yRender, 255);
+                    } while (eachx != x);
+
+                    nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
+                }
+            }
         }
     }
 
     // TODO: JRDV: Should I put all Borg stuff in the same file? Move the file structure to align the pieces together?
     // NO! I think maybe it's better to keep the hierarchy together, not bundling across hierarchies
+    // TODO: JRDV: Implement Batman for real!
     #region Borg Light Drawing
     class LightShapeBorgPlasma : LightShapeLightning
     {
         override public void DrawOn(IBitCanvas bc)
         {
-            // "Draw the seed coal values for a candle flame"
-            // "Set the next row of random coals to keep the fire going."
-            int width = bc.Width;
-            int height = bc.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+            // Draw the seed coal values for the inner lighting bolts for a plasma disc
+            int degrees, radius, xCenter, yCenter;
+
+            xCenter = bc.Width / 2;
+            yCenter = bc.Height / 2;
+            degrees = rng.Next(0, 360);
+            radius = Math.Min(xCenter, yCenter) - 2;
+
+            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: radius, callback: bc);
         }
     }
 
@@ -188,11 +418,16 @@ namespace FireDemo
     {
         override public void DrawOn(IBitCanvas bc)
         {
-            // "Draw the seed coal values for a candle flame"
-            // "Set the next row of random coals to keep the fire going."
-            int width = bc.Width;
-            int height = bc.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+            // Draw the seed coal values for the outer ring of a plasma disc
+
+            int xCenter, yCenter, radius;
+
+            xCenter = bc.Width / 2;
+            yCenter = bc.Height / 2;
+            radius = Math.Min(xCenter, yCenter) - 2;
+
+
+            this.DrawCircle(xCenter, yCenter, radius, bc);
         }
     }
     #endregion // Borg Light Drawing
