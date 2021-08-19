@@ -192,10 +192,10 @@ namespace FireDemo
 
             batLogo = new List<Point>(batArray.Count);
 
-            for (int pos = 0; pos < batArray.Count; ++pos)
+            foreach (PointF p in batArray)
             {
-                x0 = (int)(batArray[pos].X / 52 * (width - 1) + 1);
-                y0 = (int)(batArray[pos].Y / 18 * (height * 3.0f / 4.0f) + (height / 4.0f));
+                x0 = (int)(p.X / 52 * (width - 1) + 1);
+                y0 = (int)(p.Y / 18 * (height * 3.0f / 4.0f) + (height / 4.0f));
 
                 //batLogo[pos] = new Point(x0, y0);
                 batLogo.Add(new Point(x0, y0));

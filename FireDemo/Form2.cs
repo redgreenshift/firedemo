@@ -45,7 +45,7 @@ namespace FireDemo
             int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
             int left = buttonDemo.Location.X + buttonDemo.Size.Width;
 
-            Color[] palFire = PaletteGenerator.GetRealPalette();
+            Color[] palFire = PaletteGenerator.GetHardCodedFirePalette();
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(2);
             ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, bUseFullRange: false);
             ILightShape lsBatman = new LightShapeBatman();
@@ -85,7 +85,7 @@ namespace FireDemo
             //graph.DrawImage(bmEmpty, left, top, maxWidth*magnification, maxHeight * magnification);
 
 
-            Color[] palCandle = PaletteGenerator.GetRealPalette();
+            Color[] palCandle = PaletteGenerator.GetHardCodedFirePalette();
 
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();

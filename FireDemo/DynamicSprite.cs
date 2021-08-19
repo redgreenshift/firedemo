@@ -24,7 +24,7 @@ namespace FireDemo
             //front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
             front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             // TODO: JRDV: How do I set the palette? How did I do it in the main program?I just used 32bit. No need to use palette inside the bitmap
-            thePalette = PaletteGenerator.GetRealPalette();
+            thePalette = PaletteGenerator.GetHardCodedFirePalette();
         }
 
         public void SetPalette(Color[] pal)
