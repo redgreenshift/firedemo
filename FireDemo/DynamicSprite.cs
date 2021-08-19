@@ -264,13 +264,10 @@ namespace FireDemo
 
         public override void RenderStage2And3()
         {
-            //"
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
             //{ the ammount of pixels you added up and then      }
             //{ subtract a decay ammount.                        }
-            //"
-
 
             // Average the designated pixels:
             int calc, coolingFactor, cPixelsToAverage = 0;
@@ -350,19 +347,15 @@ namespace FireDemo
     {
         public override void RenderStage2And3()
         {
-            //"
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
             //{ the ammount of pixels you added up and then      }
             //{ subtract a decay ammount.                        }
-            //"
 
-
-            //" Average these pixels:
-            //.X.
-            //.X.
+            // Average these pixels:
+            //. X .
+            //. X .
             //X X X
-            //"
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
             for (int y = 1; y < height - 1; ++y)
@@ -383,7 +376,7 @@ namespace FireDemo
                     calc = p8 + p5 + p1 + p2 + p3;
                     calc /=  5;
 
-                    //"Subtract the coolingFactor value, if necessary"
+                    // Subtract the coolingFactor value, if necessary
                     coolingFactor = coolingStrategy.at(x, y);
                     if (calc > coolingFactor)
                         calc -= coolingFactor;
@@ -404,17 +397,14 @@ namespace FireDemo
     {
         public override void RenderStage2And3()
         {
-            //"
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
             //{ the ammount of pixels you added up and then      }
             //{ subtract a decay ammount.                        }
-            //"
 
-
-            //" Average these pixels:
-            //...
-            //.X.
+            // Average these pixels:
+            //. . .
+            //. X .
             //X X X
             //"
             int calc, p1, p2, p3, p5, coolingFactor;
@@ -450,5 +440,107 @@ namespace FireDemo
         }
     }
 
+    // TODO: JRDV: Add the Borg/Batman specific optimization implementations
+    /// <summary>
+    /// Optimized for Flaming Batman Logo
+    /// NOTE: this is highly coupled to the LightShapeBatman implementation,
+    /// but we could instead use the generic RealtimeFire class instead of RealtimeFireBatmanOptimized.... and it would look the same.
+    /// it's just that this 'optimized' implementation provides noticible speed improvements
+    /// </summary>
+    class RealtimeFireBatmanLogoOptimized : RealtimeFire
+    {
+        public override void RenderStage2And3()
+        {
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
 
+            // Average these pixels:
+            //. . .
+            //. X .
+            //X X X
+            int calc, p1, p2, p3, p5, coolingFactor;
+
+            // TODO: JRDV: Port the optimizations
+            for (int y = 1; y < height - 1; ++y)
+            {
+                p2 = intensityMatrix.Get(0, y + 1);
+                p3 = intensityMatrix.Get(1, y + 1);
+
+                for (int x = 1; x < width - 1; ++x)
+                {
+                    // Add the surrounding pixels
+                    p1 = p2;
+                    p2 = p3;
+                    p5 = intensityMatrix.Get(x, y);
+                    p3 = intensityMatrix.Get(x + 1, y + 1);
+
+                    // Average the colors
+                    calc = p5 + p1 + p2 + p3;
+                    calc /= 4;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.Put(x, y, calc);
+                    front.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Optimized for dissipating in place, like electricity
+    /// </summary>
+    class RealtimeLightning : AbstractRealtimeLightEffect
+    {
+        public override void RenderStage2And3()
+        {
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+
+            // Average these pixels:
+            //. X .
+            //X X X
+            //. X .
+            int calc, p2, p4, p5, p6, p8, coolingFactor;
+
+            for (int y = 1; y < height - 1; ++y)
+            {
+                p5 = intensityMatrix.Get(0, y);
+                p6 = intensityMatrix.Get(1, y);
+
+                for (int x = 1; x < width - 1; ++x)
+                {
+                    // Add the surrounding pixels
+                    p8 = intensityMatrix.Get(x, y - 1);
+                    p4 = p5;
+                    p5 = p6;
+                    p6 = intensityMatrix.Get(x + 1, y);
+                    p2 = intensityMatrix.Get(x, y + 1);
+
+                    // Average the colors
+                    calc = p8 + p6 + p5 + p4 + p2;
+                    calc /= 5;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.Put(x, y, calc);
+                    front.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+        }
+    }
 }
