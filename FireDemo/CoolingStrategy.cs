@@ -33,6 +33,12 @@ namespace FireDemo
         public void progressOneFrame() { /* do nothing*/ }
     };
 
+    // This does NOT work as well as the original.
+    //  I think this is one of the next things I need to fix before porting too many more things.
+    // But it's shifting and rotating correctly (verify rotation!) so I'm not sure why it doesn't look quite as natural...
+    // Must be the calculation! I suspect the density
+    // SIGH: figured it out. The lightPen intensity was set to 200/255, and the original demo starts with 54/255 and *that* is why it had more fluctuation!
+    // At least I now have unit tests!
     public class CoolingStrategyMap : ICoolingStrategy
     {
         // map random width height rotate shift density min max smoothing iCoolingOffset iFrame
@@ -71,16 +77,14 @@ namespace FireDemo
         public int at(int x, int y)
         {
             int i = (y * width + x + iCoolingOffset) % (width * height);
+            // Uncomment to help debug the cooling map shift
+            //if (i == 10)
+            //    return -1;
             return coolingMap[i];
-            //rotatingCoolingMap;
         }
 
         public void progressOneFrame()
         {
-            // I think I got shift/rotate backwards in the squeak implementation, as in I'm just using the wrong words
-            // C#: shift means calculate an entirely new map, and rotate means move it up one line per frame.
-            // Squeak: rorate means calculate a new line, and shift means move it up one line per frame?
-            // Hmm, not exactly. Rotate does mean recalculate a new map. Shift DOES mean move it up by one line per frame.
             if (this.shift)
             {
                 ++iFrame;
@@ -123,58 +127,6 @@ namespace FireDemo
 
             InitializeCoolingMap();
         }
-
-#if false // safe to delete once verified the remaining code works
-        void initializeCoolingMap(int w, int h, bool bRotate, bool bShift, int nDensity, int nMin, int nMax, int nSmoothing)
-        {
-            width = w;
-            height = h;
-            rotate = bRotate;
-            shift = bShift;
-            density = nDensity;
-            min = nMin;
-            max = nMax;
-            smoothing = nSmoothing;
-
-            int size = height * width;
-
-            if (coolingMap == null)
-                coolingMap = new int[size];
-
-            this.fillCoolingMap(coolingMap, 0, size);
-
-            this.smoothCoolingMap(smoothing);
-        }
-        private void fillCoolingMap(int[] coolingMap, int start, int end)
-        {
-            for (int i = start; i < end; ++i)
-            {
-                if (this.density > rng.Next(100))
-                    coolingMap[i] = min + rng.Next(max - min + 1) - 1;
-                else
-                    coolingMap[i] = 0;
-    		}
-        }
-
-        /// <summary>
-        /// Smooth the top and bottom of the buffer, so we don't get a "seam" when scrolling.
-        /// </summary>
-        /// <param name="iterations"></param>
-        private void smoothCoolingMap(int iterations)
-        {
-            int[] destMap = new int[coolingMap.Length];
-
-            for (int x = 0; x < iterations; ++x)
-            {
-                this.SmoothCoolingMap(ref coolingMap, ref destMap);
-                int[] tempSwap = coolingMap;
-                coolingMap = destMap;
-                destMap = tempSwap;
-            };
-
-            destMap = null;
-        }
-#endif
 
         private void SmoothCoolingMap(ref int[] sourceMap, ref int[] destinationMap)
         {
@@ -286,7 +238,6 @@ namespace FireDemo
 
 
 #region Cooling Map
-
         private void FillCoolingMap(int[] theMap, int start, int end)
         {
             for (int i = start; i < end; ++i)
@@ -344,7 +295,6 @@ namespace FireDemo
             }
         }
 
-        // TODO: JRDV: Shift cooling map each frame?  Make the cooling map accessible via the UI.
         private void InitializeCoolingMap()
         {
             if (rotate && coolingMap != null)
@@ -369,7 +319,6 @@ namespace FireDemo
                 swapMap = source;
                 source = destinationMap;
                 destinationMap = swapMap;
-                swapMap = null;
             }
             destinationMap = null;
         }
@@ -379,7 +328,6 @@ namespace FireDemo
         }
 
 #endregion
-
 
     }
 }

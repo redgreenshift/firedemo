@@ -36,6 +36,41 @@ namespace FireUnitTest
                     Assert.AreEqual(expectedCoolingMap[x + (y * width)], generatedCoolingMap.at(x, y));
                 }
             }
+
+            int m_iFrame = 0;
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    int iOriginal = x + (y * width);
+                    int iCoolingOffset = (iOriginal + (m_iFrame * width)) % expectedCoolingMap.Length;
+                    Assert.AreEqual(expectedCoolingMap[iCoolingOffset], generatedCoolingMap.at(x, y));
+                }
+            }
+
+            generatedCoolingMap.progressOneFrame();
+            ++m_iFrame;
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    int iOriginal = x + (y * width);
+                    int iCoolingOffset = (iOriginal + (m_iFrame * width)) % expectedCoolingMap.Length;
+                    Assert.AreEqual(expectedCoolingMap[iCoolingOffset], generatedCoolingMap.at(x, y));
+                }
+            }
+
+            generatedCoolingMap.progressOneFrame();
+            ++m_iFrame;
+            for (int y = 0; y < height; ++y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    int iOriginal = x + (y * width);
+                    int iCoolingOffset = (iOriginal + (m_iFrame * width)) % expectedCoolingMap.Length;
+                    Assert.AreEqual(expectedCoolingMap[iCoolingOffset], generatedCoolingMap.at(x, y));
+                }
+            }
         }
     }
 }

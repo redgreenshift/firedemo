@@ -36,7 +36,7 @@ namespace FireDemo
 
         public void DisplayToScreen(Graphics graph)
         {
-            bool fInterpolate = true;
+            bool fInterpolate = false;
             if (fInterpolate && magnification > 1)
             {
                 DisplayToScreenInterpolated(graph);
@@ -198,7 +198,6 @@ namespace FireDemo
         public override void Initialize(int width, int height, int magnification)
         {
             base.Initialize(width, height, magnification);
-            // TODO: JRDV: How do I call super class method implemetation? How do I call other constructors???
             // OVERRIDE INITIALIZE and call super???
             OnSize();
         }
@@ -258,14 +257,12 @@ namespace FireDemo
             //"
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
-            //"I get an out of bounds error when calculating the edge.  need to do outside the loop"
-            for (int y = 2; y < height - 1; ++y)
+            for (int y = 1; y < height - 1; ++y)
             {
-                //3 to: (height - 1) do: [:y |
                 p2 = intensityMatrix.Get(0, y + 1);
                 p3 = intensityMatrix.Get(1, y + 1);
-                //2 to: (width - 1) do: [:x |
-                for (int x = 1; x < width - 1; ++x) // TODO: JRDV: "width - 2" is probably correct, but this looks better
+
+                for (int x = 1; x < width - 1; ++x)
                 {
                     //"Add the surrounding pixels"
                     p1 = p2;
@@ -276,7 +273,7 @@ namespace FireDemo
 
                     //"Average the colors"
                     calc = p8 + p5 + p1 + p2 + p3;
-                    calc = (int)(calc / 5);
+                    calc /=  5;
 
                     //"Subtract the coolingFactor value, if necessary"
                     coolingFactor = coolingStrategy.at(x, y);
@@ -324,11 +321,7 @@ namespace FireDemo
             //"
 
 
-            //" Average these pixels:
-            //.X.
-            //.X.
-            //X X X
-            //"
+            // Average the designated pixels:
             int calc, coolingFactor, cPixelsToAverage = 0;
 
             if (f1)
@@ -355,10 +348,10 @@ namespace FireDemo
 
             for (int y = 1; y < height - 1; ++y)
             {
-                for (int x = 1; x < width - 1; ++x) // TODO: JRDV: "width - 2" is probably correct, but this looks better
+                for (int x = 1; x < width - 1; ++x)
                 {
                     calc = 0;
-                    //"Add the surrounding pixels"
+                    // Add the surrounding pixels
                     if (f7)
                         calc += intensityMatrix.Get(x - 1, y - 1);
                     if (f8)
@@ -378,11 +371,15 @@ namespace FireDemo
                     if (f3)
                         calc += intensityMatrix.Get(x + 1, y + 1);
 
-                    //"Average the colors"
-                    calc = (int)(calc / cPixelsToAverage);
+                    // Average the colors
+                    calc /= cPixelsToAverage;
 
-                    //"Subtract the coolingFactor value, if necessary"
+                    // Subtract the coolingFactor value, if necessary
                     coolingFactor = coolingStrategy.at(x, y);
+                    // Uncomment to help debug the cooling map shift
+                    //if (coolingFactor < 0)
+                    //    calc = 255;
+                    //else
                     if (calc > coolingFactor)
                         calc -= coolingFactor;
                     else
