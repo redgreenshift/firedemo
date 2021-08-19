@@ -440,14 +440,14 @@ namespace FireDemo
         }
     }
 
-    // TODO: JRDV: Add the Borg/Batman specific optimization implementations
     /// <summary>
     /// Optimized for Flaming Batman Logo
-    /// NOTE: this is highly coupled to the LightShapeBatman implementation,
-    /// but we could instead use the generic RealtimeFire class instead of RealtimeFireBatmanOptimized.... and it would look the same.
-    /// it's just that this 'optimized' implementation provides noticible speed improvements
+    /// 
+    /// NOTE: this is HIGHLY COUPLED coupled to the LightShapeBatman implementation,
+    /// but we could use the generic RealtimeFire class instead of RealtimeFireBatLogoOptimized...
+    /// and it would look the same. It's just that this 'optimized' implementation provides noticible speed improvements
     /// </summary>
-    class RealtimeFireBatmanLogoOptimized : RealtimeFire
+    class RealtimeFireBatLogoOptimized : RealtimeFire
     {
         public override void RenderStage2And3()
         {
@@ -461,34 +461,124 @@ namespace FireDemo
             //. X .
             //X X X
             int calc, p1, p2, p3, p5, coolingFactor;
+            int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
+            bool doDraw, doInnerCheck;
+            int y0inner;
 
-            // TODO: JRDV: Port the optimizations
+
+            deadZone = 0;
+            endZone = width + 1;
+            startOpt = (int)(height / 3);
+
+
+            // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
+            // But in any case needs to be retuned to whatever values we use in the LightShapeBatman
+
+            // Under the bat: 6@4 20@11.5
+            x0 = (int)(6.0f / 52 * (width - 1) + 1);
+            y0 = (int)(4.0f / 18 * (height * 3 / 4) + (height / 4));
+            x1 = (int)(20.0f / 52 * (width - 1) + 1);
+            y1 = (int)(11.5f / 18 * (height * 3 / 4) + (height / 4));
+
+            //"Inside the bat: 22.5@4
+            //8@0 to 17@4
+            //"
+            //" This turned out to be SLIGHTLY SLOWER! Or at least not measurably faster
+            // := (8 / 52 * (width - 1) + 1) asInteger.
+            // := (0 / 18 * (height * 3 / 4) + (height / 4)) asInteger.
+            // := (17 / 52 * (width - 1) + 1) asInteger.
+            // := (4 / 18 * (height * 3 / 4) + (height / 4)) asInteger.
+            // := width - x0wing.
+            // := width - x1wing."
+
+            // Inside the bat: 22.5@4
+            // 12@4 to 40@6
+            x0inner = (int)(10.0f / 52 * (width - 1) + 1);
+            y0inner = (int)(4.0f / 18 * (height * 3 / 4) + (height / 4));
+            x1inner = (int)(42.0f / 52 * (width - 1) + 1);
+            y1inner = (int)(5.9f / 18 * (height * 3 / 4) + (height / 4));
+
+
             for (int y = 1; y < height - 1; ++y)
             {
-                p2 = intensityMatrix.Get(0, y + 1);
-                p3 = intensityMatrix.Get(1, y + 1);
+                // There are large areas of pixels that will NEVER change in the Bat Logo.
+                // Approximate these regions with rectangles, so we can quickly exclude them"
+
+                if (y > y1)
+                {
+                    deadZone = x1;
+                    endZone = (width - x1);
+                }
+                else
+                {
+                    if (y > y0)
+                    {
+                        deadZone = x0;
+                        endZone = (width - x0);
+                    }
+                }
+
+                //	"doShoulderCheck := (y > y0wing) & (y <= y1wing)."
+
+                doInnerCheck = (y > y0inner) && (y <= y1inner);
+
+                p2 = intensityMatrix.Get(x: 0, y: y + 1);
+                p3 = intensityMatrix.Get(x: 1, y: y + 1);
+
 
                 for (int x = 1; x < width - 1; ++x)
                 {
-                    // Add the surrounding pixels
-                    p1 = p2;
-                    p2 = p3;
-                    p5 = intensityMatrix.Get(x, y);
-                    p3 = intensityMatrix.Get(x + 1, y + 1);
+                    //2 to: (width - 1) do: [:x |
+                    // poke the raw data into the ColorForm.
 
-                    // Average the colors
-                    calc = p5 + p1 + p2 + p3;
-                    calc /= 4;
+                    doDraw = (x >= deadZone) && (x <= endZone);
+                    if (doDraw && doInnerCheck)
+                        doDraw = (x < x0inner) || (x > x1inner);
+                    //"doDraw & doShoulderCheck ifTrue: [
 
-                    // Subtract the coolingFactor value, if necessary
-                    coolingFactor = coolingStrategy.at(x, y);
-                    if (calc > coolingFactor)
-                        calc -= coolingFactor;
+                    //doDraw:= (x < x0wing) | (x > x1rightWing) | ((x > x1wing) & (x < x0rightWing)).
+                    //	]."
+
+                    if (doDraw)
+                    {
+                        // Add the surrounding pixels
+                        //p8:= (flameArr at: x at: y + 2)
+                        //p5:= (flameArr at: x at: y).
+                        //p1:= (flameArr at: x - 1 at: y + 1).
+                        //p2:= (flameArr at: x at: y + 1).
+                        //p3:= (flameArr at: x + 1 at: y + 1).
+
+
+                        p1 = p2;
+                        p2 = p3;
+                        p5 = intensityMatrix.Get(x, y);
+                        p3 = intensityMatrix.Get(x + 1, y + 1);
+
+                        calc = p5 + p1 + p2 + p3;
+
+                        // Average the colors
+                        calc /= 4;
+
+                        // Subtract the coolingFactor value, if necessary
+                        coolingFactor = coolingStrategy.at(x, y);
+                        if (calc > coolingFactor)
+                            calc -= coolingFactor;
+                        else
+                            calc = 0;
+
+                        intensityMatrix.Put(x, y, calc);
+                        front.SetPixel(x, y, this.thePalette[calc]);
+                    }
                     else
-                        calc = 0;
+                    {
+                        p1 = p2;
+                        p2 = p3;
+                        p5 = 0;
+                        p3 = 0;
 
-                    intensityMatrix.Put(x, y, calc);
-                    front.SetPixel(x, y, this.thePalette[calc]);
+                        //DEBUG: Show me the dead zone
+                        //front.SetPixel(x, y, this.thePalette[255]);
+                    }
                 }
             }
         }
