@@ -30,6 +30,45 @@ namespace FireDemo
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            //SimpleCandle();
+            DemoBatman();
+        }
+
+        private void DemoBatman()
+        {
+            int fireWidth = 500;
+            int fireHeight = 300;
+            int magnification = 1;
+            //fireWidth = 250;
+            //fireHeight = 150;
+            //magnification = 2;
+            int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
+            int left = buttonDemo.Location.X + buttonDemo.Size.Width;
+
+            Color[] palFire = PaletteGenerator.GetRealPalette();
+            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(2);
+            ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, bUseFullRange: false);
+            ILightShape lsBatman = new LightShapeBatman();
+            lsBatman.SetPen(lpBatman);
+
+            //AbstractDynamicSprite
+            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            dbBatman.Initialize(fireWidth, fireHeight, magnification);
+            dbBatman.SetCoolingStrategy(coolingStrategy);
+            dbBatman.SetPalette(palFire);
+            dbBatman.AddShape(lsBatman);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbBatman.Location = new Point(x: left, y: top);
+
+            m_palette = palFire;
+            m_lightPen = lpBatman;
+            m_lightShape = lsBatman;
+            m_dbSprite = dbBatman;
+        }
+
+        private void SimpleCandle()
+        {
             int fireWidth = 21;
             int fireHeight = 75;
             int magnification = 4;

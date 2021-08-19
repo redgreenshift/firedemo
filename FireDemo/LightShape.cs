@@ -43,13 +43,11 @@ namespace FireDemo
 
         protected void DrawCircle(int xCenter, int yCenter, int radius, IBitCanvas bc)
         {
-            // "draw a circle from source to destination using the pen"
-
+            // draw a circle from source to destination using the pen
             int x, y, xx, xLast, width;
 
             xLast = radius;
             width = bc.Width;
-
 
             for (int yy = yCenter - radius; yy <= yCenter + radius; ++yy)
             {
@@ -146,7 +144,6 @@ namespace FireDemo
         }
     }
 
-    // TODO: JRDV: Implement Batman for real!
     class LightShapeBatman : LightShapeBase
     {
         override public void DrawOn(IBitCanvas bc)
@@ -174,60 +171,54 @@ namespace FireDemo
             //       0@0.
             //       }.
 
-            batArray = new List<PointF>{
-            new PointF(0, 0),
-            new PointF(1, 1)
-        };
-
-            batArray = new List<PointF>{
-            new PointF(0,0), new PointF(17.1f, 0), new PointF(18,2), new PointF(20, 3.9f),
-            new PointF(22.5f, 4), new PointF(23.5f, 3.9f), new PointF(24, 2.8f),
-        // Middle
-        new PointF(24.5f, 0.9f), new PointF(25, 2.5f), new PointF(27, 2.5f), new PointF(27.5f, 0.9f),
-        new PointF(28, 2.8f), new PointF(28.5f, 3.9f), new PointF(29.5f, 4), new PointF(32, 3.9f),
-            new PointF(34, 2), new PointF(34.9f, 0), new PointF(52, 0),
+            batArray = new List<PointF>
+            {
+                new PointF(0,0), new PointF(17.1f, 0), new PointF(18,2), new PointF(20, 3.9f),
+                new PointF(22.5f, 4), new PointF(23.5f, 3.9f), new PointF(24, 2.8f),
+                // Middle
+                new PointF(24.5f, 0.9f), new PointF(25, 2.5f), new PointF(27, 2.5f), new PointF(27.5f, 0.9f),
+                new PointF(28, 2.8f), new PointF(28.5f, 3.9f), new PointF(29.5f, 4), new PointF(32, 3.9f),
+                new PointF(34, 2), new PointF(34.9f, 0), new PointF(52, 0),
         
-        // Bottom Half
-        new PointF(46, 4), new PointF(44, 8), new PointF(44.5f, 10.2f), new PointF(40, 10), new PointF(36, 10.3f), new PointF(32, 11.5f), new PointF(28, 14),
-        new PointF(26, 18), // Middle of tail
-        new PointF(24, 14), new PointF(20, 11.5f), new PointF(16, 10.3f), new PointF(12, 10), new PointF(7.5f, 10.2f), new PointF(8, 8), new PointF(6, 4),
-        new PointF(0, 0)
-        };
+                // Bottom Half
+                new PointF(46, 4), new PointF(44, 8), new PointF(44.5f, 10.2f), new PointF(40, 10), new PointF(36, 10.3f), new PointF(32, 11.5f), new PointF(28, 14),
+                new PointF(26, 18), // Middle of tail
+                new PointF(24, 14), new PointF(20, 11.5f), new PointF(16, 10.3f), new PointF(12, 10), new PointF(7.5f, 10.2f), new PointF(8, 8), new PointF(6, 4),
+                new PointF(0, 0)
+            };
 
             //batArray := {0@0. 52@18}.
             //batArray:= { 0@0. 26@18. 52@18. 26@0. 0@0}.
 
             batLogo = new List<Point>(batArray.Count);
 
-            //1 to: batArray size do: [:pos|
             for (int pos = 0; pos < batArray.Count; ++pos)
             {
                 x0 = (int)(batArray[pos].X / 52 * (width - 1) + 1);
                 y0 = (int)(batArray[pos].Y / 18 * (height * 3.0f / 4.0f) + (height / 4.0f));
 
-                batLogo[pos] = new Point(x0, y0);
+                //batLogo[pos] = new Point(x0, y0);
+                batLogo.Add(new Point(x0, y0));
             }
 
             //TODO:
-            //            Map 0@0 to 0@height / 4
+            //Map 0@0 to 0@height / 4
             //Map 0@52
 
             x1 = batLogo[0].X;
             y1 = batLogo[0].Y;
 
-            //2 to: batLogo size do: [:pos|
-            for (int pos = 1; pos < batLogo.Count; ++pos)
+            foreach (Point p in batLogo)
             {
                 x0 = x1;
                 y0 = y1;
-                x1 = batLogo[pos].X;
-                y1 = batLogo[pos].Y;
+                x1 = p.X;
+                y1 = p.Y;
                 this.DrawLine(x0, y0, x1, y1, bc);
             }
         }
     }
 
-    // TODO: JRDV: Implement Borg for real!
     class LightShapeLightning : LightShapeBase
     {
         protected Random rng;
