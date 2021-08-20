@@ -34,6 +34,8 @@ namespace FireDemo
             DemoBatman();
             //DemoLightning();
             //DemoBorg();
+
+            buttonDemo_Click(null, null);
         }
 
         private void DemoBorg()
@@ -41,6 +43,9 @@ namespace FireDemo
             int fireWidth = 129;
             int fireHeight = 131;
             int magnification = 2;
+            fireWidth = 200;
+            fireHeight = 200;
+            magnification = 2;
             int left, top;
 
             Color[] palBorg = PaletteGenerator.GetHardCodedBorgPalette();
@@ -107,23 +112,30 @@ namespace FireDemo
             //fireWidth = 250;
             //fireHeight = 150;
             //magnification = 2;
+            //fireWidth = 700;
+            fireHeight = fireWidth * 3 / 5;
+            //magnification = 2;
 
             Color[] palFire = PaletteGenerator.GetHardCodedFirePalette();
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0);
+            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0);
+            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 15, smoothing: 0);
+            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 25, smoothing: 0);
+            ////m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 25, smoothing: 0);
             coolingStrategy = m_coolingStrategy;
             ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, useFullRange: false);
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
             AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            //dbBatman = new RealtimeCandleflame();
             dbBatman.Initialize(fireWidth, fireHeight, magnification);
             dbBatman.SetCoolingStrategy(coolingStrategy);
             dbBatman.SetPalette(palFire);
             dbBatman.AddShape(lsBatman);
             left = (this.Width - fireWidth * magnification) / 2;
-            top = (this.Height - fireHeight * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2 - 20;
             dbBatman.Location = new Point(x: left, y: top);
 
             m_palette = palFire;
@@ -141,8 +153,8 @@ namespace FireDemo
             int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
             int left = buttonDemo.Location.X + buttonDemo.Size.Width;
             // Clear the drawing region to eliminate artifacts from the previous flames
-            Bitmap bmEmpty = new Bitmap(fireWidth, fireHeight, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            Random rng = new Random();
+            //Bitmap bmEmpty = new Bitmap(fireWidth, fireHeight, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            //Random rng = new Random();
 
             //for (int x = 0; x < maxWidth; ++x)
             //    for (int y = 0; y < maxHeight; ++y)
@@ -154,9 +166,9 @@ namespace FireDemo
 
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(fireWidth, fireHeight,
-                rotate: true, shift: true,
-                density: 0.4f, min: 5, max: 13, smoothing: 5);
+            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
+                density: 0.4f, min: 5, max: 13, smoothing: 5,
+                shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
             ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);

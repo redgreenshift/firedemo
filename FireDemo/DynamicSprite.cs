@@ -13,19 +13,19 @@ namespace FireDemo
         protected Bitmap front;
         protected BitmapLocker poker;
         protected Color[] thePalette;
-        public int height;
-        public int width;
-        public int magnification;
+        public int Height;
+        public int Width;
+        public int Magnification;
         public Point Location { get; set; }
 
         public virtual void Initialize(int width, int height, int magnification)
         {
             Location = new Point(0, 0);
-            this.magnification = magnification;
-            this.width = width;
-            this.height = height;
+            this.Magnification = magnification;
+            this.Width = width;
+            this.Height = height;
             //front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-            front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            front = new Bitmap(width, height, PixelFormat.Format32bppRgb); // TODO: JRDV: Is PixelFormat.Format24bppRgb faster? Unsure but this is working. Measure later
             poker = new BitmapLocker(front);
             // TODO: JRDV: How do I set the palette? How did I do it in the main program?I just used 32bit. No need to use palette inside the bitmap
             thePalette = PaletteGenerator.GetHardCodedFirePalette();
@@ -41,7 +41,7 @@ namespace FireDemo
         public void DisplayToScreen(Graphics graph)
         {
             bool fInterpolate = false;
-            if (fInterpolate && magnification > 1)
+            if (fInterpolate && Magnification > 1)
             {
                 DisplayToScreenInterpolated(graph);
             }
@@ -51,7 +51,7 @@ namespace FireDemo
                 InterpolationMode im = graph.InterpolationMode; // Default Bilinear
 
                 graph.CompositingMode = CompositingMode.SourceCopy;
-                if (magnification == 1)
+                if (Magnification == 1)
                 {
                     int notUnused = 0;
                     graph.InterpolationMode = InterpolationMode.NearestNeighbor;
@@ -60,7 +60,7 @@ namespace FireDemo
                 else
                 {
                     graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graph.DrawImage(front, Location.X, Location.Y, width * magnification, height * magnification);
+                    graph.DrawImage(front, Location.X, Location.Y, Width * Magnification, Height * Magnification);
                 }
 
                 graph.CompositingMode = cm;
@@ -68,18 +68,17 @@ namespace FireDemo
             }
         }
 
-        // Bicubic interpolation was a fun experiment, and it does look a little better,
-        // but it's WAY too slow for what I want to do. I doubt I could optimize it enough
-        // given the benefits are not as great as I had hoped.
         #region EXPERIMENTAL Bicubic Interpolation is too slow
+        // Bicubic interpolation was a fun experiment, and it does look a little better,
+        // but this implementation is WAY too slow for what I want to do.
         private void DisplayToScreenInterpolated(Graphics graph)
         {
             // Bicubic interpolation?? Would like to improve the graphics quality
             //graph.DrawImage(this.bmToDraw, this.drawingX, this.drawingY, this.drawnWidth, this.drawnHeight);
-            if (magnification > 1)
+            if (Magnification > 1)
             {
-                int finalWidth = width * magnification;
-                int finalHeight = height * magnification;
+                int finalWidth = Width * Magnification;
+                int finalHeight = Height * Magnification;
                 Bitmap bmToShow = new Bitmap(finalWidth, finalHeight, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 for (int y = 0; y < finalHeight; ++y)
                 {
@@ -92,11 +91,11 @@ namespace FireDemo
                     }
                 }
 
-                graph.DrawImage(bmToShow, Location.X, Location.Y, width * magnification, height * magnification);
+                graph.DrawImage(bmToShow, Location.X, Location.Y, Width * Magnification, Height * Magnification);
             }
             else
             {
-                graph.DrawImage(front, Location.X, Location.Y, width * magnification, height * magnification);
+                graph.DrawImage(front, Location.X, Location.Y, Width * Magnification, Height * Magnification);
             }
         }
 
@@ -127,12 +126,12 @@ namespace FireDemo
         {
             if (x < 0)
                 x = 0;
-            if (x >= width)
-                x = width - 1;
+            if (x >= Width)
+                x = Width - 1;
             if (y < 0)
                 y = 0;
-            if (y >= height)
-                y = height - 1;
+            if (y >= Height)
+                y = Height - 1;
             return this.front.GetPixel(x, y);
         }
 
@@ -147,11 +146,11 @@ namespace FireDemo
         }
         private Color BicubicInterpolate(float u, float v)
         {
-            float x = (u * this.width) - 0.5f;
+            float x = (u * this.Width) - 0.5f;
             int xint = (int)(x);
             float fractx = (float)(x - Math.Floor(x));
 
-            float y = (v * this.height) - 0.5f;
+            float y = (v * this.Height) - 0.5f;
             int yint = (int)(y);
             float fracty = (float)(y - Math.Floor(y));
 
@@ -223,7 +222,7 @@ namespace FireDemo
         }
         public void OnSize()
         {
-            intensityMatrix = new BitCanvas8Bit(width, height);
+            intensityMatrix = new BitCanvas8Bit(Width, Height);
         }
 
         public override void RenderOneFrameToScreen(Graphics graph)
@@ -315,9 +314,9 @@ namespace FireDemo
                 cPixelsToAverage = 0;
 
             poker.LockBits(ImageLockMode.WriteOnly);
-            for (int y = 1; y < height - 1; ++y)
+            for (int y = 1; y < Height - 1; ++y)
             {
-                for (int x = 1; x < width - 1; ++x)
+                for (int x = 1; x < Width - 1; ++x)
                 {
                     calc = 0;
                     // Add the surrounding pixels
@@ -381,12 +380,12 @@ namespace FireDemo
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
             poker.LockBits(ImageLockMode.WriteOnly);
-            for (int y = 1; y < height - 1; ++y)
+            for (int y = 1; y < Height - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixel(0, y + 1);
                 p3 = intensityMatrix.GetPixel(1, y + 1);
 
-                for (int x = 1; x < width - 1; ++x)
+                for (int x = 1; x < Width - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
@@ -434,12 +433,12 @@ namespace FireDemo
             int calc, p1, p2, p3, p5, coolingFactor;
 
             poker.LockBits(ImageLockMode.WriteOnly);
-            for (int y = 1; y < height - 1; ++y)
+            for (int y = 1; y < Height - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixel(0, y + 1);
                 p3 = intensityMatrix.GetPixel(1, y + 1);
 
-                for (int x = 1; x < width - 1; ++x)
+                for (int x = 1; x < Width - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
@@ -492,17 +491,17 @@ namespace FireDemo
             int y0inner;
 
             deadZone = 0;
-            endZone = width + 1;
-            startOpt = (int)(height / 3);
+            endZone = Width + 1;
+            startOpt = (int)(Height / 3);
 
             // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
             // But in any case needs to be retuned to whatever values we use in the LightShapeBatman
 
             // Under the bat: 6@4 20@11.5
-            x0 = (int)(6.0f / 52 * (width - 1) + 1);
-            y0 = (int)(4.0f / 18 * (height * 3 / 4) + (height / 4));
-            x1 = (int)(20.0f / 52 * (width - 1) + 1);
-            y1 = (int)(11.5f / 18 * (height * 3 / 4) + (height / 4));
+            x0 = (int)(6.0f / 52 * (Width - 1) + 1);
+            y0 = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
+            x1 = (int)(20.0f / 52 * (Width - 1) + 1);
+            y1 = (int)(11.5f / 18 * (Height * 3 / 4) + (Height / 4));
 
             //"Inside the bat: 22.5@4
             //8@0 to 17@4
@@ -517,14 +516,14 @@ namespace FireDemo
 
             // Inside the bat: 22.5@4
             // 12@4 to 40@6
-            x0inner = (int)(10.0f / 52 * (width - 1) + 1);
-            y0inner = (int)(4.0f / 18 * (height * 3 / 4) + (height / 4));
-            x1inner = (int)(42.0f / 52 * (width - 1) + 1);
-            y1inner = (int)(5.9f / 18 * (height * 3 / 4) + (height / 4));
+            x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
+            y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
+            x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
+            y1inner = (int)(5.9f / 18 * (Height * 3 / 4) + (Height / 4));
 
             poker.LockBits(ImageLockMode.WriteOnly);
 
-            for (int y = 1; y < height - 1; ++y)
+            for (int y = 1; y < Height - 1; ++y)
             {
                 // There are large areas of pixels that will NEVER change in the Bat Logo.
                 // Approximate these regions with rectangles, so we can quickly exclude them"
@@ -532,14 +531,14 @@ namespace FireDemo
                 if (y > y1)
                 {
                     deadZone = x1;
-                    endZone = (width - x1);
+                    endZone = (Width - x1);
                 }
                 else
                 {
                     if (y > y0)
                     {
                         deadZone = x0;
-                        endZone = (width - x0);
+                        endZone = (Width - x0);
                     }
                 }
 
@@ -549,7 +548,7 @@ namespace FireDemo
                 p2 = intensityMatrix.GetPixel(x: 0, y: y + 1);
                 p3 = intensityMatrix.GetPixel(x: 1, y: y + 1);
 
-                for (int x = 1; x < width - 1; ++x)
+                for (int x = 1; x < Width - 1; ++x)
                 {
                     //2 to: (width - 1) do: [:x |
                     // poke the raw data into the ColorForm.
@@ -627,12 +626,12 @@ namespace FireDemo
 
             poker.LockBits(ImageLockMode.WriteOnly);
 
-            for (int y = 1; y < height - 1; ++y)
+            for (int y = 1; y < Height - 1; ++y)
             {
                 p5 = intensityMatrix.GetPixel(0, y);
                 p6 = intensityMatrix.GetPixel(1, y);
 
-                for (int x = 1; x < width - 1; ++x)
+                for (int x = 1; x < Width - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p8 = intensityMatrix.GetPixel(x, y - 1);
