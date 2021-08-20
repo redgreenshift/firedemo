@@ -36,7 +36,7 @@ namespace FireDemo
 
         // range INCLUDES start, and also INCLUDES end
         // Used by both the old 4 point flame palette, and new more realistic flame palette curve code
-        private static void SetPaletteRangeInclusive(Color[] thePalette, int start, int end, Color c1, Color c2)
+        protected static void SetPaletteRangeInclusive(Color[] thePalette, int start, int end, Color c1, Color c2)
         {
             int i;
             for (i = start; i <= end; ++i)
@@ -239,8 +239,52 @@ namespace FireDemo
     /// <summary>
     /// Simplistic, linear gradient between 4 specified colors.
     /// </summary>
+    public class PalFourPointLinear_OLD : PaletteGenerator
+    {
+        public static Color[] New(Color c1, Color c2, Color c3, Color c4)
+        {
+            Color[] thePalette = new Color[256];
+            InitializePalette(thePalette, c1, c2, c3, c4);
+            return thePalette;
+        }
+
+        private static void InitializePalette(Color[] thePalette, Color c1, Color c2, Color c3, Color c4)
+        {
+            // Including the final value.
+            SetPaletteRangeInclusive(thePalette, 0, 85, c1, c2); // 85 in this range
+            SetPaletteRangeInclusive(thePalette, 85, 170, c2, c3); // 86 in this range
+            SetPaletteRangeInclusive(thePalette, 170, 255, c3, c4); // 85 in this range
+        }
+
+    }
+
+    /// <summary>
+    /// Simplistic, linear gradient between 4 specified colors.
+    /// </summary>
     public class PalFourPointLinear : PaletteGenerator
     {
+        public static Color[] New(Color c1, Color c2, Color c3, Color c4)
+        {
+            Color[] thePalette = new Color[256];
+            InitializePalette(thePalette, c1, c2, c3, c4);
+            return thePalette;
+        }
+
+        private static void InitializePalette(Color[] thePalette, Color c1, Color c2, Color c3, Color c4)
+        {
+            ColorRange[] colorRange4PointLinear= {
+                new ColorRange(c1, 85),
+                new ColorRange(c2, 85),
+                new ColorRange(c3, 85),
+                new ColorRange(c4, 0),
+            };
+            // Including the final value.
+            //SetPaletteRangeInclusive(thePalette, 0, 85, c1, c2); // 85 in this range
+            //SetPaletteRangeInclusive(thePalette, 85, 170, c2, c3); // 86 in this range
+            //SetPaletteRangeInclusive(thePalette, 170, 255, c3, c4); // 85 in this range
+            SetPaletteFromColorRange(thePalette, colorRange4PointLinear);
+        }
+
     }
 
     /// <summary>
@@ -251,7 +295,12 @@ namespace FireDemo
         static public Color[] New(Color color)
         {
             Color[] thePalette = new Color[256];
-            InitializeRealisticFlameCurve(thePalette, color);
+            if (color == Color.White)
+                InitializeWhiteFlameCurve(thePalette);
+            else if (color == Color.Black)
+                InitializeBlackFlameCurve(thePalette);
+            else
+                InitializeRealisticFlameCurve(thePalette, color);
             return thePalette;
         }
         static private void InitializeRealisticFlameCurve(Color[] thePalette, Color target, float fIntensity = 1.0f)
@@ -306,6 +355,135 @@ namespace FireDemo
 
             SetPaletteFromColorRange(thePalette, colorRangeGenerated);
         }
+
+
+        private static void InitializeWhiteFlameCurve(Color[] thePalette)
+        {
+            //	"Simplify the palette generation porocess by using a function based on a single color"
+
+            //	| c0 c1 c2 c3 c4 colorRangeGenerated sourceColor palWhite c cAvg |
+#if false
+			Color c0;
+			Color c1;
+			Color c2;
+			Color c3;
+			Color c4;
+			Color sourceColor;
+
+			Color sourceColor = Color.White;
+			Color c0 = GetColorCurve(sourceColor, 0.5f, 32, 0.3f);
+			Color c1 = GetColorCurve(sourceColor, 1.0f, 32, 0.3f);
+			Color c2 = GetColorCurve(sourceColor, 1.0f, 127, 0.3f);
+			Color c3 = GetColorCurve(sourceColor, 1.0f, 238, 0.3f);
+			Color c4 = GetColorCurve(sourceColor, 1.0f, 64, 0.3f);
+
+	colorRangeGenerated := {
+				ColorRange color: (Color white) range: 10.
+		ColorRange color: (Color black) range: 30.
+		ColorRange color: (c0)range: 10.
+		ColorRange color: (c1)range: 25.
+		ColorRange color: (c2)range: 10.
+		ColorRange color: (c3)range: 10.
+		ColorRange color: (Color black) range: -1.
+		ColorRange color: (Color white) range: 15.
+		ColorRange color: ((Color black)) range: 0.
+	}.
+
+			sourceColor = Color.White;
+			c0 = GetColorCurve(sourceColor, 0.5f, 32, 0.3f);
+			c1 = GetColorCurve(sourceColor, 0.7f, 32, 0.3f);
+			c2 = GetColorCurve(sourceColor, 1.0f, 127, 0.3f);
+			c3 = GetColorCurve(sourceColor, 1.0f, 238, 0.3f);
+			c4 = GetColorCurve(sourceColor, 1.0f, 64, 0.3f);
+
+   colorRangeGenerated := {
+				ColorRange color: (Color black) range: 10.
+		ColorRange color: (Color black) range: 30.
+		ColorRange color: (c0)range: 10.
+		ColorRange color: (c1)range: 25.
+		ColorRange color: (c2)range: 10.
+		ColorRange color: (c3)range: 10.
+		ColorRange color: (Color white) range: -1.
+		ColorRange color: (Color black) range: 15.
+		ColorRange color: ((Color black)) range: 0.
+	}.
+
+	colorRangeGenerated:= {
+		ColorRange color: (self gray: 0) range: 10.
+		ColorRange color: (self gray: 0) range: 30.
+		ColorRange color: (self gray: 1.0) range: 10.
+		ColorRange color: (self gray: 1.0) range: 25.
+		ColorRange color: (self gray: 1.0) range: 10.
+		ColorRange color: (self gray: 1.0) range: 10.
+		ColorRange color: (self gray: 1.0) range: -1.
+		ColorRange color: (self gray: 0) range: 15.
+		ColorRange color: (self gray: 0) range: 0.
+	}.
+
+			ColorRange[] colorRangeGenerated = {
+				new ColorRange(Color.FromArgb(0, 0, 0), 10),
+                new ColorRange(Color.FromArgb(0, 0, 0), 30),
+				new ColorRange(Color.FromArgb(255, 255, 255), 10),
+				new ColorRange(Color.FromArgb(255, 255, 255), 25),
+				new ColorRange(Color.FromArgb(255, 255, 255), 10),
+				new ColorRange(Color.FromArgb(255, 255, 255), 10),
+				new ColorRange(Color.FromArgb(255, 255, 255), -1),
+				new ColorRange(Color.FromArgb(0, 0, 0), 15),
+				new ColorRange(Color.FromArgb(0, 0, 0), 0),
+			};
+
+			SetPaleteFromColorRange(colorRangeGenerated);
+#endif
+
+            //	InitializeRealisticPalette();
+            //	InitializeRealisticFlame
+            // OH! I called this to press the "Realistic" button, which will EITHER use 4 Point Linear
+            // or the InitializeRealisticFlame code depending on the selected radio button.
+            //throw new Exception("need to replicate blueYellowFlameButton_Click(null, null);");
+            Color[] palReal = PalRealisticFire.New();
+
+            for (int i = 0; i < palReal.Length; ++i)
+            {
+                Color c0 = palReal[i];
+                int cAvg = (c0.R + c0.G + c0.B) / 3;
+                thePalette[i] = Color.FromArgb(cAvg, cAvg, cAvg);
+            }
+        }
+
+        private static void InitializeBlackFlameCurve(Color[] thePalette)
+        {
+            InitializeWhiteFlameCurve(thePalette);
+
+            // Invert the "White" flame
+            for (int i = 0; i < thePalette.Length; ++i)
+            {
+                Color c = thePalette[i];
+
+                thePalette[i] = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
+            }
+#if false
+	"Get rid of the white rectangle!"
+	"16 is definitely too small,
+	32 has too much white
+	40 is nice
+	44 is too light
+
+	48 is nice but maybe too white ?
+
+	56 is too large
+	64 is too large"
+#endif
+
+            // now tweak it!
+            int cDampen = 16;
+            int colTarget = thePalette[cDampen].R;
+            for (int i = 0; i < cDampen; ++i)
+            {
+                int iIntensity = colTarget * (i / cDampen);
+                thePalette[i] = Color.FromArgb(iIntensity, iIntensity, iIntensity);
+            }
+        }
+
 
         #region Generalized Flame Curve Calculation
 

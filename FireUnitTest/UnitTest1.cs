@@ -14,9 +14,25 @@ namespace FireUnitTest
             Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedFirePalette();
             Color[] generatedPalette = FireDemo.PalRealisticFire.New();
 
-            Assert.AreEqual(expectedPalette.Length, generatedPalette.Length);
-            for (int ii = 0; ii < generatedPalette.Length; ++ii)
-                Assert.AreEqual(expectedPalette[ii], generatedPalette[ii]);
+            VerifyPalettesMatch(expectedPalette, generatedPalette);
+        }
+
+        [TestMethod]
+        public void TestRealisticLightningPalette()
+        {
+            //Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedFirePalette();
+            //Color[] generatedPalette = FireDemo.PalRealisticFire.New();
+
+            //VerifyPalettesMatch(expectedPalette, generatedPalette);
+        }
+
+        [TestMethod]
+        public void TestBorgPlasmaPalette()
+        {
+            //Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedFirePalette();
+            //Color[] generatedPalette = FireDemo.PalRealisticFire.New();
+
+            //VerifyPalettesMatch(expectedPalette, generatedPalette);
         }
 
         [TestMethod]
@@ -119,6 +135,38 @@ namespace FireUnitTest
                 // the new method may be more accurate. For now, ignore that one value
                 if (color != Color.Orange || ii != 187)
                     Assert.AreEqual(palExpected[ii], palActual[ii], "Palettes should match");
+            }
+        }
+
+        [TestMethod]
+        public void Test4PointLinear()
+        {
+            Color c1 = Color.FromArgb(0, 0, 0);       // Black
+            Color c2 = Color.FromArgb(255, 185, 0);   // Orange
+            Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
+            Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
+            Color[] palExpected = FireDemo.PalFourPointLinear_OLD.New(c1, c2, c3, c4);
+            Color[] palActual = FireDemo.PalFourPointLinear.New(c1, c2, c3, c4);
+
+            VerifyPalettesMatch(palExpected, palActual);
+
+            c1 = Color.FromArgb(255, 0, 65);
+            c2 = Color.FromArgb(0, 255, 0);
+            c3 = Color.FromArgb(240, 123, 200);
+            c4 = Color.FromArgb(12, 212, 255);
+            palExpected = FireDemo.PalFourPointLinear_OLD.New(c1, c2, c3, c4);
+            palActual = FireDemo.PalFourPointLinear.New(c1, c2, c3, c4);
+
+            VerifyPalettesMatch(palExpected, palActual);
+        }
+
+        private void VerifyPalettesMatch(Color[] palExpected, Color[] palActual)
+        {
+            Assert.AreEqual(palExpected.Length, palActual.Length);
+
+            for (int ii = 0; ii < palExpected.Length; ++ii)
+            {
+                Assert.AreEqual(palExpected[ii], palActual[ii], "Palettes should match");
             }
         }
 
