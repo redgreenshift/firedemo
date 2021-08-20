@@ -35,7 +35,7 @@ namespace FireDemo
         /// <summary>
         /// Lock bitmap data into system memory to start accessing faster
         /// </summary>
-        /// <param name="flags">An ImageLockMode enumeration that specifies the access level (read/write) for the Bitmap.</param>
+        /// <param name="flags">An <see cref="ImageLockMode"/> enumeration that specifies the access level (read/write) for the <see cref="Bitmap"/>.</param>
         /// <exception cref="InvalidOperationException">If already locked</exception>
         public void LockBits(ImageLockMode flags = ImageLockMode.ReadWrite)
         {
@@ -92,7 +92,8 @@ namespace FireDemo
         /// </summary>
         /// <param name="x">The x-coordinate of the pixel to retrieve.</param>
         /// <param name="y">The y-coordinate of the pixel to retrieve.</param>
-        /// <returns>A <b>Color</b> structure representing the color of the requested pixel.</returns>
+        /// <returns>A <see cref="Color"/> structure representing the color of the requested pixel.</returns>
+        /// <exception cref="InvalidOperationException">If not locked for Reading.</exception>
         public Color GetPixel(int x, int y)
         {
             if (lockMode != ImageLockMode.ReadOnly && lockMode != ImageLockMode.ReadWrite)
@@ -158,7 +159,7 @@ namespace FireDemo
         /// </summary>
         /// <param name="x">The x-coordinate of the pixel to set.</param>
         /// <param name="y">The y-coordinate of the pixel to set.</param>
-        /// <param name="color">A <b>Color</b> structure that represents the color to assign to the specified pixel.</param>
+        /// <param name="color">A <see cref="Color"/> structure that represents the color to assign to the specified pixel.</param>
         public void SetPixel(int x, int y, Color color)
         {
             //if (lockMode != ImageLockMode.WriteOnly && lockMode != ImageLockMode.ReadWrite)

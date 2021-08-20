@@ -44,7 +44,7 @@ namespace FireDemo
         int iFrame = 0;
         int width;
         int height;
-        int density;
+        float density;
 
         /// <summary>
         /// Move the map up one row per frame to give the appearance of rising air currents.
@@ -56,8 +56,8 @@ namespace FireDemo
         /// </summary>
         bool rotate = false;
 
-        int min;
-        int max;
+        int minValue;
+        int maxValue;
         int smoothing;
         public CoolingStrategyMap() : this(new Random())
         {
@@ -100,24 +100,35 @@ namespace FireDemo
         /// <summary>
         /// Probably should rename this, but creating a new "initialize" method to allow changing the values on the fly
         /// </summary>
-        /// <param name="w"></param>
-        /// <param name="h"></param>
-        /// <param name="bRotate"></param>
-        /// <param name="bShift"></param>
-        /// <param name="nDensity"></param>
-        /// <param name="nMin"></param>
-        /// <param name="nMax"></param>
-        /// <param name="nSmoothing"></param>
-        public void SetMapParameters(int w, int h, bool bRotate, bool bShift, int nDensity, int nMin, int nMax, int nSmoothing)
+        /// <param name="width">The width, in pixels, of the new cooling map.</param>
+        /// <param name="height">The height, in pixels, of the new cooling map.</param>
+        /// <param name="density">Percent of pixels that should be filled with a cooling value. Range is 0.0 to 1.0 inclusive.</param>
+        /// <param name="min">Minimum cooling intensity. Range is 0 to 255 inclusive. MUST be less-or-equal to <paramref name="max"/></param>
+        /// <param name="max">Maximum cooling intensity. Range is 0 to 255 inclusive. MUST be greater-or-equal to <paramref name="min"/>.</param>
+        /// <param name="smoothing">Number of times to smooth out the values to produce a produce a more even distribution</param>
+        /// <param name="shift">If <c>true</c>, move the map up one row per frame to give the appearance of rising air currents.</param>
+        /// <param name="rotate">If <c>true</c>, periodically generate an entirely new map, so the flame doesn't look like a video on repeat. Only makes sense to set this when <paramref name="shift"/> is also <c>true</c>.</param>
+        public void SetMapParameters(int width, int height, float density, int min, int max, int smoothing = 0, bool shift = true, bool rotate = true)
         {
-            width = w;
-            height = h;
-            rotate = bRotate;
-            shift = bShift;
-            density = nDensity;
-            min = nMin;
-            max = nMax;
-            smoothing = nSmoothing;
+            if (density < 0 || density > 1)
+                throw new ArgumentOutOfRangeException("Density percent must be between 0 and 1.0 inclusive.");
+            if (min > max)
+                throw new ArgumentOutOfRangeException("Min value must not be larger than max value.");
+            if (min < 0 || min > 255)
+                throw new ArgumentOutOfRangeException("Min value must be between 0 and 255 inclusive.");
+            if (min > max)
+                throw new ArgumentOutOfRangeException("Max value must be between 0 and 255 inclusive.");
+            if (smoothing < 0)
+                throw new ArgumentOutOfRangeException("Smoothing must be non-negative.");
+
+            this.width = width;
+            this.height = height;
+            this.rotate = rotate;
+            this.shift = shift;
+            this.density = density;
+            this.minValue = min;
+            this.maxValue = max;
+            this.smoothing = smoothing;
 
             InitializeCoolingMap();
         }
@@ -236,8 +247,8 @@ namespace FireDemo
         {
             for (int i = start; i < end; ++i)
             {
-                if (this.density > rng.Next(100))
-                    theMap[i] = rng.Next(this.min, this.max + 1);
+                if (this.density > rng.NextDouble())
+                    theMap[i] = rng.Next(this.minValue, this.maxValue + 1);
                 else
                     theMap[i] = 0;
             }

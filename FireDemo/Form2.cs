@@ -15,7 +15,7 @@ namespace FireDemo
         Color[] m_palette;
         CoolingStrategyMap m_coolingStrategy;
         ILightPen m_lightPen;
-        ILightShape m_lightShape;
+        List<ILightShape> m_lightShapes = new List<ILightShape>();
         AbstractDynamicSprite m_dbSprite;
         private GenericRealtimeFlame m_genericFlame;
         int m_fireWidth;
@@ -45,7 +45,7 @@ namespace FireDemo
 
             Color[] palBorg = PaletteGenerator.GetHardCodedBorgPalette();
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
-            ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, bUseFullRange: false);
+            ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsBorgRing = new LightShapeBorgRing();
             ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
             lsBorgRing.SetPen(lpPlasma);
@@ -63,7 +63,9 @@ namespace FireDemo
 
             m_palette = palBorg;
             m_lightPen = lpPlasma;
-            m_lightShape = lsBorgPlasma; // TODO: JRDV: need to track multiple
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsBorgPlasma);
+            m_lightShapes.Add(lsBorgRing);
             m_dbSprite = dbPlasmaDisc;
         }
 
@@ -76,7 +78,7 @@ namespace FireDemo
 
             Color[] palLightning = PaletteGenerator.GetHardCodedLightningPalette();
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(27);
-            ILightPen lpLightning = new LightPen(fill: 1.0f, min: 255, max: 255, bUseFullRange: false);
+            ILightPen lpLightning = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsLightning = new LightShapeLightning();
             lsLightning.SetPen(lpLightning);
 
@@ -91,7 +93,8 @@ namespace FireDemo
 
             m_palette = palLightning;
             m_lightPen = lpLightning;
-            m_lightShape = lsLightning;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsLightning);
             m_dbSprite = dbLightning;
         }
 
@@ -106,8 +109,11 @@ namespace FireDemo
             //magnification = 2;
 
             Color[] palFire = PaletteGenerator.GetHardCodedFirePalette();
-            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(2);
-            ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, bUseFullRange: false);
+            ICoolingStrategy coolingStrategy;
+            m_coolingStrategy = new CoolingStrategyMap();
+            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0);
+            coolingStrategy = m_coolingStrategy;
+            ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, useFullRange: false);
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
@@ -122,7 +128,8 @@ namespace FireDemo
 
             m_palette = palFire;
             m_lightPen = lpBatman;
-            m_lightShape = lsBatman;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsBatman);
             m_dbSprite = dbBatman;
         }
 
@@ -148,15 +155,14 @@ namespace FireDemo
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(fireWidth, fireHeight,
-                bRotate: true, bShift: true,
-                nDensity: 40, nMin: 5, nMax: 13, nSmoothing: 5);
+                rotate: true, shift: true,
+                density: 0.4f, min: 5, max: 13, smoothing: 5);
             coolingStrategy = m_coolingStrategy;
 
-            ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, bUseFullRange: true);
+            ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
-            //AbstractDynamicSprite
             AbstractRealtimeLightEffect dbCandle = new RealtimeCandleflame();
             m_genericFlame = new GenericRealtimeFlame();
             dbCandle = m_genericFlame;
@@ -170,7 +176,8 @@ namespace FireDemo
 
             m_palette = palCandle;
             m_lightPen = lpCandle;
-            m_lightShape = lsCandle;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsCandle);
             m_dbSprite = dbCandle;
         }
 

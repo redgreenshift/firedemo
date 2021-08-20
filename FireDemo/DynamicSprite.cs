@@ -213,7 +213,6 @@ namespace FireDemo
         public AbstractRealtimeLightEffect()
         {
             rng = new Random();
-            //Initialize(width: 10, height: 10, magnification: 1); // TODO: JRDV: I think I want to delete this. The caller MUST specify the size before use!!
         }
 
         public override void Initialize(int width, int height, int magnification)
@@ -315,7 +314,7 @@ namespace FireDemo
             if (cPixelsToAverage < 0)
                 cPixelsToAverage = 0;
 
-            poker.LockBits();
+            poker.LockBits(ImageLockMode.WriteOnly);
             for (int y = 1; y < height - 1; ++y)
             {
                 for (int x = 1; x < width - 1; ++x)
@@ -381,7 +380,7 @@ namespace FireDemo
             //X X X
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
-            poker.LockBits();
+            poker.LockBits(ImageLockMode.WriteOnly);
             for (int y = 1; y < height - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixel(0, y + 1);
@@ -434,7 +433,7 @@ namespace FireDemo
             //"
             int calc, p1, p2, p3, p5, coolingFactor;
 
-            poker.LockBits();
+            poker.LockBits(ImageLockMode.WriteOnly);
             for (int y = 1; y < height - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixel(0, y + 1);
@@ -626,7 +625,7 @@ namespace FireDemo
             //. X .
             int calc, p2, p4, p5, p6, p8, coolingFactor;
 
-            poker.LockBits();
+            poker.LockBits(ImageLockMode.WriteOnly);
 
             for (int y = 1; y < height - 1; ++y)
             {
