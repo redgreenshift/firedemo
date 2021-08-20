@@ -184,9 +184,17 @@ namespace FireDemo
                     break;
 
                 case 16: // Red(5), Green(6), and Blue(5)
-                    UInt16 word = (ushort)((color.B << 11) | (color.G << 5) | color.R);
-                    Pixels[iPixel] = (byte)(word >> 8);
-                    Pixels[iPixel + 1] = (byte)(word & 0xFF);
+                    int r = color.R * 0x1f / 255;
+                    int g = color.G * 0x3f / 255;
+                    int b = color.B * 0x1f / 255;
+                    //UInt16 word = (ushort)((color.G << 11) | (color.B << 5) | color.R);
+                    UInt16 word = (ushort)((b << 11) | (g << 5) | r);
+                    word = (ushort)((g << 11) | (b << 5) | r);
+                    word = (ushort)((r << 11) | (g << 5) | b);
+                    //Pixels[iPixel] = (byte)(word >> 8);
+                    //Pixels[iPixel + 1] = (byte)(word & 0xFF);
+                    Pixels[iPixel] = (byte)(word & 0xFF);
+                    Pixels[iPixel + 1] = (byte)(word >> 8);
                     break;
 
                 //case 15: // Red, Green, and Blue (5-bits each)
