@@ -38,7 +38,7 @@ namespace FireDemo
         protected void DrawPixel(int x, int y, IBitCanvas bc)
         {
             if (pen.FShouldDrawNext())
-                bc.Put(x, y, pen.NextValue());
+                bc.SetPixel(x, y, pen.NextValue());
         }
 
         protected void DrawCircle(int xCenter, int yCenter, int radius, IBitCanvas bc)
@@ -296,7 +296,7 @@ namespace FireDemo
                         isFirstIteration = false;
 
                         //flameIntensityMatrixFront[eachx + y * fireWidth] = 255;
-                        bc.Put(eachx, y, 255);
+                        bc.SetPixel(eachx, y, 255);
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
@@ -376,7 +376,7 @@ namespace FireDemo
                         int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
 
                         //flameIntensityMatrixFront[xRender + yRender * fireWidth] = 255;
-                        callback.Put(xRender, yRender, 255);
+                        callback.SetPixel(xRender, yRender, 255);
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)

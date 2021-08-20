@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 
@@ -9,6 +11,7 @@ namespace FireDemo
     abstract class AbstractDynamicSprite
     {
         protected Bitmap front;
+        protected BitmapLocker poker;
         protected Color[] thePalette;
         public int height;
         public int width;
@@ -23,6 +26,7 @@ namespace FireDemo
             this.height = height;
             //front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
             front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            poker = new BitmapLocker(front);
             // TODO: JRDV: How do I set the palette? How did I do it in the main program?I just used 32bit. No need to use palette inside the bitmap
             thePalette = PaletteGenerator.GetHardCodedFirePalette();
         }
@@ -43,7 +47,24 @@ namespace FireDemo
             }
             else
             {
-                graph.DrawImage(front, Location.X, Location.Y, width * magnification, height * magnification);
+                CompositingMode cm = graph.CompositingMode; // Default SourceOver
+                InterpolationMode im = graph.InterpolationMode; // Default Bilinear
+
+                graph.CompositingMode = CompositingMode.SourceCopy;
+                if (magnification == 1)
+                {
+                    int notUnused = 0;
+                    graph.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    graph.DrawImageUnscaled(front, Location.X, Location.Y, notUnused, notUnused);
+                }
+                else
+                {
+                    graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graph.DrawImage(front, Location.X, Location.Y, width * magnification, height * magnification);
+                }
+
+                graph.CompositingMode = cm;
+                graph.InterpolationMode = im;
             }
         }
 
@@ -294,6 +315,7 @@ namespace FireDemo
             if (cPixelsToAverage < 0)
                 cPixelsToAverage = 0;
 
+            poker.LockBits();
             for (int y = 1; y < height - 1; ++y)
             {
                 for (int x = 1; x < width - 1; ++x)
@@ -301,23 +323,23 @@ namespace FireDemo
                     calc = 0;
                     // Add the surrounding pixels
                     if (f7)
-                        calc += intensityMatrix.Get(x - 1, y - 1);
+                        calc += intensityMatrix.GetPixel(x - 1, y - 1);
                     if (f8)
-                        calc += intensityMatrix.Get(x, y - 1);
+                        calc += intensityMatrix.GetPixel(x, y - 1);
                     if (f9)
-                        calc += intensityMatrix.Get(x + 1, y - 1);
+                        calc += intensityMatrix.GetPixel(x + 1, y - 1);
                     if (f4)
-                        calc += intensityMatrix.Get(x - 1, y);
+                        calc += intensityMatrix.GetPixel(x - 1, y);
                     if (f5)
-                        calc += intensityMatrix.Get(x, y);
+                        calc += intensityMatrix.GetPixel(x, y);
                     if (f6)
-                        calc += intensityMatrix.Get(x + 1, y);
+                        calc += intensityMatrix.GetPixel(x + 1, y);
                     if (f1)
-                        calc += intensityMatrix.Get(x - 1, y + 1);
+                        calc += intensityMatrix.GetPixel(x - 1, y + 1);
                     if (f2)
-                        calc += intensityMatrix.Get(x, y + 1);
+                        calc += intensityMatrix.GetPixel(x, y + 1);
                     if (f3)
-                        calc += intensityMatrix.Get(x + 1, y + 1);
+                        calc += intensityMatrix.GetPixel(x + 1, y + 1);
 
                     // Average the colors
                     calc /= cPixelsToAverage;
@@ -333,10 +355,11 @@ namespace FireDemo
                     else
                         calc = 0;
 
-                    intensityMatrix.Put(x, y, calc);
-                    front.SetPixel(x, y, this.thePalette[calc]);
+                    intensityMatrix.SetPixel(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
                 }
             }
+            poker.UnlockBits();
         }
     }
 
@@ -358,19 +381,20 @@ namespace FireDemo
             //X X X
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
+            poker.LockBits();
             for (int y = 1; y < height - 1; ++y)
             {
-                p2 = intensityMatrix.Get(0, y + 1);
-                p3 = intensityMatrix.Get(1, y + 1);
+                p2 = intensityMatrix.GetPixel(0, y + 1);
+                p3 = intensityMatrix.GetPixel(1, y + 1);
 
                 for (int x = 1; x < width - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
                     p2 = p3;
-                    p8 = intensityMatrix.Get(x, y - 1);
-                    p5 = intensityMatrix.Get(x, y);
-                    p3 = intensityMatrix.Get(x + 1, y + 1);
+                    p8 = intensityMatrix.GetPixel(x, y - 1);
+                    p5 = intensityMatrix.GetPixel(x, y);
+                    p3 = intensityMatrix.GetPixel(x + 1, y + 1);
 
                     // Average the colors
                     calc = p8 + p5 + p1 + p2 + p3;
@@ -383,10 +407,11 @@ namespace FireDemo
                     else
                         calc = 0;
 
-                    intensityMatrix.Put(x, y, calc);
-                    front.SetPixel(x, y, this.thePalette[calc]);
+                    intensityMatrix.SetPixel(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
                 }
             }
+            poker.UnlockBits();
         }
     }
 
@@ -409,18 +434,19 @@ namespace FireDemo
             //"
             int calc, p1, p2, p3, p5, coolingFactor;
 
+            poker.LockBits();
             for (int y = 1; y < height - 1; ++y)
             {
-                p2 = intensityMatrix.Get(0, y + 1);
-                p3 = intensityMatrix.Get(1, y + 1);
+                p2 = intensityMatrix.GetPixel(0, y + 1);
+                p3 = intensityMatrix.GetPixel(1, y + 1);
 
                 for (int x = 1; x < width - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
                     p2 = p3;
-                    p5 = intensityMatrix.Get(x, y);
-                    p3 = intensityMatrix.Get(x + 1, y + 1);
+                    p5 = intensityMatrix.GetPixel(x, y);
+                    p3 = intensityMatrix.GetPixel(x + 1, y + 1);
 
                     // Average the colors
                     calc = p5 + p1 + p2 + p3;
@@ -433,10 +459,11 @@ namespace FireDemo
                     else
                         calc = 0;
 
-                    intensityMatrix.Put(x, y, calc);
-                    front.SetPixel(x, y, this.thePalette[calc]);
+                    intensityMatrix.SetPixel(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
                 }
             }
+            poker.UnlockBits();
         }
     }
 
@@ -496,6 +523,8 @@ namespace FireDemo
             x1inner = (int)(42.0f / 52 * (width - 1) + 1);
             y1inner = (int)(5.9f / 18 * (height * 3 / 4) + (height / 4));
 
+            poker.LockBits(ImageLockMode.WriteOnly);
+
             for (int y = 1; y < height - 1; ++y)
             {
                 // There are large areas of pixels that will NEVER change in the Bat Logo.
@@ -518,8 +547,8 @@ namespace FireDemo
                 //	"doShoulderCheck := (y > y0wing) && (y <= y1wing)."
                 doInnerCheck = (y > y0inner) && (y <= y1inner);
 
-                p2 = intensityMatrix.Get(x: 0, y: y + 1);
-                p3 = intensityMatrix.Get(x: 1, y: y + 1);
+                p2 = intensityMatrix.GetPixel(x: 0, y: y + 1);
+                p3 = intensityMatrix.GetPixel(x: 1, y: y + 1);
 
                 for (int x = 1; x < width - 1; ++x)
                 {
@@ -544,8 +573,8 @@ namespace FireDemo
 
                         p1 = p2;
                         p2 = p3;
-                        p5 = intensityMatrix.Get(x, y);
-                        p3 = intensityMatrix.Get(x + 1, y + 1);
+                        p5 = intensityMatrix.GetPixel(x, y);
+                        p3 = intensityMatrix.GetPixel(x + 1, y + 1);
 
                         // Average the colors
                         calc = p5 + p1 + p2 + p3;
@@ -558,8 +587,9 @@ namespace FireDemo
                         else
                             calc = 0;
 
-                        intensityMatrix.Put(x, y, calc);
-                        front.SetPixel(x, y, this.thePalette[calc]);
+                        intensityMatrix.SetPixel(x, y, calc);
+                        //front.SetPixel(x, y, this.thePalette[calc]); // This is by far the most expensive part.
+                        poker.SetPixel(x, y, this.thePalette[calc]);
                     }
                     else
                     {
@@ -569,10 +599,12 @@ namespace FireDemo
                         p3 = 0;
 
                         //DEBUG: Show me the dead zone
-                        //front.SetPixel(x, y, this.thePalette[255]);
+                        //poker.SetPixel(x, y, this.thePalette[255]);
                     }
                 }
             }
+
+            poker.UnlockBits();
         }
     }
 
@@ -594,19 +626,21 @@ namespace FireDemo
             //. X .
             int calc, p2, p4, p5, p6, p8, coolingFactor;
 
+            poker.LockBits();
+
             for (int y = 1; y < height - 1; ++y)
             {
-                p5 = intensityMatrix.Get(0, y);
-                p6 = intensityMatrix.Get(1, y);
+                p5 = intensityMatrix.GetPixel(0, y);
+                p6 = intensityMatrix.GetPixel(1, y);
 
                 for (int x = 1; x < width - 1; ++x)
                 {
                     // Add the surrounding pixels
-                    p8 = intensityMatrix.Get(x, y - 1);
+                    p8 = intensityMatrix.GetPixel(x, y - 1);
                     p4 = p5;
                     p5 = p6;
-                    p6 = intensityMatrix.Get(x + 1, y);
-                    p2 = intensityMatrix.Get(x, y + 1);
+                    p6 = intensityMatrix.GetPixel(x + 1, y);
+                    p2 = intensityMatrix.GetPixel(x, y + 1);
 
                     // Average the colors
                     calc = p8 + p6 + p5 + p4 + p2;
@@ -619,10 +653,11 @@ namespace FireDemo
                     else
                         calc = 0;
 
-                    intensityMatrix.Put(x, y, calc);
-                    front.SetPixel(x, y, this.thePalette[calc]);
+                    intensityMatrix.SetPixel(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
                 }
             }
+            poker.UnlockBits();
         }
     }
 }

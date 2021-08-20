@@ -30,10 +30,10 @@ namespace FireDemo
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            //SimpleCandle();
+            SimpleCandle();
             DemoBatman();
-            DemoLightning();
-            DemoBorg();
+            //DemoLightning();
+            //DemoBorg();
         }
 
         private void DemoBorg()
@@ -142,7 +142,6 @@ namespace FireDemo
             //        bmEmpty.SetPixel(x, y, Color.FromArgb(rng.Next(255), rng.Next(255), rng.Next(255)));
 
             //graph.DrawImage(bmEmpty, left, top, maxWidth*magnification, maxHeight * magnification);
-
 
             Color[] palCandle = PaletteGenerator.GetHardCodedFirePalette();
 

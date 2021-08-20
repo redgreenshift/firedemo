@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapLocker.cs" />
     <Compile Include="DynamicSprite.cs" />
     <Compile Include="BitCanvas.cs" />
     <Compile Include="ColorRange.cs" />
