@@ -626,6 +626,34 @@ namespace FireDemo
 
             poker.LockBits(ImageLockMode.WriteOnly);
 
+            // Account for the top row
+            p5 = intensityMatrix.GetPixel(0, y: 0);
+            p6 = intensityMatrix.GetPixel(1, y: 0);
+            p8 = 0;
+            for (int x = 1; x < Width - 1; ++x)
+            {
+                // Add the surrounding pixels
+                p4 = p5;
+                p5 = p6;
+                p6 = intensityMatrix.GetPixel(x + 1, y: 0);
+                p2 = intensityMatrix.GetPixel(x, y: 1);
+
+                // Average the colors
+                calc = p8 + p6 + p5 + p4 + p2;
+                calc /= 5;
+
+                // Subtract the coolingFactor value, if necessary
+                coolingFactor = coolingStrategy.at(x, y: 0);
+                if (calc > coolingFactor)
+                    calc -= coolingFactor;
+                else
+                    calc = 0;
+
+                intensityMatrix.SetPixel(x, y: 0, calc);
+                poker.SetPixel(x, y: 0, this.thePalette[calc]);
+            }
+
+            // Account for the rest
             for (int y = 1; y < Height - 1; ++y)
             {
                 p5 = intensityMatrix.GetPixel(0, y);
