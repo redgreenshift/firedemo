@@ -127,20 +127,20 @@ namespace FireDemo
                     }
                     break;
 
-                case 16: // Red(5), Green(6), and Blue(5)
+                case 16: // Red(5), Green(6), and Blue(5) Format16bppRgb565
                     {
-                        byte b = (byte)((Pixels[iPixel] >> 3) & 0x1F);
-                        byte g = (byte)(((Pixels[iPixel] << 3) | (Pixels[iPixel + 1] >> 5)) & 0x3F);
-                        byte r = (byte)(Pixels[iPixel + 1] & 0x1F);
+                        byte b = (byte)(Pixels[iPixel] & 0x1F);
+                        byte g = (byte)(((Pixels[iPixel] >> 5) | (Pixels[iPixel + 1] << 3)) & 0x3F);
+                        byte r = (byte)((Pixels[iPixel + 1] >> 3) & 0x1F);
                         color = Color.FromArgb(r, g, b);
                     }
                     break;
 
-                //case 15: // Red(5), Green(5), and Blue(5)
+                //case 15: // Red(5), Green(5), and Blue(5) Format16bppRgb555
                 //    {
-                //        byte b = (byte)((Pixels[iPixel] >> 2) & 0x1F);
-                //        byte g = (byte)(((Pixels[iPixel] << 3) | (Pixels[iPixel + 1] >> 5)) & 0x1F);
-                //        byte r = (byte)(Pixels[iPixel + 1] & 0x1F);
+                //        byte b = (byte)(Pixels[iPixel] & 0x1F);
+                //        byte g = (byte)(((Pixels[iPixel] >> 5) | (Pixels[iPixel + 1] << 3)) & 0x1F);
+                //        byte r = (byte)((Pixels[iPixel + 1] >> 3) & 0x1F);
                 //        color = Color.FromArgb(r, g, b);
                 //    }
                 //    break;
@@ -183,28 +183,33 @@ namespace FireDemo
                     Pixels[iPixel + 2] = color.R;
                     break;
 
-                case 16: // Red(5), Green(6), and Blue(5)
-                    int r = color.R * 0x1f / 255;
-                    int g = color.G * 0x3f / 255;
-                    int b = color.B * 0x1f / 255;
-                    //UInt16 word = (ushort)((color.G << 11) | (color.B << 5) | color.R);
-                    UInt16 word = (ushort)((b << 11) | (g << 5) | r);
-                    word = (ushort)((g << 11) | (b << 5) | r);
-                    word = (ushort)((r << 11) | (g << 5) | b);
-                    //Pixels[iPixel] = (byte)(word >> 8);
-                    //Pixels[iPixel + 1] = (byte)(word & 0xFF);
-                    Pixels[iPixel] = (byte)(word & 0xFF);
-                    Pixels[iPixel + 1] = (byte)(word >> 8);
+                case 16: // Red(5), Green(6), and Blue(5) Format16bppRgb565
+                    {
+                        //int r = color.R * 0x1f / 255;
+                        //int g = color.G * 0x3f / 255;
+                        //int b = color.B * 0x1f / 255;
+                        int r = color.R;
+                        int g = color.G;
+                        int b = color.B;
+                        UInt16 word = (ushort)((r << 11) | (g << 5) | b);
+                        Pixels[iPixel] = (byte)(word & 0xFF);
+                        Pixels[iPixel + 1] = (byte)(word >> 8);
+                    }
                     break;
 
-                //case 15: // Red, Green, and Blue (5-bits each)
-                //    {
-                //        byte b = (byte)((Pixels[iPixel] >> 2) & 0x1F);
-                //        byte g = (byte)(((Pixels[iPixel] << 3) | (Pixels[iPixel + 1] >> 5)) & 0x1F);
-                //        byte r = (byte)(Pixels[iPixel + 1] & 0x1F);
-                //        color = Color.FromArgb(r, g, b);
-                //    }
-                //    break;
+                //case 15: // Red, Green, and Blue (5-bits each) Format16bppRgb555
+                //{
+                ////    int r = color.R * 0x1f / 255;
+                ////    int g = color.G * 0x1f / 255;
+                ////    int b = color.B * 0x1f / 255;
+                //    int r = color.R;
+                //    int g = color.G;
+                //    int b = color.B;
+                //    UInt16 word = (ushort)((r << 10) | (g << 5) | b);
+                //    Pixels[iPixel] = (byte)(word & 0xFF);
+                //    Pixels[iPixel + 1] = (byte)(word >> 8);
+                //}
+                //break;
 
                 case 8: // For 8-bit depth, the same value is in Red, Green, and Blue (so we only need to check one)
                     Pixels[iPixel] = color.B;

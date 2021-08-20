@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace FireUnitTest
 {
@@ -74,6 +75,26 @@ namespace FireUnitTest
                     Assert.AreEqual(expectedCoolingMap[iCoolingOffset], generatedCoolingMap.at(x, y));
                 }
             }
+        }
+
+        [TestMethod]
+        public void TestBitmapLocker()
+        {
+            int width = 10;
+            int height = 10;
+            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
+            FireDemo.BitmapLocker poker = new FireDemo.BitmapLocker(bitmap);
+
+            poker.LockBits();
+            poker.SetPixel(0, 0, Color.FromArgb(red: 0, green: 0x2d, blue: 0x1f));
+            Color ret = poker.GetPixel(0, 0);
+
+            Assert.AreEqual(0, ret.R, "The color should round trip");
+            Assert.AreEqual(0x2d, ret.G, "The color should round trip");
+            Assert.AreEqual(0x1f, ret.B, "The color should round trip");
+
+            poker.UnlockBits();
+
         }
     }
 }
