@@ -211,7 +211,7 @@ namespace FireDemo
             {
                 timer1.Enabled = false;
                 buttonDemo.Text = "Start!";
-                this.BackColor = Color.DarkGray;
+                this.BackColor = Color.DimGray;
             }
         }
 

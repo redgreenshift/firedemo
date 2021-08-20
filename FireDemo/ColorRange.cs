@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FireDemo
 {
-	struct ColorRange
+	public struct ColorRange
 	{
 		public ColorRange(Color color, int range)
 		{
