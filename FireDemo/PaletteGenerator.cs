@@ -122,9 +122,9 @@ namespace FireDemo
                     intensity = ((float)intensityUpDown.Value / 100);
 
                 if (color == Color.White)
-                    InitializeWhiteFlameCurve();
+                    InitializeWhiteFlameCurve(); // TODO: JRDV: Port these!!!
                 else if (color == Color.Black)
-                    InitializeBlackFlameCurve();
+                    InitializeBlackFlameCurve(); // TODO: JRDV: Port these!!!
                 else
 
                     InitializeRealisticFlameCurve(color, intensity);
