@@ -859,16 +859,21 @@ namespace FireDemo
             {
                 Color[] palBlue = PalRealisticFlameCurve.New(Color.FromArgb(128, 255, 255)); // BLUE
                 Color[] palRedOrange = new Color[256];
-                InitializeRealisticFlameCurve(palRedOrange, Color.FromArgb(255, 128, 0)); // Validate ???
+                InitializeRealisticFlameCurve(palRedOrange, Color.FromArgb(255, 128, 0)); // OK, Orange is just OK
 
                 // Use the switch point to zero out the pink colors in the RedOrange palette
-                MixPalettes(thePalette, palRedOrange, palBlue, 1.0f, switchPoint: 70, whitePoint: 200);
+                // Basically take just the Orange halo from the lower end, and then above 70 switch to the "realistic" lightning color.
+                // This might be a good general pattern for lightning palette generation:
+                // The top end is always super bright, but as it cools, the "color halo" is responsible for the color you see.
+                // It's easier to see this "halo" when using the lightning palette on a candle. The center of the flame is
+                // bright white/bluish, and the outer part of the flame is the "color" you want the lightning to be.
+                MixPalettes(thePalette, palRedOrange, palBlue, balance: 1.0f, switchPoint: 70, whitePoint: 200);
             }
             else if (color == Color.Yellow)
             {
-                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 127)); // Too light
-                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 64)); // Too dark
-                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 96)); // Better
+                //InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 127)); // Too light
+                //InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 64)); // Too dark
+                //InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 96)); // Better
                 InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 112)); // About right
                 //InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 104)); // Better? Maybe not?
             }
