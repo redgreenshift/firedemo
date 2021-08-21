@@ -152,8 +152,20 @@ namespace FireDemo
             dbPlasmaDisc_FavoriteLightBlue.SetPalette(PalPlasma.NewRaw(
                 Color.FromArgb(red: 0, green: 128, blue: 255),
                 Color.FromArgb(red: 192, green: 192, blue: 255)));
+            dbPlasmaDisc_FavoriteLightBlue.SetPalette(PalPlasma.NewRaw(
+                Color.FromArgb(red: 0, green: 128, blue: 255),
+                Color.FromArgb(red: 255, green: 255, blue: 255)));
+            dbPlasmaDisc_FavoriteLightBlue.SetPalette(PalPlasma.New(Color.LightBlue)); // Update the generator if I improve the color
+            //dbPlasmaDisc_FavoriteLightBlue.SetPalette(PalPlasma.New(Color.DarkBlue)); // Update the generator if I improve the color
             dbPlasmaDisc_FavoriteLightBlue.AddShape(lsBorgPlasma);
             dbPlasmaDisc_FavoriteLightBlue.AddShape(lsBorgRing);
+
+            AbstractRealtimeLightEffect dbPlasmaDisc_DarkBlue = new RealtimeLightning();
+            dbPlasmaDisc_DarkBlue.Initialize(ringWidth, ringHeight, magnification);
+            dbPlasmaDisc_DarkBlue.SetCoolingStrategy(coolingStrategy);
+            dbPlasmaDisc_DarkBlue.SetPalette(PalPlasma.New(Color.DarkBlue));
+            dbPlasmaDisc_DarkBlue.AddShape(lsBorgPlasma);
+            dbPlasmaDisc_DarkBlue.AddShape(lsBorgRing);
 
             AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteBlue = new RealtimeLightning();
             dbPlasmaDisc_FavoriteBlue.Initialize(ringWidth, ringHeight, magnification);
@@ -177,27 +189,38 @@ namespace FireDemo
             dbPlasmaDisc_FavoriteDeepGreen.SetPalette(PalPlasma.NewRaw(
                 Color.FromArgb(red: 0, green: 222, blue: 0),
                 Color.FromArgb(red: 222, green: 255, blue: 222)));
+            dbPlasmaDisc_FavoriteDeepGreen.SetPalette(PalPlasma.NewRaw(
+                Color.FromArgb(red: 0, green: 200, blue: 0),
+                Color.FromArgb(red: 240, green: 240, blue: 240)));
+            dbPlasmaDisc_FavoriteDeepGreen.SetPalette(PalPlasma.NewRaw(
+                Color.FromArgb(red: 0, green: 128, blue: 0),
+                Color.FromArgb(red: 255, green: 255, blue: 255)));
+            //dbPlasmaDisc_FavoriteDeepGreen.SetPalette(PalPlasma.New(Color.DarkGreen));
             dbPlasmaDisc_FavoriteDeepGreen.AddShape(lsBorgPlasma);
             dbPlasmaDisc_FavoriteDeepGreen.AddShape(lsBorgRing);
+            //m_dbSprites.Add(dbPlasmaDisc_FavoriteDeepGreen);
 
             left = this.Width / 5;
             top = this.Height / 3 - 4;
-            dbPlasmaDiscRed.Location = new Point(x: 0, y: 0);
-            dbPlasmaDiscOrange.Location = new Point(x: left, y: 0);
-            dbPlasmaDiscYellow.Location = new Point(x: left * 2, y: 0);
-            dbPlasmaDiscGreen.Location = new Point(x: left * 3, y: 0);
-            dbPlasmaDisc_FavoriteDeepGreen.Location = new Point(x: left * 4, y: 0);
+            dbPlasmaDiscRed.Location = new Point(x: 0, y: top * 0);
+            dbPlasmaDiscOrange.Location = new Point(x: left, y: top * 0);
+            dbPlasmaDiscYellow.Location = new Point(x: left * 2, y: top * 0);
+            dbPlasmaDiscGreen.Location = new Point(x: left * 3, y: top * 0);
+            dbPlasmaDisc_FavoriteDeepGreen.Location = new Point(x: left * 4, y: top * 0);
 
-            dbPlasmaDiscBlue.Location = new Point(x: left * 0, y: top);
-            dbPlasmaDiscDarkViolet.Location = new Point(x: left * 1, y: top);
-            dbPlasmaDisc_FavoriteViolet.Location = new Point(x: left * 2, y: top);
+            dbPlasmaDisc_FavoriteLightBlue.Location = new Point(x: left * 0, y: top * 1);
+            dbPlasmaDiscBlue.Location = new Point(x: left * 1, y: top * 1);
+            dbPlasmaDisc_DarkBlue.Location = new Point(x: left * 2, y: top * 1);
+
+            dbPlasmaDiscDarkViolet.Location = new Point(x: left * 0, y: top * 2);
+            dbPlasmaDisc_FavoriteViolet.Location = new Point(x: left * 1, y: top * 2);
+
+            dbPlasmaDisc_FavoriteBlue.Location = new Point(x: left * 4, y: top);
 
 
             dbPlasmaDiscSkyBlue.Location = new Point(x: left * 0, y: top);
-            dbPlasmaDisc_FavoriteLightBlue.Location = new Point(x: left * 0, y: top);
             dbPlasmaDiscBlueNICE.Location = new Point(x: left * 1, y: top);
             dbPlasmaDiscBlue_Raw.Location = new Point(x: left * 2, y: top);
-            dbPlasmaDisc_FavoriteBlue.Location = new Point(x: left * 4, y: top);
 
             dbPlasmaDiscBlueViolet.Location = new Point(x: left * 2, y: top * 2);
             dbPlasmaDiscVioletEX1.Location = new Point(x: left * 3, y: top * 2);
@@ -213,15 +236,17 @@ namespace FireDemo
             m_dbSprites.Add(dbPlasmaDiscBlue); // GOOD
             m_dbSprites.Add(dbPlasmaDiscDarkViolet); // GOOD
             m_dbSprites.Add(dbPlasmaDisc_FavoriteViolet); // GOOD Violet(basic/light)
+            m_dbSprites.Add(dbPlasmaDisc_FavoriteLightBlue);
+            m_dbSprites.Add(dbPlasmaDisc_DarkBlue);
+
+            //m_dbSprites.Add(dbPlasmaDisc_FavoriteBlue);
 
             //m_dbSprites.Add(dbPlasmaDiscBlue_Raw);
             //m_dbSprites.Add(dbPlasmaDiscViolet_Raw);
             //m_dbSprites.Add(dbPlasmaDiscBlueViolet);
             //m_dbSprites.Add(dbPlasmaDiscVioletEX1);
             //m_dbSprites.Add(dbPlasmaDiscBlueNICE);
-            //m_dbSprites.Add(dbPlasmaDisc_FavoriteLightBlue);
             //m_dbSprites.Add(dbPlasmaDisc_FavoriteBlue);
-            //m_dbSprites.Add(dbPlasmaDisc_FavoriteDeepGreen);
         }
 
         private void DemoBorg()
@@ -236,6 +261,17 @@ namespace FireDemo
 
             Color[] palBorg = PaletteGenerator.GetHardCodedBorgPalette();
             palBorg = PalPlasma.New(Color.DarkViolet);
+            palBorg = PalPlasma.NewRaw(
+                Color.FromArgb(red: 0, green: 200, blue: 0),
+                Color.FromArgb(red: 200, green: 200, blue: 200));
+            palBorg = PalPlasma.NewRaw(
+                Color.FromArgb(red: 0, green: 128, blue: 255),
+                Color.FromArgb(red: 192, green: 192, blue: 255));
+            palBorg = PalPlasma.NewRaw(
+                Color.FromArgb(red: 0, green: 128, blue: 255),
+                Color.FromArgb(red: 224, green: 224, blue: 255));
+            palBorg = PalPlasma.New(Color.Blue);
+
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsBorgRing = new LightShapeBorgRing();
