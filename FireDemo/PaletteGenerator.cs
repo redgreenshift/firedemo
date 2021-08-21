@@ -227,12 +227,18 @@ namespace FireDemo
             else if (color == Color.LightBlue)
             {
                 //Color c2 = Color.FromArgb(red: 0, green: 128, blue: 255);
-                //Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255);
+                //Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255); // I liked this, but it was too dark
                 Color c2 = Color.FromArgb(red: 0, green: 128, blue: 255); // significantly deepen the base color
                 Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255); // slightly darken the mid-range
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
-            else if (color == Color.Blue) // Consider swapping this with DarkBlue, because the above values for LightBlue are what I think I want for default BLUE!
+            else if (color == Color.Blue)
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 80, blue: 255); // significantly deepen the base color
+                Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255); // slightly darken the mid-range
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
+            }
+            else if (color == Color.DarkBlue)
             {
                 // Originally thought it was halfway between Blue and this LightBlue
                 //Color c2 = Color.FromArgb(red: 0, green: 0, blue: 255);
@@ -255,9 +261,8 @@ namespace FireDemo
                 // BUUUUUUT maybe I need to define a better "curve" through the color space?
                 // TODO: JRDV: Explore using the lighting palette for plasma,
                 // which first requires generalizing the lighting palette algorithm.
-                PalFourPointLinear.Fill(thePalette, Color.Black, color, Color.White, Color.White);
-                Color c2 = Color.FromArgb(red: 0, green: 32, blue: 255); // brighten the base color slightly
-                Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255); // darken the mid -range slightly
+                Color c2 = Color.FromArgb(red: 0, green: 32, blue: 255); // slightly brighten the base color
+                Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255); // slightly darken the mid-range
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
             //else if (color == Color.DarkViolet) // Looks good (slightly better than DarkMagenta)
