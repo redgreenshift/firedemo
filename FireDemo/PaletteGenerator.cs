@@ -302,15 +302,20 @@ namespace FireDemo
             // Tweak the basic colors to what I think looks best
             if (color == Color.Red)
             {
-                Color pink = Color.FromArgb(red: 255, green: 192, blue: 192);
-                PalFourPointLinear.Fill(thePalette, Color.Black, color, pink, Color.White);
+                Color c3 = Color.FromArgb(red: 255, green: 192, blue: 192); // Original color I liked
+                //c3 = Color.FromArgb(red: 255, green: 224, blue: 224);
+                //c3 = Color.FromArgb(red: 255, green: 180, blue: 180);
+                //c3 = Color.FromArgb(red: 255, green: 184, blue: 184);
+                //c3 = Color.White;
+                //c3 = Color.FromArgb(red: 255, green: 224, blue: 224); // Do I like this better? Brighten the bolt? NO! Looked beter on the small version, but not as good on the large version
+                PalFourPointLinear.Fill(thePalette, Color.Black, color, c3, Color.White);
             }
-            else if (color == Color.Orange) // Need to tweak like Red?
+            else if (color == Color.Orange)
             {
-                color = Color.DarkOrange;
-                Color c2 = Color.FromArgb(red: 255, green: 96, blue: 0);
-                Color c3 = Color.FromArgb(red: 255, green: 165 + (255 - 165) *3 /4, blue: 192); // ??
-                c3 = Color.White;
+                Color c2 = Color.FromArgb(red: 255, green: 96, blue: 0); // Want to deepen the orange? Looked OK small, but larger, the below colors work better.
+                Color c3 = Color.White;
+                c2 = Color.FromArgb(red: 255, green: 128, blue: 0);
+                c3 = Color.FromArgb(red: 255, green: 224, blue: 192);
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
             //else if (color == Color.Yellow) // Looks good
