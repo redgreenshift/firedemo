@@ -866,7 +866,11 @@ namespace FireDemo
             }
             else if (color == Color.Yellow)
             {
-                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 127)); // Validate???
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 127)); // Too light
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 64)); // Too dark
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 96)); // Better
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 112)); // About right
+                //InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 104)); // Better? Maybe not?
             }
             else if (color == Color.Green)
             {
