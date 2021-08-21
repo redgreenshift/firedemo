@@ -48,30 +48,6 @@ namespace FireDemo
             }
         }
 
-        // For the Old 4 point style
-        private void InitializePalette(Color c1, Color c2, Color c3, Color c4)
-        {
-            Color[] thePalette = null;
-#if false // TODO: This will overwrite the user's selection, but makes it easier to tweak
-            customColorButton1.BackColor = c1;
-            customColorButton2.BackColor = c2;
-            customColorButton3.BackColor = c3;
-            customColorButton4.BackColor = c4;
-            userSelectedColor1 = c1;
-            userSelectedColor2 = c2;
-            userSelectedColor3 = c3;
-            userSelectedColor4 = c4;
-#endif
-            //m_fSingleColorFlame = false;
-
-            if (thePalette == null || thePalette.Length != 256)
-                thePalette = new Color[256]; // 85 per each range
-
-            // Including the final value.
-            SetPaletteRangeInclusive(thePalette, 0, 85, c1, c2); // 85 in this range
-            SetPaletteRangeInclusive(thePalette, 85, 170, c2, c3); // 86 in this range
-            SetPaletteRangeInclusive(thePalette, 170, 255, c3, c4); // 85 in this range
-        }
         // For the realistic, hand tuned palettes, AND the generalized flame curve function calculation
         static protected void SetPaletteFromColorRange(Color[] thePalette, ColorRange[] colorRange)
         {
@@ -99,75 +75,6 @@ namespace FireDemo
             }
         }
 
-#if false // JRDV: Commenting out to make it easier to deal with. Eventually delete this once the code is refactored properly
-        private void SetPaletteUsingSingleColor(Color color)
-        {
-            if (thePalette == null)
-                thePalette = new Color[256];
-
-            if (realisticRenderMethodRadioButton.Checked || intensityRenderMethodRadioButton.Checked)
-            {
-                if (color == Color.DarkOrange)
-                    color = Color.FromArgb(255, 1, 1); // JRDV: faking Orange since the default didn't look good?  Try it again soon.
-
-                float intensity = 1;
-
-                if (intensityRenderMethodRadioButton.Checked)
-                    intensity = ((float)intensityUpDown.Value / 100);
-
-                if (color == Color.White)
-                    InitializeWhiteFlameCurve(); // TODO: JRDV: Port these!!!
-                else if (color == Color.Black)
-                    InitializeBlackFlameCurve(); // TODO: JRDV: Port these!!!
-                else
-
-                    InitializeRealisticFlameCurve(color, intensity);
-                return;
-            }
-            else if (linearRenderMethodRadioButton.Checked)
-            {
-                //if (color == Color.DarkOrange)
-                //    color = Color.FromArgb(255, 128, 0);
-                //SetPaletteRangeInclusive(0, 255, Color.Black, colorDialog1.Color);
-                // TODO: JRDV: I think this is essentially dead code.... it used to do something, but now we always overwrite with the 4 Point Linear Palette calculation
-                SetPaletteRangeInclusive(0, 170, Color.Black, color);
-                SetPaletteRangeInclusive(170, 255, color, Color.White);
-            }
-            else if (flatRenderMethodRadioButton.Checked)
-            {
-                SetFlatPalette(color);
-            }
-        }
-
-        private void RefreshTheFlamePalette()
-        {
-            if (FUseSingleColorFlame())
-            {
-                if (m_fOverrideEnabledForSpecialFlame)
-                {
-                    if (flatRenderMethodRadioButton.Checked)
-                    {
-                        SetSingleColorFlame(Color.Orange);
-                        //SetSingleColorFlame(Color.LightCoral);
-                        //SetSingleColorFlame(Color.FromArgb(255, 128, 0));
-                        m_fOverrideEnabledForSpecialFlame = true;
-                        return;
-                    }
-                    // This is the Realistic.
-                    // It's the only one that isn't defined by a generic curve
-                    // I don't like having to override this
-                    InitializeRealisticFlame();
-                    return;
-                }
-
-                SetPaletteUsingSingleColor(singleColorFlame);
-            }
-            else // 4 Point linear palette
-            {
-                InitializePalette(color1, color2, color3, color4);
-            }
-        }
-#endif
         #endregion
     }
 
@@ -275,7 +182,7 @@ namespace FireDemo
             SetPaletteFromColorRange(thePalette, colorRange4PointLinear);
         }
     }
-
+    // TODO: JRDV: Investigate implementing Plasma palette with the Lightning palette instead of FourPointLinear
     public class PalPlasma : PalFourPointLinear
     {
         public static Color[] New(Color color)
@@ -302,35 +209,30 @@ namespace FireDemo
             // Tweak the basic colors to what I think looks best
             if (color == Color.Red)
             {
-                Color c3 = Color.FromArgb(red: 255, green: 192, blue: 192); // Original color I liked
-                //c3 = Color.FromArgb(red: 255, green: 224, blue: 224);
-                //c3 = Color.FromArgb(red: 255, green: 180, blue: 180);
-                //c3 = Color.FromArgb(red: 255, green: 184, blue: 184);
-                //c3 = Color.White;
-                //c3 = Color.FromArgb(red: 255, green: 224, blue: 224); // Do I like this better? Brighten the bolt? NO! Looked beter on the small version, but not as good on the large version
+                Color c3 = Color.FromArgb(red: 255, green: 192, blue: 192); // slightly darken the mid-range
                 PalFourPointLinear.Fill(thePalette, Color.Black, color, c3, Color.White);
             }
             else if (color == Color.Orange)
             {
-                Color c2 = Color.FromArgb(red: 255, green: 96, blue: 0); // Want to deepen the orange? Looked OK small, but larger, the below colors work better.
-                Color c3 = Color.White;
-                c2 = Color.FromArgb(red: 255, green: 128, blue: 0);
-                c3 = Color.FromArgb(red: 255, green: 224, blue: 192);
+                Color c2 = Color.FromArgb(red: 255, green: 128, blue: 0); // darken the base color
+                Color c3 = Color.FromArgb(red: 255, green: 224, blue: 192); // darken the mid-range
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
             //else if (color == Color.Yellow) // Looks good
             else if (color == Color.Green)
             {
-                Color c2 = Color.FromArgb(red: 0, green: 255, blue: 0);
+                Color c2 = Color.FromArgb(red: 0, green: 255, blue: 0); // brighten the base color to Pure Green
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, Color.White, Color.White);
             }
             else if (color == Color.LightBlue)
             {
-                Color c2 = Color.FromArgb(red: 0, green: 128, blue: 255);
-                Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255);
+                //Color c2 = Color.FromArgb(red: 0, green: 128, blue: 255);
+                //Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255);
+                Color c2 = Color.FromArgb(red: 0, green: 128, blue: 255); // significantly deepen the base color
+                Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255); // slightly darken the mid-range
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
-            else if (color == Color.Blue)
+            else if (color == Color.Blue) // Consider swapping this with DarkBlue, because the above values for LightBlue are what I think I want for default BLUE!
             {
                 // Originally thought it was halfway between Blue and this LightBlue
                 //Color c2 = Color.FromArgb(red: 0, green: 0, blue: 255);
@@ -351,17 +253,19 @@ namespace FireDemo
                 //Color c3 = Color.FromArgb(red: 224, green: 224, blue: 255);
                 // 
                 // BUUUUUUT maybe I need to define a better "curve" through the color space?
+                // TODO: JRDV: Explore using the lighting palette for plasma,
+                // which first requires generalizing the lighting palette algorithm.
                 PalFourPointLinear.Fill(thePalette, Color.Black, color, Color.White, Color.White);
-                Color c2 = Color.FromArgb(red: 0, green: 32, blue: 255);
-                Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255);
+                Color c2 = Color.FromArgb(red: 0, green: 32, blue: 255); // brighten the base color slightly
+                Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255); // darken the mid -range slightly
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
-            //else if (color == Color.DarkViolet) // Looks good
-            else if (color == Color.Violet)
-            {
-                Color c2 = Color.FromArgb(red: 255, green: 0, blue: 255);
-                PalFourPointLinear.Fill(thePalette, Color.Black, c2, Color.White, Color.White);
-            }
+            //else if (color == Color.DarkViolet) // Looks good (slightly better than DarkMagenta)
+            //else if (color == Color.Violet) // I like Magenta better, but we have a named color for that. No reason to override Violet
+            //{
+            //    Color c2 = Color.FromArgb(red: 255, green: 0, blue: 255); // This is Magenta, just use Color.Magenta;
+            //    PalFourPointLinear.Fill(thePalette, Color.Black, c2, Color.White, Color.White);
+            //}
             else
                 PalFourPointLinear.Fill(thePalette, Color.Black, color, Color.White, Color.White);
         }

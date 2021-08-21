@@ -167,9 +167,7 @@ namespace FireDemo
             AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteViolet = new RealtimeLightning();
             dbPlasmaDisc_FavoriteViolet.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc_FavoriteViolet.SetCoolingStrategy(coolingStrategy);
-            dbPlasmaDisc_FavoriteViolet.SetPalette(PalPlasma.NewRaw(
-                Color.FromArgb(red: 255, green: 0, blue: 255),
-                Color.FromArgb(red: 255, green: 255, blue: 255)));
+            dbPlasmaDisc_FavoriteViolet.SetPalette(PalPlasma.New(Color.Magenta));
             dbPlasmaDisc_FavoriteViolet.AddShape(lsBorgPlasma);
             dbPlasmaDisc_FavoriteViolet.AddShape(lsBorgRing);
 
@@ -237,7 +235,7 @@ namespace FireDemo
             int left, top;
 
             Color[] palBorg = PaletteGenerator.GetHardCodedBorgPalette();
-            palBorg = PalPlasma.New(Color.Orange);
+            palBorg = PalPlasma.New(Color.DarkViolet);
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsBorgRing = new LightShapeBorgRing();
