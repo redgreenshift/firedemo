@@ -316,11 +316,36 @@ namespace FireDemo
                 Color c2 = Color.FromArgb(red: 0, green: 255, blue: 0);
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, Color.White, Color.White);
             }
+            else if (color == Color.LightBlue)
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 128, blue: 255);
+                Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
+            }
             else if (color == Color.Blue)
             {
+                // Originally thought it was halfway between Blue and this LightBlue
+                //Color c2 = Color.FromArgb(red: 0, green: 0, blue: 255);
+                //Color c3 = Color.FromArgb(red: 255, green: 255, blue: 255);
+                // AND
+                //Color c2 = Color.FromArgb(red: 0, green: 128, blue: 255);
+                //Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255);
+                // 
+                // Which produced FavoriteBlue1:
+                //Color c2 = Color.FromArgb(red: 0, green: 64, blue: 255);
+                //Color c3 = Color.FromArgb(red: 224, green: 224, blue: 255);
+                // BUUUUT it wasn't quite bright enough, or deep enough? So need to brigten c3, and deepen c2
+                // Somewhere between 
+                //Color c2 = Color.FromArgb(red: 0, green: 0, blue: 255);
+                //Color c3 = Color.FromArgb(red: 255, green: 255, blue: 255);
+                // AND
+                //Color c2 = Color.FromArgb(red: 0, green: 64, blue: 255);
+                //Color c3 = Color.FromArgb(red: 224, green: 224, blue: 255);
+                // 
+                // BUUUUUUT maybe I need to define a better "curve" through the color space?
+                PalFourPointLinear.Fill(thePalette, Color.Black, color, Color.White, Color.White);
                 Color c2 = Color.FromArgb(red: 0, green: 32, blue: 255);
-                Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255);
-                //c3 = Color.White;
+                Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255);
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
             else if (color == Color.Violet)

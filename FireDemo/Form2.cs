@@ -32,9 +32,9 @@ namespace FireDemo
         private void Form2_Load(object sender, EventArgs e)
         {
             SimpleCandle();
-            //DemoBatman();
+            DemoBatman();
             //DemoLightning();
-            DemoBorg();
+            //DemoBorg();
             DemoPlasmaRainbow();
 
             buttonDemo_Click(null, null);
@@ -125,11 +125,12 @@ namespace FireDemo
             dbPlasmaDiscBlueEX1.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscBlueEX1.SetPalette(PalPlasma.NewRaw(
                 Color.FromArgb(red: 0, green: 32, blue: 255),
-                Color.FromArgb(red: 192, green: 192, blue: 255)));
+                Color.FromArgb(red: 240, green: 240, blue: 255)));
             dbPlasmaDiscBlueEX1.AddShape(lsBorgPlasma);
             dbPlasmaDiscBlueEX1.AddShape(lsBorgRing);
 
             // I really like this color, but it's more of a Cyan, instead of the deep BLUE I'm looking for
+            // BUT, it might be hapfway between?
             AbstractRealtimeLightEffect dbPlasmaDiscBlueNICE = new RealtimeLightning();
             dbPlasmaDiscBlueNICE.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscBlueNICE.SetCoolingStrategy(coolingStrategy);
@@ -139,6 +140,7 @@ namespace FireDemo
             dbPlasmaDiscBlueNICE.AddShape(lsBorgPlasma);
             dbPlasmaDiscBlueNICE.AddShape(lsBorgRing);
 
+            // This is very close to actual Cyan, but looks a tad too yellow
             AbstractRealtimeLightEffect dbPlasmaDiscSkyBlue = new RealtimeLightning();
             dbPlasmaDiscSkyBlue.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscSkyBlue.SetCoolingStrategy(coolingStrategy);
@@ -146,12 +148,21 @@ namespace FireDemo
             dbPlasmaDiscSkyBlue.AddShape(lsBorgPlasma);
             dbPlasmaDiscSkyBlue.AddShape(lsBorgRing);
 
+            AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteLightBlue = new RealtimeLightning();
+            dbPlasmaDisc_FavoriteLightBlue.Initialize(ringWidth, ringHeight, magnification);
+            dbPlasmaDisc_FavoriteLightBlue.SetCoolingStrategy(coolingStrategy);
+            dbPlasmaDisc_FavoriteLightBlue.SetPalette(PalPlasma.NewRaw(
+                Color.FromArgb(red: 0, green: 128, blue: 255),
+                Color.FromArgb(red: 192, green: 192, blue: 255)));
+            dbPlasmaDisc_FavoriteLightBlue.AddShape(lsBorgPlasma);
+            dbPlasmaDisc_FavoriteLightBlue.AddShape(lsBorgRing);
+
             AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteBlue = new RealtimeLightning();
             dbPlasmaDisc_FavoriteBlue.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc_FavoriteBlue.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc_FavoriteBlue.SetPalette(PalPlasma.NewRaw(
-                Color.FromArgb(red: 0, green: 128, blue: 255),
-                Color.FromArgb(red: 192, green: 192, blue: 255)));
+                Color.FromArgb(red: 0, green: 64, blue: 255),
+                Color.FromArgb(red: 224, green: 224, blue: 255)));
             dbPlasmaDisc_FavoriteBlue.AddShape(lsBorgPlasma);
             dbPlasmaDisc_FavoriteBlue.AddShape(lsBorgRing);
 
@@ -181,15 +192,16 @@ namespace FireDemo
             dbPlasmaDiscGreen.Location = new Point(x: left * 3, y: 0);
             dbPlasmaDisc_FavoriteDeepGreen.Location = new Point(x: left * 4, y: 0);
 
-            dbPlasmaDiscBlue_Raw.Location = new Point(x: 0, y: top);
-            dbPlasmaDiscBlueEX1.Location = new Point(x: left, y: top);
-            dbPlasmaDiscBlueNICE.Location = new Point(x: left * 2, y: top);
-            dbPlasmaDiscSkyBlue.Location = new Point(x: left * 3, y: top);
+            dbPlasmaDiscSkyBlue.Location = new Point(x: left * 0, y: top);
+            dbPlasmaDisc_FavoriteLightBlue.Location = new Point(x: left * 0, y: top);
+            dbPlasmaDiscBlueNICE.Location = new Point(x: left * 1, y: top);
+            dbPlasmaDiscBlue_Raw.Location = new Point(x: left * 2, y: top);
+            dbPlasmaDiscBlueEX1.Location = new Point(x: left * 3, y: top);
             dbPlasmaDisc_FavoriteBlue.Location = new Point(x: left * 4, y: top);
 
-            dbPlasmaDiscViolet_Raw.Location = new Point(x: 0, y: top * 2);
-            dbPlasmaDiscVioletEX1.Location = new Point(x: left, y: top * 2);
-            dbPlasmaDiscBlueViolet.Location = new Point(x: left * 2, y: top * 2);
+            dbPlasmaDiscBlueViolet.Location = new Point(x: left * 0, y: top * 2);
+            dbPlasmaDiscVioletEX1.Location = new Point(x: left * 1, y: top * 2);
+            dbPlasmaDiscViolet_Raw.Location = new Point(x: left * 2, y: top * 2);
             dbPlasmaDiscDarkViolet.Location = new Point(x: left * 3, y: top * 2);
             dbPlasmaDisc_FavoriteViolet.Location = new Point(x: left * 4, y: top * 2);
 
@@ -207,7 +219,7 @@ namespace FireDemo
             m_dbSprites.Add(dbPlasmaDiscVioletEX1);
             m_dbSprites.Add(dbPlasmaDiscBlueEX1);
             m_dbSprites.Add(dbPlasmaDiscBlueNICE);
-            m_dbSprites.Add(dbPlasmaDiscSkyBlue);
+            m_dbSprites.Add(dbPlasmaDisc_FavoriteLightBlue);
             m_dbSprites.Add(dbPlasmaDisc_FavoriteBlue);
             m_dbSprites.Add(dbPlasmaDisc_FavoriteViolet);
             m_dbSprites.Add(dbPlasmaDisc_FavoriteDeepGreen);
