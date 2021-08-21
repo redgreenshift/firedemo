@@ -307,8 +307,11 @@ namespace FireDemo
             }
             else if (color == Color.Orange) // Need to tweak like Red?
             {
-                Color pink = Color.FromArgb(red: 255, green: 192, blue: 192);
-                PalFourPointLinear.Fill(thePalette, Color.Black, color, pink, Color.White);
+                color = Color.DarkOrange;
+                Color c2 = Color.FromArgb(red: 255, green: 96, blue: 0);
+                Color c3 = Color.FromArgb(red: 255, green: 165 + (255 - 165) *3 /4, blue: 192); // ??
+                c3 = Color.White;
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
             //else if (color == Color.Yellow) // Looks good
             else if (color == Color.Green)
@@ -348,6 +351,7 @@ namespace FireDemo
                 Color c3 = Color.FromArgb(red: 240, green: 240, blue: 255);
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             }
+            //else if (color == Color.DarkViolet) // Looks good
             else if (color == Color.Violet)
             {
                 Color c2 = Color.FromArgb(red: 255, green: 0, blue: 255);
