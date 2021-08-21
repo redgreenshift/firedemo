@@ -21,7 +21,7 @@ namespace FireUnitTest
         public void TestRealisticLightningPalette()
         {
             Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedLightningPalette();
-            Color[] generatedPalette = FireDemo.PalLghtning.New();
+            Color[] generatedPalette = FireDemo.PalLightning.New();
 
             VerifyPalettesMatch(expectedPalette, generatedPalette);
         }

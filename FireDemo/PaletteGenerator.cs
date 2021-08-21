@@ -824,7 +824,7 @@ namespace FireDemo
         }
     }
 
-    public class PalLghtning : PalRealisticFlameCurve
+    public class PalLightning : PalRealisticFlameCurve
     {
         public static Color[] New()
         {
