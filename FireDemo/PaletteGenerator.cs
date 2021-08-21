@@ -285,17 +285,47 @@ namespace FireDemo
             return thePalette;
         }
 
+        public static Color[] NewRaw(Color c2)
+        {
+            return NewRaw(c2, Color.White);
+        }
+
+        public static Color[] NewRaw(Color c2, Color c3)
+        {
+            Color[] thePalette = new Color[256];
+            PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
+            return thePalette;
+        }
+
         public static void Fill(Color[] thePalette, Color color)
         {
-            // TODO: JRDV: Experiment and see how the other colors look.
+            // Tweak the basic colors to what I think looks best
             if (color == Color.Red)
             {
                 Color pink = Color.FromArgb(red: 255, green: 192, blue: 192);
                 PalFourPointLinear.Fill(thePalette, Color.Black, color, pink, Color.White);
             }
+            else if (color == Color.Orange) // Need to tweak like Red?
+            {
+                Color pink = Color.FromArgb(red: 255, green: 192, blue: 192);
+                PalFourPointLinear.Fill(thePalette, Color.Black, color, pink, Color.White);
+            }
+            //else if (color == Color.Yellow) // Looks good
             else if (color == Color.Green)
             {
                 Color c2 = Color.FromArgb(red: 0, green: 255, blue: 0);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, Color.White, Color.White);
+            }
+            else if (color == Color.Blue)
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 32, blue: 255);
+                Color c3 = Color.FromArgb(red: 192, green: 192, blue: 255);
+                //c3 = Color.White;
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
+            }
+            else if (color == Color.Violet)
+            {
+                Color c2 = Color.FromArgb(red: 255, green: 0, blue: 255);
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, Color.White, Color.White);
             }
             else
