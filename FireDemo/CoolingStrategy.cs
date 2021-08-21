@@ -83,17 +83,16 @@ namespace FireDemo
             {
                 ++iFrame;
                 iCoolingOffset = (width * iFrame) % (width * height);
+
+                if (this.rotate && iFrame > height)
+                {
+                    UpdateRotatingCoolingMap();
+                }
             }
             else
             {
                 iFrame = 0;
                 iCoolingOffset = 0;
-            }
-
-            if (this.rotate && iFrame > height)
-            {
-                // this.fillCoolingMap(coolingMap, iCoolingOffset + 1, width);
-                UpdateRotatingCoolingMap();
             }
         }
 
