@@ -14,23 +14,17 @@ namespace FireDemo
             return tempPalette;
         }
 
-        public static Color[] GetHardCodedLightningPalette() // TODO: JRDV: Implement the palettes for real
+        public static Color[] GetHardCodedLightningPalette()
         {
             Color[] theLightningPalette = { Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(0, 0, 0), Color.FromArgb(6, 4, 4), Color.FromArgb(13, 8, 8), Color.FromArgb(20, 12, 12), Color.FromArgb(27, 16, 16), Color.FromArgb(33, 20, 21), Color.FromArgb(41, 24, 25), Color.FromArgb(47, 28, 29), Color.FromArgb(54, 32, 33), Color.FromArgb(61, 37, 38), Color.FromArgb(67, 41, 42), Color.FromArgb(74, 45, 46), Color.FromArgb(81, 49, 50), Color.FromArgb(87, 53, 55), Color.FromArgb(94, 57, 59), Color.FromArgb(101, 61, 63), Color.FromArgb(108, 65, 67), Color.FromArgb(114, 69, 71), Color.FromArgb(122, 73, 76), Color.FromArgb(128, 77, 80), Color.FromArgb(135, 81, 84), Color.FromArgb(142, 85, 88), Color.FromArgb(148, 90, 93), Color.FromArgb(155, 94, 97), Color.FromArgb(162, 98, 101), Color.FromArgb(169, 102, 105), Color.FromArgb(175, 106, 110), Color.FromArgb(182, 110, 114), Color.FromArgb(189, 114, 118), Color.FromArgb(195, 118, 122), Color.FromArgb(203, 123, 127), Color.FromArgb(203, 135, 139), Color.FromArgb(203, 147, 152), Color.FromArgb(203, 160, 165), Color.FromArgb(203, 172, 178), Color.FromArgb(203, 185, 191), Color.FromArgb(203, 196, 203), Color.FromArgb(203, 209, 216), Color.FromArgb(203, 221, 229), Color.FromArgb(203, 234, 242), Color.FromArgb(203, 246, 255), Color.FromArgb(204, 246, 255), Color.FromArgb(207, 246, 255), Color.FromArgb(209, 246, 255), Color.FromArgb(211, 246, 255), Color.FromArgb(213, 246, 255), Color.FromArgb(215, 246, 255), Color.FromArgb(217, 246, 255), Color.FromArgb(219, 246, 255), Color.FromArgb(221, 246, 255), Color.FromArgb(224, 246, 255), Color.FromArgb(225, 246, 255), Color.FromArgb(227, 246, 255), Color.FromArgb(230, 246, 255), Color.FromArgb(232, 246, 255), Color.FromArgb(234, 246, 255), Color.FromArgb(236, 246, 255), Color.FromArgb(238, 246, 255), Color.FromArgb(240, 246, 255), Color.FromArgb(242, 246, 255), Color.FromArgb(245, 246, 255), Color.FromArgb(246, 246, 255), Color.FromArgb(248, 246, 255), Color.FromArgb(251, 246, 255), Color.FromArgb(253, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(255, 246, 255), Color.FromArgb(254, 246, 255), Color.FromArgb(254, 246, 255), Color.FromArgb(254, 246, 255), Color.FromArgb(254, 246, 255), Color.FromArgb(253, 246, 255), Color.FromArgb(253, 246, 255), Color.FromArgb(253, 246, 255), Color.FromArgb(253, 246, 255), Color.FromArgb(253, 246, 255), Color.FromArgb(252, 246, 255), Color.FromArgb(252, 246, 255), Color.FromArgb(252, 246, 255), Color.FromArgb(252, 246, 255), Color.FromArgb(251, 246, 255), Color.FromArgb(251, 246, 255), Color.FromArgb(251, 246, 255), Color.FromArgb(251, 246, 255), Color.FromArgb(251, 246, 255), Color.FromArgb(250, 246, 255), Color.FromArgb(250, 246, 255), Color.FromArgb(249, 246, 255), Color.FromArgb(249, 246, 255), Color.FromArgb(249, 246, 255), Color.FromArgb(249, 246, 255), Color.FromArgb(249, 246, 255), Color.FromArgb(248, 246, 255), Color.FromArgb(248, 246, 255), Color.FromArgb(248, 246, 255), Color.FromArgb(248, 246, 255), Color.FromArgb(247, 246, 255), Color.FromArgb(247, 246, 255), Color.FromArgb(247, 246, 255), Color.FromArgb(247, 246, 255), Color.FromArgb(247, 246, 255), Color.FromArgb(246, 246, 255), Color.FromArgb(246, 246, 255), Color.FromArgb(246, 246, 255), Color.FromArgb(246, 246, 255), Color.FromArgb(246, 246, 255), Color.FromArgb(245, 246, 255), Color.FromArgb(245, 246, 255), Color.FromArgb(245, 246, 255), Color.FromArgb(245, 246, 255), Color.FromArgb(244, 246, 255), Color.FromArgb(244, 246, 255), Color.FromArgb(244, 246, 255), Color.FromArgb(243, 246, 255), Color.FromArgb(243, 246, 255), Color.FromArgb(243, 246, 255), Color.FromArgb(243, 246, 255), Color.FromArgb(242, 246, 255), Color.FromArgb(242, 246, 255), Color.FromArgb(242, 246, 255), Color.FromArgb(242, 246, 255), Color.FromArgb(242, 246, 255), Color.FromArgb(241, 246, 255), Color.FromArgb(241, 246, 255), Color.FromArgb(241, 246, 255), Color.FromArgb(241, 246, 255), Color.FromArgb(240, 246, 255), Color.FromArgb(240, 246, 255), Color.FromArgb(240, 246, 255), Color.FromArgb(240, 246, 255), Color.FromArgb(240, 246, 255), Color.FromArgb(239, 246, 255), Color.FromArgb(239, 246, 255), Color.FromArgb(238, 246, 255), Color.FromArgb(238, 246, 255), Color.FromArgb(238, 246, 255), Color.FromArgb(238, 246, 255), Color.FromArgb(238, 246, 255), Color.FromArgb(237, 246, 255), Color.FromArgb(237, 246, 255), Color.FromArgb(237, 246, 255), Color.FromArgb(237, 246, 255), Color.FromArgb(236, 246, 255), Color.FromArgb(236, 246, 255), Color.FromArgb(236, 246, 255), Color.FromArgb(236, 246, 255), Color.FromArgb(236, 246, 255), Color.FromArgb(235, 246, 255), Color.FromArgb(235, 246, 255), Color.FromArgb(235, 246, 255), Color.FromArgb(235, 246, 255), Color.FromArgb(235, 246, 255), Color.FromArgb(234, 246, 255), Color.FromArgb(234, 246, 255), Color.FromArgb(234, 246, 255), Color.FromArgb(234, 246, 255), Color.FromArgb(233, 246, 255), Color.FromArgb(233, 246, 255), Color.FromArgb(233, 246, 255), Color.FromArgb(232, 246, 255), Color.FromArgb(232, 246, 255), Color.FromArgb(232, 246, 255), Color.FromArgb(232, 246, 255), Color.FromArgb(231, 246, 255), Color.FromArgb(231, 246, 255), Color.FromArgb(231, 246, 255), Color.FromArgb(231, 246, 255), Color.FromArgb(231, 246, 255), Color.FromArgb(230, 246, 255), Color.FromArgb(230, 246, 255), Color.FromArgb(230, 246, 255), Color.FromArgb(230, 246, 255), Color.FromArgb(229, 246, 255), Color.FromArgb(229, 246, 255), Color.FromArgb(229, 246, 255), Color.FromArgb(229, 246, 255), Color.FromArgb(229, 246, 255), Color.FromArgb(228, 246, 255), Color.FromArgb(228, 246, 255), Color.FromArgb(227, 246, 255), Color.FromArgb(227, 246, 255), Color.FromArgb(227, 246, 255), Color.FromArgb(227, 246, 255), Color.FromArgb(227, 246, 255), Color.FromArgb(226, 246, 255), Color.FromArgb(226, 246, 255), Color.FromArgb(226, 246, 255), Color.FromArgb(226, 246, 255), Color.FromArgb(225, 246, 255), Color.FromArgb(225, 246, 255), Color.FromArgb(225, 246, 255), Color.FromArgb(225, 246, 255), Color.FromArgb(225, 246, 255), Color.FromArgb(224, 246, 255), Color.FromArgb(224, 246, 255), Color.FromArgb(224, 246, 255), Color.FromArgb(224, 246, 255), Color.FromArgb(224, 246, 255), Color.FromArgb(223, 246, 255), Color.FromArgb(223, 246, 255), Color.FromArgb(223, 246, 255), Color.FromArgb(223, 246, 255), Color.FromArgb(222, 246, 255), Color.FromArgb(222, 246, 255), Color.FromArgb(222, 246, 255), Color.FromArgb(221, 246, 255), Color.FromArgb(221, 246, 255), Color.FromArgb(221, 246, 255), Color.FromArgb(221, 246, 255), Color.FromArgb(220, 246, 255), Color.FromArgb(220, 246, 255), Color.FromArgb(220, 246, 255), Color.FromArgb(219, 246, 255), Color.FromArgb(218, 246, 255), Color.FromArgb(216, 246, 255), Color.FromArgb(215, 246, 255), Color.FromArgb(214, 246, 255), Color.FromArgb(213, 246, 255), Color.FromArgb(212, 246, 255), Color.FromArgb(210, 246, 255), Color.FromArgb(209, 246, 255), Color.FromArgb(208, 246, 255), Color.FromArgb(207, 246, 255), Color.FromArgb(206, 246, 255), Color.FromArgb(205, 246, 255), Color.FromArgb(204, 246, 255), Color.FromArgb(203, 246, 255) };
             return theLightningPalette;
         }
 
-        public static Color[] GetHardCodedBorgPalette() // TODO: JRDV: Implement the palettes for real
+        public static Color[] GetHardCodedBorgPalette()
         {
             Color[] theBorgPalette = { Color.FromArgb(0, 0, 0), Color.FromArgb(0, 3, 0), Color.FromArgb(0, 6, 0), Color.FromArgb(0, 9, 0), Color.FromArgb(0, 12, 0), Color.FromArgb(0, 15, 0), Color.FromArgb(0, 18, 0), Color.FromArgb(0, 21, 0), Color.FromArgb(0, 24, 0), Color.FromArgb(0, 27, 0), Color.FromArgb(0, 30, 0), Color.FromArgb(0, 33, 0), Color.FromArgb(0, 36, 0), Color.FromArgb(0, 39, 0), Color.FromArgb(0, 42, 0), Color.FromArgb(0, 45, 0), Color.FromArgb(0, 48, 0), Color.FromArgb(0, 51, 0), Color.FromArgb(0, 54, 0), Color.FromArgb(0, 57, 0), Color.FromArgb(0, 60, 0), Color.FromArgb(0, 63, 0), Color.FromArgb(0, 66, 0), Color.FromArgb(0, 69, 0), Color.FromArgb(0, 72, 0), Color.FromArgb(0, 75, 0), Color.FromArgb(0, 78, 0), Color.FromArgb(0, 81, 0), Color.FromArgb(0, 84, 0), Color.FromArgb(0, 87, 0), Color.FromArgb(0, 90, 0), Color.FromArgb(0, 93, 0), Color.FromArgb(0, 96, 0), Color.FromArgb(0, 99, 0), Color.FromArgb(0, 102, 0), Color.FromArgb(0, 105, 0), Color.FromArgb(0, 108, 0), Color.FromArgb(0, 111, 0), Color.FromArgb(0, 114, 0), Color.FromArgb(0, 117, 0), Color.FromArgb(0, 120, 0), Color.FromArgb(0, 123, 0), Color.FromArgb(0, 126, 0), Color.FromArgb(0, 129, 0), Color.FromArgb(0, 132, 0), Color.FromArgb(0, 135, 0), Color.FromArgb(0, 138, 0), Color.FromArgb(0, 141, 0), Color.FromArgb(0, 144, 0), Color.FromArgb(0, 147, 0), Color.FromArgb(0, 150, 0), Color.FromArgb(0, 153, 0), Color.FromArgb(0, 156, 0), Color.FromArgb(0, 159, 0), Color.FromArgb(0, 162, 0), Color.FromArgb(0, 165, 0), Color.FromArgb(0, 168, 0), Color.FromArgb(0, 171, 0), Color.FromArgb(0, 174, 0), Color.FromArgb(0, 177, 0), Color.FromArgb(0, 180, 0), Color.FromArgb(0, 183, 0), Color.FromArgb(0, 186, 0), Color.FromArgb(0, 189, 0), Color.FromArgb(0, 192, 0), Color.FromArgb(0, 195, 0), Color.FromArgb(0, 198, 0), Color.FromArgb(0, 201, 0), Color.FromArgb(0, 204, 0), Color.FromArgb(0, 207, 0), Color.FromArgb(0, 210, 0), Color.FromArgb(0, 213, 0), Color.FromArgb(0, 216, 0), Color.FromArgb(0, 219, 0), Color.FromArgb(0, 222, 0), Color.FromArgb(0, 225, 0), Color.FromArgb(0, 228, 0), Color.FromArgb(0, 231, 0), Color.FromArgb(0, 234, 0), Color.FromArgb(0, 237, 0), Color.FromArgb(0, 240, 0), Color.FromArgb(0, 243, 0), Color.FromArgb(0, 246, 0), Color.FromArgb(0, 249, 0), Color.FromArgb(0, 252, 0), Color.FromArgb(0, 255, 0), Color.FromArgb(3, 255, 3), Color.FromArgb(6, 255, 6), Color.FromArgb(9, 255, 9), Color.FromArgb(12, 255, 12), Color.FromArgb(15, 255, 15), Color.FromArgb(18, 255, 18), Color.FromArgb(21, 255, 21), Color.FromArgb(24, 255, 24), Color.FromArgb(27, 255, 27), Color.FromArgb(30, 255, 30), Color.FromArgb(33, 255, 33), Color.FromArgb(36, 255, 36), Color.FromArgb(39, 255, 39), Color.FromArgb(42, 255, 42), Color.FromArgb(45, 255, 45), Color.FromArgb(48, 255, 48), Color.FromArgb(51, 255, 51), Color.FromArgb(54, 255, 54), Color.FromArgb(57, 255, 57), Color.FromArgb(60, 255, 60), Color.FromArgb(63, 255, 63), Color.FromArgb(66, 255, 66), Color.FromArgb(69, 255, 69), Color.FromArgb(72, 255, 72), Color.FromArgb(75, 255, 75), Color.FromArgb(78, 255, 78), Color.FromArgb(81, 255, 81), Color.FromArgb(84, 255, 84), Color.FromArgb(87, 255, 87), Color.FromArgb(90, 255, 90), Color.FromArgb(93, 255, 93), Color.FromArgb(96, 255, 96), Color.FromArgb(99, 255, 99), Color.FromArgb(102, 255, 102), Color.FromArgb(105, 255, 105), Color.FromArgb(108, 255, 108), Color.FromArgb(111, 255, 111), Color.FromArgb(114, 255, 114), Color.FromArgb(117, 255, 117), Color.FromArgb(120, 255, 120), Color.FromArgb(123, 255, 123), Color.FromArgb(126, 255, 126), Color.FromArgb(129, 255, 129), Color.FromArgb(132, 255, 132), Color.FromArgb(135, 255, 135), Color.FromArgb(138, 255, 138), Color.FromArgb(141, 255, 141), Color.FromArgb(144, 255, 144), Color.FromArgb(147, 255, 147), Color.FromArgb(150, 255, 150), Color.FromArgb(153, 255, 153), Color.FromArgb(156, 255, 156), Color.FromArgb(159, 255, 159), Color.FromArgb(162, 255, 162), Color.FromArgb(165, 255, 165), Color.FromArgb(168, 255, 168), Color.FromArgb(171, 255, 171), Color.FromArgb(174, 255, 174), Color.FromArgb(177, 255, 177), Color.FromArgb(180, 255, 180), Color.FromArgb(183, 255, 183), Color.FromArgb(186, 255, 186), Color.FromArgb(189, 255, 189), Color.FromArgb(192, 255, 192), Color.FromArgb(195, 255, 195), Color.FromArgb(198, 255, 198), Color.FromArgb(201, 255, 201), Color.FromArgb(204, 255, 204), Color.FromArgb(207, 255, 207), Color.FromArgb(210, 255, 210), Color.FromArgb(213, 255, 213), Color.FromArgb(216, 255, 216), Color.FromArgb(219, 255, 219), Color.FromArgb(222, 255, 222), Color.FromArgb(225, 255, 225), Color.FromArgb(228, 255, 228), Color.FromArgb(231, 255, 231), Color.FromArgb(234, 255, 234), Color.FromArgb(237, 255, 237), Color.FromArgb(240, 255, 240), Color.FromArgb(243, 255, 243), Color.FromArgb(246, 255, 246), Color.FromArgb(249, 255, 249), Color.FromArgb(252, 255, 252), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255), Color.FromArgb(255, 255, 255) };
             return theBorgPalette;
         }
-
-        protected void SetPaleteFromColorRange(ColorRange[] cr)
-        {
-
-        }
-
 
         #region Palette Helper/Setters
 
@@ -175,10 +169,6 @@ namespace FireDemo
         }
 #endif
         #endregion
-
-
-
-
     }
 
     /// <summary>
@@ -266,8 +256,12 @@ namespace FireDemo
         public static Color[] New(Color c1, Color c2, Color c3, Color c4)
         {
             Color[] thePalette = new Color[256];
-            InitializePalette(thePalette, c1, c2, c3, c4);
+            Fill(thePalette, c1, c2, c3, c4);
             return thePalette;
+        }
+        public static void Fill(Color[] thePalette, Color c1, Color c2, Color c3, Color c4)
+        {
+            InitializePalette(thePalette, c1, c2, c3, c4);
         }
 
         private static void InitializePalette(Color[] thePalette, Color c1, Color c2, Color c3, Color c4)
@@ -278,13 +272,35 @@ namespace FireDemo
                 new ColorRange(c3, 85),
                 new ColorRange(c4, 0),
             };
-            // Including the final value.
-            //SetPaletteRangeInclusive(thePalette, 0, 85, c1, c2); // 85 in this range
-            //SetPaletteRangeInclusive(thePalette, 85, 170, c2, c3); // 86 in this range
-            //SetPaletteRangeInclusive(thePalette, 170, 255, c3, c4); // 85 in this range
             SetPaletteFromColorRange(thePalette, colorRange4PointLinear);
         }
+    }
 
+    public class PalPlasma : PalFourPointLinear
+    {
+        public static Color[] New(Color color)
+        {
+            Color[] thePalette = new Color[256];
+            Fill(thePalette, color);
+            return thePalette;
+        }
+
+        public static void Fill(Color[] thePalette, Color color)
+        {
+            // TODO: JRDV: Experiment and see how the other colors look.
+            if (color == Color.Red)
+            {
+                Color pink = Color.FromArgb(red: 255, green: 192, blue: 192);
+                PalFourPointLinear.Fill(thePalette, Color.Black, color, pink, Color.White);
+            }
+            else if (color == Color.Green)
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 255, blue: 0);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, Color.White, Color.White);
+            }
+            else
+                PalFourPointLinear.Fill(thePalette, Color.Black, color, Color.White, Color.White);
+        }
     }
 
     /// <summary>
@@ -832,6 +848,53 @@ namespace FireDemo
             };
 
             SetPaletteFromColorRange(thePalette, colorRangeBlueWhiteOrangeRed_WithIntensity_Modified);
+        }
+    }
+
+    public class PalLghtning : PalRealisticFlameCurve
+    {
+        public static Color[] New()
+        {
+            Color[] thePalette = new Color[256];
+            Fill(thePalette);
+            return thePalette;
+        }
+
+        public static void Fill(Color[] thePalette)
+        {
+            Color[] palPink = PalRealisticFlameCurve.New(Color.FromArgb(236, 236, 255)); // PINK
+            Color[] palBlue = PalRealisticFlameCurve.New(Color.FromArgb(128, 255, 255)); // BLUE
+
+            int switchPoint = 382;
+            int whitePoint = 380; // Yes, I know setting the WhitePoint below the SwitchPoint means we don't use the old palette....
+                                  // it looks better without the pink ring inside.
+                                  // Looks better to start with blue, and transition to red (the logic, which may be completely false, is particles go fast-->blue, slow to red as it fades).
+            for (int i = 0; i < switchPoint && i < thePalette.Length; ++i)
+            {
+                Color c1 = palPink[i];
+                Color c2 = palBlue[i];
+                float pBlue = 0.55f;
+                float pRed = (1.0f - pBlue);
+                thePalette[i] = Color.FromArgb(
+                    (int)((c1.R * pRed + c2.R * pBlue) + 0.5f),
+                    (int)((c1.G * pRed + c2.G * pBlue) + 0.5f),
+                    (int)((c1.B * pRed + c2.B * pBlue) + 0.5f));
+            }
+
+            for (int i = switchPoint; i < thePalette.Length; ++i)
+            {
+                Color c = palPink[i];
+                thePalette[i] = c;
+            }
+
+            //SetSingleColorFlame(Color.FromArgb(236, 236, 255)); // PINK
+            //SetSingleColorFlame(Color.FromArgb(128, 255, 255)); // BLUE
+            //RefreshTheFlamePalette();
+
+            for (int i = whitePoint; i < thePalette.Length; ++i)
+            {
+                thePalette[i] = Color.White;
+            }
         }
     }
 }

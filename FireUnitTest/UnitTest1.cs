@@ -20,19 +20,19 @@ namespace FireUnitTest
         [TestMethod]
         public void TestRealisticLightningPalette()
         {
-            //Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedFirePalette();
-            //Color[] generatedPalette = FireDemo.PalRealisticFire.New();
+            Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedLightningPalette();
+            Color[] generatedPalette = FireDemo.PalLghtning.New();
 
-            //VerifyPalettesMatch(expectedPalette, generatedPalette);
+            VerifyPalettesMatch(expectedPalette, generatedPalette);
         }
 
         [TestMethod]
         public void TestBorgPlasmaPalette()
         {
-            //Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedFirePalette();
-            //Color[] generatedPalette = FireDemo.PalRealisticFire.New();
+            Color[] expectedPalette = FireDemo.PaletteGenerator.GetHardCodedBorgPalette();
+            Color[] generatedPalette = FireDemo.PalPlasma.New(Color.Green);
 
-            //VerifyPalettesMatch(expectedPalette, generatedPalette);
+            VerifyPalettesMatch(expectedPalette, generatedPalette);
         }
 
         [TestMethod]
