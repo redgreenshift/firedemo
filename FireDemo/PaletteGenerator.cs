@@ -182,7 +182,12 @@ namespace FireDemo
             SetPaletteFromColorRange(thePalette, colorRange4PointLinear);
         }
     }
-    // TODO: JRDV: Investigate implementing Plasma palette with the Lightning palette instead of FourPointLinear
+
+    /// <summary>
+    /// Interestingly, the <see cref="PalLightning"/> palettes do NOT look very good when rendering plasma.
+    /// The <see cref="PalFourPointLinear"/> is much better for simulating plasma discs.
+    /// But it may be possible to define a better curve for plasma generation.
+    /// </summary>
     public class PalPlasma : PalFourPointLinear
     {
         public static Color[] New(Color color)
@@ -292,7 +297,7 @@ namespace FireDemo
                 InitializeRealisticFlameCurve(thePalette, color);
             return thePalette;
         }
-        static private void InitializeRealisticFlameCurve(Color[] thePalette, Color target, float fIntensity = 1.0f)
+        static protected void InitializeRealisticFlameCurve(Color[] thePalette, Color target, float fIntensity = 1.0f)
         {
 #if false
             // secondary intensity
@@ -824,13 +829,110 @@ namespace FireDemo
         }
     }
 
+    // TODO: JRDV: generalize the lighting palette algorithm
+    // Wait, I sortof do. It's the Flame Curve code with a value NEAR White!
+    // The difference for the "realistic" lightning is that I mix pink and blue, and then manually whiten a portion of the range\
+    // so generalize that!
     public class PalLightning : PalRealisticFlameCurve
     {
         public static Color[] New()
         {
             Color[] thePalette = new Color[256];
-            Fill(thePalette);
+            Fill_Generalized(thePalette);
             return thePalette;
+        }
+
+        public static new Color[] New(Color color)
+        {
+            Color[] thePalette = new Color[256];
+            Fill(thePalette, color);
+            return thePalette;
+        }
+
+        public static void Fill(Color[] thePalette, Color color)
+        {
+            if (color == Color.Red)
+            {
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(236, 236, 255)); // PINK
+            }
+            else if (color == Color.Orange)
+            {
+                Color[] palBlue = PalRealisticFlameCurve.New(Color.FromArgb(128, 255, 255)); // BLUE
+                Color[] palRedOrange = new Color[256];
+                InitializeRealisticFlameCurve(palRedOrange, Color.FromArgb(255, 128, 0)); // Validate ???
+
+                // Use the switch point to zero out the pink colors in the RedOrange palette
+                MixPalettes(thePalette, palRedOrange, palBlue, 1.0f, switchPoint: 70, whitePoint: 200);
+            }
+            else if (color == Color.Yellow)
+            {
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 127)); // Validate???
+            }
+            else if (color == Color.Green)
+            {
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 236, 236)); // GREEN (looks good for lightning, but unnatural. Looks BAD for plasma. Looks OK for flame.)
+            }
+            else if (color == Color.Blue)
+            {
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(128, 255, 255)); // BLUE
+            }
+            else if (color == Color.Violet)
+            {
+                //InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 246, 236)); // Validate ???
+                InitializeRealisticFlameCurve(thePalette, Color.FromArgb(255, 255, 236)); // Validate???
+            }
+            else
+            {
+                InitializeRealisticFlameCurve(thePalette, color); // Validate???
+            }
+        }
+
+
+        public static void Fill_Generalized(Color[] thePalette)
+        {
+            Color[] palPink = PalRealisticFlameCurve.New(Color.FromArgb(236, 236, 255)); // PINK
+            Color[] palBlue = PalRealisticFlameCurve.New(Color.FromArgb(128, 255, 255)); // BLUE
+
+            //int switchPoint = 382;
+            //int whitePoint = 380; // Yes, I know setting the WhitePoint below the SwitchPoint means we don't use the old palette....
+            //                      // it looks better without the pink ring inside.
+            //                      // Looks better to start with blue, and transition to red (the logic, which may be completely false, is particles go fast-->blue, slow to red as it fades).
+
+            MixPalettes(thePalette, palBlue, palPink, 0.55f);
+        }
+
+        /// <summary>
+        /// Mix two palettes to generate a new palette
+        /// </summary>
+        /// <param name="thePalette">Buffer that receives the mixed palette values.</param>
+        /// <param name="pal1">the primary palette</param>
+        /// <param name="pal2">the secondary palette</param>
+        /// <param name="balance">A floating point value representing how prominent the primary palette. Default is 50%. Valid range is 0.0 to 1.0</param>
+        /// <param name="switchPoint">Point at which the secondary palette takes over. Default is never</param>
+        /// <param name="whitePoint">Point at which both palettes are ignored and <see cref="Color.White"/> is used. Default is never</param>
+        public static void MixPalettes(Color[] thePalette, Color[] pal1, Color[] pal2, float balance = 0.5f, int switchPoint = 256, int whitePoint = 256)
+        {
+            for (int i = 0; i < switchPoint && i < thePalette.Length; ++i)
+            {
+                Color c1 = pal1[i];
+                Color c2 = pal2[i];
+                float weightOfPalette2 = (1.0f - balance);
+                thePalette[i] = Color.FromArgb(
+                    (int)((c1.R * balance + c2.R * weightOfPalette2) + 0.5f),
+                    (int)((c1.G * balance + c2.G * weightOfPalette2) + 0.5f),
+                    (int)((c1.B * balance + c2.B * weightOfPalette2) + 0.5f));
+            }
+
+            for (int i = switchPoint; i < thePalette.Length; ++i)
+            {
+                Color c = pal2[i];
+                thePalette[i] = c;
+            }
+
+            for (int i = whitePoint; i < thePalette.Length; ++i)
+            {
+                thePalette[i] = Color.White;
+            }
         }
 
         public static void Fill(Color[] thePalette)
@@ -859,10 +961,6 @@ namespace FireDemo
                 Color c = palPink[i];
                 thePalette[i] = c;
             }
-
-            //SetSingleColorFlame(Color.FromArgb(236, 236, 255)); // PINK
-            //SetSingleColorFlame(Color.FromArgb(128, 255, 255)); // BLUE
-            //RefreshTheFlamePalette();
 
             for (int i = whitePoint; i < thePalette.Length; ++i)
             {
