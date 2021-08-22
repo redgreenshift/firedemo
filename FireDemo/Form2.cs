@@ -645,12 +645,13 @@ namespace FireDemo
             int magnification = 2;
             //fireWidth = 200;
             //fireHeight = 200;
-            magnification = 2;
+            magnification = 3;
             int left, top;
 
             Color[] palBorg = PalPlasma.New(Color.Green);
 
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
+            coolingStrategy = new CoolingStrategyConst(11); // 11 looks better. Looks faster
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsBorgRing = new LightShapeBorgRing();
             ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
@@ -685,7 +686,7 @@ namespace FireDemo
             int magnification = 2;
             //fireWidth = 200;
             //fireHeight = 200;
-            magnification = 2;
+            magnification = 1;
             int left, top;
 
             Color[] palBorg = PalPlasma.New(Color.Red);
