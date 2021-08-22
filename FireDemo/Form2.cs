@@ -31,11 +31,14 @@ namespace FireDemo
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            this.BackColor = Color.DimGray;
+            this.Text = "-- Friendly Neighborhood Status Indicator --";
+
             SimpleCandle();
-            DemoBatman();
-            //DemoLightning();
+            //DemoBatman();
+            DemoLightning();
             //DemoBorg();
-            DemoPlasmaRainbow();
+            //DemoPlasmaRainbow();
 
             buttonDemo_Click(null, null);
         }
@@ -446,6 +449,8 @@ namespace FireDemo
                 buttonDemo.Text = "Start!";
                 this.BackColor = Color.DimGray;
             }
+
+            UpdateVisibleUI();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -490,6 +495,225 @@ namespace FireDemo
                 m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
             else
                 m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true, f8: true);
+
+            UpdateVisibleUI();
+        }
+
+        private void UpdateVisibleUI()
+        {
+            if (timer1.Enabled)
+            {
+                groupBox1.Hide();
+                //buttonAvailableStatus.Hide();
+                //buttonAwayStatus.Hide();
+                //buttonOofStatus.Hide();
+                //buttonBusyStatus.Hide();
+                //buttonDndStatus.Hide();
+            }
+            else
+            {
+                groupBox1.Show();
+                //buttonAvailableStatus.Show();
+                //buttonAwayStatus.Show();
+                //buttonOofStatus.Show();
+                //buttonBusyStatus.Show();
+                //buttonDndStatus.Show();
+            }
+        }
+        private void buttonAwayStatus_Click(object sender, EventArgs e)
+        {
+            //SimpleCandle();
+            int fireWidth = 21;
+            int fireHeight = 75;
+            int magnification = 4;
+            int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
+            int left = buttonDemo.Location.X + buttonDemo.Size.Width;
+
+            Color[] palCandle = PalRealisticFire.New();
+            ICoolingStrategy coolingStrategy;
+            m_coolingStrategy = new CoolingStrategyMap();
+            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
+                density: 0.4f, min: 5, max: 13, smoothing: 5,
+                shift: true, rotate: true);
+            coolingStrategy = m_coolingStrategy;
+
+            ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);
+            ILightShape lsCandle = new LightShapeCandle();
+            lsCandle.SetPen(lpCandle);
+
+            AbstractRealtimeLightEffect dbCandle = new RealtimeCandleflame();
+            m_genericFlame = new GenericRealtimeFlame();
+            dbCandle = m_genericFlame;
+            dbCandle.Initialize(fireWidth, fireHeight, magnification);
+            dbCandle.SetCoolingStrategy(coolingStrategy);
+            dbCandle.SetPalette(palCandle);
+            dbCandle.AddShape(lsCandle);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbCandle.Location = new Point(x: left, y: top);
+
+            m_palette = palCandle;
+            m_lightPen = lpCandle;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsCandle);
+            m_dbSprite = dbCandle;
+
+            buttonDemo_Click(sender, e);
+        }
+
+        private void buttonOofStatus_Click(object sender, EventArgs e)
+        {
+            //DemoLightning();
+
+            int fireWidth = 132;
+            int fireHeight = 200;
+            int magnification = 2;
+            int left, top;
+
+            Color[] palLightning = PalLightning.New();
+            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(27);
+            ILightPen lpLightning = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
+            ILightShape lsLightning = new LightShapeLightning();
+            lsLightning.SetPen(lpLightning);
+
+            AbstractRealtimeLightEffect dbLightning = new RealtimeLightning();
+            dbLightning.Initialize(fireWidth, fireHeight, magnification);
+            dbLightning.SetCoolingStrategy(coolingStrategy);
+            dbLightning.SetPalette(palLightning);
+            dbLightning.AddShape(lsLightning);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbLightning.Location = new Point(x: left, y: top);
+
+            m_palette = palLightning;
+            m_lightPen = lpLightning;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsLightning);
+            m_dbSprite = dbLightning;
+            buttonDemo_Click(sender, e);
+        }
+
+        private void buttonBusyStatus_Click(object sender, EventArgs e)
+        {
+            UpdateVisibleUI();
+
+            //DemoBatman();
+            int left, top;
+            int fireWidth = 500;
+            int fireHeight = 300;
+            int magnification = 1;
+            //fireWidth = 250;
+            //fireHeight = 150;
+            //magnification = 2;
+            //fireWidth = 700;
+            fireHeight = fireWidth * 3 / 5;
+            //magnification = 2;
+
+            Color[] palFire = PalRealisticFire.New();
+            ICoolingStrategy coolingStrategy;
+            m_coolingStrategy = new CoolingStrategyMap();
+            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 25, smoothing: 0);
+            coolingStrategy = m_coolingStrategy;
+            ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, useFullRange: false);
+            ILightShape lsBatman = new LightShapeBatman();
+            lsBatman.SetPen(lpBatman);
+
+            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            dbBatman.Initialize(fireWidth, fireHeight, magnification);
+            dbBatman.SetCoolingStrategy(coolingStrategy);
+            dbBatman.SetPalette(palFire);
+            dbBatman.AddShape(lsBatman);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2 - 20;
+            dbBatman.Location = new Point(x: left, y: top);
+
+            m_palette = palFire;
+            m_lightPen = lpBatman;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsBatman);
+            m_dbSprite = dbBatman;
+
+            buttonDemo_Click(sender, e);
+        }
+
+        private void buttonAvailableStatus_Click(object sender, EventArgs e)
+        {
+            //DemoBorg();
+
+            int ringWidth = 129;
+            int ringHeight = 131;
+            int magnification = 2;
+            //fireWidth = 200;
+            //fireHeight = 200;
+            magnification = 2;
+            int left, top;
+
+            Color[] palBorg = PalPlasma.New(Color.Green);
+
+            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
+            ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
+            ILightShape lsBorgRing = new LightShapeBorgRing();
+            ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
+            lsBorgRing.SetPen(lpPlasma);
+            lsBorgPlasma.SetPen(lpPlasma);
+
+            AbstractRealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
+            dbPlasmaDisc.Initialize(ringWidth, ringHeight, magnification);
+            dbPlasmaDisc.SetCoolingStrategy(coolingStrategy);
+            dbPlasmaDisc.SetPalette(palBorg);
+            dbPlasmaDisc.AddShape(lsBorgPlasma);
+            dbPlasmaDisc.AddShape(lsBorgRing);
+            left = (this.Width - ringWidth * magnification) / 2;
+            top = (this.Height - ringHeight * magnification) / 2;
+            dbPlasmaDisc.Location = new Point(x: left, y: top);
+
+            m_palette = palBorg;
+            m_lightPen = lpPlasma;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsBorgPlasma);
+            m_lightShapes.Add(lsBorgRing);
+            m_dbSprite = dbPlasmaDisc;
+
+            buttonDemo_Click(sender, e);
+        }
+
+        private void buttonDndStatus_Click(object sender, EventArgs e)
+        {
+            //DemoBorg();
+            int ringWidth = 129;
+            int ringHeight = 131;
+            int magnification = 2;
+            //fireWidth = 200;
+            //fireHeight = 200;
+            magnification = 2;
+            int left, top;
+
+            Color[] palBorg = PalPlasma.New(Color.Red);
+            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(11);
+            ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
+            ILightShape lsBorgRing = new LightShapeBorgRing();
+            ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
+            lsBorgRing.SetPen(lpPlasma);
+            lsBorgPlasma.SetPen(lpPlasma);
+
+            AbstractRealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
+            dbPlasmaDisc.Initialize(ringWidth, ringHeight, magnification);
+            dbPlasmaDisc.SetCoolingStrategy(coolingStrategy);
+            dbPlasmaDisc.SetPalette(palBorg);
+            dbPlasmaDisc.AddShape(lsBorgPlasma);
+            dbPlasmaDisc.AddShape(lsBorgRing);
+            left = (this.Width - ringWidth * magnification) / 2;
+            top = (this.Height - ringHeight * magnification) / 2;
+            dbPlasmaDisc.Location = new Point(x: left, y: top);
+
+            m_palette = palBorg;
+            m_lightPen = lpPlasma;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsBorgPlasma);
+            m_lightShapes.Add(lsBorgRing);
+            m_dbSprite = dbPlasmaDisc;
+
+            buttonDemo_Click(sender, e);
         }
     }
 }
