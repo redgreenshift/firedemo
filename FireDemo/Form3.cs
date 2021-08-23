@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace FireDemo
@@ -22,11 +23,18 @@ namespace FireDemo
         int m_fireWidth;
         int m_fireHeight;
         int m_framesPerSecond = 64;
+        System.Threading.Timer timer2;
 
         public Form3()
         {
             InitializeComponent();
             m_graph = this.CreateGraphics(); // TODO: JRDV Delete this!!!
+
+            //TimerCallback callback = new TimerCallback(() =>
+            //{
+            //    return null;
+            //});
+            timer2 = new System.Threading.Timer(MyTimerCallback, null, 10, 10);
         }
 
         private void Form3_Load(object sender, EventArgs e)
@@ -34,8 +42,24 @@ namespace FireDemo
             DemoBatman();
             DemoBatman_LowerCooling_HigherFire();
             this.BackColor = Color.Black;
-            timer1.Interval = (int)(1000 / 63);
+            timer1.Interval = (int)(1000 / m_framesPerSecond);
             timer1.Enabled = true;
+        }
+
+        delegate void TTimerCallback(string str);
+        public void MyTimerCallback(Object obj)
+        {
+            // 1) How to check whether we're on the correct thread?
+            // 2) How to create a delegate to Invoke to the correct thread?
+            if (System.Threading.Thread.CurrentThread.IsBackground)
+            {
+                TTimerCallback del4 = name => { timer1_Tick(null, null); };
+                this.Invoke(del4, "");
+            }
+            else
+            {
+                timer1_Tick(null, null);
+            }
         }
 
         private void DemoBatman()
@@ -145,6 +169,7 @@ namespace FireDemo
         }
 
         // TODO: JRDV: Throw this away!!! Want to implement using alternate suggestion:
+        // https://stackoverflow.com/questions/11020710/is-graphics-drawimage-too-slow-for-bigger-images
         int iFrame = 0;
         DateTime dtEnd = DateTime.Now;
         private void timer1_Tick(object sender, EventArgs e)
