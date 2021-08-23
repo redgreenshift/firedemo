@@ -407,7 +407,7 @@ namespace FireDemo
                 shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
-            ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);
+            ILightPen lpCandle = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
@@ -525,7 +525,7 @@ namespace FireDemo
             //SimpleCandle();
             int fireWidth = 21;
             int fireHeight = 75;
-            int magnification = 4;
+            int magnification = 5;
             int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
             int left = buttonDemo.Location.X + buttonDemo.Size.Width;
 
@@ -537,7 +537,7 @@ namespace FireDemo
                 shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
-            ILightPen lpCandle = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);
+            ILightPen lpCandle = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
