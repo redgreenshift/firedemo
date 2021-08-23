@@ -17,7 +17,12 @@ namespace FireDemo
         public int Width;
         public int Magnification;
         public Point Location { get; set; }
+        public InterpolationMode InterpolationMode { get; set; }
 
+        protected AbstractDynamicSprite()
+        {
+            this.InterpolationMode = InterpolationMode.Bicubic;
+        }
         public virtual void Initialize(int width, int height, int magnification)
         {
             Location = new Point(0, 0);
@@ -59,7 +64,7 @@ namespace FireDemo
                 }
                 else
                 {
-                    graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graph.InterpolationMode = this.InterpolationMode;
                     graph.DrawImage(front, Location.X, Location.Y, Width * Magnification, Height * Magnification);
                 }
 
