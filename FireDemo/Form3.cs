@@ -32,7 +32,7 @@ namespace FireDemo
         private void Form3_Load(object sender, EventArgs e)
         {
             DemoBatman();
-            //DemoBatman_LowerCooling_HigherFire();
+            DemoBatman_LowerCooling_HigherFire();
             this.BackColor = Color.Black;
             timer1.Interval = (int)(1000 / 63);
             timer1.Enabled = true;
@@ -104,7 +104,7 @@ namespace FireDemo
             fireHeight = fireWidth * 3 / 5;
             //magnification = 2;
 
-            Color[] palFire = PaletteGenerator.GetHardCodedFirePalette();
+            Color[] palFire = PalRealisticFire.New();
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0);
@@ -123,7 +123,7 @@ namespace FireDemo
             // *sigh* It does look a lot better with the map
 
             //coolingStrategy = new CoolingStrategyConst(3);
-            ILightPen lpBatman = new LightPen(fill: 0.75f, min: 54, max: 255, useFullRange: false);
+            ILightPen lpBatman = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: false);
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
