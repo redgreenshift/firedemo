@@ -342,15 +342,16 @@ namespace FireDemo
             fireHeight = fireWidth * 3 / 5;
             //magnification = 2;
 
-            Color[] palFire = PaletteGenerator.GetHardCodedFirePalette();
+            Color[] palFire = PalRealisticFire.New();
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
-            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0);
-            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 15, smoothing: 0);
-            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 25, smoothing: 0);
-            ////m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 25, smoothing: 0);
+            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0, shift: true, rotate: false);
+            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 15, smoothing: 0, shift: true, rotate: false);
+            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 15, smoothing: 0, shift: true, rotate: false);
+            ////m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 25, smoothing: 0, shift: true, rotate: false);
             coolingStrategy = m_coolingStrategy;
-            ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, useFullRange: false);
+            //coolingStrategy = new CoolingStrategyConst(3);
+            ILightPen lpBatman = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: false);
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
@@ -563,6 +564,7 @@ namespace FireDemo
 
         private void buttonOofStatus_Click(object sender, EventArgs e)
         {
+            m_dbSprites.Clear();
             //DemoLightning();
 
             int fireWidth = 132;
@@ -595,49 +597,17 @@ namespace FireDemo
 
         private void buttonBusyStatus_Click(object sender, EventArgs e)
         {
+            m_dbSprites.Clear();
             UpdateVisibleUI();
 
-            //DemoBatman();
-            int left, top;
-            int fireWidth = 500;
-            int fireHeight = 300;
-            int magnification = 1;
-            //fireWidth = 250;
-            //fireHeight = 150;
-            //magnification = 2;
-            //fireWidth = 700;
-            fireHeight = fireWidth * 3 / 5;
-            //magnification = 2;
-
-            Color[] palFire = PalRealisticFire.New();
-            ICoolingStrategy coolingStrategy;
-            m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 25, smoothing: 0);
-            coolingStrategy = m_coolingStrategy;
-            ILightPen lpBatman = new LightPen(fill: 0.45f, min: 54, max: 255, useFullRange: false);
-            ILightShape lsBatman = new LightShapeBatman();
-            lsBatman.SetPen(lpBatman);
-
-            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
-            dbBatman.Initialize(fireWidth, fireHeight, magnification);
-            dbBatman.SetCoolingStrategy(coolingStrategy);
-            dbBatman.SetPalette(palFire);
-            dbBatman.AddShape(lsBatman);
-            left = (this.Width - fireWidth * magnification) / 2;
-            top = (this.Height - fireHeight * magnification) / 2 - 20;
-            dbBatman.Location = new Point(x: left, y: top);
-
-            m_palette = palFire;
-            m_lightPen = lpBatman;
-            m_lightShapes.Clear();
-            m_lightShapes.Add(lsBatman);
-            m_dbSprite = dbBatman;
+            DemoBatman();
 
             buttonDemo_Click(sender, e);
         }
 
         private void buttonAvailableStatus_Click(object sender, EventArgs e)
         {
+            m_dbSprites.Clear();
             //DemoBorg();
 
             int ringWidth = 129;
@@ -680,6 +650,7 @@ namespace FireDemo
 
         private void buttonDndStatus_Click(object sender, EventArgs e)
         {
+            m_dbSprites.Clear();
             //DemoBorg();
             int ringWidth = 129;
             int ringHeight = 131;
