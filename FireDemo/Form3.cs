@@ -43,7 +43,7 @@ namespace FireDemo
             DemoBatman_LowerCooling_HigherFire();
             this.BackColor = Color.Black;
             timer1.Interval = (int)(1000 / m_framesPerSecond);
-            timer1.Enabled = true;
+            //timer1.Enabled = true;
         }
 
         delegate void TTimerCallback(string str);
