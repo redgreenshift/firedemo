@@ -58,9 +58,11 @@ namespace FireDemo
                 graph.CompositingMode = CompositingMode.SourceCopy;
                 if (Magnification == 1)
                 {
-                    int notUnused = 0;
                     graph.InterpolationMode = InterpolationMode.NearestNeighbor;
-                    graph.DrawImageUnscaled(front, Location.X, Location.Y, notUnused, notUnused);
+                    // NOTE: While the Width/Height parameters to DrawImageUnscaled are
+                    // unused on Windows platforms, Mono on Linux respects the paremeters,
+                    // therefore they are required.
+                    graph.DrawImageUnscaled(front, Location.X, Location.Y, Width, Height); 
                 }
                 else
                 {
