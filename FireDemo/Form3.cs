@@ -24,6 +24,7 @@ namespace FireDemo
         int m_fireHeight;
         int m_framesPerSecond = 64;
         System.Threading.Timer timer2;
+        bool Closing = false;
 
         public Form3()
         {
@@ -34,32 +35,79 @@ namespace FireDemo
             //{
             //    return null;
             //});
-            timer2 = new System.Threading.Timer(MyTimerCallback, null, 10, 10);
+            this.FormClosing += Form3_FormClosing;
+        }
+
+        private void Form3_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Closing = true;
+            timer2.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         private void Form3_Load(object sender, EventArgs e)
         {
+            timer2 = new System.Threading.Timer(MyTimerCallback, null, 0, Timeout.Infinite);
+
             DemoBatman();
             DemoBatman_LowerCooling_HigherFire();
             this.BackColor = Color.Black;
-            timer1.Interval = (int)(1000 / m_framesPerSecond);
+            //timer1.Interval = (int)(1000 / m_framesPerSecond);
             //timer1.Enabled = true;
+
         }
 
+        // TODO: JRDV: NEAT! I seem to have *actually* doubled the framerate!
+        // Verify that I'm doing it right, and maybe see if it translates to the Pi?
         delegate void TTimerCallback(string str);
         public void MyTimerCallback(Object obj)
         {
+            if (this.Closing)
+                return;
+
             // 1) How to check whether we're on the correct thread?
             // 2) How to create a delegate to Invoke to the correct thread?
             if (System.Threading.Thread.CurrentThread.IsBackground)
             {
-                TTimerCallback del4 = name => { timer1_Tick(null, null); };
+                TTimerCallback del4 = name => {
+                    this.Invalidate();
+                    // TODO: JRDV: Render to buffer here, and then queue an OnPaint call?
+                    //timer1_Tick(null, null);
+                };
                 this.Invoke(del4, "");
             }
             else
             {
                 timer1_Tick(null, null);
             }
+        }
+
+
+        //protected override void OnPaint(PaintEventArgs e)
+        //{
+        //    OnPaintOneFrame(e);
+        //}
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            OnPaintOneFrame(e);
+        }
+
+        void OnPaintOneFrame(PaintEventArgs e)
+        {
+            UpdateFramerate();
+            // Draw the frame once per tick.
+            if (m_dbSprites.Count > 0)
+            {
+                foreach (AbstractDynamicSprite sprite in m_dbSprites)
+                {
+                    sprite.RenderOneFrameToScreen(e.Graphics);
+                }
+            }
+            else
+                m_dbSprite.RenderOneFrameToScreen(e.Graphics);
+
+            timer2.Change(0, Timeout.Infinite);
+
         }
 
         private void DemoBatman()
@@ -131,11 +179,11 @@ namespace FireDemo
             Color[] palFire = PalRealisticFire.New();
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
-            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0);
-            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 15, smoothing: 0);
+            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0, shift: true, rotate: false);
+            //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 15, smoothing: 0, shift: true, rotate: false);
             //            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 25, smoothing: 0);
-            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 15, smoothing: 0, shift: true, rotate: false);
-            ////m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 25, smoothing: 0);
+//            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 15, smoothing: 0, shift: true, rotate: false);
+            ////m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.3f, min: 5, max: 25, smoothing: 0, shift: true, rotate: false);
             coolingStrategy = m_coolingStrategy;
 
             // CoolingStrategyMap seems to be a bottleneck for Batman flames!
@@ -168,11 +216,14 @@ namespace FireDemo
             m_dbSprite = dbBatman;
         }
 
-        // TODO: JRDV: Throw this away!!! Want to implement using alternate suggestion:
-        // https://stackoverflow.com/questions/11020710/is-graphics-drawimage-too-slow-for-bigger-images
+        //public override void OnPaint
+        //{
+
+        //}
+
         int iFrame = 0;
         DateTime dtEnd = DateTime.Now;
-        private void timer1_Tick(object sender, EventArgs e)
+        private void UpdateFramerate()
         {
             ++iFrame;
             DateTime dtNow = DateTime.Now;
@@ -183,9 +234,15 @@ namespace FireDemo
                 iFrame = 0;
                 dtEnd = DateTime.Now.AddSeconds(1);
             }
+        }
+
+        // TODO: JRDV: Throw this away!!! Want to implement using alternate suggestion:
+        // https://stackoverflow.com/questions/11020710/is-graphics-drawimage-too-slow-for-bigger-images
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            UpdateFramerate();
 
             // Draw the frame once per tick.
-
             if (m_dbSprites.Count > 0)
             {
                 foreach (AbstractDynamicSprite sprite in m_dbSprites)
