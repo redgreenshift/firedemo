@@ -614,6 +614,208 @@ namespace FireDemo
     }
 
     /// <summary>
+    /// Optimized for Flaming Batman Logo
+    /// 
+    /// NOTE: this is HIGHLY COUPLED coupled to the LightShapeBatman implementation,
+    /// but we could use the generic RealtimeFire class instead of RealtimeFireBatLogoOptimized...
+    /// and it would look the same. It's just that this 'optimized' implementation provides noticible speed improvements
+    /// </summary>
+    class RealtimeFireBatLogoOptimizedMT : RealtimeFire
+    {
+        Thread thread1;
+        Thread thread2;
+
+        //delegate void MyCallback(int i);
+
+        public RealtimeFireBatLogoOptimizedMT()
+        {
+            //ThreadStart myDelegate1 = () =>
+            //{
+            //    RenderStage2And3(0, thread1);
+            //};
+            //ThreadStart myDelegate2 = () =>
+            //{
+            //    RenderStage2And3(1, thread2);
+            //};
+            //thread1 = new Thread(myDelegate1);
+            //thread2 = new Thread(myDelegate2);
+            //this.Invoke(delegate1, 1);
+            //this.Invoke(delegate2, 2);
+        }
+
+        // TODO: JRDV: Parallelize the algorithm. I think the Pi has 4 cores.
+        // TODO: JRDV: Is it faster to do the edges in a separate pass? Or to add extra conditions inside the main loop?
+        public override void RenderStage2And3()
+        {
+            // TODO: JRDV: Creating new threads each time is probably expensive.
+            // Instead, have multiple long lived threads, that block and wait to be signalled, and then here we wait for completion
+            ThreadStart myDelegate1 = () =>
+            {
+                RenderStage2And3(0, thread1);
+            };
+            ThreadStart myDelegate2 = () =>
+            {
+                RenderStage2And3(1, thread2);
+            };
+            thread1 = new Thread(myDelegate1);
+            thread2 = new Thread(myDelegate2);
+
+            poker.LockBits(ImageLockMode.WriteOnly);
+
+            thread1.Start();
+            thread2.Start();
+            thread1.Join();
+            thread2.Join();
+
+            poker.UnlockBits();
+        }
+        public void RenderStage2And3(int iStartPoint, Thread threadObject)
+        {
+            //while (true)
+            {
+                int initialY = iStartPoint * Height / 2;
+                int endY = (iStartPoint + 1) * Height / 2 - iStartPoint;
+                //{ For flame effect scroll through every pixel and  }
+                //{ choose some other pixels around it. Divide by    }
+                //{ the ammount of pixels you added up and then      }
+                //{ subtract a decay ammount.                        }
+
+                // Average these pixels:
+                //. . .
+                //. X .
+                //X X X
+                int calc, p1, p2, p3, p5, coolingFactor;
+                int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
+                bool doDraw, doInnerCheck;
+                int y0inner;
+                int ySkipStart, ySkipEnd;
+
+                deadZone = 0;
+                endZone = Width + 1;
+                startOpt = (int)(Height / 3);
+
+                // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
+                // But in any case needs to be retuned to whatever values we use in the LightShapeBatman
+
+                // Under the bat: 6@4 20@11.5
+                x0 = (int)(6.0f / 52 * (Width - 1) + 1);
+                y0 = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
+                x1 = (int)(20.0f / 52 * (Width - 1) + 1);
+                y1 = (int)(11.5f / 18 * (Height * 3 / 4) + (Height / 4));
+
+                //"Inside the bat: 22.5@4
+                //8@0 to 17@4
+                //"
+                //" This turned out to be SLIGHTLY SLOWER! Or at least not measurably faster
+                // := (8 / 52 * (width - 1) + 1) asInteger.
+                // := (0 / 18 * (height * 3 / 4) + (height / 4)) asInteger.
+                // := (17 / 52 * (width - 1) + 1) asInteger.
+                // := (4 / 18 * (height * 3 / 4) + (height / 4)) asInteger.
+                // := width - x0wing.
+                // := width - x1wing."
+
+                // Inside the bat: 22.5@4
+                // 12@4 to 40@6
+                ySkipStart = 0;
+                ySkipEnd = 30;
+                ySkipEnd = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
+                x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
+                y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
+                x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
+                y1inner = (int)(5.9f / 18 * (Height * 3 / 4) + (Height / 4));
+
+                for (int y = initialY; y < endY; ++y)
+                {
+                    // There are large areas of pixels that will NEVER change in the Bat Logo.
+                    // Approximate these regions with rectangles, so we can quickly exclude them"
+
+                    //if (false)
+                    //{
+                    //    //DEBUG: Show me the dead zone
+                    //    //poker.SetPixel(x, y, this.thePalette[255]);
+                    //    continue;
+                    //}
+
+                    if (y > y1)
+                    {
+                        deadZone = x1;
+                        endZone = (Width - x1);
+                    }
+                    else
+                    {
+                        if (y > y0)
+                        {
+                            deadZone = x0;
+                            endZone = (Width - x0);
+                        }
+                    }
+
+                    //	"doShoulderCheck := (y > y0wing) && (y <= y1wing)."
+                    doInnerCheck = (y > y0inner) && (y <= y1inner);
+
+                    p2 = intensityMatrix.GetPixel(x: 0, y: y + 1);
+                    p3 = intensityMatrix.GetPixel(x: 1, y: y + 1);
+
+                    for (int x = 1; x < Width - 1; ++x)
+                    {
+                        //2 to: (width - 1) do: [:x |
+                        // poke the raw data into the ColorForm.
+
+                        doDraw = (y > ySkipEnd) && (x >= deadZone) && (x <= endZone);
+                        if (doDraw && doInnerCheck)
+                            doDraw = (x < x0inner) || (x > x1inner);
+                        //"doDraw && doShoulderCheck ifTrue: [
+                        //doDraw:= (x < x0wing) || (x > x1rightWing) || ((x > x1wing) && (x < x0rightWing)).
+                        //	]."
+
+                        if (doDraw)
+                        {
+                            // Add the surrounding pixels
+                            //p8:= (flameArr at: x at: y + 2)
+                            //p5:= (flameArr at: x at: y).
+                            //p1:= (flameArr at: x - 1 at: y + 1).
+                            //p2:= (flameArr at: x at: y + 1).
+                            //p3:= (flameArr at: x + 1 at: y + 1).
+
+                            p1 = p2;
+                            p2 = p3;
+                            p5 = intensityMatrix.GetPixel(x, y);
+                            p3 = intensityMatrix.GetPixel(x + 1, y + 1);
+
+                            // Average the colors
+                            calc = p5 + p1 + p2 + p3;
+                            calc /= 4;
+
+                            // Subtract the coolingFactor value, if necessary
+                            coolingFactor = coolingStrategy.at(x, y);
+                            if (calc > coolingFactor)
+                                calc -= coolingFactor;
+                            else
+                                calc = 0;
+
+                            intensityMatrix.SetPixel(x, y, calc);
+                            //front.SetPixel(x, y, this.thePalette[calc]);
+                            poker.SetPixel(x, y, this.thePalette[calc]);
+                        }
+                        else
+                        {
+                            p1 = p2;
+                            p2 = p3;
+                            p5 = 0;
+                            p3 = 0;
+
+                            //DEBUG: Show me the dead zone
+                            //poker.SetPixel(x, y, this.thePalette[255]);
+                        }
+                    }
+                }
+
+                //threadObject.Suspend();
+            }
+
+        }
+    }
+    /// <summary>
     /// Optimized for dissipating in place, like electricity
     /// </summary>
     class RealtimeLightning : AbstractRealtimeLightEffect
