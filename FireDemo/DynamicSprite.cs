@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace FireDemo
 {
@@ -473,7 +474,7 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Optimized for Flaming Batman Logo
+    /// Optimized for Flaming Batman Logo Multi Threaded
     /// 
     /// NOTE: this is HIGHLY COUPLED coupled to the LightShapeBatman implementation,
     /// but we could use the generic RealtimeFire class instead of RealtimeFireBatLogoOptimized...
@@ -496,6 +497,7 @@ namespace FireDemo
             int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
             bool doDraw, doInnerCheck;
             int y0inner;
+            int ySkipEnd;
 
             deadZone = 0;
             endZone = Width + 1;
@@ -523,6 +525,8 @@ namespace FireDemo
 
             // Inside the bat: 22.5@4
             // 12@4 to 40@6
+            ySkipEnd = 30;
+            ySkipEnd = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
             x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
             y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
             x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
@@ -560,7 +564,7 @@ namespace FireDemo
                     //2 to: (width - 1) do: [:x |
                     // poke the raw data into the ColorForm.
 
-                    doDraw = (x >= deadZone) && (x <= endZone);
+                    doDraw = (y > ySkipEnd) && (x >= deadZone) && (x <= endZone);
                     if (doDraw && doInnerCheck)
                         doDraw = (x < x0inner) || (x > x1inner);
                     //"doDraw && doShoulderCheck ifTrue: [
@@ -622,8 +626,11 @@ namespace FireDemo
     /// </summary>
     class RealtimeFireBatLogoOptimizedMT : RealtimeFire
     {
+        int numThreads = 3;
+        // TODO: JRDV: Parameterize the number of threads, make the threads long lived (so we don't have to create new threads every frame)
         Thread thread1;
         Thread thread2;
+        Thread thread3;
 
         //delegate void MyCallback(int i);
 
@@ -649,6 +656,7 @@ namespace FireDemo
         {
             // TODO: JRDV: Creating new threads each time is probably expensive.
             // Instead, have multiple long lived threads, that block and wait to be signalled, and then here we wait for completion
+            // And to implement this for real, really need to have BitCanvas rendering to a front/back buffer so the input/output buffers don't overlap
             ThreadStart myDelegate1 = () =>
             {
                 RenderStage2And3(0, thread1);
@@ -657,24 +665,32 @@ namespace FireDemo
             {
                 RenderStage2And3(1, thread2);
             };
+            ThreadStart myDelegate3 = () =>
+            {
+                RenderStage2And3(2, thread3);
+            };
             thread1 = new Thread(myDelegate1);
             thread2 = new Thread(myDelegate2);
+            thread3 = new Thread(myDelegate3);
 
             poker.LockBits(ImageLockMode.WriteOnly);
 
             thread1.Start();
             thread2.Start();
+            thread3.Start();
             thread1.Join();
             thread2.Join();
+            thread3.Join();
+
 
             poker.UnlockBits();
         }
-        public void RenderStage2And3(int iStartPoint, Thread threadObject)
+        public void RenderStage2And3(int iThreadNum, Thread threadObject)
         {
             //while (true)
             {
-                int initialY = iStartPoint * Height / 2;
-                int endY = (iStartPoint + 1) * Height / 2 - iStartPoint;
+                int initialY = iThreadNum * Height / numThreads;
+                int endY = (iThreadNum + 1) * Height / numThreads - (iThreadNum == 0 ? 0 : 1);
                 //{ For flame effect scroll through every pixel and  }
                 //{ choose some other pixels around it. Divide by    }
                 //{ the ammount of pixels you added up and then      }
