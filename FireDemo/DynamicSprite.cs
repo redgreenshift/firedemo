@@ -497,7 +497,7 @@ namespace FireDemo
             int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
             bool doDraw, doInnerCheck;
             int y0inner;
-            int ySkipEnd;
+            int ySkipInitial;
 
             deadZone = 0;
             endZone = Width + 1;
@@ -525,8 +525,8 @@ namespace FireDemo
 
             // Inside the bat: 22.5@4
             // 12@4 to 40@6
-            ySkipEnd = 30;
-            ySkipEnd = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
+            ySkipInitial = 30;
+            ySkipInitial = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
             x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
             y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
             x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
@@ -564,7 +564,7 @@ namespace FireDemo
                     //2 to: (width - 1) do: [:x |
                     // poke the raw data into the ColorForm.
 
-                    doDraw = (y > ySkipEnd) && (x >= deadZone) && (x <= endZone);
+                    doDraw = (y > ySkipInitial) && (x >= deadZone) && (x <= endZone);
                     if (doDraw && doInnerCheck)
                         doDraw = (x < x0inner) || (x > x1inner);
                     //"doDraw && doShoulderCheck ifTrue: [
@@ -682,7 +682,6 @@ namespace FireDemo
             thread2.Join();
             thread3.Join();
 
-
             poker.UnlockBits();
         }
         public void RenderStage2And3(int iThreadNum, Thread threadObject)
@@ -690,7 +689,7 @@ namespace FireDemo
             //while (true)
             {
                 int initialY = iThreadNum * Height / numThreads;
-                int endY = (iThreadNum + 1) * Height / numThreads - (iThreadNum == 0 ? 0 : 1);
+                int endY = (iThreadNum + 1) * Height / numThreads - (iThreadNum == numThreads - 1 ? 1 : 0);
                 //{ For flame effect scroll through every pixel and  }
                 //{ choose some other pixels around it. Divide by    }
                 //{ the ammount of pixels you added up and then      }
@@ -704,7 +703,7 @@ namespace FireDemo
                 int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
                 bool doDraw, doInnerCheck;
                 int y0inner;
-                int ySkipStart, ySkipEnd;
+                int ySkipInitial;
 
                 deadZone = 0;
                 endZone = Width + 1;
@@ -732,9 +731,8 @@ namespace FireDemo
 
                 // Inside the bat: 22.5@4
                 // 12@4 to 40@6
-                ySkipStart = 0;
-                ySkipEnd = 30;
-                ySkipEnd = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
+                ySkipInitial = 30;
+                ySkipInitial = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
                 x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
                 y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
                 x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
@@ -777,7 +775,7 @@ namespace FireDemo
                         //2 to: (width - 1) do: [:x |
                         // poke the raw data into the ColorForm.
 
-                        doDraw = (y > ySkipEnd) && (x >= deadZone) && (x <= endZone);
+                        doDraw = (y > ySkipInitial) && (x >= deadZone) && (x <= endZone);
                         if (doDraw && doInnerCheck)
                             doDraw = (x < x0inner) || (x > x1inner);
                         //"doDraw && doShoulderCheck ifTrue: [
