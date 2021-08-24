@@ -17,15 +17,17 @@ namespace FireDemo
     {
         public int Width { get; }
         public int Height { get; }
-        int[] intensityMatrixBackBuffer;
 
-        readonly int[] intensityMatrixFront;
+        int[] intensityMatrixFront;
+        int[] intensityMatrixBackBuffer; // TODO: JRDV: Why did I have this? Do I ever need double buffering?
+        // DUH! It's because when averaging the pixels, you read from one, and write to the other! Otherwise you're modifying the source state.
 
-        public BitCanvas8Bit(int width, int height) // TODO: JRDV: write these out for clarity
+        public BitCanvas8Bit(int width, int height)
         {
             Width = width;
             Height = height;
             intensityMatrixFront = new int[height * width];
+            intensityMatrixBackBuffer = new int[height * width];
         }
 
         /// <summary>

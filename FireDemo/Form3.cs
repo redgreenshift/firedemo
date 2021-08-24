@@ -12,7 +12,6 @@ namespace FireDemo
 {
     public partial class Form3 : Form
     {
-        Graphics m_graph;
         Color[] m_palette;
         CoolingStrategyMap m_coolingStrategy;
         ILightPen m_lightPen;
@@ -29,7 +28,6 @@ namespace FireDemo
         public Form3()
         {
             InitializeComponent();
-            m_graph = this.CreateGraphics(); // TODO: JRDV Delete this!!!
 
             //TimerCallback callback = new TimerCallback(() =>
             //{
@@ -53,12 +51,15 @@ namespace FireDemo
             this.BackColor = Color.Black;
             //timer1.Interval = (int)(1000 / m_framesPerSecond);
             //timer1.Enabled = true;
-
         }
 
+        // Want to implement using alternate suggestion:
+        // https://stackoverflow.com/questions/11020710/is-graphics-drawimage-too-slow-for-bigger-images
         // TODO: JRDV: NEAT! I seem to have *actually* doubled the framerate!
         // Verify that I'm doing it right, and maybe see if it translates to the Pi?
-        delegate void TTimerCallback(string str);
+        // Nope, doesn't work on the Raspberry Pi for some reason it renders exactly one frame, and that's it.
+        // Double teh framerate in Windows is meaningless if it doesn't translate to Pi.
+        //delegate void TTimerCallback(string str);
         public void MyTimerCallback(Object obj)
         {
             if (this.Closing)
@@ -66,19 +67,23 @@ namespace FireDemo
 
             // 1) How to check whether we're on the correct thread?
             // 2) How to create a delegate to Invoke to the correct thread?
-            if (System.Threading.Thread.CurrentThread.IsBackground)
-            {
-                TTimerCallback del4 = name => {
-                    this.Invalidate();
-                    // TODO: JRDV: Render to buffer here, and then queue an OnPaint call?
-                    //timer1_Tick(null, null);
-                };
-                this.Invoke(del4, "");
-            }
-            else
-            {
-                timer1_Tick(null, null);
-            }
+            //Rectangle rc = new Rectangle(100, 1000, 1001, 501);
+            //Rectangle rc = new Rectangle(this.Location, this.Size);
+            //this.Invalidate(rc);
+            this.Invalidate();
+
+            //if (System.Threading.Thread.CurrentThread.IsBackground)
+            //{
+            //    TTimerCallback del4 = name => {
+            //        this.Invalidate();
+            //        // TODO: JRDV: Render to buffer here, and then queue an OnPaint call?
+            //        //timer1_Tick(null, null);
+            //    };
+            //    this.Invoke(del4, "");
+            //}
+            //else
+            //{
+            //}
         }
 
 
@@ -87,9 +92,24 @@ namespace FireDemo
         //    OnPaintOneFrame(e);
         //}
 
+        bool m_fNeedBackgroundFill = true;
         protected override void OnPaintBackground(PaintEventArgs e)
         {
+            //e.Graphics.FillRectangle(Brushes.Black, 0.0f, 0.0f, 1.0f, 1.0f);
+            if (m_fNeedBackgroundFill)
+            {
+                e.Graphics.FillRectangle(Brushes.Black, 0, 0, this.Size.Width, this.Size.Height);
+                //e.Graphics.DrawString("FPS", Font, Brushes.White, 0.0f, 0.0f);
+                m_fNeedBackgroundFill = false;
+            }
             OnPaintOneFrame(e);
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            m_fNeedBackgroundFill = true;
         }
 
         void OnPaintOneFrame(PaintEventArgs e)
@@ -234,24 +254,6 @@ namespace FireDemo
                 iFrame = 0;
                 dtEnd = DateTime.Now.AddSeconds(1);
             }
-        }
-
-        // TODO: JRDV: Throw this away!!! Want to implement using alternate suggestion:
-        // https://stackoverflow.com/questions/11020710/is-graphics-drawimage-too-slow-for-bigger-images
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            UpdateFramerate();
-
-            // Draw the frame once per tick.
-            if (m_dbSprites.Count > 0)
-            {
-                foreach (AbstractDynamicSprite sprite in m_dbSprites)
-                {
-                    sprite.RenderOneFrameToScreen(m_graph);
-                }
-            }
-            else
-                m_dbSprite.RenderOneFrameToScreen(m_graph);
         }
     }
 }

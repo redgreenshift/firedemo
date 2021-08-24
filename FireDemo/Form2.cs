@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace FireDemo
@@ -19,14 +21,28 @@ namespace FireDemo
         AbstractDynamicSprite m_dbSprite;
         List<AbstractDynamicSprite> m_dbSprites = new List<AbstractDynamicSprite>();
         private GenericRealtimeFlame m_genericFlame;
-        int m_fireWidth;
-        int m_fireHeight;
         int m_framesPerSecond = 64;
 
         public Form2()
         {
             InitializeComponent();
             m_graph = this.CreateGraphics();
+        }
+
+        // Cheap way to calculate framerate.
+        int iFrame = 0;
+        DateTime dtEnd = DateTime.Now;
+        private void UpdateFramerate()
+        {
+            ++iFrame;
+            DateTime dtNow = DateTime.Now;
+
+            if (dtNow >= dtEnd)
+            {
+                this.Text = string.Format("-- Friendly Neighborhood Status Indicator -- FPS: {0}", iFrame);
+                iFrame = 0;
+                dtEnd = DateTime.Now.AddSeconds(1);
+            }
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -456,6 +472,7 @@ namespace FireDemo
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            UpdateFramerate();
             //if (m_fUpdateFireDimensionsAfterNextFrame)
             //{
             //    UpdateFireDimensions();
@@ -523,6 +540,7 @@ namespace FireDemo
         }
         private void buttonAwayStatus_Click(object sender, EventArgs e)
         {
+            m_dbSprites.Clear();
             //SimpleCandle();
             int fireWidth = 21;
             int fireHeight = 75;
@@ -544,6 +562,8 @@ namespace FireDemo
 
             AbstractRealtimeLightEffect dbCandle = new RealtimeCandleflame();
             m_genericFlame = new GenericRealtimeFlame();
+            m_largerFlame = true;
+            m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
             dbCandle = m_genericFlame;
             dbCandle.Initialize(fireWidth, fireHeight, magnification);
             dbCandle.SetCoolingStrategy(coolingStrategy);

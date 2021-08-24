@@ -61,7 +61,7 @@ namespace FireDemo
                     graph.InterpolationMode = InterpolationMode.NearestNeighbor;
                     // NOTE: While the Width/Height parameters to DrawImageUnscaled are
                     // unused on Windows platforms, Mono on Linux respects the paremeters,
-                    // therefore they are required.
+                    // therefore they are required here.
                     graph.DrawImageUnscaled(front, Location.X, Location.Y, Width, Height); 
                 }
                 else
