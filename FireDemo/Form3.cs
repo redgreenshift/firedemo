@@ -12,18 +12,16 @@ namespace FireDemo
 {
     public partial class Form3 : Form
     {
-        Color[] m_palette;
+        //Color[] m_palette;
         CoolingStrategyMap m_coolingStrategy;
-        ILightPen m_lightPen;
+        //ILightPen m_lightPen;
         List<ILightShape> m_lightShapes = new List<ILightShape>();
         AbstractDynamicSprite m_dbSprite;
         List<AbstractDynamicSprite> m_dbSprites = new List<AbstractDynamicSprite>();
-        private GenericRealtimeFlame m_genericFlame;
-        int m_fireWidth;
-        int m_fireHeight;
+        //private GenericRealtimeFlame m_genericFlame;
         int m_framesPerSecond = 64;
         System.Threading.Timer timer2;
-        bool Closing = false;
+        bool ClosingSoShutdownStuff = false;
 
         public Form3()
         {
@@ -38,7 +36,7 @@ namespace FireDemo
 
         private void Form3_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.Closing = true;
+            this.ClosingSoShutdownStuff = true;
             timer2.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
@@ -58,11 +56,11 @@ namespace FireDemo
         // TODO: JRDV: NEAT! I seem to have *actually* doubled the framerate!
         // Verify that I'm doing it right, and maybe see if it translates to the Pi?
         // Nope, doesn't work on the Raspberry Pi for some reason it renders exactly one frame, and that's it.
-        // Double teh framerate in Windows is meaningless if it doesn't translate to Pi.
+        // Double the framerate in Windows is meaningless if it doesn't translate to Pi.
         //delegate void TTimerCallback(string str);
         public void MyTimerCallback(Object obj)
         {
-            if (this.Closing)
+            if (this.ClosingSoShutdownStuff)
                 return;
 
             // 1) How to check whether we're on the correct thread?
@@ -126,8 +124,14 @@ namespace FireDemo
             else
                 m_dbSprite.RenderOneFrameToScreen(e.Graphics);
 
+            // That is strange. 0 dueTime means this runs about 120 FPS on my desktop.
+            // 1 dueTime makes it run SLOWER than the original timer1_Tick implementation,
+            // and the framerate is inconsistent, fluctuating from 30-50-60 and back to 30 FPS
+            // Given how this is proving problematic on Linux, and inconsistent on Windows,
+            // I think my effort is better spent on paralellizing the implementation,
+            // and only later explore this path again. Yes I know this is theoretically
+            // not as good, but for now it IS producing better results.
             timer2.Change(0, Timeout.Infinite);
-
         }
 
         private void DemoBatman()
@@ -176,8 +180,8 @@ namespace FireDemo
             top = (this.Height - fireHeight * magnification) / 2 - 20;
             dbBatman.Location = new Point(x: left, y: top);
 
-            m_palette = palFire;
-            m_lightPen = lpBatman;
+            //m_palette = palFire;
+            //m_lightPen = lpBatman;
             m_lightShapes.Clear();
             m_lightShapes.Add(lsBatman);
             m_dbSprite = dbBatman;
@@ -229,8 +233,8 @@ namespace FireDemo
             top = (this.Height - fireHeight * magnification) / 2 - 20;
             dbBatman.Location = new Point(x: left, y: top);
 
-            m_palette = palFire;
-            m_lightPen = lpBatman;
+            //m_palette = palFire;
+            //m_lightPen = lpBatman;
             m_lightShapes.Clear();
             m_lightShapes.Add(lsBatman);
             m_dbSprite = dbBatman;
