@@ -243,10 +243,13 @@ namespace FireDemo
 
         void renderStage1SeedShapes()
         {
+            // TODO: JRDV: Temporarily hacky swapping the buffers so we draw on WHAT WILL BE the FRONT buffer, which will be used as the source when blending later
+            intensityMatrix.SwapBuffers();
             foreach (ILightShape ls in lightShapes)
             {
                 ls.DrawOn(intensityMatrix);
             }
+            intensityMatrix.SwapBuffers();
         }
 
         public abstract void RenderStage2And3();
@@ -366,6 +369,7 @@ namespace FireDemo
                 }
             }
             poker.UnlockBits();
+            this.intensityMatrix.SwapBuffers();
         }
     }
 
@@ -418,6 +422,7 @@ namespace FireDemo
                 }
             }
             poker.UnlockBits();
+            this.intensityMatrix.SwapBuffers();
         }
     }
 
@@ -470,6 +475,7 @@ namespace FireDemo
                 }
             }
             poker.UnlockBits();
+            this.intensityMatrix.SwapBuffers();
         }
     }
 
@@ -523,6 +529,8 @@ namespace FireDemo
             // := width - x0wing.
             // := width - x1wing."
 
+            // There are large regions of the screen that will always be black.
+            // If we can cheaply skip these regions, then that gives us a cheap speed improvement.
             // Inside the bat: 22.5@4
             // 12@4 to 40@6
             ySkipInitial = 30;
@@ -614,6 +622,7 @@ namespace FireDemo
             }
 
             poker.UnlockBits();
+            intensityMatrix.SwapBuffers();
         }
     }
 
@@ -683,6 +692,7 @@ namespace FireDemo
             thread3.Join();
 
             poker.UnlockBits();
+            intensityMatrix.SwapBuffers();
         }
         public void RenderStage2And3(int iThreadNum, Thread threadObject)
         {
@@ -907,6 +917,7 @@ namespace FireDemo
                 }
             }
             poker.UnlockBits();
+            this.intensityMatrix.SwapBuffers();
         }
     }
 }

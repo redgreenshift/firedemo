@@ -11,6 +11,8 @@ namespace FireDemo
         int Height { get; }
         int GetPixel(int x, int y);
         void SetPixel(int x, int y, int val);
+
+        void SwapBuffers(); // UGH! feels like this shouldn't be here
     }
 
     class BitCanvas8Bit : IBitCanvas
@@ -49,7 +51,15 @@ namespace FireDemo
         /// <param name="val">An integer representing the intensity of the specified pixel.</param>
         public void SetPixel(int x, int y, int val)
         {
-            intensityMatrixFront[y * Width + x] = val;
+            //intensityMatrixFront[y * Width + x] = val;
+            intensityMatrixBackBuffer[y * Width + x] = val;
+        }
+
+        public void SwapBuffers()
+        {
+            int[] temp = intensityMatrixFront;
+            intensityMatrixFront = intensityMatrixBackBuffer;
+            intensityMatrixBackBuffer = temp;
         }
     }
 }
