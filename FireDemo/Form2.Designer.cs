@@ -40,6 +40,7 @@ namespace FireDemo
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonRainBORG = new System.Windows.Forms.Button();
+            this.buttonBatmanMultiThread = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -124,6 +125,7 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonBatmanMultiThread);
             this.groupBox1.Controls.Add(this.buttonRainBORG);
             this.groupBox1.Controls.Add(this.buttonAwayStatus);
             this.groupBox1.Controls.Add(this.buttonDndStatus);
@@ -147,6 +149,16 @@ namespace FireDemo
             this.buttonRainBORG.Text = "RainBORG";
             this.buttonRainBORG.UseVisualStyleBackColor = true;
             this.buttonRainBORG.Click += new System.EventHandler(this.buttonRainBORG_Click);
+            // 
+            // buttonBatmanMultiThread
+            // 
+            this.buttonBatmanMultiThread.Location = new System.Drawing.Point(185, 115);
+            this.buttonBatmanMultiThread.Name = "buttonBatmanMultiThread";
+            this.buttonBatmanMultiThread.Size = new System.Drawing.Size(137, 41);
+            this.buttonBatmanMultiThread.TabIndex = 8;
+            this.buttonBatmanMultiThread.Text = "Batman MT";
+            this.buttonBatmanMultiThread.UseVisualStyleBackColor = true;
+            this.buttonBatmanMultiThread.Click += new System.EventHandler(this.buttonBatmanMultiThread_Click);
             // 
             // Form2
             // 
@@ -176,5 +188,6 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonDndStatus;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button buttonRainBORG;
+        private System.Windows.Forms.Button buttonBatmanMultiThread;
     }
 }

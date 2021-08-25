@@ -345,8 +345,9 @@ namespace FireDemo
             m_dbSprite = dbLightning;
         }
 
-        private void DemoBatman()
+        private void DemoBatman(bool multithreaded = false)
         {
+            m_dbSprites.Clear();
             int left, top;
             int fireWidth = 500;
             int fireHeight = 300;
@@ -371,7 +372,11 @@ namespace FireDemo
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
-            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            AbstractRealtimeLightEffect dbBatman;
+            if (multithreaded)
+                dbBatman = new RealtimeFireBatLogoOptimizedMT();
+            else
+                dbBatman = new RealtimeFireBatLogoOptimized();
             //dbBatman = new RealtimeCandleflame();
             dbBatman.Initialize(fireWidth, fireHeight, magnification);
             dbBatman.SetCoolingStrategy(coolingStrategy);
@@ -712,6 +717,13 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
             DemoPlasmaRainbow();
+            buttonDemo_Click(sender, e);
+        }
+
+        private void buttonBatmanMultiThread_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            DemoBatman(multithreaded: true);
             buttonDemo_Click(sender, e);
         }
     }
