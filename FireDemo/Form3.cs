@@ -19,7 +19,7 @@ namespace FireDemo
         AbstractDynamicSprite m_dbSprite;
         List<AbstractDynamicSprite> m_dbSprites = new List<AbstractDynamicSprite>();
         //private GenericRealtimeFlame m_genericFlame;
-        int m_framesPerSecond = 64;
+        //int m_framesPerSecond = 64;
         System.Threading.Timer timer2;
         bool ClosingSoShutdownStuff = false;
 

@@ -66,9 +66,9 @@ namespace FireDemo
 
         protected void DrawLine(int x0, int y0, int x1, int y1, IBitCanvas bc)
         {
-            // "draw a line from source to destination using the pen"
+            // draw a line from source to destination using the pen
 
-            int sx, sy, err, dx, dy, dxsigned, dysigned, xrender, yrender;
+            int /*sx, sy, err, */ dx, dy, dxsigned, dysigned, xrender, yrender;
 
             if (x0 == x1 && y0 == y1)
             {
@@ -82,11 +82,11 @@ namespace FireDemo
             dysigned = y1 - y0;
             dx = Math.Abs(x1 - x0);
 
-            if (x0 < x1) sx = 1; else sx = -1;
+            //if (x0 < x1) sx = 1; else sx = -1;
             dy = Math.Abs(y1 - y0);
 
-            if (y0 < y1) sy = 1; else sy = -1;
-            err = dx + dy;
+            //if (y0 < y1) sy = 1; else sy = -1;
+            //err = dx + dy;
 
 
             if (dx > dy)
@@ -136,8 +136,8 @@ namespace FireDemo
     {
         override public void DrawOn(IBitCanvas bc)
         {
-            // "Draw the seed coal values for a candle flame"
-            // "Set the next row of random coals to keep the fire going."
+            // Draw the seed coal values for a candle flame
+            // Set the next row of random coals to keep the fire going.
             int width = bc.Width;
             int height = bc.Height;
             this.DrawLine(0, height - 1, width - 1, height - 1, bc);
@@ -197,7 +197,6 @@ namespace FireDemo
                 x0 = (int)(p.X / 52 * (width - 1) + 1);
                 y0 = (int)(p.Y / 18 * (height * 3.0f / 4.0f) + (height / 4.0f));
 
-                //batLogo[pos] = new Point(x0, y0);
                 batLogo.Add(new Point(x0, y0));
             }
 
@@ -348,7 +347,6 @@ namespace FireDemo
                     if (x > fireWidth)
                         x = fireWidth;
 
-
                     int delta = x - nodes[n];
                     int step = 0;
                     if (delta < 0)
@@ -375,7 +373,6 @@ namespace FireDemo
                         int xRender = (int)(xTemp * Math.Cos(rotationAngle) - yTemp * Math.Sin(rotationAngle)) + xCenter;
                         int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
 
-                        //flameIntensityMatrixFront[xRender + yRender * fireWidth] = 255;
                         callback.SetPixelPrevious(xRender, yRender, 255);
                     } while (eachx != x);
 
