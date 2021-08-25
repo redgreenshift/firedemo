@@ -671,7 +671,6 @@ namespace FireDemo
         {
             // TODO: JRDV: Creating new threads each time is probably expensive.
             // Instead, have multiple long lived threads, that block and wait to be signalled, and then here we wait for completion
-            // And to implement this for real, really need to have BitCanvas rendering to a front/back buffer so the input/output buffers don't overlap
             // TODO: JRDV: Move this it's hacky test
             threads.Clear();
             numThreads = 4;
