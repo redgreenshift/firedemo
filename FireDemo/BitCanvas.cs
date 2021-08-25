@@ -5,14 +5,19 @@ using System.Text;
 
 namespace FireDemo
 {
-    interface IBitCanvas
+    interface IBitCanvas // BitCanvas isn't the right term. This is an Intensity Matrix so maybe rename?
+                         // Or really a function of the DynamicSprite? LightMap?
+                         // The LightShape draws with a LightPen on a LightMap? LightCanvas?
+                         // Or is usng the word "light" too restrictive? Not mre restrictive than LightShape and LightPen...
+                         // IntensityMap?
     {
         int Width { get; }
         int Height { get; }
-        int GetPixel(int x, int y);
-        void SetPixel(int x, int y, int val);
-
-        void SwapBuffers(); // UGH! feels like this shouldn't be here
+        int GetPixelPrevious(int x, int y);
+        void SetPixelPrevious(int x, int y, int val);
+        void SetPixelNext(int x, int y, int val);
+        
+        void ProgressOneFrame(); // CommitFrame?
     }
 
     class BitCanvas8Bit : IBitCanvas
@@ -20,16 +25,28 @@ namespace FireDemo
         public int Width { get; }
         public int Height { get; }
 
-        int[] intensityMatrixFront;
-        int[] intensityMatrixBackBuffer; // TODO: JRDV: Why did I have this? Do I ever need double buffering?
-        // DUH! It's because when averaging the pixels, you read from one, and write to the other! Otherwise you're modifying the source state.
+        /// <summary>
+        /// The last frame displayed to the screen.
+        /// 
+        /// It is used as the SOURCE when generating the dissipation for the next frame.
+        /// As such, it is the DESTINATION when writing the "seed" values.
+        /// 
+        /// This is where the new "seed" values are drawn, because this is the SOURCE frame used for generating the NEXT frame.
+        /// This was the last frame displayed. The "seed" values are drawn to this buffer before dissipating to the destination buufferCurrent? Source?
+        /// </summary>
+        int[] intensityMatrixPrevious;
+
+        /// <summary>
+        /// The destination buffer
+        /// </summary>
+        int[] intensityMatrixNext;
 
         public BitCanvas8Bit(int width, int height)
         {
             Width = width;
             Height = height;
-            intensityMatrixFront = new int[height * width];
-            intensityMatrixBackBuffer = new int[height * width];
+            intensityMatrixPrevious = new int[height * width];
+            intensityMatrixNext = new int[height * width];
         }
 
         /// <summary>
@@ -38,9 +55,9 @@ namespace FireDemo
         /// <param name="x">The x-coordinate of the pixel to retrieve.</param>
         /// <param name="y">The x-coordinate of the pixel to retrieve.</param>
         /// <returns>An integer representing the color of the requested pixel.</returns>
-        public int GetPixel(int x, int y)
+        public int GetPixelPrevious(int x, int y)
         {
-            return intensityMatrixFront[y * Width + x];
+            return intensityMatrixPrevious[y * Width + x];
         }
 
         /// <summary>
@@ -49,17 +66,27 @@ namespace FireDemo
         /// <param name="x">The x-coordinate of the pixel to set.</param>
         /// <param name="y">The y-coordinate of the pixel to set.</param>
         /// <param name="val">An integer representing the intensity of the specified pixel.</param>
-        public void SetPixel(int x, int y, int val)
+        public void SetPixelPrevious(int x, int y, int val)
         {
-            //intensityMatrixFront[y * Width + x] = val;
-            intensityMatrixBackBuffer[y * Width + x] = val;
+            intensityMatrixPrevious[y * Width + x] = val;
         }
 
-        public void SwapBuffers()
+        /// <summary>
+        /// Sets the color of the specified pixel
+        /// </summary>
+        /// <param name="x">The x-coordinate of the pixel to set.</param>
+        /// <param name="y">The y-coordinate of the pixel to set.</param>
+        /// <param name="val">An integer representing the intensity of the specified pixel.</param>
+        public void SetPixelNext(int x, int y, int val)
         {
-            int[] temp = intensityMatrixFront;
-            intensityMatrixFront = intensityMatrixBackBuffer;
-            intensityMatrixBackBuffer = temp;
+            intensityMatrixNext[y * Width + x] = val;
+        }
+
+        public void ProgressOneFrame()
+        {
+            int[] temp = intensityMatrixPrevious;
+            intensityMatrixPrevious = intensityMatrixNext;
+            intensityMatrixNext = temp;
         }
     }
 }

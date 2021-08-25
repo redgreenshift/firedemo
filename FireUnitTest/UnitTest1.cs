@@ -68,7 +68,7 @@ namespace FireUnitTest
                 }
             }
 
-            generatedCoolingMap.progressOneFrame();
+            generatedCoolingMap.ProgressOneFrame();
             ++m_iFrame;
             for (int y = 0; y < height; ++y)
             {
@@ -80,7 +80,7 @@ namespace FireUnitTest
                 }
             }
 
-            generatedCoolingMap.progressOneFrame();
+            generatedCoolingMap.ProgressOneFrame();
             ++m_iFrame;
             for (int y = 0; y < height; ++y)
             {

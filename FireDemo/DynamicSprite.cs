@@ -238,18 +238,16 @@ namespace FireDemo
             this.renderStage1SeedShapes();
             this.RenderStage2And3();
             this.DisplayToScreen(graph);
-            coolingStrategy.progressOneFrame();
+            intensityMatrix.ProgressOneFrame();
+            coolingStrategy.ProgressOneFrame();
         }
 
         void renderStage1SeedShapes()
         {
-            // TODO: JRDV: Temporarily hacky swapping the buffers so we draw on WHAT WILL BE the FRONT buffer, which will be used as the source when blending later
-            intensityMatrix.SwapBuffers();
             foreach (ILightShape ls in lightShapes)
             {
                 ls.DrawOn(intensityMatrix);
             }
-            intensityMatrix.SwapBuffers();
         }
 
         public abstract void RenderStage2And3();
@@ -332,23 +330,23 @@ namespace FireDemo
                     calc = 0;
                     // Add the surrounding pixels
                     if (f7)
-                        calc += intensityMatrix.GetPixel(x - 1, y - 1);
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y - 1);
                     if (f8)
-                        calc += intensityMatrix.GetPixel(x, y - 1);
+                        calc += intensityMatrix.GetPixelPrevious(x, y - 1);
                     if (f9)
-                        calc += intensityMatrix.GetPixel(x + 1, y - 1);
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y - 1);
                     if (f4)
-                        calc += intensityMatrix.GetPixel(x - 1, y);
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y);
                     if (f5)
-                        calc += intensityMatrix.GetPixel(x, y);
+                        calc += intensityMatrix.GetPixelPrevious(x, y);
                     if (f6)
-                        calc += intensityMatrix.GetPixel(x + 1, y);
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y);
                     if (f1)
-                        calc += intensityMatrix.GetPixel(x - 1, y + 1);
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y + 1);
                     if (f2)
-                        calc += intensityMatrix.GetPixel(x, y + 1);
+                        calc += intensityMatrix.GetPixelPrevious(x, y + 1);
                     if (f3)
-                        calc += intensityMatrix.GetPixel(x + 1, y + 1);
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y + 1);
 
                     // Average the colors
                     calc /= cPixelsToAverage;
@@ -364,12 +362,11 @@ namespace FireDemo
                     else
                         calc = 0;
 
-                    intensityMatrix.SetPixel(x, y, calc);
+                    intensityMatrix.SetPixelNext(x, y, calc);
                     poker.SetPixel(x, y, this.thePalette[calc]);
                 }
             }
             poker.UnlockBits();
-            this.intensityMatrix.SwapBuffers();
         }
     }
 
@@ -394,17 +391,17 @@ namespace FireDemo
             poker.LockBits(ImageLockMode.WriteOnly);
             for (int y = 1; y < Height - 1; ++y)
             {
-                p2 = intensityMatrix.GetPixel(0, y + 1);
-                p3 = intensityMatrix.GetPixel(1, y + 1);
+                p2 = intensityMatrix.GetPixelPrevious(0, y + 1);
+                p3 = intensityMatrix.GetPixelPrevious(1, y + 1);
 
                 for (int x = 1; x < Width - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
                     p2 = p3;
-                    p8 = intensityMatrix.GetPixel(x, y - 1);
-                    p5 = intensityMatrix.GetPixel(x, y);
-                    p3 = intensityMatrix.GetPixel(x + 1, y + 1);
+                    p8 = intensityMatrix.GetPixelPrevious(x, y - 1);
+                    p5 = intensityMatrix.GetPixelPrevious(x, y);
+                    p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
 
                     // Average the colors
                     calc = p8 + p5 + p1 + p2 + p3;
@@ -417,12 +414,11 @@ namespace FireDemo
                     else
                         calc = 0;
 
-                    intensityMatrix.SetPixel(x, y, calc);
+                    intensityMatrix.SetPixelNext(x, y, calc);
                     poker.SetPixel(x, y, this.thePalette[calc]);
                 }
             }
             poker.UnlockBits();
-            this.intensityMatrix.SwapBuffers();
         }
     }
 
@@ -448,16 +444,16 @@ namespace FireDemo
             poker.LockBits(ImageLockMode.WriteOnly);
             for (int y = 1; y < Height - 1; ++y)
             {
-                p2 = intensityMatrix.GetPixel(0, y + 1);
-                p3 = intensityMatrix.GetPixel(1, y + 1);
+                p2 = intensityMatrix.GetPixelPrevious(0, y + 1);
+                p3 = intensityMatrix.GetPixelPrevious(1, y + 1);
 
                 for (int x = 1; x < Width - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
                     p2 = p3;
-                    p5 = intensityMatrix.GetPixel(x, y);
-                    p3 = intensityMatrix.GetPixel(x + 1, y + 1);
+                    p5 = intensityMatrix.GetPixelPrevious(x, y);
+                    p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
 
                     // Average the colors
                     calc = p5 + p1 + p2 + p3;
@@ -470,12 +466,11 @@ namespace FireDemo
                     else
                         calc = 0;
 
-                    intensityMatrix.SetPixel(x, y, calc);
+                    intensityMatrix.SetPixelNext(x, y, calc);
                     poker.SetPixel(x, y, this.thePalette[calc]);
                 }
             }
             poker.UnlockBits();
-            this.intensityMatrix.SwapBuffers();
         }
     }
 
@@ -564,8 +559,8 @@ namespace FireDemo
                 //	"doShoulderCheck := (y > y0wing) && (y <= y1wing)."
                 doInnerCheck = (y > y0inner) && (y <= y1inner);
 
-                p2 = intensityMatrix.GetPixel(x: 0, y: y + 1);
-                p3 = intensityMatrix.GetPixel(x: 1, y: y + 1);
+                p2 = intensityMatrix.GetPixelPrevious(x: 0, y: y + 1);
+                p3 = intensityMatrix.GetPixelPrevious(x: 1, y: y + 1);
 
                 for (int x = 1; x < Width - 1; ++x)
                 {
@@ -590,8 +585,8 @@ namespace FireDemo
 
                         p1 = p2;
                         p2 = p3;
-                        p5 = intensityMatrix.GetPixel(x, y);
-                        p3 = intensityMatrix.GetPixel(x + 1, y + 1);
+                        p5 = intensityMatrix.GetPixelPrevious(x, y);
+                        p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
 
                         // Average the colors
                         calc = p5 + p1 + p2 + p3;
@@ -604,8 +599,8 @@ namespace FireDemo
                         else
                             calc = 0;
 
-                        intensityMatrix.SetPixel(x, y, calc);
-                        //front.SetPixel(x, y, this.thePalette[calc]); // This is by far the most expensive part.
+                        intensityMatrix.SetPixelNext(x, y, calc);
+                        //front.SetPixel(x, y, this.thePalette[calc]);
                         poker.SetPixel(x, y, this.thePalette[calc]);
                     }
                     else
@@ -622,7 +617,6 @@ namespace FireDemo
             }
 
             poker.UnlockBits();
-            intensityMatrix.SwapBuffers();
         }
     }
 
@@ -692,7 +686,6 @@ namespace FireDemo
             thread3.Join();
 
             poker.UnlockBits();
-            intensityMatrix.SwapBuffers();
         }
         public void RenderStage2And3(int iThreadNum, Thread threadObject)
         {
@@ -777,8 +770,8 @@ namespace FireDemo
                     //	"doShoulderCheck := (y > y0wing) && (y <= y1wing)."
                     doInnerCheck = (y > y0inner) && (y <= y1inner);
 
-                    p2 = intensityMatrix.GetPixel(x: 0, y: y + 1);
-                    p3 = intensityMatrix.GetPixel(x: 1, y: y + 1);
+                    p2 = intensityMatrix.GetPixelPrevious(x: 0, y: y + 1);
+                    p3 = intensityMatrix.GetPixelPrevious(x: 1, y: y + 1);
 
                     for (int x = 1; x < Width - 1; ++x)
                     {
@@ -803,8 +796,8 @@ namespace FireDemo
 
                             p1 = p2;
                             p2 = p3;
-                            p5 = intensityMatrix.GetPixel(x, y);
-                            p3 = intensityMatrix.GetPixel(x + 1, y + 1);
+                            p5 = intensityMatrix.GetPixelPrevious(x, y);
+                            p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
 
                             // Average the colors
                             calc = p5 + p1 + p2 + p3;
@@ -817,7 +810,7 @@ namespace FireDemo
                             else
                                 calc = 0;
 
-                            intensityMatrix.SetPixel(x, y, calc);
+                            intensityMatrix.SetPixelNext(x, y, calc);
                             //front.SetPixel(x, y, this.thePalette[calc]);
                             poker.SetPixel(x, y, this.thePalette[calc]);
                         }
@@ -860,16 +853,16 @@ namespace FireDemo
             poker.LockBits(ImageLockMode.WriteOnly);
 
             // Account for the top row
-            p5 = intensityMatrix.GetPixel(0, y: 0);
-            p6 = intensityMatrix.GetPixel(1, y: 0);
+            p5 = intensityMatrix.GetPixelPrevious(0, y: 0);
+            p6 = intensityMatrix.GetPixelPrevious(1, y: 0);
             p8 = 0;
             for (int x = 1; x < Width - 1; ++x)
             {
                 // Add the surrounding pixels
                 p4 = p5;
                 p5 = p6;
-                p6 = intensityMatrix.GetPixel(x + 1, y: 0);
-                p2 = intensityMatrix.GetPixel(x, y: 1);
+                p6 = intensityMatrix.GetPixelPrevious(x + 1, y: 0);
+                p2 = intensityMatrix.GetPixelPrevious(x, y: 1);
 
                 // Average the colors
                 calc = p8 + p6 + p5 + p4 + p2;
@@ -882,23 +875,26 @@ namespace FireDemo
                 else
                     calc = 0;
 
-                intensityMatrix.SetPixel(x, y: 0, calc);
+                intensityMatrix.SetPixelNext(x, y: 0, calc);
                 poker.SetPixel(x, y: 0, this.thePalette[calc]);
             }
 
             // Account for the rest
             for (int y = 1; y < Height - 1; ++y)
+#if false
+            // Account for the right/left edges
+            // Account for the top row
+            for (int y = 1; y < Height - 1; ++y)
             {
                 p5 = intensityMatrix.GetPixel(0, y);
                 p6 = intensityMatrix.GetPixel(1, y);
-
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 0; x < Width; x += Width - 1)
                 {
                     // Add the surrounding pixels
                     p8 = intensityMatrix.GetPixel(x, y - 1);
                     p4 = p5;
                     p5 = p6;
-                    p6 = intensityMatrix.GetPixel(x + 1, y);
+                    p6 = x == 0 ? intensityMatrix.GetPixel(x + 1, y) : 0;
                     p2 = intensityMatrix.GetPixel(x, y + 1);
 
                     // Average the colors
@@ -906,18 +902,18 @@ namespace FireDemo
                     calc /= 5;
 
                     // Subtract the coolingFactor value, if necessary
-                    coolingFactor = coolingStrategy.at(x, y);
+                    coolingFactor = coolingStrategy.at(x, y: 0);
                     if (calc > coolingFactor)
                         calc -= coolingFactor;
                     else
                         calc = 0;
 
-                    intensityMatrix.SetPixel(x, y, calc);
-                    poker.SetPixel(x, y, this.thePalette[calc]);
+                    intensityMatrix.SetPixelNext(x, y: 0, calc);
+                    poker.SetPixel(x, y: 0, this.thePalette[calc]);
                 }
             }
+#endif
             poker.UnlockBits();
-            this.intensityMatrix.SwapBuffers();
         }
     }
 }

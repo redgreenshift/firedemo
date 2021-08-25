@@ -8,7 +8,7 @@ namespace FireDemo
     interface ICoolingStrategy
     {
         int at(int x, int y);
-        void progressOneFrame();
+        void ProgressOneFrame();
     }
 
     class CoolingStrategyConst : ICoolingStrategy
@@ -30,7 +30,7 @@ namespace FireDemo
             return coolingFactor;
         }
 
-        public void progressOneFrame() { /* do nothing*/ }
+        public void ProgressOneFrame() { /* do nothing*/ }
     };
 
     public class CoolingStrategyMap : ICoolingStrategy
@@ -77,7 +77,7 @@ namespace FireDemo
             return coolingMap[i];
         }
 
-        public void progressOneFrame()
+        public void ProgressOneFrame()
         {
             if (this.shift)
             {

@@ -38,7 +38,7 @@ namespace FireDemo
         protected void DrawPixel(int x, int y, IBitCanvas bc)
         {
             if (pen.FShouldDrawNext())
-                bc.SetPixel(x, y, pen.NextValue());
+                bc.SetPixelPrevious(x, y, pen.NextValue());
         }
 
         protected void DrawCircle(int xCenter, int yCenter, int radius, IBitCanvas bc)
@@ -296,7 +296,7 @@ namespace FireDemo
                         isFirstIteration = false;
 
                         //flameIntensityMatrixFront[eachx + y * fireWidth] = 255;
-                        bc.SetPixel(eachx, y, 255);
+                        bc.SetPixelPrevious(eachx, y, 255); // TODO: JRDV: Should some bolts start dimmer? how do I affect bolt width?
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
@@ -376,7 +376,7 @@ namespace FireDemo
                         int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
 
                         //flameIntensityMatrixFront[xRender + yRender * fireWidth] = 255;
-                        callback.SetPixel(xRender, yRender, 255);
+                        callback.SetPixelPrevious(xRender, yRender, 255);
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
@@ -385,9 +385,6 @@ namespace FireDemo
         }
     }
 
-    // TODO: JRDV: Should I put all Borg stuff in the same file? Move the file structure to align the pieces together?
-    // NO! I think maybe it's better to keep the hierarchy together, not bundling across hierarchies
-    // TODO: JRDV: Implement Batman for real!
     #region Borg Light Drawing
     class LightShapeBorgPlasma : LightShapeLightning
     {
