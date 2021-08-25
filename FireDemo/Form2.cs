@@ -707,5 +707,11 @@ namespace FireDemo
 
             buttonDemo_Click(sender, e);
         }
+
+        private void buttonRainBORG_Click(object sender, EventArgs e)
+        {
+            DemoPlasmaRainbow();
+            buttonDemo_Click(sender, e);
+        }
     }
 }

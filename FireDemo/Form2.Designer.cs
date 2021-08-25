@@ -39,12 +39,13 @@ namespace FireDemo
             this.buttonAvailableStatus = new System.Windows.Forms.Button();
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonRainBORG = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonDemo
             // 
-            this.buttonDemo.Location = new System.Drawing.Point(156, 12);
+            this.buttonDemo.Location = new System.Drawing.Point(151, 2);
             this.buttonDemo.Name = "buttonDemo";
             this.buttonDemo.Size = new System.Drawing.Size(75, 23);
             this.buttonDemo.TabIndex = 0;
@@ -58,7 +59,7 @@ namespace FireDemo
             // 
             // buttonChange
             // 
-            this.buttonChange.Location = new System.Drawing.Point(238, 12);
+            this.buttonChange.Location = new System.Drawing.Point(355, 2);
             this.buttonChange.Name = "buttonChange";
             this.buttonChange.Size = new System.Drawing.Size(75, 23);
             this.buttonChange.TabIndex = 1;
@@ -123,6 +124,7 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonRainBORG);
             this.groupBox1.Controls.Add(this.buttonAwayStatus);
             this.groupBox1.Controls.Add(this.buttonDndStatus);
             this.groupBox1.Controls.Add(this.buttonOofStatus);
@@ -135,6 +137,16 @@ namespace FireDemo
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
+            // 
+            // buttonRainBORG
+            // 
+            this.buttonRainBORG.Location = new System.Drawing.Point(185, 209);
+            this.buttonRainBORG.Name = "buttonRainBORG";
+            this.buttonRainBORG.Size = new System.Drawing.Size(137, 41);
+            this.buttonRainBORG.TabIndex = 7;
+            this.buttonRainBORG.Text = "RainBORG";
+            this.buttonRainBORG.UseVisualStyleBackColor = true;
+            this.buttonRainBORG.Click += new System.EventHandler(this.buttonRainBORG_Click);
             // 
             // Form2
             // 
@@ -163,5 +175,6 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonAvailableStatus;
         private System.Windows.Forms.Button buttonDndStatus;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonRainBORG;
     }
 }
