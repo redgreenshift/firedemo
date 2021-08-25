@@ -212,7 +212,7 @@ namespace FireDemo
 
     abstract class AbstractRealtimeLightEffect : AbstractDynamicSprite
     {
-        protected IBitCanvas intensityMatrix;
+        protected IntensityMap intensityMatrix;
         protected Random rng;
         protected ICoolingStrategy coolingStrategy;
         List<ILightShape> lightShapes;
@@ -230,7 +230,7 @@ namespace FireDemo
         }
         public void OnSize()
         {
-            intensityMatrix = new BitCanvas8Bit(Width, Height);
+            intensityMatrix = new IntensityMap(Width, Height);
         }
 
         public override void RenderOneFrameToScreen(Graphics graph)

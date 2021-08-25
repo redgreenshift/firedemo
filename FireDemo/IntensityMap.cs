@@ -5,22 +5,7 @@ using System.Text;
 
 namespace FireDemo
 {
-    interface IBitCanvas // BitCanvas isn't the right term. This is an Intensity Matrix so maybe rename?
-                         // Or really a function of the DynamicSprite? LightMap?
-                         // The LightShape draws with a LightPen on a LightMap? LightCanvas?
-                         // Or is usng the word "light" too restrictive? Not mre restrictive than LightShape and LightPen...
-                         // IntensityMap?
-    {
-        int Width { get; }
-        int Height { get; }
-        int GetPixelPrevious(int x, int y);
-        void SetPixelPrevious(int x, int y, int val);
-        void SetPixelNext(int x, int y, int val);
-        
-        void ProgressOneFrame(); // CommitFrame?
-    }
-
-    class BitCanvas8Bit : IBitCanvas
+    class IntensityMap
     {
         public int Width { get; }
         public int Height { get; }
@@ -41,7 +26,7 @@ namespace FireDemo
         /// </summary>
         int[] intensityMatrixNext;
 
-        public BitCanvas8Bit(int width, int height)
+        public IntensityMap(int width, int height)
         {
             Width = width;
             Height = height;

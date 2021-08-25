@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="BitmapLocker.cs" />
     <Compile Include="DynamicSprite.cs" />
-    <Compile Include="BitCanvas.cs" />
+    <Compile Include="IntensityMap.cs" />
     <Compile Include="ColorRange.cs" />
     <Compile Include="CoolingStrategy.cs" />
     <Compile Include="Form1.cs">

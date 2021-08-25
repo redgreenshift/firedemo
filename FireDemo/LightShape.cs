@@ -13,8 +13,8 @@ namespace FireDemo
         /// <summary>
         /// Render this seed shape to a canvas
         /// </summary>
-        /// <param name="bc"></param>
-        void DrawOn(IBitCanvas bc);
+        /// <param name="canvas"></param>
+        void DrawOn(IntensityMap canvas);
     }
 
     abstract class LightShapeBase : ILightShape
@@ -31,23 +31,23 @@ namespace FireDemo
         {
             this.pen = pen;
         }
-        abstract public void DrawOn(IBitCanvas bc);
+        abstract public void DrawOn(IntensityMap canvas);
         #endregion // LightShape implementation
 
         #region Internal Drawing Methods
-        protected void DrawPixel(int x, int y, IBitCanvas bc)
+        protected void DrawPixel(int x, int y, IntensityMap canvas)
         {
             if (pen.FShouldDrawNext())
-                bc.SetPixelPrevious(x, y, pen.NextValue());
+                canvas.SetPixelPrevious(x, y, pen.NextValue());
         }
 
-        protected void DrawCircle(int xCenter, int yCenter, int radius, IBitCanvas bc)
+        protected void DrawCircle(int xCenter, int yCenter, int radius, IntensityMap canvas)
         {
             // draw a circle from source to destination using the pen
             int x, y, xx, xLast, width;
 
             xLast = radius;
-            width = bc.Width;
+            width = canvas.Width;
 
             for (int yy = yCenter - radius; yy <= yCenter + radius; ++yy)
             {
@@ -56,15 +56,15 @@ namespace FireDemo
 
                 xx = x + xCenter;
 
-                this.DrawLine(xx, yy, xLast, yy, bc);
+                this.DrawLine(xx, yy, xLast, yy, canvas);
 
-                this.DrawLine((width - xx), yy, (width - xLast), yy, bc);
+                this.DrawLine((width - xx), yy, (width - xLast), yy, canvas);
 
                 xLast = xx;
             }
         }
 
-        protected void DrawLine(int x0, int y0, int x1, int y1, IBitCanvas bc)
+        protected void DrawLine(int x0, int y0, int x1, int y1, IntensityMap canvas)
         {
             // draw a line from source to destination using the pen
 
@@ -72,7 +72,7 @@ namespace FireDemo
 
             if (x0 == x1 && y0 == y1)
             {
-                this.DrawPixel(x0, y0, bc);
+                this.DrawPixel(x0, y0, canvas);
                 return;
             }
 
@@ -96,7 +96,7 @@ namespace FireDemo
                     for (int xindex = x0; xindex < x1; ++xindex)
                     {
                         yrender = (int)(y0 + (dysigned * (xindex - x0) / dxsigned));
-                        this.DrawPixel(xindex, yrender, bc);
+                        this.DrawPixel(xindex, yrender, canvas);
                     }
                 }
                 else
@@ -104,7 +104,7 @@ namespace FireDemo
                     for (int xindex = x1; xindex < x0; ++xindex)
                     {
                         yrender = (int)(y1 + (dysigned * (xindex - x1) / dxsigned));
-                        this.DrawPixel(xindex, yrender, bc);
+                        this.DrawPixel(xindex, yrender, canvas);
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace FireDemo
                     for (int yindex = y0; yindex < y1; ++yindex)
                     {
                         xrender = (int)(x0 + (dxsigned * (yindex - y0) / dysigned));
-                        this.DrawPixel(xrender, yindex, bc);
+                        this.DrawPixel(xrender, yindex, canvas);
 
                     }
                 }
@@ -124,7 +124,7 @@ namespace FireDemo
                     for (int yindex = y1; yindex < y0; ++yindex)
                     {
                         xrender = (int)(x1 + (dxsigned * (yindex - y1) / dysigned));
-                        this.DrawPixel(xrender, yindex, bc);
+                        this.DrawPixel(xrender, yindex, canvas);
                     }
                 }
             }
@@ -134,19 +134,19 @@ namespace FireDemo
 
     class LightShapeCandle : LightShapeBase
     {
-        override public void DrawOn(IBitCanvas bc)
+        override public void DrawOn(IntensityMap canvas)
         {
             // Draw the seed coal values for a candle flame
             // Set the next row of random coals to keep the fire going.
-            int width = bc.Width;
-            int height = bc.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, bc);
+            int width = canvas.Width;
+            int height = canvas.Height;
+            this.DrawLine(0, height - 1, width - 1, height - 1, canvas);
         }
     }
 
     class LightShapeBatman : LightShapeBase
     {
-        override public void DrawOn(IBitCanvas bc)
+        override public void DrawOn(IntensityMap canvas)
         {
             // Draw the seed coal values for a Flaming Batman Logo!
 
@@ -155,8 +155,8 @@ namespace FireDemo
             List<Point> batLogo;
             int width, height;
 
-            width = bc.Width;
-            height = bc.Height;
+            width = canvas.Width;
+            height = canvas.Height;
 
             //        batArray:= {
             //                0@0. 17.1@0. 18@2. 20@3.9. 22.5@4. 23.5@3.9. 24@2.8.
@@ -213,7 +213,7 @@ namespace FireDemo
                 y0 = y1;
                 x1 = p.X;
                 y1 = p.Y;
-                this.DrawLine(x0, y0, x1, y1, bc);
+                this.DrawLine(x0, y0, x1, y1, canvas);
             }
         }
     }
@@ -227,17 +227,17 @@ namespace FireDemo
             rng = new Random();
         }
  
-        override public void DrawOn(IBitCanvas bc)
+        override public void DrawOn(IntensityMap canvas)
         {
             if (rng.Next(25) == 1)
-                DrawOneBolt(bc);
+                DrawOneBolt(canvas);
         }
 
-        protected void DrawOneBolt(IBitCanvas bc)
+        protected void DrawOneBolt(IntensityMap canvas)
         {
             // Copied from Seed8BitLightning_Branching_Cheap_LINES()
-            int fireWidth = bc.Width;
-            int fireHeight = bc.Height;
+            int fireWidth = canvas.Width;
+            int fireHeight = canvas.Height;
             List<int> nodes = new List<int>(1);
 
             nodes.Add(fireWidth / 2);
@@ -294,8 +294,7 @@ namespace FireDemo
 
                         isFirstIteration = false;
 
-                        //flameIntensityMatrixFront[eachx + y * fireWidth] = 255;
-                        bc.SetPixelPrevious(eachx, y, 255); // TODO: JRDV: Should some bolts start dimmer? how do I affect bolt width?
+                        canvas.SetPixelPrevious(eachx, y, 255); // TODO: JRDV: Should some bolts start dimmer? No.
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
@@ -303,9 +302,9 @@ namespace FireDemo
             }
         }
 
-        protected void DrawOneBolt(int xCenter, int yCenter, int rotationAngle, int radius, IBitCanvas callback)
+        protected void DrawOneBolt(int xCenter, int yCenter, int rotationAngle, int radius, IntensityMap canvas)
         {
-            int fireWidth = callback.Width;
+            int fireWidth = canvas.Width;
             //int fireHeight = callback.Height;
             // Copied from Seed8BitLightning_ForkingBorg_RandomRotation_EXPERIMENT
             List<int> nodes = new List<int>(1);
@@ -366,14 +365,14 @@ namespace FireDemo
                         int xTemp = eachx - xCenter;
                         int yTemp = y - yCenter;
 
-                        // if we exceed teh ring DONE!
+                        // if we exceed the ring DONE!
                         if (xTemp * xTemp + yTemp * yTemp > radius * radius)
                             return;
 
                         int xRender = (int)(xTemp * Math.Cos(rotationAngle) - yTemp * Math.Sin(rotationAngle)) + xCenter;
                         int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
 
-                        callback.SetPixelPrevious(xRender, yRender, 255);
+                        canvas.SetPixelPrevious(xRender, yRender, 255);
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
@@ -385,34 +384,33 @@ namespace FireDemo
     #region Borg Light Drawing
     class LightShapeBorgPlasma : LightShapeLightning
     {
-        override public void DrawOn(IBitCanvas bc)
+        override public void DrawOn(IntensityMap canvas)
         {
             // Draw the seed coal values for the inner lighting bolts for a plasma disc
             int degrees, radius, xCenter, yCenter;
 
-            xCenter = bc.Width / 2;
-            yCenter = bc.Height / 2;
+            xCenter = canvas.Width / 2;
+            yCenter = canvas.Height / 2;
             degrees = rng.Next(0, 360);
             radius = Math.Min(xCenter, yCenter) - 2;
 
-            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: radius, callback: bc);
+            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: radius, canvas: canvas);
         }
     }
 
     class LightShapeBorgRing : LightShapeBase
     {
-        override public void DrawOn(IBitCanvas bc)
+        override public void DrawOn(IntensityMap canvas)
         {
             // Draw the seed coal values for the outer ring of a plasma disc
 
             int xCenter, yCenter, radius;
 
-            xCenter = bc.Width / 2;
-            yCenter = bc.Height / 2;
+            xCenter = canvas.Width / 2;
+            yCenter = canvas.Height / 2;
             radius = Math.Min(xCenter, yCenter) - 2;
 
-
-            this.DrawCircle(xCenter, yCenter, radius, bc);
+            this.DrawCircle(xCenter, yCenter, radius, canvas);
         }
     }
     #endregion // Borg Light Drawing
