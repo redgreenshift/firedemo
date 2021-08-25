@@ -631,9 +631,10 @@ namespace FireDemo
     {
         int numThreads = 3;
         // TODO: JRDV: Parameterize the number of threads, make the threads long lived (so we don't have to create new threads every frame)
-        Thread thread1;
-        Thread thread2;
-        Thread thread3;
+        List<Thread> threads = new List<Thread>();
+        //Thread thread1;
+        //Thread thread2;
+        //Thread thread3;
 
         //delegate void MyCallback(int i);
 
@@ -651,6 +652,17 @@ namespace FireDemo
             //thread2 = new Thread(myDelegate2);
             //this.Invoke(delegate1, 1);
             //this.Invoke(delegate2, 2);
+
+            //for (int t = 0; t < numThreads; ++t)
+            //{
+            //    int tid = t;
+            //    ThreadStart myDelegate = () =>
+            //    {
+            //        RenderStage2And3(iThreadNum: tid+1);
+            //    };
+
+            //    threads.Add(new Thread(myDelegate));
+            //}
         }
 
         // TODO: JRDV: Parallelize the algorithm. I think the Pi has 4 cores.
@@ -660,32 +672,27 @@ namespace FireDemo
             // TODO: JRDV: Creating new threads each time is probably expensive.
             // Instead, have multiple long lived threads, that block and wait to be signalled, and then here we wait for completion
             // And to implement this for real, really need to have BitCanvas rendering to a front/back buffer so the input/output buffers don't overlap
-            ThreadStart myDelegate1 = () =>
-            {
-                RenderStage2And3(iThreadNum: 1);
-            };
-            ThreadStart myDelegate2 = () =>
-            {
-                RenderStage2And3(iThreadNum: 2);
-            };
-            ThreadStart myDelegate3 = () =>
-            {
-                RenderStage2And3(iThreadNum: 3);
-            };
+            // TODO: JRDV: Move this it's hacky test
+            threads.Clear();
             numThreads = 4;
-            thread1 = new Thread(myDelegate1);
-            thread2 = new Thread(myDelegate2);
-            thread3 = new Thread(myDelegate3);
+            for (int t = 1; t < numThreads; ++t)
+            {
+                int tid = t;
+                ThreadStart myDelegate = () =>
+                {
+                    RenderStage2And3(iThreadNum: tid);
+                };
+
+                threads.Add(new Thread(myDelegate));
+            }
 
             poker.LockBits(ImageLockMode.WriteOnly);
 
-            thread1.Start();
-            thread2.Start();
-            thread3.Start();
+            foreach (Thread t in threads)
+                t.Start();
             RenderStage2And3(iThreadNum: 0);
-            thread1.Join();
-            thread2.Join();
-            thread3.Join();
+            foreach (Thread t in threads)
+                t.Join();
 
             poker.UnlockBits();
         }
