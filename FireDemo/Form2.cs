@@ -710,6 +710,7 @@ namespace FireDemo
 
         private void buttonRainBORG_Click(object sender, EventArgs e)
         {
+            m_dbSprites.Clear();
             DemoPlasmaRainbow();
             buttonDemo_Click(sender, e);
         }
