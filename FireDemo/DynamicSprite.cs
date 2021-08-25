@@ -662,16 +662,17 @@ namespace FireDemo
             // And to implement this for real, really need to have BitCanvas rendering to a front/back buffer so the input/output buffers don't overlap
             ThreadStart myDelegate1 = () =>
             {
-                RenderStage2And3(0, thread1);
+                RenderStage2And3(iThreadNum: 1);
             };
             ThreadStart myDelegate2 = () =>
             {
-                RenderStage2And3(1, thread2);
+                RenderStage2And3(iThreadNum: 2);
             };
             ThreadStart myDelegate3 = () =>
             {
-                RenderStage2And3(2, thread3);
+                RenderStage2And3(iThreadNum: 3);
             };
+            numThreads = 4;
             thread1 = new Thread(myDelegate1);
             thread2 = new Thread(myDelegate2);
             thread3 = new Thread(myDelegate3);
@@ -681,13 +682,14 @@ namespace FireDemo
             thread1.Start();
             thread2.Start();
             thread3.Start();
+            RenderStage2And3(iThreadNum: 0);
             thread1.Join();
             thread2.Join();
             thread3.Join();
 
             poker.UnlockBits();
         }
-        public void RenderStage2And3(int iThreadNum, Thread threadObject)
+        public void RenderStage2And3(int iThreadNum)
         {
             //while (true)
             {
