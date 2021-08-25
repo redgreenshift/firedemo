@@ -3301,18 +3301,6 @@ namespace FireDemo
 			}
 		}
 
-		private void realisticFlameCheckBox_CheckedChanged(object sender, EventArgs e) // TODO: JRDV: Delete
-		{
-			RefreshTheFlamePalette();
-			UpdateUI_Visibility();
-		}
-
-		private void experimentalFlameCheckBox_CheckedChanged(object sender, EventArgs e) // TODO: JRDV: Delete
-		{
-			RefreshTheFlamePalette();
-			UpdateUI_Visibility();
-		}
-
 		private void intensityUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			RefreshTheFlamePalette();
