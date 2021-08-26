@@ -1039,26 +1039,27 @@ namespace FireDemo
     class RealtimeFireBatLogoOptimizedMT_ManualLongThreads : RealtimeFireBatLogoOptimizedMT_Base
     {
         List<Thread> threads = new List<Thread>();
-        ManualResetEvent goTime = new ManualResetEvent(initialState: false);
+        AutoResetEvent[] startHandles;
         AutoResetEvent[] doneHandles;
+        bool isShuttingDown = false;
 
         /// <summary>
         /// EXPERIMENTAL.
         /// Encapsulates the logic to perform the work on multiple threads.
-        /// Attempts to reuse long lived threads. Works on Windows, doesn't work on Linux.
-        /// Additionally, it requires using MTAThread, but we have a conflict because
-        /// Windows Forms Apps require using STAThread, so may cause issues 
-        /// even if I were to implement this correctly in MTAThread
+        /// Attempts to reuse long lived threads.
+        /// Works at fuill 60 FPS on both Linux and Windows.
         /// 
-        /// UPDATE: I can workaround the MTA issue by explicitly waiting on each of the handles,
-        /// instead of calling WaitHandle.WaitAll()
+        /// PROBLEM: Have to code a way to shutdown the threads.
+        /// Alternatively, if I use a ThreadPool, then I don't have to shut anything down
         /// </summary>
         public RealtimeFireBatLogoOptimizedMT_ManualLongThreads()
         {
             int numBGThreads = numThreads - 1; // The MAIN thread is one of the threads
+            startHandles = new AutoResetEvent[numBGThreads];
             doneHandles = new AutoResetEvent[numBGThreads];
             for (int t = 0; t < numBGThreads; ++t)
             {
+                startHandles[t] = new AutoResetEvent(initialState: false);
                 doneHandles[t] = new AutoResetEvent(initialState: false);
                 int threadIndex = t + 1;
                 ThreadStart myDelegate = () =>
@@ -1082,13 +1083,17 @@ namespace FireDemo
         {
             poker.LockBits(ImageLockMode.WriteOnly);
 
-            goTime.Set();
-            foreach (Thread t in threads)
-                t.Resume(); // (this is hacky, need to change to event) Eventually crashes here because eventually the thread was not USER suspended
+            foreach (AutoResetEvent h in startHandles)
+                h.Set();
 
-            RenderStage2And3_Wrapper(iSliceNum: 0);
-            goTime.Reset(); // TODO: JRDV: I think this will not work
-            //WaitHandle.WaitAll(doneHandles);
+            RenderStage2And3_Slice(iSliceNum: 0);
+
+            // WaitHandle.WaitAll(doneHandles); <-- it requires using MTAThread,
+            // but we have a conflict because Windows Forms Apps require using STAThread,
+            // so may cause issues even if I were to implement this correctly in MTAThread.
+            // 
+            // We can workaround the MTA issue by explicitly waiting on each of the handles,
+            // instead of calling WaitHandle.WaitAll()
             foreach (WaitHandle h in doneHandles)
                 h.WaitOne();
 
@@ -1097,21 +1102,17 @@ namespace FireDemo
 
         public void RenderStage2And3_Wrapper(int iSliceNum)
         {
+            if (iSliceNum == 0)
+                throw new ArgumentException("Do NOT run this on the main thread!");
+
             do
             {
-                if (iSliceNum != 0)
-                    Thread.CurrentThread.Suspend(); // wait for work (this is hacky, need to change to event)
+                startHandles[iSliceNum - 1].WaitOne(); // wait for work
 
                 base.RenderStage2And3_Slice(iSliceNum);
 
-                if (iSliceNum == 0)
-                    return; // Main thread, nothing to do
-
-                // BG thread, keep looping, but wait for next work
                 doneHandles[iSliceNum - 1].Set();
-            } while (true);
-            //} while (iSliceNum != 0 && goTime.WaitOne()); // TODO: JRDV: I think this doesn't do what I want since it can loop through again before I'm ready for the next frame
-
+            } while (!isShuttingDown);
         }
     }
 
