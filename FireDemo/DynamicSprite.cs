@@ -475,7 +475,7 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Optimized for Flaming Batman Logo Multi Threaded
+    /// Optimized for Flaming Batman Logo
     /// 
     /// NOTE: this is HIGHLY COUPLED coupled to the LightShapeBatman implementation,
     /// but we could use the generic RealtimeFire class instead of RealtimeFireBatLogoOptimized...
@@ -620,224 +620,8 @@ namespace FireDemo
         }
     }
 
-
-    #region Naive Multithreaded approach that "works" but creates new threads every frame
     /// <summary>
-    /// Optimized for Flaming Batman Logo
-    /// 
-    /// NOTE: this is HIGHLY COUPLED coupled to the LightShapeBatman implementation,
-    /// but we could use the generic RealtimeFire class instead of RealtimeFireBatLogoOptimized...
-    /// and it would look the same. It's just that this 'optimized' implementation provides noticible speed improvements
-    /// </summary>
-    class RealtimeFireBatLogoOptimizedMT_Naive : RealtimeFire
-    {
-        int numThreads = 4;
-        // TODO: JRDV: Parameterize the number of threads, make the threads long lived (so we don't have to create new threads every frame)
-        List<Thread> threads = new List<Thread>();
-        // Define an array with two AutoResetEvent WaitHandles.
-        //ManualResetEvent goTime = new ManualResetEvent(initialState: false);
-        //AutoResetEvent[] doneHandles;
-        //delegate void MyCallback(int i);
-
-        public RealtimeFireBatLogoOptimizedMT_Naive()
-        {
-            //int numBGThreads = numThreads - 1; // The MAIN thread is one of the threads
-            //doneHandles = new AutoResetEvent[numBGThreads];
-            //for (int t = 0; t < numBGThreads; ++t)
-            //{
-            //    doneHandles[t] = new AutoResetEvent(initialState: false);
-            //    int threadIndex = t + 1;
-            //    ThreadStart myDelegate = () =>
-            //    {
-            //        RenderStage2And3(iThreadNum: threadIndex);
-            //    };
-            //    threads.Add(new Thread(myDelegate));
-            //}
-        }
-
-        // TODO: JRDV: Parallelize the algorithm. I think the Pi has 4 cores.
-        // TODO: JRDV: Is it faster to do the edges in a separate pass? Or to add extra conditions inside the main loop?
-        public override void RenderStage2And3()
-        {
-            // TODO: JRDV: Move this it's hacky test
-            threads.Clear();
-            for (int t = 1; t < numThreads; ++t)
-            {
-                int tid = t;
-                ThreadStart myDelegate = () =>
-                {
-                    RenderStage2And3(iThreadNum: tid);
-                };
-                threads.Add(new Thread(myDelegate));
-            }
-
-            poker.LockBits(ImageLockMode.WriteOnly);
-
-            foreach (Thread t in threads)
-                t.Start();
-            //goTime.Set();
-            RenderStage2And3(iThreadNum: 0);
-            //goTime.Reset(); // TODO: JRDV: I think this will not work
-            //WaitHandle.WaitAll(doneHandles);
-            foreach (Thread t in threads)
-                t.Join();
-
-            // DELETE THIS!!!!!
-            //threads[0].Start(); // Thread is terminated; cannot restart.
-
-            poker.UnlockBits();
-        }
-        public void RenderStage2And3(int iThreadNum)
-        {
-            //do
-            //{
-                int initialY = iThreadNum * Height / numThreads;
-                int endY = (iThreadNum + 1) * Height / numThreads - (iThreadNum == numThreads - 1 ? 1 : 0);
-                //{ For flame effect scroll through every pixel and  }
-                //{ choose some other pixels around it. Divide by    }
-                //{ the ammount of pixels you added up and then      }
-                //{ subtract a decay ammount.                        }
-
-                // Average these pixels:
-                //. . .
-                //. X .
-                //X X X
-                int calc, p1, p2, p3, p5, coolingFactor;
-                int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
-                bool doDraw, doInnerCheck;
-                int y0inner;
-                int ySkipInitial;
-
-                deadZone = 0;
-                endZone = Width + 1;
-                startOpt = (int)(Height / 3);
-
-                // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
-                // But in any case needs to be retuned to whatever values we use in the LightShapeBatman
-
-                // Under the bat: 6@4 20@11.5
-                x0 = (int)(6.0f / 52 * (Width - 1) + 1);
-                y0 = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
-                x1 = (int)(20.0f / 52 * (Width - 1) + 1);
-                y1 = (int)(11.5f / 18 * (Height * 3 / 4) + (Height / 4));
-
-                //"Inside the bat: 22.5@4
-                //8@0 to 17@4
-                //"
-                //" This turned out to be SLIGHTLY SLOWER! Or at least not measurably faster
-                // := (8 / 52 * (width - 1) + 1) asInteger.
-                // := (0 / 18 * (height * 3 / 4) + (height / 4)) asInteger.
-                // := (17 / 52 * (width - 1) + 1) asInteger.
-                // := (4 / 18 * (height * 3 / 4) + (height / 4)) asInteger.
-                // := width - x0wing.
-                // := width - x1wing."
-
-                // Inside the bat: 22.5@4
-                // 12@4 to 40@6
-                ySkipInitial = 30;
-                ySkipInitial = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
-                x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
-                y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
-                x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
-                y1inner = (int)(5.9f / 18 * (Height * 3 / 4) + (Height / 4));
-
-                for (int y = initialY; y < endY; ++y)
-                {
-                    // There are large areas of pixels that will NEVER change in the Bat Logo.
-                    // Approximate these regions with rectangles, so we can quickly exclude them"
-
-                    //if (false)
-                    //{
-                    //    //DEBUG: Show me the dead zone
-                    //    //poker.SetPixel(x, y, this.thePalette[255]);
-                    //    continue;
-                    //}
-
-                    if (y > y1)
-                    {
-                        deadZone = x1;
-                        endZone = (Width - x1);
-                    }
-                    else
-                    {
-                        if (y > y0)
-                        {
-                            deadZone = x0;
-                            endZone = (Width - x0);
-                        }
-                    }
-
-                    //	"doShoulderCheck := (y > y0wing) && (y <= y1wing)."
-                    doInnerCheck = (y > y0inner) && (y <= y1inner);
-
-                    p2 = intensityMatrix.GetPixelPrevious(x: 0, y: y + 1);
-                    p3 = intensityMatrix.GetPixelPrevious(x: 1, y: y + 1);
-
-                    for (int x = 1; x < Width - 1; ++x)
-                    {
-                        //2 to: (width - 1) do: [:x |
-                        // poke the raw data into the ColorForm.
-
-                        doDraw = (y > ySkipInitial) && (x >= deadZone) && (x <= endZone);
-                        if (doDraw && doInnerCheck)
-                            doDraw = (x < x0inner) || (x > x1inner);
-                        //"doDraw && doShoulderCheck ifTrue: [
-                        //doDraw:= (x < x0wing) || (x > x1rightWing) || ((x > x1wing) && (x < x0rightWing)).
-                        //	]."
-
-                        if (doDraw)
-                        {
-                            // Add the surrounding pixels
-                            //p8:= (flameArr at: x at: y + 2)
-                            //p5:= (flameArr at: x at: y).
-                            //p1:= (flameArr at: x - 1 at: y + 1).
-                            //p2:= (flameArr at: x at: y + 1).
-                            //p3:= (flameArr at: x + 1 at: y + 1).
-
-                            p1 = p2;
-                            p2 = p3;
-                            p5 = intensityMatrix.GetPixelPrevious(x, y);
-                            p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
-
-                            // Average the colors
-                            calc = p5 + p1 + p2 + p3;
-                            calc /= 4;
-
-                            // Subtract the coolingFactor value, if necessary
-                            coolingFactor = coolingStrategy.at(x, y);
-                            if (calc > coolingFactor)
-                                calc -= coolingFactor;
-                            else
-                                calc = 0;
-
-                            intensityMatrix.SetPixelNext(x, y, calc);
-                            //front.SetPixel(x, y, this.thePalette[calc]);
-                            poker.SetPixel(x, y, this.thePalette[calc]);
-                        }
-                        else
-                        {
-                            p1 = p2;
-                            p2 = p3;
-                            p5 = 0;
-                            p3 = 0;
-
-                            //DEBUG: Show me the dead zone
-                            //poker.SetPixel(x, y, this.thePalette[255]);
-                        }
-                    }
-                }
-
-            //    if (iThreadNum > 0)
-            //        doneHandles[iThreadNum - 1].Set();
-            //} while (iThreadNum != 0 && goTime.WaitOne()); // TODO: JRDV: I think this doesn't do what I want since it can loop through again before I'm ready for the next frame
-
-        }
-    }
-
-    #endregion
-
-    /// <summary>
-    /// Optimized for Flaming Batman Logo
+    /// Optimized for Flaming Batman Logo Multi Threaded
     /// 
     /// NOTE: this is HIGHLY COUPLED coupled to the LightShapeBatman implementation,
     /// but we could use the generic RealtimeFire class instead of RealtimeFireBatLogoOptimized...
@@ -846,9 +630,6 @@ namespace FireDemo
     class RealtimeFireBatLogoOptimizedMT_Base : RealtimeFire
     {
         protected int numThreads = 4;
-        public RealtimeFireBatLogoOptimizedMT_Base()
-        {
-        }
 
         protected void RenderStage2And3_Slice(int iSliceNum)
         {
@@ -990,10 +771,10 @@ namespace FireDemo
         }
     }
 
-
+#if false
     class RealtimeFireBatLogoOptimizedMT_NaiveSubclass : RealtimeFireBatLogoOptimizedMT_Base
     {
-        List<Thread> threads = new List<Thread>();
+        private readonly List<Thread> threads = new List<Thread>();
 
         /// <summary>
         /// EXPERIMENTAL.
@@ -1036,13 +817,12 @@ namespace FireDemo
         }
     }
 
-
     class RealtimeFireBatLogoOptimizedMT_ManualLongThreads : RealtimeFireBatLogoOptimizedMT_Base
     {
-        List<Thread> threads = new List<Thread>();
-        AutoResetEvent[] startHandles;
-        AutoResetEvent[] doneHandles;
-        bool isShuttingDown = false;
+        private readonly List<Thread> threads = new List<Thread>();
+        private readonly AutoResetEvent[] startHandles;
+        private readonly AutoResetEvent[] doneHandles;
+        private bool isShuttingDown = false;
 
         /// <summary>
         /// EXPERIMENTAL.
@@ -1117,10 +897,11 @@ namespace FireDemo
             } while (!isShuttingDown);
         }
     }
+#endif
 
     class RealtimeFireBatLogoOptimizedMT_ThreadPool : RealtimeFireBatLogoOptimizedMT_Base
     {
-        AutoResetEvent[] doneHandles;
+        private readonly AutoResetEvent[] doneHandles;
 
         /// <summary>
         /// Encapsulates the logic to perform the work on multiple threads.
