@@ -862,9 +862,17 @@ namespace FireDemo
 
             RenderStage2And3_Slice(iSliceNum: 0);
 
-            // WaitHandle.WaitAll(doneHandles); <-- it requires using MTAThread,
-            // but we have a conflict because Windows Forms Apps require using STAThread,
-            // so may cause issues even if I were to implement this correctly in MTAThread.
+            // using WaitHandle.WaitAll(doneHandles); <-- requires the program to be MTAThread,
+            // but online documentation says that if I'm writing a WinForms app then
+            // STAThread is required for that code to be correct:
+            // https://devblogs.microsoft.com/vbteam/stathread-vs-mtathread-whorst/
+            // https://stackoverflow.com/questions/4192646/when-to-use-mtathread
+            //
+            // It seems two requirements are in conflict.
+            // If I create new threads every frame (eww) then calling thread.Join() does not require MTAThread,
+            // but creating threads every frame is wasteful...
+            // and even if it appears to be working with MTAThread, there may be subtle
+            // issues even if I were to implement this correctly in MTAThread.
             // 
             // We can workaround the MTA issue by explicitly waiting on each of the handles,
             // instead of calling WaitHandle.WaitAll()
