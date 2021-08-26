@@ -31,10 +31,12 @@ namespace FireDemo
             this.Width = width;
             this.Height = height;
             //front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-            front = new Bitmap(width, height, PixelFormat.Format32bppRgb); // TODO: JRDV: Is PixelFormat.Format24bppRgb faster? Unsure but this is working. Measure later
+            front = new Bitmap(width, height, PixelFormat.Format32bppRgb);
+            // TODO: JRDV: Is PixelFormat.Format24bppRgb faster? Unsure but this is working. Measure later
+            //front = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            //front = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
             poker = new BitmapLocker(front);
-            // TODO: JRDV: How do I set the palette? How did I do it in the main program?I just used 32bit. No need to use palette inside the bitmap
-            thePalette = PaletteGenerator.GetHardCodedFirePalette();
+            thePalette = PalRealisticFire.New();
         }
 
         public void SetPalette(Color[] pal)
@@ -44,39 +46,33 @@ namespace FireDemo
 
         public abstract void RenderOneFrameToScreen(Graphics graph);
 
-        public void DisplayToScreen(Graphics graph)
+        protected void DisplayToScreen(Graphics graph)
         {
-            bool fInterpolate = false;
-            if (fInterpolate && Magnification > 1)
+            CompositingMode cm = graph.CompositingMode; // Default SourceOver
+            InterpolationMode im = graph.InterpolationMode; // Default Bilinear
+
+            graph.CompositingMode = CompositingMode.SourceCopy;
+            if (Magnification == 1)
             {
-                DisplayToScreenInterpolated(graph);
+                graph.InterpolationMode = InterpolationMode.NearestNeighbor;
+                // NOTE: While the Width/Height parameters to DrawImageUnscaled are
+                // unused on Windows platforms, Mono on Linux respects the paremeters,
+                // therefore they are required here.
+                graph.DrawImageUnscaled(front, Location.X, Location.Y, Width, Height);
             }
             else
             {
-                CompositingMode cm = graph.CompositingMode; // Default SourceOver
-                InterpolationMode im = graph.InterpolationMode; // Default Bilinear
-
-                graph.CompositingMode = CompositingMode.SourceCopy;
-                if (Magnification == 1)
-                {
-                    graph.InterpolationMode = InterpolationMode.NearestNeighbor;
-                    // NOTE: While the Width/Height parameters to DrawImageUnscaled are
-                    // unused on Windows platforms, Mono on Linux respects the paremeters,
-                    // therefore they are required here.
-                    graph.DrawImageUnscaled(front, Location.X, Location.Y, Width, Height); 
-                }
-                else
-                {
-                    graph.InterpolationMode = this.InterpolationMode;
-                    graph.DrawImage(front, Location.X, Location.Y, Width * Magnification, Height * Magnification);
-                }
-
-                graph.CompositingMode = cm;
-                graph.InterpolationMode = im;
+                graph.InterpolationMode = this.InterpolationMode;
+                graph.DrawImage(front, Location.X, Location.Y, Width * Magnification, Height * Magnification);
             }
+
+            graph.CompositingMode = cm;
+            graph.InterpolationMode = im;
+
         }
 
         #region EXPERIMENTAL Bicubic Interpolation is too slow
+#if false
         // Bicubic interpolation was a fun experiment, and it does look a little better,
         // but this implementation is WAY too slow for what I want to do.
         private void DisplayToScreenInterpolated(Graphics graph)
@@ -207,6 +203,7 @@ namespace FireDemo
 
             return Color.FromArgb(ConvertFloatToByte(R), ConvertFloatToByte(G), ConvertFloatToByte(B));
         }
+#endif
         #endregion
     }
 
@@ -225,11 +222,6 @@ namespace FireDemo
         public override void Initialize(int width, int height, int magnification)
         {
             base.Initialize(width, height, magnification);
-            // OVERRIDE INITIALIZE and call super???
-            OnSize();
-        }
-        public void OnSize()
-        {
             intensityMatrix = new IntensityMap(Width, Height);
         }
 
@@ -242,7 +234,7 @@ namespace FireDemo
             coolingStrategy.ProgressOneFrame();
         }
 
-        void renderStage1SeedShapes()
+        protected void renderStage1SeedShapes()
         {
             foreach (ILightShape ls in lightShapes)
             {
@@ -250,7 +242,7 @@ namespace FireDemo
             }
         }
 
-        public abstract void RenderStage2And3();
+        protected abstract void RenderStage2And3();
 
         public void AddShape(ILightShape shape)
         {
@@ -290,7 +282,7 @@ namespace FireDemo
             this.f9 = f9;
         }
 
-        public override void RenderStage2And3()
+        protected override void RenderStage2And3()
         {
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
@@ -375,7 +367,7 @@ namespace FireDemo
     /// </summary>
     class RealtimeCandleflame : AbstractRealtimeLightEffect
     {
-        public override void RenderStage2And3()
+        protected override void RenderStage2And3()
         {
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
@@ -427,7 +419,7 @@ namespace FireDemo
     /// </summary>
     class RealtimeFire : AbstractRealtimeLightEffect
     {
-        public override void RenderStage2And3()
+        protected override void RenderStage2And3()
         {
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
@@ -436,8 +428,8 @@ namespace FireDemo
 
             // Average these pixels:
             //. . .
-            //. X .
-            //X X X
+            //. 5 .
+            //1 2 3
             //"
             int calc, p1, p2, p3, p5, coolingFactor;
 
@@ -483,7 +475,7 @@ namespace FireDemo
     /// </summary>
     class RealtimeFireBatLogoOptimized : RealtimeFire
     {
-        public override void RenderStage2And3()
+        protected override void RenderStage2And3()
         {
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
@@ -492,8 +484,8 @@ namespace FireDemo
 
             // Average these pixels:
             //. . .
-            //. X .
-            //X X X
+            //. 5 .
+            //1 2 3
             int calc, p1, p2, p3, p5, coolingFactor;
             int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
             bool doDraw, doInnerCheck;
@@ -642,8 +634,8 @@ namespace FireDemo
 
             // Average these pixels:
             //. . .
-            //. X .
-            //X X X
+            //. 5 .
+            //1 2 3
             int calc, p1, p2, p3, p5, coolingFactor;
             int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
             bool doDraw, doInnerCheck;
@@ -930,7 +922,7 @@ namespace FireDemo
                 ThreadPool.SetMinThreads(numThreads, completionPortThreads);
         }
 
-        public override void RenderStage2And3()
+        protected override void RenderStage2And3()
         {
             poker.LockBits(ImageLockMode.WriteOnly);
 
@@ -973,7 +965,85 @@ namespace FireDemo
     /// </summary>
     class RealtimeLightning : AbstractRealtimeLightEffect
     {
-        public override void RenderStage2And3()
+        protected override void RenderStage2And3()
+        {
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+
+            // Average these pixels:
+            //. 8 .
+            //4 5 6
+            //. 2 .
+            int calc, p2, p4, p5, p6, p8, coolingFactor;
+
+            poker.LockBits(ImageLockMode.WriteOnly);
+
+            for (int y = 0; y < Height; ++y)
+            {
+                p5 = 0;
+                p6 = intensityMatrix.GetPixelPrevious(0, y);
+
+                for (int x = 0; x < Width; ++x)
+                {
+                    // Add the surrounding pixels
+                    // I'm not sure I like the extra conditions for bounds checks,
+                    // but it doesn't seem significantly different perf wise from
+                    // the unrolled version, but it's a LOT simpler to keep it all inline.
+                    p8 = y > 0 ? intensityMatrix.GetPixelPrevious(x, y - 1) : 0;
+                    p4 = p5;
+                    p5 = p6;
+                    p6 = x < Width - 1 ? intensityMatrix.GetPixelPrevious(x + 1, y) : 0;
+                    p2 = y < Height - 1 ? intensityMatrix.GetPixelPrevious(x, y + 1) : 0;
+
+                    // Average the colors
+                    calc = p8 + p6 + p5 + p4 + p2;
+                    calc /= 5;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.SetPixelNext(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+
+            poker.UnlockBits();
+        }
+
+#if false
+        public override void RenderStage2And3_MEASURE_PERF()
+        {
+            int iterations = 1000;
+            System.Diagnostics.Stopwatch watch_Inline = new System.Diagnostics.Stopwatch();
+            System.Diagnostics.Stopwatch watch_Separate = new System.Diagnostics.Stopwatch();
+
+            watch_Inline.Start();
+            for (int i1 = 0; i1 < iterations; ++i1)
+                RenderStage2And3_Inline();
+            watch_Inline.Stop();
+
+
+            watch_Separate.Start();
+            for (int iii = 0; iii < iterations; ++iii)
+                RenderStage2And3_Separate();
+            watch_Separate.Stop();
+
+            long msecInline = watch_Inline.ElapsedMilliseconds;
+            long msecSep = watch_Separate.ElapsedMilliseconds;
+
+            string s = string.Format("Inline: {0} and Separate: {1}", msecInline, msecSep);
+            System.Windows.Forms.MessageBox.Show(s);
+
+            //throw new Exception("just a test");
+        }
+
+        private void RenderStage2And3_Separate()
         {
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
@@ -989,49 +1059,82 @@ namespace FireDemo
             poker.LockBits(ImageLockMode.WriteOnly);
 
             // Account for the top row
-            p5 = intensityMatrix.GetPixelPrevious(0, y: 0);
-            p6 = intensityMatrix.GetPixelPrevious(1, y: 0);
-            p8 = 0;
-            for (int x = 1; x < Width - 1; ++x)
+            // And bottom row
+            for (int y = 0; y < Height; y += Height - 1)
             {
-                // Add the surrounding pixels
-                p4 = p5;
-                p5 = p6;
-                p6 = intensityMatrix.GetPixelPrevious(x + 1, y: 0);
-                p2 = intensityMatrix.GetPixelPrevious(x, y: 1);
+                p5 = intensityMatrix.GetPixelPrevious(0, y);
+                p6 = intensityMatrix.GetPixelPrevious(1, y);
+                p8 = 0;
+                for (int x = 1; x < Width - 1; ++x)
+                {
+                    // Add the surrounding pixels
+                    p4 = p5;
+                    p5 = p6;
+                    p6 = intensityMatrix.GetPixelPrevious(x + 1, y);
+                    p2 = y == 0 ? intensityMatrix.GetPixelPrevious(x, y + 1) : 0;
 
-                // Average the colors
-                calc = p8 + p6 + p5 + p4 + p2;
-                calc /= 5;
+                    // Average the colors
+                    calc = p8 + p6 + p5 + p4 + p2;
+                    calc /= 5;
 
-                // Subtract the coolingFactor value, if necessary
-                coolingFactor = coolingStrategy.at(x, y: 0);
-                if (calc > coolingFactor)
-                    calc -= coolingFactor;
-                else
-                    calc = 0;
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y: 0);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
 
-                intensityMatrix.SetPixelNext(x, y: 0, calc);
-                poker.SetPixel(x, y: 0, this.thePalette[calc]);
+                    intensityMatrix.SetPixelNext(x, y: 0, calc);
+                    poker.SetPixel(x, y: 0, this.thePalette[calc]);
+                }
             }
 
             // Account for the rest
             for (int y = 1; y < Height - 1; ++y)
-#if false
+            {
+                p5 = 0;
+                p6 = intensityMatrix.GetPixelPrevious(0, y);
+
+                for (int x = 0; x < Width; ++x)
+                {
+                    // Add the surrounding pixels
+                    p8 = intensityMatrix.GetPixelPrevious(x, y - 1);
+                    p4 = p5;
+                    p5 = p6;
+                    p6 = intensityMatrix.GetPixelPrevious(x + 1, y); // TODO: JRDV: I'm not sure I like the extra condition
+                    p2 = intensityMatrix.GetPixelPrevious(x, y + 1);
+
+                    // Average the colors
+                    calc = p8 + p6 + p5 + p4 + p2;
+                    calc /= 5;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.SetPixelNext(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+
+#if true
             // Account for the right/left edges
             // Account for the top row
             for (int y = 1; y < Height - 1; ++y)
             {
-                p5 = intensityMatrix.GetPixel(0, y);
-                p6 = intensityMatrix.GetPixel(1, y);
+                p5 = intensityMatrix.GetPixelPrevious(0, y);
+                p6 = intensityMatrix.GetPixelPrevious(1, y);
                 for (int x = 0; x < Width; x += Width - 1)
                 {
                     // Add the surrounding pixels
-                    p8 = intensityMatrix.GetPixel(x, y - 1);
+                    p8 = intensityMatrix.GetPixelPrevious(x, y - 1);
                     p4 = p5;
                     p5 = p6;
-                    p6 = x == 0 ? intensityMatrix.GetPixel(x + 1, y) : 0;
-                    p2 = intensityMatrix.GetPixel(x, y + 1);
+                    p6 = x == 0 ? intensityMatrix.GetPixelPrevious(x + 1, y) : 0;
+                    p2 = intensityMatrix.GetPixelPrevious(x, y + 1);
 
                     // Average the colors
                     calc = p8 + p6 + p5 + p4 + p2;
@@ -1051,5 +1154,6 @@ namespace FireDemo
 #endif
             poker.UnlockBits();
         }
+#endif
     }
 }
