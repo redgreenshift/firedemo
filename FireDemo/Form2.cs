@@ -374,8 +374,8 @@ namespace FireDemo
 
             AbstractRealtimeLightEffect dbBatman;
             if (multithreaded)
-                //dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
-                dbBatman = new RealtimeFireBatLogoOptimizedMT_ManualLongThreads();
+                dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
+            //dbBatman = new RealtimeFireBatLogoOptimizedMT_ManualLongThreads();
             //dbBatman = new RealtimeFireBatLogoOptimizedMT_NaiveSubclass();
             //dbBatman = new RealtimeFireBatLogoOptimizedMT_Naive();
             else
