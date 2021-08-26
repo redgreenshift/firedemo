@@ -850,10 +850,8 @@ namespace FireDemo
         {
         }
 
-        public void RenderStage2And3_Slice(int iSliceNum)
+        protected void RenderStage2And3_Slice(int iSliceNum)
         {
-            //do
-            //{
             int initialY = iSliceNum * Height / numThreads;
             int endY = (iSliceNum + 1) * Height / numThreads - (iSliceNum == numThreads - 1 ? 1 : 0);
             //{ For flame effect scroll through every pixel and  }
@@ -989,10 +987,6 @@ namespace FireDemo
                     }
                 }
             }
-
-            //    if (iSliceNum > 0)
-            //        doneHandles[iSliceNum - 1].Set();
-            //} while (iSliceNum != 0 && goTime.WaitOne()); // TODO: JRDV: I think this doesn't do what I want since it can loop through again before I'm ready for the next frame
         }
     }
 
@@ -1002,9 +996,16 @@ namespace FireDemo
         List<Thread> threads = new List<Thread>();
 
         /// <summary>
+        /// EXPERIMENTAL.
         /// Encapsulates the logic to perform the work on multiple threads.
         /// Uses the naive (expensive) approach of creating new threads every frame,
         /// but it WORKS rendering at a full 60 FPS on Linux.
+        /// 
+        /// PROS:
+        ///  - It works! Renders at 50-60 FPS on Linux (which is faster than the single threaded implementation 28-30 FPS)
+        /// CONS:
+        ///  - Runs at 45 FPS on Windows (which is slower than the single threaded implementation at 60-65 FPS).
+        ///  - Creating new threads every frame is wasteful.
         /// </summary>
         public RealtimeFireBatLogoOptimizedMT_NaiveSubclass()
         {
@@ -1049,7 +1050,8 @@ namespace FireDemo
         /// Attempts to reuse long lived threads.
         /// Works at fuill 60 FPS on both Linux and Windows.
         /// 
-        /// PROBLEM: Have to code a way to shutdown the threads.
+        /// PROS: It works at full speed on Windows
+        /// CONS: Have to code a way to shutdown the threads. Currently have to kill the process when done.
         /// Alternatively, if I use a ThreadPool, then I don't have to shut anything down
         /// </summary>
         public RealtimeFireBatLogoOptimizedMT_ManualLongThreads()
@@ -1100,7 +1102,7 @@ namespace FireDemo
             poker.UnlockBits();
         }
 
-        public void RenderStage2And3_Wrapper(int iSliceNum)
+        private void RenderStage2And3_Wrapper(int iSliceNum)
         {
             if (iSliceNum == 0)
                 throw new ArgumentException("Do NOT run this on the main thread!");
@@ -1118,88 +1120,69 @@ namespace FireDemo
 
     class RealtimeFireBatLogoOptimizedMT_ThreadPool : RealtimeFireBatLogoOptimizedMT_Base
     {
-        List<Thread> threads = new List<Thread>();
-        // Define an array with two AutoResetEvent WaitHandles.
-        //ManualResetEvent goTime = new ManualResetEvent(initialState: false);
-        //AutoResetEvent[] doneHandles;
-        //delegate void MyCallback(int i);
+        AutoResetEvent[] doneHandles;
 
         /// <summary>
-        /// EXPERIMENTAL.
         /// Encapsulates the logic to perform the work on multiple threads.
-        /// Attempts to use the thread pool instead of managing threads manually
-        /// NOT YET IMPLEMENTED
+        /// Use the thread pool instead of managing threads manually
+        /// 
+        /// PROS:
+        ///  - Works at fuill 60 FPS on both Linux and Windows.
+        ///  - nothing to clean up or shutdown.
+        ///  - simple.
+        ///  CONS:
+        ///   - none.
+        ///   - Really don't want to use any other DynamicSprites at the same time?
         /// </summary>
         public RealtimeFireBatLogoOptimizedMT_ThreadPool()
         {
-            WaitHandle han = new AutoResetEvent(initialState: false);
-            WaitHandle han2 = new AutoResetEvent(initialState: false);
-            //han.WaitOne();
-            WaitHandle[] handles = { han, han2 };
-            WaitHandle.WaitAny(handles);
-            throw new NotImplementedException();
-            //ThreadPool.QueueUserWorkItem()
+            int numBGThreads = numThreads - 1; // The MAIN thread is one of the threads
 
-            //int numBGThreads = numThreads - 1; // The MAIN thread is one of the threads
-            //doneHandles = new AutoResetEvent[numBGThreads];
-            //for (int t = 0; t < numBGThreads; ++t)
-            //{
-            //    doneHandles[t] = new AutoResetEvent(initialState: false);
-            //    int threadIndex = t + 1;
-            //    ThreadStart myDelegate = () =>
-            //    {
-            //        RenderStage2And3(iThreadNum: threadIndex);
-            //    };
-            //    threads.Add(new Thread(myDelegate));
-            //}
+            doneHandles = new AutoResetEvent[numBGThreads];
+            for (int t = 0; t < numBGThreads; ++t)
+            {
+                doneHandles[t] = new AutoResetEvent(initialState: false);
+            }
+
+            ThreadPool.GetMinThreads(out int workerThreads, out int completionPortThreads);
+            if (workerThreads < numThreads)
+                ThreadPool.SetMinThreads(numThreads, completionPortThreads);
         }
 
         public override void RenderStage2And3()
         {
-            // TODO: JRDV: Creating new threads each time is probably expensive.
-            // Instead, have multiple long lived threads, that block and wait to be signalled, and then here we wait for completion
-            //
-            //ThreadPool.QueueUserWorkItem()
-
-            threads.Clear();
-            for (int t = 1; t < numThreads; ++t)
-            {
-                int tid = t;
-                ThreadStart myDelegate = () =>
-                {
-                    RenderStage2And3_Wrapper(iSliceNum: tid);
-                };
-                threads.Add(new Thread(myDelegate));
-            }
-
             poker.LockBits(ImageLockMode.WriteOnly);
 
-            foreach (Thread t in threads)
-                t.Start();
-            //goTime.Set();
-            RenderStage2And3_Wrapper(iSliceNum: 0);
-            //goTime.Reset(); // TODO: JRDV: I think this will not work
-            //WaitHandle.WaitAll(doneHandles);
-            foreach (Thread t in threads)
-                t.Join();
+            int numBGThreads = numThreads - 1; // The MAIN thread is one of the threads
+            for (int t = 0; t < numBGThreads; ++t)
+            {
+                int threadIndex = t + 1;
+                ThreadPool.QueueUserWorkItem(new WaitCallback(RenderStage2And3_Wrapper), threadIndex);
+            }
 
-            // DELETE THIS!!!!!
-            //threads[0].Start(); // Thread is terminated; cannot restart.
+            RenderStage2And3_Slice(iSliceNum: 0);
+
+            // WaitHandle.WaitAll(doneHandles); <-- it requires using MTAThread,
+            // but we have a conflict because Windows Forms Apps require using STAThread,
+            // so may cause issues even if I were to implement this correctly in MTAThread.
+            // 
+            // We can workaround the MTA issue by explicitly waiting on each of the handles,
+            // instead of calling WaitHandle.WaitAll()
+            foreach (WaitHandle h in doneHandles)
+                h.WaitOne();
 
             poker.UnlockBits();
         }
-        //public static void Run1(Object pThis)
-        //{
-        //    pThis
-        //}
-        public void RenderStage2And3_Wrapper(int iSliceNum)
+
+        private void RenderStage2And3_Wrapper(object state)
         {
-            //do
-            //{
-            RenderStage2And3_Slice(iSliceNum);
-            //    if (iSliceNum > 0)
-            //        doneHandles[iSliceNum - 1].Set();
-            //} while (iSliceNum != 0 && goTime.WaitOne()); // TODO: JRDV: I think this doesn't do what I want since it can loop through again before I'm ready for the next frame
+            int iSliceNum = (int)state;
+            if (iSliceNum == 0)
+                throw new ArgumentException("Do NOT run this on the main thread!");
+
+            base.RenderStage2And3_Slice(iSliceNum);
+
+            doneHandles[iSliceNum - 1].Set();
         }
     }
 
