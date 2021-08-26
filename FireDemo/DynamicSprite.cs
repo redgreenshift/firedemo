@@ -19,10 +19,12 @@ namespace FireDemo
         public int Magnification;
         public Point Location { get; set; }
         public InterpolationMode InterpolationMode { get; set; }
+        public CompositingMode CompositingMode { get; set; }
 
         protected AbstractDynamicSprite()
         {
-            this.InterpolationMode = InterpolationMode.Bicubic;
+            this.InterpolationMode = InterpolationMode.Bicubic; // Default to BEST quality
+            this.CompositingMode = CompositingMode.SourceCopy; // Default to FASTEST option
         }
         public virtual void Initialize(int width, int height, int magnification)
         {
@@ -51,7 +53,7 @@ namespace FireDemo
             CompositingMode cm = graph.CompositingMode; // Default SourceOver
             InterpolationMode im = graph.InterpolationMode; // Default Bilinear
 
-            graph.CompositingMode = CompositingMode.SourceCopy;
+            graph.CompositingMode = this.CompositingMode;
             if (Magnification == 1)
             {
                 graph.InterpolationMode = InterpolationMode.NearestNeighbor;

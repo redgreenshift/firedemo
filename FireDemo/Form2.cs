@@ -266,6 +266,13 @@ namespace FireDemo
             //m_dbSprites.Add(dbPlasmaDiscVioletEX1);
             //m_dbSprites.Add(dbPlasmaDiscBlueNICE);
             //m_dbSprites.Add(dbPlasmaDisc_FavoriteBlue);
+
+            foreach (AbstractDynamicSprite db in m_dbSprites)
+            {
+                // This is SLOWER than SourceCopy, but necessary
+                // to be able to render multiple plasma discs in Linux
+                db.CompositingMode = CompositingMode.SourceOver;
+            }
         }
 
         private void DemoBorg()
@@ -394,6 +401,7 @@ namespace FireDemo
             m_lightShapes.Clear();
             m_lightShapes.Add(lsBatman);
             m_dbSprite = dbBatman;
+            m_dbSprite.CompositingMode = CompositingMode.SourceCopy; // This is FASTER than SourceOver
         }
 
         private void SimpleCandle()
@@ -706,12 +714,30 @@ namespace FireDemo
             top = (this.Height - ringHeight * magnification) / 2;
             dbPlasmaDisc.Location = new Point(x: left, y: top);
 
+            AbstractRealtimeLightEffect dbPlasmaDisc2 = new RealtimeLightning();
+            dbPlasmaDisc2.Initialize(ringWidth, ringHeight, magnification);
+            dbPlasmaDisc2.SetCoolingStrategy(coolingStrategy);
+            dbPlasmaDisc2.SetPalette(palBorg);
+            dbPlasmaDisc2.AddShape(lsBorgPlasma);
+            dbPlasmaDisc2.AddShape(lsBorgRing);
+            left = (this.Width - ringWidth * magnification) / 5;
+            top = (this.Height - ringHeight * magnification) / 5;
+            dbPlasmaDisc2.Location = new Point(x: left, y: top);
+
             m_palette = palBorg;
             m_lightPen = lpPlasma;
             m_lightShapes.Clear();
             m_lightShapes.Add(lsBorgPlasma);
             m_lightShapes.Add(lsBorgRing);
-            m_dbSprite = dbPlasmaDisc;
+            m_dbSprites.Add(dbPlasmaDisc);
+            m_dbSprites.Add(dbPlasmaDisc2);
+
+            foreach (AbstractDynamicSprite db in m_dbSprites)
+            {
+                // This is SLOWER than SourceCopy, but necessary
+                // to be able to render multiple plasma discs in Linux
+                db.CompositingMode = CompositingMode.SourceOver;
+            }
 
             buttonDemo_Click(sender, e);
         }
