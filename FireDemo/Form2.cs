@@ -19,7 +19,7 @@ namespace FireDemo
         ILightPen m_lightPen;
         List<ILightShape> m_lightShapes = new List<ILightShape>();
         AbstractDynamicSprite m_dbSprite;
-        List<AbstractDynamicSprite> m_dbSprites = new List<AbstractDynamicSprite>();
+        List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
         private GenericRealtimeFlame m_genericFlame;
         int m_framesPerSecond = 64;
 
@@ -267,12 +267,13 @@ namespace FireDemo
             //m_dbSprites.Add(dbPlasmaDiscBlueNICE);
             //m_dbSprites.Add(dbPlasmaDisc_FavoriteBlue);
 
-            foreach (AbstractDynamicSprite db in m_dbSprites)
+            foreach (SimpleSprite db in m_dbSprites)
             {
                 // This is SLOWER than SourceCopy, but necessary
                 // to be able to render multiple plasma discs in Linux
                 db.CompositingMode = CompositingMode.SourceOver;
             }
+            m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster
         }
 
         private void DemoBorg()
@@ -499,7 +500,7 @@ namespace FireDemo
 
             if (m_dbSprites.Count > 0)
             {
-                foreach (AbstractDynamicSprite sprite in m_dbSprites)
+                foreach (SimpleSprite sprite in m_dbSprites)
                 {
                     sprite.RenderOneFrameToScreen(m_graph);
                 }
@@ -714,6 +715,27 @@ namespace FireDemo
             top = (this.Height - ringHeight * magnification) / 2;
             dbPlasmaDisc.Location = new Point(x: left, y: top);
 
+            LinkHoldingItem link = new LinkHoldingItem();
+            link.Magnification = 3;
+            //left = (this.Width - ringWidth * magnification) / 2;
+            left += (ringWidth / 2) - (link.Width * link.Magnification / 2);
+            //left += (link.Width / 2);
+            top += ringHeight * magnification;
+            link.Location = new Point(left, top);
+            link.InterpolationMode = InterpolationMode.NearestNeighbor;
+
+
+            OldMan man = new OldMan();
+            man.Magnification = 3;
+            man.InterpolationMode = InterpolationMode.NearestNeighbor;
+            left = (this.Width - ringWidth * magnification) / 2;
+            left += (ringWidth / 2) - (man.Width * man.Magnification / 2);
+            top = (this.Height - ringHeight * magnification) / 2;
+            top -= man.Height * man.Magnification;
+            man.Location = new Point(left, top);
+            m_dbSprites.Add(man);
+
+
             AbstractRealtimeLightEffect dbPlasmaDisc2 = new RealtimeLightning();
             dbPlasmaDisc2.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc2.SetCoolingStrategy(coolingStrategy);
@@ -730,14 +752,42 @@ namespace FireDemo
             m_lightShapes.Add(lsBorgPlasma);
             m_lightShapes.Add(lsBorgRing);
             m_dbSprites.Add(dbPlasmaDisc);
-            m_dbSprites.Add(dbPlasmaDisc2);
+            //m_dbSprites.Add(dbPlasmaDisc2);
 
-            foreach (AbstractDynamicSprite db in m_dbSprites)
+            m_dbSprites.Add(link);
+
+            BrickWall brick = new BrickWall();
+            brick.InterpolationMode = InterpolationMode.NearestNeighbor;
+            brick.Magnification = 2;
+            m_dbSprites.Add(brick);
+            BrickWall brick2 = new BrickWall();
+            brick2.InterpolationMode = InterpolationMode.NearestNeighbor;
+            brick2.Magnification = 2;
+            brick2.Location = new Point(brick.Width * brick.Magnification, 0);
+            m_dbSprites.Add(brick2);
+            BrickWall brick3 = new BrickWall();
+            brick3.InterpolationMode = InterpolationMode.NearestNeighbor;
+            brick3.Magnification = 2;
+            brick3.Location = new Point(0, brick.Height * brick.Magnification);
+            m_dbSprites.Add(brick3);
+            BrickWall brick4 = new BrickWall();
+            brick4.InterpolationMode = InterpolationMode.NearestNeighbor;
+            brick4.Magnification = 2;
+            brick4.Location = new Point(brick.Width * brick.Magnification, brick.Height * brick.Magnification);
+            m_dbSprites.Add(brick4);
+
+            TextSprite text = new TextSprite();
+            text.Text = "It's dangerous to bother me!\nGO AWAY! (use email)";
+            text.Location = new Point(190, 30);
+            m_dbSprites.Add(text);
+
+            foreach (SimpleSprite db in m_dbSprites)
             {
                 // This is SLOWER than SourceCopy, but necessary
                 // to be able to render multiple plasma discs in Linux
                 db.CompositingMode = CompositingMode.SourceOver;
             }
+            m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster
 
             buttonDemo_Click(sender, e);
         }

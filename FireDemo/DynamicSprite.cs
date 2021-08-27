@@ -9,22 +9,13 @@ using System.Threading;
 
 namespace FireDemo
 {
-    abstract class AbstractDynamicSprite
+    abstract class AbstractDynamicSprite : SimpleSprite
     {
-        protected Bitmap front;
         protected BitmapLocker poker;
         protected Color[] thePalette;
-        public int Height;
-        public int Width;
-        public int Magnification;
-        public Point Location { get; set; }
-        public InterpolationMode InterpolationMode { get; set; }
-        public CompositingMode CompositingMode { get; set; }
 
         protected AbstractDynamicSprite()
         {
-            this.InterpolationMode = InterpolationMode.Bicubic; // Default to BEST quality
-            this.CompositingMode = CompositingMode.SourceCopy; // Default to FASTEST option
         }
         public virtual void Initialize(int width, int height, int magnification)
         {
@@ -33,44 +24,17 @@ namespace FireDemo
             this.Width = width;
             this.Height = height;
             //front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-            front = new Bitmap(width, height, PixelFormat.Format32bppRgb);
+            Form = new Bitmap(width, height, PixelFormat.Format32bppRgb);
             // TODO: JRDV: Is PixelFormat.Format24bppRgb faster? Unsure but this is working. Measure later
             //front = new Bitmap(width, height, PixelFormat.Format24bppRgb);
             //front = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
-            poker = new BitmapLocker(front);
+            poker = new BitmapLocker(Form);
             thePalette = PalRealisticFire.New();
         }
 
         public void SetPalette(Color[] pal)
         {
             thePalette = pal;
-        }
-
-        public abstract void RenderOneFrameToScreen(Graphics graph);
-
-        protected void DisplayToScreen(Graphics graph)
-        {
-            CompositingMode cm = graph.CompositingMode; // Default SourceOver
-            InterpolationMode im = graph.InterpolationMode; // Default Bilinear
-
-            graph.CompositingMode = this.CompositingMode;
-            if (Magnification == 1)
-            {
-                graph.InterpolationMode = InterpolationMode.NearestNeighbor;
-                // NOTE: While the Width/Height parameters to DrawImageUnscaled are
-                // unused on Windows platforms, Mono on Linux respects the paremeters,
-                // therefore they are required here.
-                graph.DrawImageUnscaled(front, Location.X, Location.Y, Width, Height);
-            }
-            else
-            {
-                graph.InterpolationMode = this.InterpolationMode;
-                graph.DrawImage(front, Location.X, Location.Y, Width * Magnification, Height * Magnification);
-            }
-
-            graph.CompositingMode = cm;
-            graph.InterpolationMode = im;
-
         }
 
         #region EXPERIMENTAL Bicubic Interpolation is too slow
@@ -231,7 +195,7 @@ namespace FireDemo
         {
             this.renderStage1SeedShapes();
             this.RenderStage2And3();
-            this.DisplayToScreen(graph);
+            this.DrawOn(graph);
             intensityMatrix.ProgressOneFrame();
             coolingStrategy.ProgressOneFrame();
         }
@@ -1165,5 +1129,92 @@ namespace FireDemo
             poker.UnlockBits();
         }
 #endif
+    }
+
+
+    class TextSprite : AbstractDynamicSprite
+    {
+        public string Text { get; set; }
+        public Color Color
+        {
+            get; set; // TODO: JRDV: Set Brush when setting color?
+        }
+
+        private Font Font { get; set; }
+        private Brush Brush { get; set; }
+
+        // TODO: JRDV: Want to have it randomly move from time to time.
+        public TextSprite()
+        {
+            this.Font = SystemFonts.DefaultFont;
+            this.Brush = Brushes.White;
+
+            //Font = new Font(familyName: "Arial", emSize: 20.0f, style: FontStyle.Regular);
+            //Font = new Font(familyName: "Times New Roman", emSize: 20.0f, style: FontStyle.Regular);
+//            Font = new Font(familyName: "Noto Sans", emSize: 20.0f, style: FontStyle.Regular);
+            Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 20.0f, style: FontStyle.Regular);
+            //Font = new Font(familyName: "Comic Sans MS", emSize: 20.0f, style: FontStyle.Regular);
+            // WINDOWS:
+            // "Agency FB; Algerian; Arial; Arial Black; Arial Narrow; Arial Rounded MT Bold; Bahnschrift; Bahnschrift Condensed; Bahnschrift Light; Bahnschrift Light Condensed; Bahnschrift Light SemiCondensed; Bahnschrift SemiBold; Bahnschrift SemiBold Condensed; Bahnschrift SemiBold SemiConden; Bahnschrift SemiCondensed; Bahnschrift SemiLight; Bahnschrift SemiLight Condensed; Bahnschrift SemiLight SemiConde; Baskerville Old Face; Bauhaus 93; Bell MT; Berlin Sans FB; Berlin Sans FB Demi; Bernard MT Condensed; Blackadder ITC; Bodoni MT; Bodoni MT Black; Bodoni MT Condensed; Bodoni MT Poster Compressed; Book Antiqua; Bookman Old Style; Bookshelf Symbol 7; Bradley Hand ITC; Britannic Bold; Broadway; Brush Script MT; Calibri; Calibri Light; Californian FB; Calisto MT; Cambria; Cambria Math; Candara; Candara Light; Castellar; Centaur; Century; Century Gothic; Century Schoolbook; Chiller; Colonna MT; Comic Sans MS; Consolas; Constantia; Cooper Black; Copperplate Gothic Bold; Copperplate Gothic Light; Corbel; Corbel Light; Courier New; Curlz MT; Dubai; Dubai Light; Dubai Medium; Ebrima; Edwardian Script ITC; Elephant; Engravers MT; Eras Bold ITC; Eras Demi ITC; Eras Light ITC; Eras Medium ITC; Felix Titling; Footlight MT Light; Forte; Franklin Gothic Book; Franklin Gothic Demi; Franklin Gothic Demi Cond; Franklin Gothic Heavy; Franklin Gothic Medium; Franklin Gothic Medium Cond; Freestyle Script; French Script MT; Gabriola; Gadugi; Garamond; Georgia; Gigi; Gill Sans MT; Gill Sans MT Condensed; Gill Sans MT Ext Condensed Bold; Gill Sans Ultra Bold; Gill Sans Ultra Bold Condensed; Gloucester MT Extra Condensed; Goudy Old Style; Goudy Stout; Haettenschweiler; Harlow Solid Italic; Harrington; High Tower Text; HoloLens MDL2 Assets; Impact; Imprint MT Shadow; Informal Roman; Ink Free; Javanese Text; Jokerman; Juice ITC; Kristen ITC; Kunstler Script; Leelawadee UI; Leelawadee UI Semilight; Lucida Bright; Lucida Calligraphy; Lucida Console; Lucida Fax; Lucida Handwriting; Lucida Sans; Lucida Sans Typewriter; Lucida Sans Unicode; Magneto; Maiandra GD; Malgun Gothic; Malgun Gothic Semilight; Marlett; Matura MT Script Capitals; Microsoft Himalaya; Microsoft JhengHei; Microsoft JhengHei Light; Microsoft JhengHei UI; Microsoft JhengHei UI Light; Microsoft New Tai Lue; Microsoft PhagsPa; Microsoft Sans Serif; Microsoft Tai Le; Microsoft YaHei; Microsoft YaHei Light; Microsoft YaHei UI; Microsoft YaHei UI Light; Microsoft Yi Baiti; MingLiU-ExtB; MingLiU_HKSCS-ExtB; Mistral; Modern No. 20; Mongolian Baiti; Monotype Corsiva; MS Gothic; MS Outlook; MS PGothic; MS Reference Sans Serif; MS Reference Specialty; MS UI Gothic; MT Extra; MV Boli; Myanmar Text; Niagara Engraved; Niagara Solid; Nirmala UI; Nirmala UI Semilight; Noto Sans; NSimSun; OCR A Extended; OCRATTRegular; Old English Text MT; Onyx; Palace Script MT; Palatino Linotype; Papyrus; Parchment; Perpetua; Perpetua Titling MT; Playbill; PMingLiU-ExtB; Poor Richard; Pristina; Rage Italic; Ravie; Rockwell; Rockwell Condensed; Rockwell Extra Bold; Script MT Bold; Segoe MDL2 Assets; Segoe Print; Segoe Script; Segoe UI; Segoe UI Black; Segoe UI Emoji; Segoe UI Historic; Segoe UI Light; Segoe UI Semibold; Segoe UI Semilight; Segoe UI Symbol; Showcard Gothic; SimSun; SimSun-ExtB; Sitka Banner; Sitka Display; Sitka Heading; Sitka Small; Sitka Subheading; Sitka Text; Snap ITC; Stencil; Sylfaen; Symbol; Tahoma; Tempus Sans ITC; Times New Roman; Trebuchet MS; Tw Cen MT; Tw Cen MT Condensed; Tw Cen MT Condensed Extra Bold; Verdana; Viner Hand ITC; Vivaldi; Vladimir Script; Webdings; Wide Latin; Wingdings; Wingdings 2; Wingdings 3; Yu Gothic; Yu Gothic Light; Yu Gothic Medium; Yu Gothic UI; Yu Gothic UI Light; Yu Gothic UI Semibold; Yu Gothic UI Semilight; "
+            // LINUX:
+            // Noto Kufi Arabic; Noto Serif Armenian; Noto Sans Thai UI; Noto Sans Arabic UI; Linux Biolinum O; DejaVu Serif; Noto Sans Javanese; Noto Sans Kharoshthi; Noto Sans Kannada UI; Noto Sans Buhid; Noto Sans Syriac; Nimbus Mono L; Noto Sans Myanmar UI; Noto Sans Coptic; Liberation Mono; Gentium Basic; Noto Sans Myanmar; Noto Serif Telugu; Noto Sans Mandaic; Noto Sans Runic; Noto Sans Sharada; cmmi10; Noto Sans Yi; Lato; Noto Sans Tagalog; Piboto Condensed; Noto Sans Symbols; stmary10; Noto Sans Sinhala UI; Noto Serif Tamil Slanted; DejaVu Sans; Linux Biolinum Keyboard O; Noto Sans Lydian; Droid Sans Fallback; Linux Libertine O; FreeMono; Nimbus Sans L; Noto Sans Bengali; Century Schoolbook L; FreeSerif; Noto Sans Mahajani; Carlito; Noto Sans Gurmukhi; Noto Sans Georgian; Liberation Serif; Noto Sans Kayah Li; Noto Sans Inscriptional Pahlavi; Noto Sans Linear A; Noto Sans Linear B; Noto Sans Gothic; Noto Sans Warang Citi; Noto Nastaliq Urdu; Noto Sans Tai Tham; Noto Sans Ugaritic; Noto Sans Rejang; Liberation Sans; Noto Sans Mongolian; Noto Sans Glagolitic; eufm10; Inconsolata; Noto Sans Adlam Unjoined; Lato; Noto Sans Ethiopic; Noto Serif Devanagari; Noto Sans Syriac Estrangela; Noto Sans Ogham; Noto Sans Bengali UI; Gentium Book Basic; Noto Sans Egyptian Hieroglyphs; Standard Symbols L; cmex10; Noto Sans Meetei Mayek; Noto Sans Psalter Pahlavi; Noto Naskh Arabic UI; Noto Sans PhagsPa; Noto Serif Hebrew; Noto Sans Old South Arabian; DejaVu Serif; Noto Sans Imperial Aramaic; Noto Serif Bengali; Noto Sans; Noto Sans Lao UI; Bitstream Vera Sans; Noto Sans Grantha; Lato; Noto Sans Khmer UI; Noto Sans Armenian; Noto Sans Khmer; Noto Sans Old Hungarian; Noto Sans Tamil UI; Lato; PibotoLt; Noto Sans Shavian; Noto Sans Tirhuta; Noto Sans Oriya UI; URW Chancery L; Noto Sans Meroitic; Noto Sans Vai; Noto Sans Samaritan; Piboto; Lato; Noto Sans Deseret; wasy10; Noto Serif Ahom; Noto Sans Gujarati; Noto Sans Osmanya; URW Gothic L; Noto Sans Bassa Vah; Noto Sans Malayalam UI; Noto Sans Telugu UI; Noto Sans Hatran; Noto Sans Newa; Noto Sans Cuneiform; Noto Serif Lao; Noto Sans Limbu; Noto Sans Avestan; Quicksand; Noto Sans Malayalam; Noto Sans Old Permic; Noto Sans Tamil; Noto Serif Khmer; cmsy10; Noto Sans Palmyrene; Noto Sans Bhaiksuki; Quicksand Medium; Noto Sans Syriac Eastern; Noto Sans NKo; Noto Serif Ethiopic; FreeSans; Noto Sans Bamum; Noto Sans Devanagari UI; Noto Sans Takri; Noto Sans Gurmukhi UI; OpenSymbol; Linux Libertine Display O; Noto Serif Kannada; Noto Sans Caucasian Albanian; msam10; Noto Serif Tibetan; Noto Sans Sundanese; Linux Libertine Mono O; esint10; Caladea; Noto Sans Devanagari; Noto Sans Old Turkic; Noto Serif Gujarati; Noto Serif Display; URW Palladio L; Noto Sans Old North Arabian; Noto Sans Oriya; Noto Sans Arabic; Noto Sans Telugu; Piboto; Noto Sans Pau Cin Hau; Noto Serif Sinhala; Noto Sans Batak; Noto Sans Saurashtra; Noto Sans Mende Kikakui; Noto Sans Osage; Noto Sans Miao; Noto Sans Buginese; Lato; msbm10; Dingbats; Noto Sans Symbols2; Noto Sans Ol Chiki; Noto Sans Modi; DejaVu Sans Mono; Noto Sans Duployan; Noto Sans Thaana; Lato; Noto Sans Mono; Noto Music; Noto Sans Sinhala; Noto Sans Marchen; Noto Sans Display; Noto Sans Phoenician; Noto Serif Tamil; Noto Sans Old Italic; Noto Sans Tai Le; Noto Sans Tifinagh; Noto Sans Sora Sompeng; Noto Serif Myanmar; Noto Sans Khudawadi; Noto Sans Lepcha; URW Bookman L; Noto Sans Thai; Noto Sans Lisu; Noto Serif; Liberation Sans Narrow; Noto Sans Tibetan; Noto Serif Balinese; Nimbus Roman No9 L; Noto Sans Chakma; Noto Sans Anatolian Hieroglyphs; Noto Sans Mro; Noto Sans Cypriot; Noto Sans Hanunoo; Noto Sans Brahmi; Noto Sans Gujarati UI; Noto Sans Lao; GentiumAlt; Noto Sans Hebrew; Noto Sans Syriac Western; Noto Sans Cherokee; cmr10; Noto Sans Pahawh Hmong; Noto Serif Georgian; Noto Sans New Tai Lue; Noto Serif Gurmukhi; Noto Serif Thai; Linux Libertine Initials O; Noto Serif Malayalam; Noto Sans Manichaean; rsfs10; Noto Sans Syloti Nagri; Lato; Noto Sans Kaithi; Noto Naskh Arabic; Noto Sans Tagbanwa; Noto Sans Carian; Noto Sans Canadian Aboriginal; Noto Sans Kannada; Noto Sans Elbasan; DejaVu Sans; Noto Sans Tai Viet; Noto Sans Adlam; Noto Sans Multani; Bitstream Vera Serif; Noto Sans Inscriptional Parthia; Noto Sans Nabataean; Noto Sans Cham; Quicksand Light; Piboto; Noto Sans Old Persian; DejaVu Sans; Bitstream Vera Sans Mono; Noto Mono; Noto Sans Lycian; DejaVu Math TeX Gyre; Gentium;
+            //
+            // COMMON FONTS:
+            //  Noto Sans; 
+
+            // BUT "Times New Roman" works in Linux!! So there are more commonalities
+            //string fam = "";
+            //foreach (FontFamily ff in FontFamily.Families)
+            //{
+            //    fam += ff.Name + "; ";
+            //}
+            //Brush = new SolidBrush(Color.Orange);
+            //string sWindows = "Agency FB; Algerian; Arial; Arial Black; Arial Narrow; Arial Rounded MT Bold; Bahnschrift; Bahnschrift Condensed; Bahnschrift Light; Bahnschrift Light Condensed; Bahnschrift Light SemiCondensed; Bahnschrift SemiBold; Bahnschrift SemiBold Condensed; Bahnschrift SemiBold SemiConden; Bahnschrift SemiCondensed; Bahnschrift SemiLight; Bahnschrift SemiLight Condensed; Bahnschrift SemiLight SemiConde; Baskerville Old Face; Bauhaus 93; Bell MT; Berlin Sans FB; Berlin Sans FB Demi; Bernard MT Condensed; Blackadder ITC; Bodoni MT; Bodoni MT Black; Bodoni MT Condensed; Bodoni MT Poster Compressed; Book Antiqua; Bookman Old Style; Bookshelf Symbol 7; Bradley Hand ITC; Britannic Bold; Broadway; Brush Script MT; Calibri; Calibri Light; Californian FB; Calisto MT; Cambria; Cambria Math; Candara; Candara Light; Castellar; Centaur; Century; Century Gothic; Century Schoolbook; Chiller; Colonna MT; Comic Sans MS; Consolas; Constantia; Cooper Black; Copperplate Gothic Bold; Copperplate Gothic Light; Corbel; Corbel Light; Courier New; Curlz MT; Dubai; Dubai Light; Dubai Medium; Ebrima; Edwardian Script ITC; Elephant; Engravers MT; Eras Bold ITC; Eras Demi ITC; Eras Light ITC; Eras Medium ITC; Felix Titling; Footlight MT Light; Forte; Franklin Gothic Book; Franklin Gothic Demi; Franklin Gothic Demi Cond; Franklin Gothic Heavy; Franklin Gothic Medium; Franklin Gothic Medium Cond; Freestyle Script; French Script MT; Gabriola; Gadugi; Garamond; Georgia; Gigi; Gill Sans MT; Gill Sans MT Condensed; Gill Sans MT Ext Condensed Bold; Gill Sans Ultra Bold; Gill Sans Ultra Bold Condensed; Gloucester MT Extra Condensed; Goudy Old Style; Goudy Stout; Haettenschweiler; Harlow Solid Italic; Harrington; High Tower Text; HoloLens MDL2 Assets; Impact; Imprint MT Shadow; Informal Roman; Ink Free; Javanese Text; Jokerman; Juice ITC; Kristen ITC; Kunstler Script; Leelawadee UI; Leelawadee UI Semilight; Lucida Bright; Lucida Calligraphy; Lucida Console; Lucida Fax; Lucida Handwriting; Lucida Sans; Lucida Sans Typewriter; Lucida Sans Unicode; Magneto; Maiandra GD; Malgun Gothic; Malgun Gothic Semilight; Marlett; Matura MT Script Capitals; Microsoft Himalaya; Microsoft JhengHei; Microsoft JhengHei Light; Microsoft JhengHei UI; Microsoft JhengHei UI Light; Microsoft New Tai Lue; Microsoft PhagsPa; Microsoft Sans Serif; Microsoft Tai Le; Microsoft YaHei; Microsoft YaHei Light; Microsoft YaHei UI; Microsoft YaHei UI Light; Microsoft Yi Baiti; MingLiU-ExtB; MingLiU_HKSCS-ExtB; Mistral; Modern No. 20; Mongolian Baiti; Monotype Corsiva; MS Gothic; MS Outlook; MS PGothic; MS Reference Sans Serif; MS Reference Specialty; MS UI Gothic; MT Extra; MV Boli; Myanmar Text; Niagara Engraved; Niagara Solid; Nirmala UI; Nirmala UI Semilight; Noto Sans; NSimSun; OCR A Extended; OCRATTRegular; Old English Text MT; Onyx; Palace Script MT; Palatino Linotype; Papyrus; Parchment; Perpetua; Perpetua Titling MT; Playbill; PMingLiU-ExtB; Poor Richard; Pristina; Rage Italic; Ravie; Rockwell; Rockwell Condensed; Rockwell Extra Bold; Script MT Bold; Segoe MDL2 Assets; Segoe Print; Segoe Script; Segoe UI; Segoe UI Black; Segoe UI Emoji; Segoe UI Historic; Segoe UI Light; Segoe UI Semibold; Segoe UI Semilight; Segoe UI Symbol; Showcard Gothic; SimSun; SimSun-ExtB; Sitka Banner; Sitka Display; Sitka Heading; Sitka Small; Sitka Subheading; Sitka Text; Snap ITC; Stencil; Sylfaen; Symbol; Tahoma; Tempus Sans ITC; Times New Roman; Trebuchet MS; Tw Cen MT; Tw Cen MT Condensed; Tw Cen MT Condensed Extra Bold; Verdana; Viner Hand ITC; Vivaldi; Vladimir Script; Webdings; Wide Latin; Wingdings; Wingdings 2; Wingdings 3; Yu Gothic; Yu Gothic Light; Yu Gothic Medium; Yu Gothic UI; Yu Gothic UI Light; Yu Gothic UI Semibold; Yu Gothic UI Semilight; ";
+            //string sLinux = "Noto Kufi Arabic; Noto Serif Armenian; Noto Sans Thai UI; Noto Sans Arabic UI; Linux Biolinum O; DejaVu Serif; Noto Sans Javanese; Noto Sans Kharoshthi; Noto Sans Kannada UI; Noto Sans Buhid; Noto Sans Syriac; Nimbus Mono L; Noto Sans Myanmar UI; Noto Sans Coptic; Liberation Mono; Gentium Basic; Noto Sans Myanmar; Noto Serif Telugu; Noto Sans Mandaic; Noto Sans Runic; Noto Sans Sharada; cmmi10; Noto Sans Yi; Lato; Noto Sans Tagalog; Piboto Condensed; Noto Sans Symbols; stmary10; Noto Sans Sinhala UI; Noto Serif Tamil Slanted; DejaVu Sans; Linux Biolinum Keyboard O; Noto Sans Lydian; Droid Sans Fallback; Linux Libertine O; FreeMono; Nimbus Sans L; Noto Sans Bengali; Century Schoolbook L; FreeSerif; Noto Sans Mahajani; Carlito; Noto Sans Gurmukhi; Noto Sans Georgian; Liberation Serif; Noto Sans Kayah Li; Noto Sans Inscriptional Pahlavi; Noto Sans Linear A; Noto Sans Linear B; Noto Sans Gothic; Noto Sans Warang Citi; Noto Nastaliq Urdu; Noto Sans Tai Tham; Noto Sans Ugaritic; Noto Sans Rejang; Liberation Sans; Noto Sans Mongolian; Noto Sans Glagolitic; eufm10; Inconsolata; Noto Sans Adlam Unjoined; Lato; Noto Sans Ethiopic; Noto Serif Devanagari; Noto Sans Syriac Estrangela; Noto Sans Ogham; Noto Sans Bengali UI; Gentium Book Basic; Noto Sans Egyptian Hieroglyphs; Standard Symbols L; cmex10; Noto Sans Meetei Mayek; Noto Sans Psalter Pahlavi; Noto Naskh Arabic UI; Noto Sans PhagsPa; Noto Serif Hebrew; Noto Sans Old South Arabian; DejaVu Serif; Noto Sans Imperial Aramaic; Noto Serif Bengali; Noto Sans; Noto Sans Lao UI; Bitstream Vera Sans; Noto Sans Grantha; Lato; Noto Sans Khmer UI; Noto Sans Armenian; Noto Sans Khmer; Noto Sans Old Hungarian; Noto Sans Tamil UI; Lato; PibotoLt; Noto Sans Shavian; Noto Sans Tirhuta; Noto Sans Oriya UI; URW Chancery L; Noto Sans Meroitic; Noto Sans Vai; Noto Sans Samaritan; Piboto; Lato; Noto Sans Deseret; wasy10; Noto Serif Ahom; Noto Sans Gujarati; Noto Sans Osmanya; URW Gothic L; Noto Sans Bassa Vah; Noto Sans Malayalam UI; Noto Sans Telugu UI; Noto Sans Hatran; Noto Sans Newa; Noto Sans Cuneiform; Noto Serif Lao; Noto Sans Limbu; Noto Sans Avestan; Quicksand; Noto Sans Malayalam; Noto Sans Old Permic; Noto Sans Tamil; Noto Serif Khmer; cmsy10; Noto Sans Palmyrene; Noto Sans Bhaiksuki; Quicksand Medium; Noto Sans Syriac Eastern; Noto Sans NKo; Noto Serif Ethiopic; FreeSans; Noto Sans Bamum; Noto Sans Devanagari UI; Noto Sans Takri; Noto Sans Gurmukhi UI; OpenSymbol; Linux Libertine Display O; Noto Serif Kannada; Noto Sans Caucasian Albanian; msam10; Noto Serif Tibetan; Noto Sans Sundanese; Linux Libertine Mono O; esint10; Caladea; Noto Sans Devanagari; Noto Sans Old Turkic; Noto Serif Gujarati; Noto Serif Display; URW Palladio L; Noto Sans Old North Arabian; Noto Sans Oriya; Noto Sans Arabic; Noto Sans Telugu; Piboto; Noto Sans Pau Cin Hau; Noto Serif Sinhala; Noto Sans Batak; Noto Sans Saurashtra; Noto Sans Mende Kikakui; Noto Sans Osage; Noto Sans Miao; Noto Sans Buginese; Lato; msbm10; Dingbats; Noto Sans Symbols2; Noto Sans Ol Chiki; Noto Sans Modi; DejaVu Sans Mono; Noto Sans Duployan; Noto Sans Thaana; Lato; Noto Sans Mono; Noto Music; Noto Sans Sinhala; Noto Sans Marchen; Noto Sans Display; Noto Sans Phoenician; Noto Serif Tamil; Noto Sans Old Italic; Noto Sans Tai Le; Noto Sans Tifinagh; Noto Sans Sora Sompeng; Noto Serif Myanmar; Noto Sans Khudawadi; Noto Sans Lepcha; URW Bookman L; Noto Sans Thai; Noto Sans Lisu; Noto Serif; Liberation Sans Narrow; Noto Sans Tibetan; Noto Serif Balinese; Nimbus Roman No9 L; Noto Sans Chakma; Noto Sans Anatolian Hieroglyphs; Noto Sans Mro; Noto Sans Cypriot; Noto Sans Hanunoo; Noto Sans Brahmi; Noto Sans Gujarati UI; Noto Sans Lao; GentiumAlt; Noto Sans Hebrew; Noto Sans Syriac Western; Noto Sans Cherokee; cmr10; Noto Sans Pahawh Hmong; Noto Serif Georgian; Noto Sans New Tai Lue; Noto Serif Gurmukhi; Noto Serif Thai; Linux Libertine Initials O; Noto Serif Malayalam; Noto Sans Manichaean; rsfs10; Noto Sans Syloti Nagri; Lato; Noto Sans Kaithi; Noto Naskh Arabic; Noto Sans Tagbanwa; Noto Sans Carian; Noto Sans Canadian Aboriginal; Noto Sans Kannada; Noto Sans Elbasan; DejaVu Sans; Noto Sans Tai Viet; Noto Sans Adlam; Noto Sans Multani; Bitstream Vera Serif; Noto Sans Inscriptional Parthia; Noto Sans Nabataean; Noto Sans Cham; Quicksand Light; Piboto; Noto Sans Old Persian; DejaVu Sans; Bitstream Vera Sans Mono; Noto Mono; Noto Sans Lycian; DejaVu Math TeX Gyre; Gentium;";
+            //string[] arrWindowsFonts;
+            //string[] arrLinuxFonts;
+            //List<string> lCommonFonts = new List<string>();
+            //char[] separators = { ';' };
+            //arrWindowsFonts = sWindows.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            //arrLinuxFonts = sLinux.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+            //foreach (string font in arrWindowsFonts)
+            //{
+            //    if (arrLinuxFonts.Contains(font))
+            //    {
+            //        lCommonFonts.Add(font);
+            //        fam += font + "; ";
+            //    }
+            //}
+
+            //Text = fam;
+        }
+
+        public void SetBrushColor(Color color)
+        {
+            if (color == Color.Red)
+                Brush = Brushes.Red;
+            else if (color == Color.Orange)
+                Brush = Brushes.Orange;
+            else if (color == Color.Yellow)
+                Brush = Brushes.Yellow;
+            else if (color == Color.Green)
+                Brush = Brushes.Green;
+            else if (color == Color.Blue)
+                Brush = Brushes.Blue;
+            else if (color == Color.Violet)
+                Brush = Brushes.Violet;
+            else if (color == Color.Black)
+                Brush = Brushes.Black;
+            else if (color == Color.White)
+                Brush = Brushes.White;
+            else
+                Brush = new SolidBrush(color);
+        }
+
+        public override void RenderOneFrameToScreen(Graphics graph)
+        {
+            graph.DrawString(Text, Font, Brush, Location);
+        }
     }
 }
