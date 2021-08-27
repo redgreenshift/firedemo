@@ -39,8 +39,8 @@ namespace FireDemo
             this.buttonAvailableStatus = new System.Windows.Forms.Button();
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonBatmanMultiThread = new System.Windows.Forms.Button();
+            this.buttonRainBORG = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -140,16 +140,6 @@ namespace FireDemo
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
             // 
-            // buttonRainBORG
-            // 
-            this.buttonRainBORG.Location = new System.Drawing.Point(185, 209);
-            this.buttonRainBORG.Name = "buttonRainBORG";
-            this.buttonRainBORG.Size = new System.Drawing.Size(137, 41);
-            this.buttonRainBORG.TabIndex = 7;
-            this.buttonRainBORG.Text = "RainBORG";
-            this.buttonRainBORG.UseVisualStyleBackColor = true;
-            this.buttonRainBORG.Click += new System.EventHandler(this.buttonRainBORG_Click);
-            // 
             // buttonBatmanMultiThread
             // 
             this.buttonBatmanMultiThread.Location = new System.Drawing.Point(185, 115);
@@ -159,6 +149,16 @@ namespace FireDemo
             this.buttonBatmanMultiThread.Text = "Batman MT";
             this.buttonBatmanMultiThread.UseVisualStyleBackColor = true;
             this.buttonBatmanMultiThread.Click += new System.EventHandler(this.buttonBatmanMultiThread_Click);
+            // 
+            // buttonRainBORG
+            // 
+            this.buttonRainBORG.Location = new System.Drawing.Point(185, 209);
+            this.buttonRainBORG.Name = "buttonRainBORG";
+            this.buttonRainBORG.Size = new System.Drawing.Size(137, 41);
+            this.buttonRainBORG.TabIndex = 7;
+            this.buttonRainBORG.Text = "RainBORG";
+            this.buttonRainBORG.UseVisualStyleBackColor = true;
+            this.buttonRainBORG.Click += new System.EventHandler(this.buttonRainBORG_Click);
             // 
             // Form2
             // 
