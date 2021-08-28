@@ -16,8 +16,8 @@ namespace FireDemo
         CoolingStrategyMap m_coolingStrategy;
         //ILightPen m_lightPen;
         List<ILightShape> m_lightShapes = new List<ILightShape>();
-        AbstractDynamicSprite m_dbSprite;
-        List<AbstractDynamicSprite> m_dbSprites = new List<AbstractDynamicSprite>();
+        SimpleSprite m_dbSprite;
+        List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
         //private GenericRealtimeFlame m_genericFlame;
         //int m_framesPerSecond = 64;
         System.Threading.Timer timer2;
@@ -47,8 +47,6 @@ namespace FireDemo
             DemoBatman();
             DemoBatman_LowerCooling_HigherFire();
             this.BackColor = Color.Black;
-            //timer1.Interval = (int)(1000 / m_framesPerSecond);
-            //timer1.Enabled = true;
         }
 
         // Want to implement using alternate suggestion:
@@ -116,7 +114,7 @@ namespace FireDemo
             // Draw the frame once per tick.
             if (m_dbSprites.Count > 0)
             {
-                foreach (AbstractDynamicSprite sprite in m_dbSprites)
+                foreach (SimpleSprite sprite in m_dbSprites)
                 {
                     sprite.RenderOneFrameToScreen(e.Graphics);
                 }
@@ -124,14 +122,15 @@ namespace FireDemo
             else
                 m_dbSprite.RenderOneFrameToScreen(e.Graphics);
 
-            // That is strange. 0 dueTime means this runs about 120 FPS on my desktop.
+            // That is strange. 0 dueTime means this runs about 180-240 FPS on my desktop.
             // 1 dueTime makes it run SLOWER than the original timer1_Tick implementation,
-            // and the framerate is inconsistent, fluctuating from 30-50-60 and back to 30 FPS
+            // and the framerate is inconsistent, fluctuating from 30-50-60 and back to 30 FPS.
+            //
             // Given how this is proving problematic on Linux, and inconsistent on Windows,
             // I think my effort is better spent on paralellizing the implementation,
             // and only later explore this path again. Yes I know this is theoretically
             // not as good, but for now it IS producing better results.
-            timer2.Change(0, Timeout.Infinite);
+            timer2.Change(dueTime: 0, period: Timeout.Infinite);
         }
 
         private void DemoBatman()
@@ -147,7 +146,7 @@ namespace FireDemo
             fireHeight = fireWidth * 3 / 5;
             //magnification = 2;
 
-            Color[] palFire = PaletteGenerator.GetHardCodedFirePalette();
+            Color[] palFire = PalRealisticFire.New();
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             //m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.4f, min: 5, max: 7, smoothing: 0);
@@ -170,7 +169,8 @@ namespace FireDemo
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
-            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            //AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
             //dbBatman = new RealtimeCandleflame();
             dbBatman.Initialize(fireWidth, fireHeight, magnification);
             dbBatman.SetCoolingStrategy(coolingStrategy);
@@ -223,7 +223,8 @@ namespace FireDemo
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
-            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            //AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
+            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
             //dbBatman = new RealtimeCandleflame();
             dbBatman.Initialize(fireWidth, fireHeight, magnification);
             dbBatman.SetCoolingStrategy(coolingStrategy);
@@ -239,11 +240,6 @@ namespace FireDemo
             m_lightShapes.Add(lsBatman);
             m_dbSprite = dbBatman;
         }
-
-        //public override void OnPaint
-        //{
-
-        //}
 
         int iFrame = 0;
         DateTime dtEnd = DateTime.Now;

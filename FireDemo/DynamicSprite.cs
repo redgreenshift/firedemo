@@ -1131,6 +1131,7 @@ namespace FireDemo
     }
 
 
+    // TODO: JRDV: TextSprite with bounds? Random placement???
     class TextSprite : AbstractDynamicSprite
     {
         public string Text { get; set; }

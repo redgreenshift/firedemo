@@ -35,8 +35,6 @@ namespace FireDemo
 			CompositingMode cm = graph.CompositingMode; // Default SourceOver
 			InterpolationMode im = graph.InterpolationMode; // Default Bilinear
 
-			// TODO: JRDV: TextSprite with bounds? Random placement???
-
 			graph.CompositingMode = this.CompositingMode;
 			if (Magnification == 1)
 			{
