@@ -849,7 +849,7 @@ namespace FireDemo
             BrickWall brick1 = new BrickWall();
             brick1.InterpolationMode = InterpolationMode.NearestNeighbor;
             brick1.Magnification = 2;
-            SpriteDuplicator brickWall = new SpriteDuplicator();
+            SpriteCompositor brickWall = new SpriteCompositor();
             brickWall.Sprite = brick1;
             brickWall.Initialize();
             m_dbSprites.Add(brickWall);

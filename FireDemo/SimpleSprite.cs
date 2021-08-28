@@ -384,12 +384,12 @@ namespace FireDemo
 		}
 	}
 
-	// Prototyping, not the final implementation. Way too slow!
-	class SpriteDuplicator : SimpleSprite
+	// Prototyping, not the final implementation. Fast enough, but not written very well.
+	class SpriteCompositor : SimpleSprite
     {
 		public SimpleSprite Sprite { get; set; }
 
-		public SpriteDuplicator()
+		public SpriteCompositor()
         {
 			// TODO: Define how to parameterize this? For now I know I want the Pi device.
 			Width = 1024;
