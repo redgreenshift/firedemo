@@ -713,16 +713,20 @@ namespace FireDemo
 			SetPaleteFromColorRange(colorRangeGenerated);
 #endif
 
-//			InitializeRealisticPalette();
-//			InitializeRealisticFlame
+			//	InitializeRealisticPalette();
+			//	InitializeRealisticFlame
+			// OH! I called this to press the "Realistic" button, which will EITHER use 4 Point Linear
+			// or the InitializeRealisticFlame code depending on the selected radio button.
 			blueYellowFlameButton_Click(null, null);
-			
+
 			for (int i = 0; i < thePalette.Length; ++i)
             {
 				Color c0 = thePalette[i];
 				int cAvg = (c0.R + c0.G + c0.B) / 3;
 				thePalette[i] = Color.FromArgb(cAvg, cAvg, cAvg);
 			}
+
+			// TODO: JRDV: Revert this!! First generate it so I can validate it...
 		}
 
 		void InitializeBlackFlameCurve()
@@ -3521,11 +3525,22 @@ namespace FireDemo
 			//SetSingleColorFlame(Color.FromArgb(251, 251, 255));
 			//RefreshTheFlamePalette();
 			realisticLightningButton_Click(null, null);
+
+			// Revert this! Just generating the test data for unit tests
+			//string result = "Color[] theLightningPalette = { ";
+			//foreach (Color c in thePalette)
+			//{
+			//	result += string.Format("Color.FromArgb({0}, {1}, {2}), ", c.R, c.G, c.B);
+			//}
+			//result = result.Substring(0, result.Length - 2);
+			//result += " };";
+
+			//string final = result;
 		}
 
-#endregion
+		#endregion
 
-        private void presetAssimilateButton_Click(object sender, EventArgs e)
+		private void presetAssimilateButton_Click(object sender, EventArgs e)
         {
 			// Reset the Demo!
 			resetButton_Click(sender, e);
@@ -3576,8 +3591,19 @@ namespace FireDemo
 			InitializePalette(color1, color2, color3, color4);
 			UpdateUI_Visibility();
 
-//			thePalette[255] = Color.FromArgb(0, 255, 0);
-		}
+            //			thePalette[255] = Color.FromArgb(0, 255, 0);
+
+            //// Revert this! Just generating the test data for unit tests
+            //string result = "Color[] theBorgPalette = { ";
+            //foreach (Color c in thePalette)
+            //{
+            //    result += string.Format("Color.FromArgb({0}, {1}, {2}), ", c.R, c.G, c.B);
+            //}
+            //result = result.Substring(0, result.Length - 2);
+            //result += " };";
+
+            //string final = result;
+        }
 
         private void presetRedBorgButton_Click(object sender, EventArgs e)
         {
