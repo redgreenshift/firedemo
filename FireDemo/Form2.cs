@@ -26,6 +26,7 @@ namespace FireDemo
         public Form2()
         {
             InitializeComponent();
+            this.Size = new Size(1024, 600); // Enlarge to the size of the Raspberry Pi device screen
             m_graph = this.CreateGraphics();
             this.Click += Form2_Click;
         }
@@ -56,6 +57,7 @@ namespace FireDemo
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            this.BackColor = Color.DimGray;
             this.Text = "-- Friendly Neighborhood Status Indicator --";
 
             //SimpleCandle();
