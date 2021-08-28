@@ -404,16 +404,19 @@ namespace FireDemo
             {
 				for (int xx = x; xx < dest.Width && xx < x + source.Width; ++xx)
                 {
-					Color c = source.GetPixel(xx - x, yy - y);
-					for (int y3 = y + (yy - y); y3 < y + (yy - y) + magnification; ++y3)
+					// Starting at
+					int sourceX = xx - x;
+					int sourceY = yy - y;
+					Color c = source.GetPixel(sourceX, sourceY);
+					for (int y3 = 0; y3 < magnification; ++y3)
 					{
-						for (int x3 = x + (xx - x); x3 < x + (xx - x) + magnification; ++x3)
+						for (int x3 = 0; x3 < magnification; ++x3)
 						{
-							int theX = (xx - x) * magnification + x3;
-							int theY = (yy - y) * magnification + y3;
+							int destX = x + sourceX * magnification + x3;
+							int destY = y + sourceY * magnification + y3;
 
-							if (theX < dest.Width && theY < dest.Height)
-								dest.SetPixel(theX, theY, c);
+							if (destX < dest.Width && destY < dest.Height)
+								dest.SetPixel(destX, destY, c);
 						}
 					}
 
