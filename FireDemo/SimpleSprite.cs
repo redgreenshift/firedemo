@@ -21,7 +21,11 @@ namespace FireDemo
 		public SimpleSprite()
 		{
 			this.InterpolationMode = InterpolationMode.Bicubic; // Default to BEST quality
-			this.CompositingMode = CompositingMode.SourceCopy; // Default to FASTEST option
+			this.CompositingMode = CompositingMode.SourceOver; // Default to best QUALITY option (no blinking
+															   // due to blanking out the ENTIRE graph)
+															   // Caller can use SourceCopy for some extra speed
+															   // if they know it's safe (i.e. only a single bitmap
+															   // will be rendered per frame)
 			Location = new Point(0, 0);
 			Magnification = 1;
 		}

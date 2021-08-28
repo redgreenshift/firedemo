@@ -273,7 +273,7 @@ namespace FireDemo
                 // to be able to render multiple plasma discs in Linux
                 db.CompositingMode = CompositingMode.SourceOver;
             }
-            m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster
+            //m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster (NO! It blinks if we do this!)
         }
 
         private void DemoBorg()
@@ -402,7 +402,7 @@ namespace FireDemo
             m_lightShapes.Clear();
             m_lightShapes.Add(lsBatman);
             m_dbSprite = dbBatman;
-            m_dbSprite.CompositingMode = CompositingMode.SourceCopy; // This is FASTER than SourceOver
+            m_dbSprite.CompositingMode = CompositingMode.SourceCopy; // This is FASTER than SourceOver (only use this for SINGLE bitmap scenarios!)
         }
 
         private void SimpleCandle()
@@ -787,7 +787,8 @@ namespace FireDemo
                 // to be able to render multiple plasma discs in Linux
                 db.CompositingMode = CompositingMode.SourceOver;
             }
-            m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster
+            // Commenting out. This is why it blinks on the Pi.
+            //m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster (NO! It blinks if we do this!)
 
             buttonDemo_Click(sender, e);
         }
