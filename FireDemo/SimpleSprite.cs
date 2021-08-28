@@ -391,34 +391,45 @@ namespace FireDemo
 
 		public SpriteDuplicator()
         {
+			// TODO: Define how to parameterize this? For now I know I want the Pi device.
+			Width = 1024;
+			Height = 600;
+			Magnification = 1;
+		}
 
-        }
 
-        //public void SetGrid(List<Point> grid)
-        //{
-        //    int bmWidth = 16;
-        //    int bmHeight = 16;
-        //    Bitmap foo = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppArgb);
-        //    // TODO: Define how to parameterize this? For now I know I want the Pi device.
-        //    Width = 1024;
-        //    Height = 600;
-        //    Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-
-        //    int xMax = Width / Sprite.Width;
-        //    for (int xx = 0; xx < xMax; ++xx)
-        //    {
-        //        //Sprite.RenderOneFrameToScreen();
-        //        Form.
-
-        //    }
-
-        //}
-
-        public override void RenderOneFrameToScreen(Graphics graph)
+		void Draw(Bitmap source, Bitmap dest, int x, int y, int magnification)
         {
-			int bmWidth = 16;
-			int bmHeight = 16;
-			Bitmap foo = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppArgb);
+			for (int yy = y; yy < dest.Height && yy < y + source.Height; ++yy)
+            {
+				for (int xx = x; xx < dest.Width && xx < x + source.Width; ++xx)
+                {
+					Color c = source.GetPixel(xx - x, yy - y);
+					for (int y3 = y + (yy - y); y3 < y + (yy - y) + magnification; ++y3)
+					{
+						for (int x3 = x + (xx - x); x3 < x + (xx - x) + magnification; ++x3)
+						{
+							int theX = (xx - x) * magnification + x3;
+							int theY = (yy - y) * magnification + y3;
+
+							if (theX < dest.Width && theY < dest.Height)
+								dest.SetPixel(theX, theY, c);
+						}
+					}
+
+					//for (int my = 0; my <= magnification; ++my)
+					//{
+					//	for (int mx = 0; mx <= magnification; ++mx)
+					//	{
+					//		dest.SetPixel(xx + mx, yy + my, c);
+					//	}
+					//}
+
+				}
+			}
+        }
+		public void Initialize()
+        {
 			// TODO: Define how to parameterize this? For now I know I want the Pi device.
 			Width = 1024;
 			Height = 600;
@@ -430,13 +441,55 @@ namespace FireDemo
 			{
 				for (int xx = 0; xx < xMax; ++xx)
 				{
-					if (xx < 1 || xx > xMax - 2 || yy < 2 || (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2)) ))
+					if (xx < 1 || xx > xMax - 2 || yy < 2 || (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2))))
+					{
+						int x = xx * Sprite.Width * Sprite.Magnification;
+						int y = yy * Sprite.Height * Sprite.Magnification;
+						Draw(Sprite.Form, Form, x, y, Sprite.Magnification);
+					}
+				}
+			}
+		}
+
+		//public void SetGrid(List<Point> grid)
+		//{
+		//    int bmWidth = 16;
+		//    int bmHeight = 16;
+		//    Bitmap foo = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppArgb);
+		//    // TODO: Define how to parameterize this? For now I know I want the Pi device.
+		//    Width = 1024;
+		//    Height = 600;
+		//    Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+		//    int xMax = Width / Sprite.Width;
+		//    for (int xx = 0; xx < xMax; ++xx)
+		//    {
+		//        //Sprite.RenderOneFrameToScreen();
+		//        Form.
+		//    }
+
+		//}
+
+		private void NaiveRender(Graphics graph)
+        {
+			int xMax = Width / (Sprite.Width * Sprite.Magnification);
+			int yMax = Height / (Sprite.Height * Sprite.Magnification);
+			for (int yy = 0; yy < yMax; ++yy)
+			{
+				for (int xx = 0; xx < xMax; ++xx)
+				{
+					if (xx < 1 || xx > xMax - 2 || yy < 2 || (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2))))
 					{
 						Sprite.Location = new Point(xx * Sprite.Width * Sprite.Magnification, yy * Sprite.Height * Sprite.Magnification);
 						Sprite.RenderOneFrameToScreen(graph);
 					}
 				}
 			}
+		}
+		public override void RenderOneFrameToScreen(Graphics graph)
+        {
+			base.RenderOneFrameToScreen(graph);
+			//NaiveRender(graph);
 		}
 	}
 

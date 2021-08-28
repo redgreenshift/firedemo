@@ -851,6 +851,7 @@ namespace FireDemo
             brick1.Magnification = 2;
             SpriteDuplicator brickWall = new SpriteDuplicator();
             brickWall.Sprite = brick1;
+            brickWall.Initialize();
             m_dbSprites.Add(brickWall);
 
 
