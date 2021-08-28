@@ -27,6 +27,14 @@ namespace FireDemo
         {
             InitializeComponent();
             m_graph = this.CreateGraphics();
+            this.Click += Form2_Click;
+        }
+
+        private void Form2_Click(object sender, EventArgs e)
+        {
+            // Click anywhere on the window to stop the render.
+            if (timer1.Enabled)
+                buttonDemo_Click(null, null);
         }
 
         // Cheap way to calculate framerate.
@@ -538,21 +546,20 @@ namespace FireDemo
         {
             if (timer1.Enabled)
             {
+                this.FormBorderStyle = FormBorderStyle.None; // Hide the Title Bar and other UI
+                this.Location = new Point(0, 0);
                 groupBox1.Hide();
-                //buttonAvailableStatus.Hide();
-                //buttonAwayStatus.Hide();
-                //buttonOofStatus.Hide();
-                //buttonBusyStatus.Hide();
-                //buttonDndStatus.Hide();
+                buttonChange.Hide();
+                buttonDemo.Hide();
             }
             else
             {
+                Cursor.Show();
+                Cursor = Cursors.Default;
+                this.FormBorderStyle = FormBorderStyle.Sizable; // Show the Title Bar
                 groupBox1.Show();
-                //buttonAvailableStatus.Show();
-                //buttonAwayStatus.Show();
-                //buttonOofStatus.Show();
-                //buttonBusyStatus.Show();
-                //buttonDndStatus.Show();
+                buttonChange.Show();
+                buttonDemo.Show();
             }
         }
         private void buttonAwayStatus_Click(object sender, EventArgs e)
@@ -596,39 +603,32 @@ namespace FireDemo
             m_lightShapes.Add(lsCandle);
             m_dbSprite = dbCandle;
 
+            TextSprite tsAway = new TextSprite
+            {
+                Location = new Point(0, 0),
+                Text = "Away",
+                Color = Color.Orange,
+            };
+            m_dbSprites.Add(dbCandle);
+            m_dbSprites.Add(tsAway);
+
             buttonDemo_Click(sender, e);
         }
 
         private void buttonOofStatus_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            //DemoLightning();
+            DemoLightning();
 
-            int fireWidth = 132;
-            int fireHeight = 200;
-            int magnification = 2;
-            int left, top;
+            m_dbSprites.Add(m_dbSprite);
+            TextSprite text = new TextSprite
+            {
+                Text = "I'm OOF",
+                Location = new Point(300, 0),
+                Color = Color.DarkMagenta
+            };
+            m_dbSprites.Add(text);
 
-            Color[] palLightning = PalLightning.New();
-            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(27);
-            ILightPen lpLightning = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
-            ILightShape lsLightning = new LightShapeLightning();
-            lsLightning.SetPen(lpLightning);
-
-            AbstractRealtimeLightEffect dbLightning = new RealtimeLightning();
-            dbLightning.Initialize(fireWidth, fireHeight, magnification);
-            dbLightning.SetCoolingStrategy(coolingStrategy);
-            dbLightning.SetPalette(palLightning);
-            dbLightning.AddShape(lsLightning);
-            left = (this.Width - fireWidth * magnification) / 2;
-            top = (this.Height - fireHeight * magnification) / 2;
-            dbLightning.Location = new Point(x: left, y: top);
-
-            m_palette = palLightning;
-            m_lightPen = lpLightning;
-            m_lightShapes.Clear();
-            m_lightShapes.Add(lsLightning);
-            m_dbSprite = dbLightning;
             buttonDemo_Click(sender, e);
         }
 
@@ -638,6 +638,15 @@ namespace FireDemo
             UpdateVisibleUI();
 
             DemoBatman();
+
+            m_dbSprites.Add(m_dbSprite);
+            TextSprite text = new TextSprite
+            {
+                Text = "I'm Busy",
+                Location = new Point(120, 0),
+                Color = Color.Red
+            };
+            m_dbSprites.Add(text);
 
             buttonDemo_Click(sender, e);
         }
@@ -682,6 +691,16 @@ namespace FireDemo
             m_lightShapes.Add(lsBorgRing);
             m_dbSprite = dbPlasmaDisc;
 
+
+            m_dbSprites.Add(m_dbSprite);
+            TextSprite text = new TextSprite
+            {
+                Text = "Available",
+                Location = new Point(120, 0),
+                Color = Color.LightGreen
+            };
+            m_dbSprites.Add(text);
+
             buttonDemo_Click(sender, e);
         }
 
@@ -691,6 +710,8 @@ namespace FireDemo
             //DemoBorg();
             int ringWidth = 129;
             int ringHeight = 131;
+            ringWidth = 129 / 2;
+            ringHeight = 131 / 2;
             int magnification = 2;
             //fireWidth = 200;
             //fireHeight = 200;
@@ -712,14 +733,14 @@ namespace FireDemo
             dbPlasmaDisc.AddShape(lsBorgPlasma);
             dbPlasmaDisc.AddShape(lsBorgRing);
             left = (this.Width - ringWidth * magnification) / 2;
-            top = (this.Height - ringHeight * magnification) / 2;
+            top = (this.Height - ringHeight * magnification) / 2 + 50;
             dbPlasmaDisc.Location = new Point(x: left, y: top);
 
             LinkHoldingItem link = new LinkHoldingItem();
             link.Magnification = 3;
-            //left = (this.Width - ringWidth * magnification) / 2;
-            left += (ringWidth / 2) - (link.Width * link.Magnification / 2);
-            //left += (link.Width / 2);
+            left = dbPlasmaDisc.Location.X;
+            top = dbPlasmaDisc.Location.Y;
+            left +=   (ringWidth / 2) - (link.Width * link.Magnification / 2);
             top += ringHeight * magnification;
             link.Location = new Point(left, top);
             link.InterpolationMode = InterpolationMode.NearestNeighbor;
@@ -728,10 +749,10 @@ namespace FireDemo
             OldMan man = new OldMan();
             man.Magnification = 3;
             man.InterpolationMode = InterpolationMode.NearestNeighbor;
-            left = (this.Width - ringWidth * magnification) / 2;
+            left = dbPlasmaDisc.Location.X;
+            top = dbPlasmaDisc.Location.Y;
             left += (ringWidth / 2) - (man.Width * man.Magnification / 2);
-            top = (this.Height - ringHeight * magnification) / 2;
-            top -= man.Height * man.Magnification;
+            top -= 2 * man.Height * man.Magnification;
             man.Location = new Point(left, top);
             m_dbSprites.Add(man);
 
@@ -759,26 +780,29 @@ namespace FireDemo
             BrickWall brick = new BrickWall();
             brick.InterpolationMode = InterpolationMode.NearestNeighbor;
             brick.Magnification = 2;
+            int fudgeFactor = brick.Magnification / 2;
             m_dbSprites.Add(brick);
             BrickWall brick2 = new BrickWall();
             brick2.InterpolationMode = InterpolationMode.NearestNeighbor;
-            brick2.Magnification = 2;
-            brick2.Location = new Point(brick.Width * brick.Magnification, 0);
+            brick2.Magnification = brick.Magnification;
+            brick2.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, 0);
             m_dbSprites.Add(brick2);
             BrickWall brick3 = new BrickWall();
             brick3.InterpolationMode = InterpolationMode.NearestNeighbor;
-            brick3.Magnification = 2;
-            brick3.Location = new Point(0, brick.Height * brick.Magnification);
+            brick3.Magnification = brick.Magnification;
+            brick3.Location = new Point(0, brick.Height * brick.Magnification - fudgeFactor);
             m_dbSprites.Add(brick3);
             BrickWall brick4 = new BrickWall();
             brick4.InterpolationMode = InterpolationMode.NearestNeighbor;
-            brick4.Magnification = 2;
-            brick4.Location = new Point(brick.Width * brick.Magnification, brick.Height * brick.Magnification);
+            brick4.Magnification = brick.Magnification;
+            brick4.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, brick.Height * brick.Magnification - fudgeFactor);
             m_dbSprites.Add(brick4);
 
-            TextSprite text = new TextSprite();
-            text.Text = "It's dangerous to bother me!\nGO AWAY! (use email)";
-            text.Location = new Point(190, 30);
+            TextSprite text = new TextSprite
+            {
+                Text = "It's dangerous to bother me!\nGO AWAY! (use email)",
+                Location = new Point(man.Location.X - 120, man.Location.Y - 75)
+            };
             m_dbSprites.Add(text);
 
             foreach (SimpleSprite db in m_dbSprites)

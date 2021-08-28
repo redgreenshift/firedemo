@@ -1134,9 +1134,15 @@ namespace FireDemo
     class TextSprite : AbstractDynamicSprite
     {
         public string Text { get; set; }
+
+        private Color color;
         public Color Color
         {
-            get; set; // TODO: JRDV: Set Brush when setting color?
+            get { return color; }
+            set {
+                color = value;
+                SetBrushColor(value);
+            }
         }
 
         private Font Font { get; set; }
