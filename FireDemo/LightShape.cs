@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FireDemo
 {
+    // seed, coals, path, shape
     interface ILightShape
     {
         void SetPen(ILightPen pen);
@@ -302,7 +303,7 @@ namespace FireDemo
             }
         }
 
-        protected void DrawOneBolt(int xCenter, int yCenter, int rotationAngle, int radius, IntensityMap canvas)
+        protected void DrawOneBolt(int xCenter, int yCenter, int rotationAngle, int radius, int width, IntensityMap canvas)
         {
             int fireWidth = canvas.Width;
             //int fireHeight = callback.Height;
@@ -373,6 +374,16 @@ namespace FireDemo
                         int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
 
                         canvas.SetPixelPrevious(xRender, yRender, 255);
+                        // Hacky prototype of wider bolts. Probably want something nicer.
+                        // Want to also implment TEXT
+                        if (width >= 2)
+                            canvas.SetPixelPrevious(xRender + 1, yRender + 1, 255);
+                        if (width >= 3)
+                            canvas.SetPixelPrevious(xRender - 1, yRender - 1, 255);
+                        if (width >= 4)
+                            canvas.SetPixelPrevious(xRender + 1, yRender - 1, 255);
+                        if (width >= 5)
+                            canvas.SetPixelPrevious(xRender - 1, yRender + 1, 255);
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
@@ -394,7 +405,7 @@ namespace FireDemo
             degrees = rng.Next(0, 360);
             radius = Math.Min(xCenter, yCenter) - 2;
 
-            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: radius, canvas: canvas);
+            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: radius, width: rng.Next(-2,6), canvas: canvas);
         }
     }
 

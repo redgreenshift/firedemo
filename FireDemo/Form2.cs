@@ -55,7 +55,6 @@ namespace FireDemo
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            this.BackColor = Color.DimGray;
             this.Text = "-- Friendly Neighborhood Status Indicator --";
 
             SimpleCandle();
