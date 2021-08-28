@@ -146,7 +146,7 @@ namespace FireDemo
             this.buttonBatmanMultiThread.Name = "buttonBatmanMultiThread";
             this.buttonBatmanMultiThread.Size = new System.Drawing.Size(137, 41);
             this.buttonBatmanMultiThread.TabIndex = 8;
-            this.buttonBatmanMultiThread.Text = "Batman MT";
+            this.buttonBatmanMultiThread.Text = "Batman ST";
             this.buttonBatmanMultiThread.UseVisualStyleBackColor = true;
             this.buttonBatmanMultiThread.Click += new System.EventHandler(this.buttonBatmanMultiThread_Click);
             // 

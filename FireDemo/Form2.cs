@@ -687,7 +687,7 @@ namespace FireDemo
             m_dbSprites.Clear();
             UpdateVisibleUI();
 
-            DemoBatman();
+            DemoBatman(multithreaded: true);
 
             m_dbSprites.Add(m_dbSprite);
             TextSprite text = new TextSprite
@@ -814,23 +814,12 @@ namespace FireDemo
             m_dbSprites.Add(man);
 
 
-            AbstractRealtimeLightEffect dbPlasmaDisc2 = new RealtimeLightning();
-            dbPlasmaDisc2.Initialize(ringWidth, ringHeight, magnification);
-            dbPlasmaDisc2.SetCoolingStrategy(coolingStrategy);
-            dbPlasmaDisc2.SetPalette(palBorg);
-            dbPlasmaDisc2.AddShape(lsBorgPlasma);
-            dbPlasmaDisc2.AddShape(lsBorgRing);
-            left = (this.Width - ringWidth * magnification) / 5;
-            top = (this.Height - ringHeight * magnification) / 5;
-            dbPlasmaDisc2.Location = new Point(x: left, y: top);
-
             m_palette = palBorg;
             m_lightPen = lpPlasma;
             m_lightShapes.Clear();
             m_lightShapes.Add(lsBorgPlasma);
             m_lightShapes.Add(lsBorgRing);
             m_dbSprites.Add(dbPlasmaDisc);
-            //m_dbSprites.Add(dbPlasmaDisc2);
 
             m_dbSprites.Add(link);
 
@@ -884,7 +873,7 @@ namespace FireDemo
         private void buttonBatmanMultiThread_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            DemoBatman(multithreaded: true);
+            DemoBatman(multithreaded: false);
             buttonDemo_Click(sender, e);
         }
     }
