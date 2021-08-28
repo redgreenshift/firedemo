@@ -340,9 +340,9 @@ namespace FireDemo
             //{ subtract a decay ammount.                        }
 
             // Average these pixels:
-            //. X .
-            //. X .
-            //X X X
+            //. 8 .
+            //. 5 .
+            //1 2 3
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
             poker.LockBits(ImageLockMode.WriteOnly);

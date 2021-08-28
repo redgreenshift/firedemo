@@ -150,7 +150,7 @@ namespace FireDemo
 		{
 			int[][] pixels;
 			Color[] pal;
-			Color lightBrown, darkBrown, darkGreen, lightGreen, orangeShoe, pinkSkin, redShoe, reddishBrownHat, yellow, redMouth;
+			Color lightBrown, darkBrown, pinkSkin, reddishBrownHat, yellow;
 
 			Width = 16;
 			Height = 16;
@@ -176,7 +176,6 @@ namespace FireDemo
 				yellow, // 7
 			};
 
-			//"1 black, 2 pink, 3 ltGreen, 4 dkGreen, 5 brown, 6 hatBrown, 7yellow, 8 orangeShoe, 9 redShoe, 10 eyes, 11 teeth"
 			pixels = new int[][]
 			{
 				new int[] { 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, },
@@ -196,7 +195,6 @@ namespace FireDemo
 				new int[] { 0, 0, 0, 5, 6, 6, 6, 6, 6, 6, 6, 6, 5, 0, 0, 0, },
 				new int[] { 0, 0, 0, 4, 6, 3, 3, 4, 4, 3, 3, 6, 4, 0, 0, 0, },
 			};
-			//"1 black, 2 pink, 3 ltGreen, 4 dkGreen, 5 brown, 6 hatBrown, 7yellow, 8 orangeShoe, 9 redShoe, 10 eyes, 11 teeth"
 
 			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 
@@ -234,7 +232,6 @@ namespace FireDemo
 				Color.Brown, // "2"
 			};
 
-			//"1 black, 2 pink, 3 ltGreen, 4 dkGreen, 5 brown, 6 hatBrown, 7yellow, 8 orangeShoe, 9 redShoe, 10 eyes, 11 teeth"
 			brick = new int[][]
 			{
 				new int[] { 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 2, },
@@ -254,7 +251,6 @@ namespace FireDemo
 				new int[] { 2, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
 				new int[] { 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, },
 			};
-			//"1 black, 2 pink, 3 ltGreen, 4 dkGreen, 5 brown, 6 hatBrown, 7yellow, 8 orangeShoe, 9 redShoe, 10 eyes, 11 teeth"
 
 			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 
@@ -285,7 +281,7 @@ namespace FireDemo
 			Color[] pal;
 
 			Width = 8;
-			Height = 16;
+			Height = 5;
 
 			Color lightBrown = Color.FromArgb(red: 236, green: 100, blue: 55);
 			Color medBrown = Color.FromArgb(red: 168, green: 35, blue: 11);
@@ -388,5 +384,60 @@ namespace FireDemo
 		}
 	}
 
+	// Prototyping, not the final implementation. Way too slow!
+	class SpriteDuplicator : SimpleSprite
+    {
+		public SimpleSprite Sprite { get; set; }
+
+		public SpriteDuplicator()
+        {
+
+        }
+
+        //public void SetGrid(List<Point> grid)
+        //{
+        //    int bmWidth = 16;
+        //    int bmHeight = 16;
+        //    Bitmap foo = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppArgb);
+        //    // TODO: Define how to parameterize this? For now I know I want the Pi device.
+        //    Width = 1024;
+        //    Height = 600;
+        //    Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+        //    int xMax = Width / Sprite.Width;
+        //    for (int xx = 0; xx < xMax; ++xx)
+        //    {
+        //        //Sprite.RenderOneFrameToScreen();
+        //        Form.
+
+        //    }
+
+        //}
+
+        public override void RenderOneFrameToScreen(Graphics graph)
+        {
+			int bmWidth = 16;
+			int bmHeight = 16;
+			Bitmap foo = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppArgb);
+			// TODO: Define how to parameterize this? For now I know I want the Pi device.
+			Width = 1024;
+			Height = 600;
+			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+			int xMax = Width / (Sprite.Width * Sprite.Magnification);
+			int yMax = Height / (Sprite.Height * Sprite.Magnification);
+			for (int yy = 0; yy < yMax; ++yy)
+			{
+				for (int xx = 0; xx < xMax; ++xx)
+				{
+					if (xx < 1 || xx > xMax - 2 || yy < 2 || (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2)) ))
+					{
+						Sprite.Location = new Point(xx * Sprite.Width * Sprite.Magnification, yy * Sprite.Height * Sprite.Magnification);
+						Sprite.RenderOneFrameToScreen(graph);
+					}
+				}
+			}
+		}
+	}
 
 }

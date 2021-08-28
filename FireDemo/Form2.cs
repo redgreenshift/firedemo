@@ -57,6 +57,7 @@ namespace FireDemo
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            Location = new Point(0, 0);
             this.BackColor = Color.DimGray;
             this.Text = "-- Friendly Neighborhood Status Indicator --";
 
@@ -446,7 +447,7 @@ namespace FireDemo
 
             //graph.DrawImage(bmEmpty, left, top, maxWidth*magnification, maxHeight * magnification);
 
-            Color[] palCandle = PaletteGenerator.GetHardCodedFirePalette();
+            Color[] palCandle = PalRealisticFire.New();
             palCandle = PalFlatPalette.New(Color.Orange);
             palCandle = PalRealisticFlameCurve.New(Color.White);
             palCandle = PalRealisticFlameCurve.New(Color.Black);
@@ -823,26 +824,87 @@ namespace FireDemo
 
             m_dbSprites.Add(link);
 
-            BrickWall brick = new BrickWall();
-            brick.InterpolationMode = InterpolationMode.NearestNeighbor;
-            brick.Magnification = 2;
-            int fudgeFactor = brick.Magnification / 2;
-            m_dbSprites.Add(brick);
-            BrickWall brick2 = new BrickWall();
-            brick2.InterpolationMode = InterpolationMode.NearestNeighbor;
-            brick2.Magnification = brick.Magnification;
-            brick2.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, 0);
-            m_dbSprites.Add(brick2);
-            BrickWall brick3 = new BrickWall();
-            brick3.InterpolationMode = InterpolationMode.NearestNeighbor;
-            brick3.Magnification = brick.Magnification;
-            brick3.Location = new Point(0, brick.Height * brick.Magnification - fudgeFactor);
-            m_dbSprites.Add(brick3);
-            BrickWall brick4 = new BrickWall();
-            brick4.InterpolationMode = InterpolationMode.NearestNeighbor;
-            brick4.Magnification = brick.Magnification;
-            brick4.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, brick.Height * brick.Magnification - fudgeFactor);
-            m_dbSprites.Add(brick4);
+            //BrickWall brick = new BrickWall();
+            //brick.InterpolationMode = InterpolationMode.NearestNeighbor;
+            //brick.Magnification = 2;
+            //int fudgeFactor = brick.Magnification / 2;
+            //m_dbSprites.Add(brick);
+            //BrickWall brick2 = new BrickWall();
+            //brick2.InterpolationMode = InterpolationMode.NearestNeighbor;
+            //brick2.Magnification = brick.Magnification;
+            //brick2.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, 0);
+            //m_dbSprites.Add(brick2);
+            //BrickWall brick3 = new BrickWall();
+            //brick3.InterpolationMode = InterpolationMode.NearestNeighbor;
+            //brick3.Magnification = brick.Magnification;
+            //brick3.Location = new Point(0, brick.Height * brick.Magnification - fudgeFactor);
+            //m_dbSprites.Add(brick3);
+            //BrickWall brick4 = new BrickWall();
+            //brick4.InterpolationMode = InterpolationMode.NearestNeighbor;
+            //brick4.Magnification = brick.Magnification;
+            //brick4.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, brick.Height * brick.Magnification - fudgeFactor);
+            //m_dbSprites.Add(brick4);
+
+
+            BrickWall brick1 = new BrickWall();
+            brick1.InterpolationMode = InterpolationMode.NearestNeighbor;
+            brick1.Magnification = 2;
+            SpriteDuplicator brickWall = new SpriteDuplicator();
+            brickWall.Sprite = brick1;
+            m_dbSprites.Add(brickWall);
+
+
+            int fireWidth = 20;
+            int fireHeight = 30;
+            int fireMagnification = 2;
+
+            CauldronBase cauldron1 = new CauldronBase();
+            cauldron1.Location = new Point(man.Location.X - man.Width * man.Magnification * 3, man.Location.Y + man.Height * man.Magnification);
+            cauldron1.Magnification = 5;
+            cauldron1.InterpolationMode = InterpolationMode.NearestNeighbor;
+            m_dbSprites.Add(cauldron1);
+
+            Color[] palCandle = PalRealisticFire.New();
+            CoolingStrategyMap csBonfire1 = new CoolingStrategyMap();
+            csBonfire1.SetMapParameters(width: fireWidth, height: fireHeight,
+                density: 0.6f, min: 8, max: 16, smoothing: 0,
+                shift: true, rotate: true);
+
+            ILightPen lpCandle = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
+            ILightShape lsCandle = new LightShapeCandle();
+            lsCandle.SetPen(lpCandle);
+
+            AbstractRealtimeLightEffect dbCandle = new RealtimeFire();
+            dbCandle.Initialize(fireWidth, fireHeight, fireMagnification);
+            dbCandle.SetCoolingStrategy(csBonfire1);
+            dbCandle.SetPalette(palCandle);
+            dbCandle.AddShape(lsCandle);
+            left = cauldron1.Location.X;
+            top = cauldron1.Location.Y - dbCandle.Height * dbCandle.Magnification + 0;
+            dbCandle.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dbCandle);
+
+
+            CauldronBase cauldron2 = new CauldronBase();
+            cauldron2.Location = new Point(man.Location.X + man.Width * man.Magnification * 3, man.Location.Y + man.Height * man.Magnification);
+            cauldron2.Magnification = cauldron1.Magnification;
+            cauldron2.InterpolationMode = InterpolationMode.NearestNeighbor;
+            m_dbSprites.Add(cauldron2);
+
+            AbstractRealtimeLightEffect dbCandle2 = new RealtimeFire();
+            CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
+            csBonfire2.SetMapParameters(width: fireWidth, height: fireHeight,
+                density: 0.6f, min: 8, max: 16, smoothing: 0,
+                shift: true, rotate: true);
+            dbCandle2.Initialize(fireWidth, fireHeight, fireMagnification);
+            dbCandle2.SetCoolingStrategy(csBonfire2);
+            dbCandle2.SetPalette(palCandle);
+            dbCandle2.AddShape(lsCandle);
+            left = cauldron2.Location.X;
+            top = cauldron2.Location.Y - dbCandle2.Height * dbCandle2.Magnification + 0;
+            dbCandle2.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dbCandle2);
+
 
             TextSprite text = new TextSprite
             {
