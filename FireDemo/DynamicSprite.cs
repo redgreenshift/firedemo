@@ -29,7 +29,6 @@ namespace FireDemo
             //front = new Bitmap(width, height, PixelFormat.Format24bppRgb);
             //front = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
             poker = new BitmapLocker(Form);
-            thePalette = PalRealisticFire.New();
         }
 
         public void SetPalette(Color[] pal)
