@@ -38,6 +38,7 @@ namespace FireDemo
         }
 
         // Cheap way to calculate framerate.
+        // No matter how fast it goes, doesn't go above 65 FPS
         int iFrame = 0;
         DateTime dtEnd = DateTime.Now;
         private void UpdateFramerate()
@@ -57,13 +58,19 @@ namespace FireDemo
         {
             this.Text = "-- Friendly Neighborhood Status Indicator --";
 
-            SimpleCandle();
-            //DemoBatman();
-            DemoLightning();
+            //SimpleCandle();
+            DemoBatman(multithreaded: true);
+            //DemoLightning();
             //DemoBorg();
             //DemoPlasmaRainbow();
 
-            buttonDemo_Click(null, null);
+            //buttonDemo_Click(null, null);
+            //UpdateVisibleUI();
+            //this.BackColor = Color.Black;
+            //groupBox1.Hide();
+            //RenderAtTopSpeed();
+//            buttonDndStatus_Click(null, null);
+        }
         }
 
         private void DemoPlasmaRainbow()
@@ -339,6 +346,14 @@ namespace FireDemo
             int left, top;
 
             Color[] palLightning = PaletteGenerator.GetHardCodedLightningPalette();
+            palLightning = PalLightning.New(Color.Red);
+            palLightning = PalLightning.New(Color.Orange);
+            palLightning = PalLightning.New(Color.Yellow);
+            palLightning = PalLightning.New(Color.Green);
+            palLightning = PalLightning.New(Color.Blue);
+            palLightning = PalLightning.New(Color.Violet);
+            //palLightning = PalLightning.New();
+            palLightning = PalLightning.New(Color.Orange);
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(27);
             ILightPen lpLightning = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsLightning = new LightShapeLightning();
@@ -441,6 +456,8 @@ namespace FireDemo
             Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
             palCandle = PalFourPointLinear.New(c1, c2, c3, c4);
 
+            //palCandle = PalLightning.New(Color.Yellow); // A way to test the lightning algorithm is to see how it looks in candle form
+
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
@@ -517,6 +534,45 @@ namespace FireDemo
         }
 
 
+#if false
+        struct TheModes
+        {
+            public TheModes(string s, InterpolationMode m)
+            {
+                name = s;
+                mode = m;
+            }
+            public string name;
+            public InterpolationMode mode;
+
+        };
+
+        private void ChangeMode()
+        {
+            TheModes[] modes = {
+                new TheModes("NearestNeighbor", InterpolationMode.NearestNeighbor), // PI (YES)
+                new TheModes("Low", InterpolationMode.Low), // PI (NO)
+                new TheModes("Default", InterpolationMode.Default), // PI (YES, probably Bilinear)
+                new TheModes("High", InterpolationMode.High), // PI (NO)
+                new TheModes("Bilinear", InterpolationMode.Bilinear), // PI (Yes)
+                new TheModes("HighQualityBilinear", InterpolationMode.HighQualityBilinear), // PI (NO)
+                new TheModes("Bicubic", InterpolationMode.Bicubic), // PI (YES!)
+                new TheModes("HighQualityBicubic", InterpolationMode.HighQualityBicubic), // PI (NO)
+            };
+
+            int ii;
+            for (ii = 0; ii < modes.Length; ++ii)
+            {
+                if (m_dbSprite.InterpolationMode == modes[ii].mode)
+                    break;
+            }
+            ++ii;
+            if (ii == modes.Length)
+                ii = 0;
+            buttonChange.Text = modes[ii].name;
+            m_dbSprite.InterpolationMode = modes[ii].mode;
+        }
+#endif
         bool m_largerFlame = false;
         /// <summary>
         /// Just a proof-of-concept that I can still change things on the fly, even in the refactored form
@@ -525,13 +581,6 @@ namespace FireDemo
         /// <param name="e"></param>
         private void buttonChange_Click(object sender, EventArgs e)
         {
-            //int len = m_palette.Length;
-            //for (int i = 0; i < len / 2; ++i)
-            //{
-            //    Color temp = m_palette[i];
-            //    m_palette[i] = m_palette[len - i - 1];
-            //    m_palette[len - i - 1] = temp;
-            //}
             m_largerFlame = !m_largerFlame;
             if (m_largerFlame)
                 m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
@@ -606,7 +655,7 @@ namespace FireDemo
             {
                 Location = new Point(0, 0),
                 Text = "Away",
-                Color = Color.Orange,
+                Color = Color.Yellow,
             };
             m_dbSprites.Add(dbCandle);
             m_dbSprites.Add(tsAway);
@@ -665,8 +714,15 @@ namespace FireDemo
 
             Color[] palBorg = PalPlasma.New(Color.Green);
 
-            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
-            coolingStrategy = new CoolingStrategyConst(11); // 11 looks better. Looks faster
+            ICoolingStrategy coolingStrategy;
+            //coolingStrategy = new CoolingStrategyConst(7);
+            // Varying the density showed no improvement over constant cooling (for Plasma)
+            //m_coolingStrategy = new CoolingStrategyMap();
+            //m_coolingStrategy.SetMapParameters(width: ringWidth, height: ringHeight,
+            //    density: 1.0f, min: 10, max: 13, smoothing: 0,
+            //    shift: false, rotate: false);
+            //coolingStrategy = m_coolingStrategy;
+            coolingStrategy = new CoolingStrategyConst(11); // 11 looks better. Looks faster than 7
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsBorgRing = new LightShapeBorgRing();
             ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
