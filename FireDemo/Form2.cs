@@ -22,6 +22,7 @@ namespace FireDemo
         List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
         private GenericRealtimeFlame m_genericFlame;
         int m_framesPerSecond = 64;
+        int SecondsBeforeMovingTextAround = 10;
 
         public Form2()
         {
@@ -669,6 +670,8 @@ namespace FireDemo
                 Location = new Point(0, 0),
                 Text = "Away",
                 Color = Color.Yellow,
+                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(dbCandle);
             m_dbSprites.Add(tsAway);
@@ -686,7 +689,9 @@ namespace FireDemo
             {
                 Text = "I'm OOF",
                 Location = new Point(300, 0),
-                Color = Color.DarkMagenta
+                Color = Color.DarkMagenta,
+                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 
@@ -705,7 +710,9 @@ namespace FireDemo
             {
                 Text = "I'm Busy",
                 Location = new Point(120, 0),
-                Color = Color.Red
+                Color = Color.Red,
+                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 
@@ -765,7 +772,9 @@ namespace FireDemo
             {
                 Text = "Available",
                 Location = new Point(120, 0),
-                Color = Color.LightGreen
+                Color = Color.LightGreen,
+                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 

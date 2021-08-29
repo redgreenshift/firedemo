@@ -1134,6 +1134,7 @@ namespace FireDemo
     // TODO: JRDV: TextSprite with bounds? Random placement???
     class TextSprite : AbstractDynamicSprite
     {
+        Random rng = new Random();
         public string Text { get; set; }
 
         private Color color;
@@ -1145,6 +1146,9 @@ namespace FireDemo
                 SetBrushColor(value);
             }
         }
+
+        public Rectangle Bounds { get; set; }
+        public TimeSpan Period { get; set; }
 
         private Font Font { get; set; }
         private Brush Brush { get; set; }
@@ -1218,8 +1222,17 @@ namespace FireDemo
                 Brush = new SolidBrush(color);
         }
 
+        DateTime lastMove = DateTime.MinValue;
         public override void RenderOneFrameToScreen(Graphics graph)
         {
+            DateTime thisTime = DateTime.Now;
+            if (Period != TimeSpan.Zero && lastMove < thisTime - Period)
+            {
+                graph.FillRectangle(Brushes.Black, Location.X, Location.Y, width: 150, height: 100);
+
+                lastMove = thisTime;
+                Location = new Point(rng.Next(Bounds.X, Bounds.X + Bounds.Width), rng.Next(Bounds.Y, Bounds.Y + Bounds.Height));
+            }
             graph.DrawString(Text, Font, Brush, Location);
         }
     }
