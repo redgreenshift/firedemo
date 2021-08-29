@@ -18,6 +18,11 @@ namespace FireDemo
 		public InterpolationMode InterpolationMode { get; set; }
 		public CompositingMode CompositingMode { get; set; }
 
+		public Color GetPixel(int x, int y)
+        {
+			return Form.GetPixel(x, y);
+		}
+
 		public SimpleSprite()
 		{
 			this.InterpolationMode = InterpolationMode.Bicubic; // Default to BEST quality
@@ -61,11 +66,11 @@ namespace FireDemo
 		}
 	}
 
-	class LinkHoldingItem : SimpleSprite
+	class HeroHoldingItem : SimpleSprite
     {
-		public LinkHoldingItem()
+		public HeroHoldingItem()
 		{
-			int[][] link;
+			int[][] hero;
 			Color[] pal;
 			Color darkBrown, darkGreen, lightGreen, orangeShoe, pinkSkin, redShoe, reddishBrownHat, yellow, redMouth;
 
@@ -98,7 +103,7 @@ namespace FireDemo
 			};
 
 			//"1 black, 2 pink, 3 ltGreen, 4 dkGreen, 5 brown, 6 hatBrown, 7yellow, 8 orangeShoe, 9 redShoe, 10 eyes, 11 teeth"
-			link = new int[][]
+			hero = new int[][]
 			{
 				new int[] { 1, 2, 2, 1, 0, 1, 1, 3, 3, 1, 1, 0, 1, 2, 2, 1, },
 				new int[] { 1, 2, 2, 2, 1, 4, 3, 3, 3, 3, 4, 1, 2, 2, 2, 1, },
@@ -130,7 +135,7 @@ namespace FireDemo
 				for (int x = 0; x < Width; ++x)
                 {
 					Color color = Color.Transparent;
-					int i = link[y][x];
+					int i = hero[y][x];
 					if (i > 0)
                     {
 						color = pal[i];
@@ -385,6 +390,9 @@ namespace FireDemo
 	}
 
 	// Prototyping, not the final implementation. Fast enough, but not written very well.
+	// The idea is that I would like to be able to flatten multiple sprites into a single bitmap for speed,
+	// and eventually generalize that in this class. For now, it's hard coded for the one composite "scene"
+	// I want to create that is reminicient of the "It's dangerous to go alone, take this thing"
 	class SpriteCompositor : SimpleSprite
     {
 		public SimpleSprite Sprite { get; set; }
@@ -398,7 +406,7 @@ namespace FireDemo
 		}
 
 
-		void Draw(Bitmap source, Bitmap dest, int x, int y, int magnification)
+		void Draw(SimpleSprite source, Bitmap dest, int x, int y, int magnification)
         {
 			for (int yy = y; yy < dest.Height && yy < y + source.Height; ++yy)
             {
@@ -419,15 +427,6 @@ namespace FireDemo
 								dest.SetPixel(destX, destY, c);
 						}
 					}
-
-					//for (int my = 0; my <= magnification; ++my)
-					//{
-					//	for (int mx = 0; mx <= magnification; ++mx)
-					//	{
-					//		dest.SetPixel(xx + mx, yy + my, c);
-					//	}
-					//}
-
 				}
 			}
         }
@@ -448,7 +447,7 @@ namespace FireDemo
 					{
 						int x = xx * Sprite.Width * Sprite.Magnification;
 						int y = yy * Sprite.Height * Sprite.Magnification;
-						Draw(Sprite.Form, Form, x, y, Sprite.Magnification);
+						Draw(Sprite, Form, x, y, Sprite.Magnification);
 					}
 				}
 			}

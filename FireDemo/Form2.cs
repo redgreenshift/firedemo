@@ -794,14 +794,14 @@ namespace FireDemo
             top = (this.Height - ringHeight * magnification) / 2 + 50;
             dbPlasmaDisc.Location = new Point(x: left, y: top);
 
-            LinkHoldingItem link = new LinkHoldingItem();
-            link.Magnification = 3;
+            HeroHoldingItem hero = new HeroHoldingItem();
+            hero.Magnification = 3;
             left = dbPlasmaDisc.Location.X;
             top = dbPlasmaDisc.Location.Y;
-            left +=   (ringWidth / 2) - (link.Width * link.Magnification / 2);
+            left +=   (ringWidth / 2) - (hero.Width * hero.Magnification / 2);
             top += ringHeight * magnification;
-            link.Location = new Point(left, top);
-            link.InterpolationMode = InterpolationMode.NearestNeighbor;
+            hero.Location = new Point(left, top);
+            hero.InterpolationMode = InterpolationMode.NearestNeighbor;
 
 
             OldMan man = new OldMan();
@@ -822,29 +822,7 @@ namespace FireDemo
             m_lightShapes.Add(lsBorgRing);
             m_dbSprites.Add(dbPlasmaDisc);
 
-            m_dbSprites.Add(link);
-
-            //BrickWall brick = new BrickWall();
-            //brick.InterpolationMode = InterpolationMode.NearestNeighbor;
-            //brick.Magnification = 2;
-            //int fudgeFactor = brick.Magnification / 2;
-            //m_dbSprites.Add(brick);
-            //BrickWall brick2 = new BrickWall();
-            //brick2.InterpolationMode = InterpolationMode.NearestNeighbor;
-            //brick2.Magnification = brick.Magnification;
-            //brick2.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, 0);
-            //m_dbSprites.Add(brick2);
-            //BrickWall brick3 = new BrickWall();
-            //brick3.InterpolationMode = InterpolationMode.NearestNeighbor;
-            //brick3.Magnification = brick.Magnification;
-            //brick3.Location = new Point(0, brick.Height * brick.Magnification - fudgeFactor);
-            //m_dbSprites.Add(brick3);
-            //BrickWall brick4 = new BrickWall();
-            //brick4.InterpolationMode = InterpolationMode.NearestNeighbor;
-            //brick4.Magnification = brick.Magnification;
-            //brick4.Location = new Point(brick.Width * brick.Magnification - fudgeFactor, brick.Height * brick.Magnification - fudgeFactor);
-            //m_dbSprites.Add(brick4);
-
+            m_dbSprites.Add(hero);
 
             BrickWall brick1 = new BrickWall();
             brick1.InterpolationMode = InterpolationMode.NearestNeighbor;
