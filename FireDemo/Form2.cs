@@ -856,32 +856,34 @@ namespace FireDemo
             int fireHeight = 30;
             int fireMagnification = 2;
 
+            Color[] palCandle = PalRealisticFire.New();
+
             CauldronBase cauldron1 = new CauldronBase();
-            cauldron1.Location = new Point(man.Location.X - man.Width * man.Magnification * 3, man.Location.Y + man.Height * man.Magnification);
+            cauldron1.Location = new Point(
+                man.Location.X - man.Width * man.Magnification * 3,
+                man.Location.Y + man.Height * man.Magnification);
             cauldron1.Magnification = 5;
             cauldron1.InterpolationMode = InterpolationMode.NearestNeighbor;
             m_dbSprites.Add(cauldron1);
 
-            Color[] palCandle = PalRealisticFire.New();
             CoolingStrategyMap csBonfire1 = new CoolingStrategyMap();
             csBonfire1.SetMapParameters(width: fireWidth, height: fireHeight,
                 density: 0.6f, min: 8, max: 16, smoothing: 0,
                 shift: true, rotate: true);
 
-            ILightPen lpCandle = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
-            ILightShape lsCandle = new LightShapeCandle();
-            lsCandle.SetPen(lpCandle);
+            ILightPen lpBonfire = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);
+            ILightShape lsBonfire = new LightShapeCandle();
+            lsBonfire.SetPen(lpBonfire);
 
-            AbstractRealtimeLightEffect dbCandle = new RealtimeFire();
-            dbCandle.Initialize(fireWidth, fireHeight, fireMagnification);
-            dbCandle.SetCoolingStrategy(csBonfire1);
-            dbCandle.SetPalette(palCandle);
-            dbCandle.AddShape(lsCandle);
+            AbstractRealtimeLightEffect dbCauldron1 = new RealtimeFire();
+            dbCauldron1.Initialize(fireWidth, fireHeight, fireMagnification);
+            dbCauldron1.SetCoolingStrategy(csBonfire1);
+            dbCauldron1.SetPalette(palCandle);
+            dbCauldron1.AddShape(lsBonfire);
             left = cauldron1.Location.X;
-            top = cauldron1.Location.Y - dbCandle.Height * dbCandle.Magnification + 0;
-            dbCandle.Location = new Point(x: left, y: top);
-            m_dbSprites.Add(dbCandle);
-
+            top = cauldron1.Location.Y - dbCauldron1.Height * dbCauldron1.Magnification + 0; // TODO: JRDV: The last line of the fire is black. Do not want that. Want it to match up with the caudron flush
+            dbCauldron1.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dbCauldron1);
 
             CauldronBase cauldron2 = new CauldronBase();
             cauldron2.Location = new Point(man.Location.X + man.Width * man.Magnification * 3, man.Location.Y + man.Height * man.Magnification);
@@ -889,19 +891,62 @@ namespace FireDemo
             cauldron2.InterpolationMode = InterpolationMode.NearestNeighbor;
             m_dbSprites.Add(cauldron2);
 
-            AbstractRealtimeLightEffect dbCandle2 = new RealtimeFire();
+            AbstractRealtimeLightEffect dbCauldron2 = new RealtimeFire();
             CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
             csBonfire2.SetMapParameters(width: fireWidth, height: fireHeight,
                 density: 0.6f, min: 8, max: 16, smoothing: 0,
                 shift: true, rotate: true);
-            dbCandle2.Initialize(fireWidth, fireHeight, fireMagnification);
-            dbCandle2.SetCoolingStrategy(csBonfire2);
-            dbCandle2.SetPalette(palCandle);
-            dbCandle2.AddShape(lsCandle);
+            dbCauldron2.Initialize(fireWidth, fireHeight, fireMagnification);
+            dbCauldron2.SetCoolingStrategy(csBonfire2);
+            dbCauldron2.SetPalette(palCandle);
+            dbCauldron2.AddShape(lsBonfire);
             left = cauldron2.Location.X;
-            top = cauldron2.Location.Y - dbCandle2.Height * dbCandle2.Magnification + 0;
-            dbCandle2.Location = new Point(x: left, y: top);
-            m_dbSprites.Add(dbCandle2);
+            top = cauldron2.Location.Y - dbCauldron2.Height * dbCauldron2.Magnification + 0;
+            dbCauldron2.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dbCauldron2);
+
+            // TODO: Add 2 torches, and the life bar
+
+            ILightPen lpTorch = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
+            //ILightPen lpTorch = new LightPen(fill: 0.08f, min: 200, max: 255, useFullRange: true);
+            //ILightPen lpTorch = new LightPen(fill: 1.0f, min: 200, max: 255, useFullRange: true);
+            ILightShape lsTorch = new LightShapeCandle();
+            lsTorch.SetPen(lpTorch);
+
+            int torchFlameHeight = 25;
+            int torchFlameWidth = 10;
+            int torchMagnification = 4;
+            torchFlameHeight = 75;
+            torchFlameWidth = 20;
+            torchMagnification = 2;
+
+            TorchHandle torch1 = new TorchHandle();
+            torch1.Location = new Point(
+                man.Location.X - man.Width * man.Magnification * 3,
+                man.Location.Y + (5 * man.Height * man.Magnification));
+            torch1.Magnification = 5;
+            torch1.InterpolationMode = InterpolationMode.NearestNeighbor;
+            m_dbSprites.Add(torch1);
+
+            CoolingStrategyMap csTorch1 = new CoolingStrategyMap();
+            //csTorch1.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
+            //    density: 0.4f, min: 5, max: 23, smoothing: 1,
+            //    shift: true, rotate: true);
+            csTorch1.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
+                density: 0.4f, min: 5, max: 13, smoothing: 5,
+                shift: true, rotate: true);
+
+            AbstractRealtimeLightEffect dbTorch1 = new RealtimeFire();
+            //dbTorch1 = new RealtimeCandleflame();
+            dbTorch1.Initialize(torchFlameWidth, torchFlameHeight, magnification: torchMagnification);
+            dbTorch1.InterpolationMode = InterpolationMode.NearestNeighbor;
+            dbTorch1.SetCoolingStrategy(csTorch1);
+            dbTorch1.SetPalette(palCandle);
+            dbTorch1.AddShape(lsTorch);
+            left = torch1.Location.X;
+            top = torch1.Location.Y - dbTorch1.Height * dbTorch1.Magnification + 0; // TODO: JRDV: The last line of the fire is black. Do not want that. Want it to match up with the caudron flush
+            dbTorch1.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dbTorch1);
 
 
             TextSprite text = new TextSprite

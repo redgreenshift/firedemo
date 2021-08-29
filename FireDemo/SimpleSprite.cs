@@ -336,7 +336,7 @@ namespace FireDemo
 			Color[] pal;
 
 			Width = 8;
-			Height = 5;
+			Height = 16;
 
 			Color lightBrown = Color.FromArgb(red: 236, green: 100, blue: 55);
 			Color medBrown = Color.FromArgb(red: 168, green: 35, blue: 11);
