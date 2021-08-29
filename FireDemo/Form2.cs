@@ -350,15 +350,15 @@ namespace FireDemo
             int magnification = 2;
             int left, top;
 
-            Color[] palLightning = PaletteGenerator.GetHardCodedLightningPalette();
-            palLightning = PalLightning.New(Color.Red);
-            palLightning = PalLightning.New(Color.Orange);
-            palLightning = PalLightning.New(Color.Yellow);
-            palLightning = PalLightning.New(Color.Green);
-            palLightning = PalLightning.New(Color.Blue);
-            palLightning = PalLightning.New(Color.Violet);
-            //palLightning = PalLightning.New();
-            palLightning = PalLightning.New(Color.Orange);
+            Color[] palLightning;
+            //palLightning = PaletteGenerator.GetHardCodedLightningPalette();
+            //palLightning = PalLightning.New(Color.Red);
+            //palLightning = PalLightning.New(Color.Orange);
+            //palLightning = PalLightning.New(Color.Yellow);
+            //palLightning = PalLightning.New(Color.Green);
+            //palLightning = PalLightning.New(Color.Blue);
+            //palLightning = PalLightning.New(Color.Violet);
+            palLightning = PalLightning.New();
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(27);
             ILightPen lpLightning = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsLightning = new LightShapeLightning();
