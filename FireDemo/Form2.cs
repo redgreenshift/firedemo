@@ -870,12 +870,16 @@ namespace FireDemo
             int cauldronFireWidth = 19;
             int cauldronFireHeight = 25;
             int cauldronFireMagnification = 2;
+            cauldronFireWidth = 19 * 2 - 1;
+            cauldronFireHeight = 25 * 2;
+            cauldronFireMagnification = 1;
 
             Color[] palCauldron;
             //palCauldron = PalRealisticFlameCurve.New(Color.DarkRed);
             palCauldron = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.White);
             //palCauldron = PalFourPointLinear.New(Color.Black, Color.DarkOrange, Color.Yellow, Color.White);
             Color[] palTorch = PalRealisticFire.New();
+            //palCauldron = palTorch;
 
             CauldronBase cauldronBase1 = new CauldronBase
             {
@@ -889,10 +893,10 @@ namespace FireDemo
 
             CoolingStrategyMap csBonfire1 = new CoolingStrategyMap();
             csBonfire1.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
-                density: 0.6f, min: 8, max: 16, smoothing: 0,
+                density: 0.5f, min: 8, max: 16, smoothing: 0,
                 shift: true, rotate: true);
 
-            ILightPen lpBonfire1 = new LightPen(fill: 1,0f, min: 54, max: 255, useFullRange: true);
+            ILightPen lpBonfire1 = new LightPen(fill: 0.6f, min: 54, max: 255, useFullRange: true);
             ILightShape lsBonfire1 = new LightShapeCandle();
             lsBonfire1.SetPen(lpBonfire1);
 
@@ -920,10 +924,10 @@ namespace FireDemo
             AbstractRealtimeLightEffect dbCauldronFire2 = new RealtimeFire();
             CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
             csBonfire2.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
-                density: 0.6f, min: 8, max: 16, smoothing: 0,
+                density: 0.6f, min: 6, max: 13, smoothing: 0,
                 shift: true, rotate: true);
 
-            ILightPen lpBonfire2 = new LightPen(fill: 0.5f, min: 34, max: 255, useFullRange: true);
+            ILightPen lpBonfire2 = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: true);
             ILightShape lsBonfire2 = new LightShapeCandle();
             lsBonfire2.SetPen(lpBonfire2);
 
