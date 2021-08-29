@@ -1131,7 +1131,6 @@ namespace FireDemo
     }
 
 
-    // TODO: JRDV: TextSprite with bounds? Random placement???
     class TextSprite : AbstractDynamicSprite
     {
         Random rng = new Random();
@@ -1153,7 +1152,6 @@ namespace FireDemo
         private Font Font { get; set; }
         private Brush Brush { get; set; }
 
-        // TODO: JRDV: Want to have it randomly move from time to time.
         public TextSprite()
         {
             this.Font = SystemFonts.DefaultFont;
