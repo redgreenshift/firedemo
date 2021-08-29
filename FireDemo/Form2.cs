@@ -961,13 +961,13 @@ namespace FireDemo
                 man.Location.X - man.Width * man.Magnification * 5,
                 man.Location.Y + (5 * man.Height * man.Magnification)),
                 Magnification = 4,
-                InterpolationMode = InterpolationMode.NearestNeighbor
+                InterpolationMode = InterpolationMode.NearestNeighbor,
             };
             m_dbSprites.Add(torchHandle1);
 
             CoolingStrategyMap csTorch1 = new CoolingStrategyMap();
             csTorch1.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
-                density: 0.4f, min: 5, max: 23, smoothing: 1,
+                density: 0.4f, min: 3, max: 21, smoothing: 1,
                 shift: true, rotate: true);
 
             AbstractRealtimeLightEffect dbTorch1 = new RealtimeFire();
@@ -987,13 +987,13 @@ namespace FireDemo
                 man.Location.X + man.Width * man.Magnification * 5,
                 man.Location.Y + (5 * man.Height * man.Magnification)),
                 Magnification = torchHandle1.Magnification,
-                InterpolationMode = InterpolationMode.NearestNeighbor
+                InterpolationMode = InterpolationMode.NearestNeighbor,
             };
             m_dbSprites.Add(torchHandle2);
 
             CoolingStrategyMap csTorch2 = new CoolingStrategyMap();
             csTorch2.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
-                density: 0.4f, min: 3, max: 17, smoothing: 1,
+                density: 0.3f, min: 5, max: 23, smoothing: 1,
                 shift: true, rotate: true);
 
             AbstractRealtimeLightEffect dbTorch2 = new RealtimeFire();
