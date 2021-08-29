@@ -23,12 +23,19 @@ namespace FireDemo
             this.Magnification = magnification;
             this.Width = width;
             this.Height = height;
-            //front = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-            Form = new Bitmap(width, height, PixelFormat.Format32bppRgb);
-            // TODO: JRDV: Is PixelFormat.Format24bppRgb faster? Unsure but this is working. Measure later
-            //front = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            //front = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
+
+            //Form = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            //Form = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
+            //Form = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+
+            // 32bit with Alpha seems slightly faster, or at the very least not noticibly slower
+            // for the largest fire shapes, so no need to parameterize the value for now.
+            // Therefore this is fast enough for now.
+            Form = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             poker = new BitmapLocker(Form);
+
+            //for (int x = 0; x < Width; ++x)
+            //    Form.SetPixel(x, Height - 1, Color.Transparent);
         }
 
         public void SetPalette(Color[] pal)
