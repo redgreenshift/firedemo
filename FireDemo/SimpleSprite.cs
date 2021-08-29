@@ -488,10 +488,17 @@ namespace FireDemo
 				}
 			}
 		}
+
+		int m_iNeedToRender = 0;
 		public override void RenderOneFrameToScreen(Graphics graph)
         {
-			base.RenderOneFrameToScreen(graph);
-			//NaiveRender(graph);
+			// Don't need to spend time redrawing this every time, so we can just render once,
+			// or every once in a while to make sure no artifacts.
+			if (m_iNeedToRender++ % 60 == 1)
+			{
+				base.RenderOneFrameToScreen(graph);
+				//NaiveRender(graph);
+			}
 		}
 	}
 
