@@ -449,10 +449,11 @@ namespace FireDemo
 
             //graph.DrawImage(bmEmpty, left, top, maxWidth*magnification, maxHeight * magnification);
 
-            Color[] palCandle = PalRealisticFire.New();
-            palCandle = PalFlatPalette.New(Color.Orange);
-            palCandle = PalRealisticFlameCurve.New(Color.White);
-            palCandle = PalRealisticFlameCurve.New(Color.Black);
+            Color[] palCandle;
+            //palCandle = PalRealisticFire.New();
+            //palCandle = PalFlatPalette.New(Color.Orange);
+            //palCandle = PalRealisticFlameCurve.New(Color.White);
+            //palCandle = PalRealisticFlameCurve.New(Color.Black);
             //palCandle = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.Blue);
 
             Color c1 = Color.FromArgb(0, 0, 0);       // Black
@@ -474,7 +475,8 @@ namespace FireDemo
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
-            AbstractRealtimeLightEffect dbCandle = new RealtimeCandleflame();
+            AbstractRealtimeLightEffect dbCandle;
+            //dbCandle = new RealtimeCandleflame();
             m_genericFlame = new GenericRealtimeFlame();
             dbCandle = m_genericFlame;
             dbCandle.Initialize(fireWidth, fireHeight, magnification);
