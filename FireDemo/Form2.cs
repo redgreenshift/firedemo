@@ -867,7 +867,7 @@ namespace FireDemo
             m_dbSprites.Add(brickWall);
 
 
-            int cauldronFireWidth = 18;
+            int cauldronFireWidth = 19;
             int cauldronFireHeight = 25;
             int cauldronFireMagnification = 2;
 
@@ -902,7 +902,7 @@ namespace FireDemo
             dbCauldronFire1.SetCoolingStrategy(csBonfire1);
             dbCauldronFire1.SetPalette(palCauldron);
             dbCauldronFire1.AddShape(lsBonfire1);
-            left = cauldronBase1.Location.X;
+            left = cauldronBase1.Location.X + 1;
             top = cauldronBase1.Location.Y - (dbCauldronFire1.Height - 1)* dbCauldronFire1.Magnification + 1;
             dbCauldronFire1.Location = new Point(x: left, y: top);
             m_dbSprites.Add(dbCauldronFire1);
@@ -932,7 +932,7 @@ namespace FireDemo
             dbCauldronFire2.SetCoolingStrategy(csBonfire2);
             dbCauldronFire2.SetPalette(palCauldron);
             dbCauldronFire2.AddShape(lsBonfire2);
-            left = cauldronBase2.Location.X;
+            left = cauldronBase2.Location.X + 1;
             top = cauldronBase2.Location.Y - (dbCauldronFire2.Height - 1) * dbCauldronFire2.Magnification + 1;
             dbCauldronFire2.Location = new Point(x: left, y: top);
             m_dbSprites.Add(dbCauldronFire2);
@@ -943,30 +943,31 @@ namespace FireDemo
             //lpTorch = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
             //lpTorch = new LightPen(fill: 0.08f, min: 200, max: 255, useFullRange: true);
             //lpTorch = new LightPen(fill: 1.0f, min: 200, max: 255, useFullRange: true);
-            lpTorch = new LightPen(fill: 0.5f, min: 14, max: 255, useFullRange: true);
+            //lpTorch = new LightPen(fill: 0.5f, min: 34, max: 255, useFullRange: true);
+            lpTorch = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
             ILightShape lsTorch = new LightShapeCandle();
             lsTorch.SetPen(lpTorch);
 
             int torchFlameHeight = 25;
             int torchFlameWidth = 10;
             int torchMagnification = 4;
-            torchFlameHeight = 75;
-            torchFlameWidth = 20;
-            torchMagnification = 2;
+            torchFlameHeight = 35;
+            torchFlameWidth = 12;
+            torchMagnification = 3;
 
             TorchHandle torchHandle1 = new TorchHandle
             {
                 Location = new Point(
                 man.Location.X - man.Width * man.Magnification * 5,
                 man.Location.Y + (5 * man.Height * man.Magnification)),
-                Magnification = 5,
+                Magnification = 4,
                 InterpolationMode = InterpolationMode.NearestNeighbor
             };
             m_dbSprites.Add(torchHandle1);
 
             CoolingStrategyMap csTorch1 = new CoolingStrategyMap();
             csTorch1.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
-                density: 0.4f, min: 5, max: 13, smoothing: 5,
+                density: 0.4f, min: 5, max: 23, smoothing: 1,
                 shift: true, rotate: true);
 
             AbstractRealtimeLightEffect dbTorch1 = new RealtimeFire();
@@ -975,7 +976,7 @@ namespace FireDemo
             dbTorch1.SetCoolingStrategy(csTorch1);
             dbTorch1.SetPalette(palTorch);
             dbTorch1.AddShape(lsTorch);
-            left = torchHandle1.Location.X;
+            left = torchHandle1.Location.X - 2;
             top = torchHandle1.Location.Y - (dbTorch1.Height - 1) * dbTorch1.Magnification + 1;
             dbTorch1.Location = new Point(x: left, y: top);
             m_dbSprites.Add(dbTorch1);
@@ -985,14 +986,14 @@ namespace FireDemo
                 Location = new Point(
                 man.Location.X + man.Width * man.Magnification * 5,
                 man.Location.Y + (5 * man.Height * man.Magnification)),
-                Magnification = 5,
+                Magnification = torchHandle1.Magnification,
                 InterpolationMode = InterpolationMode.NearestNeighbor
             };
             m_dbSprites.Add(torchHandle2);
 
             CoolingStrategyMap csTorch2 = new CoolingStrategyMap();
             csTorch2.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
-                density: 0.4f, min: 5, max: 13, smoothing: 5,
+                density: 0.4f, min: 3, max: 17, smoothing: 1,
                 shift: true, rotate: true);
 
             AbstractRealtimeLightEffect dbTorch2 = new RealtimeFire();
@@ -1001,7 +1002,7 @@ namespace FireDemo
             dbTorch2.SetCoolingStrategy(csTorch2);
             dbTorch2.SetPalette(palTorch);
             dbTorch2.AddShape(lsTorch);
-            left = torchHandle2.Location.X;
+            left = torchHandle2.Location.X - 2;
             top = torchHandle2.Location.Y - (dbTorch2.Height - 1) * dbTorch2.Magnification + 1;
             dbTorch2.Location = new Point(x: left, y: top);
             m_dbSprites.Add(dbTorch2);
