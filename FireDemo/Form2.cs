@@ -1019,5 +1019,10 @@ namespace FireDemo
             DemoBatman(multithreaded: false);
             buttonDemo_Click(sender, e);
         }
+
+        private void buttonQuit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

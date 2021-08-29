@@ -41,6 +41,7 @@ namespace FireDemo
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonBatmanMultiThread = new System.Windows.Forms.Button();
             this.buttonRainBORG = new System.Windows.Forms.Button();
+            this.buttonQuit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,6 +126,7 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonQuit);
             this.groupBox1.Controls.Add(this.buttonBatmanMultiThread);
             this.groupBox1.Controls.Add(this.buttonRainBORG);
             this.groupBox1.Controls.Add(this.buttonAwayStatus);
@@ -144,7 +146,7 @@ namespace FireDemo
             // 
             this.buttonBatmanMultiThread.Location = new System.Drawing.Point(185, 117);
             this.buttonBatmanMultiThread.Name = "buttonBatmanMultiThread";
-            this.buttonBatmanMultiThread.Size = new System.Drawing.Size(137, 41);
+            this.buttonBatmanMultiThread.Size = new System.Drawing.Size(171, 90);
             this.buttonBatmanMultiThread.TabIndex = 8;
             this.buttonBatmanMultiThread.Text = "Batman ST";
             this.buttonBatmanMultiThread.UseVisualStyleBackColor = true;
@@ -152,13 +154,23 @@ namespace FireDemo
             // 
             // buttonRainBORG
             // 
-            this.buttonRainBORG.Location = new System.Drawing.Point(185, 164);
+            this.buttonRainBORG.Location = new System.Drawing.Point(185, 213);
             this.buttonRainBORG.Name = "buttonRainBORG";
-            this.buttonRainBORG.Size = new System.Drawing.Size(137, 41);
+            this.buttonRainBORG.Size = new System.Drawing.Size(171, 90);
             this.buttonRainBORG.TabIndex = 7;
             this.buttonRainBORG.Text = "RainBORG";
             this.buttonRainBORG.UseVisualStyleBackColor = true;
             this.buttonRainBORG.Click += new System.EventHandler(this.buttonRainBORG_Click);
+            // 
+            // buttonQuit
+            // 
+            this.buttonQuit.Location = new System.Drawing.Point(414, 412);
+            this.buttonQuit.Name = "buttonQuit";
+            this.buttonQuit.Size = new System.Drawing.Size(175, 86);
+            this.buttonQuit.TabIndex = 9;
+            this.buttonQuit.Text = "Quit";
+            this.buttonQuit.UseVisualStyleBackColor = true;
+            this.buttonQuit.Click += new System.EventHandler(this.buttonQuit_Click);
             // 
             // Form2
             // 
@@ -190,5 +202,6 @@ namespace FireDemo
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button buttonRainBORG;
         private System.Windows.Forms.Button buttonBatmanMultiThread;
+        private System.Windows.Forms.Button buttonQuit;
     }
 }
