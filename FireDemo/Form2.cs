@@ -23,6 +23,7 @@ namespace FireDemo
         private GenericRealtimeFlame m_genericFlame;
         int m_framesPerSecond = 64;
         int SecondsBeforeMovingTextAround = 10;
+        bool m_fHideTitlebarOnDemo = true;
 
         public Form2()
         {
@@ -599,11 +600,14 @@ namespace FireDemo
         {
             if (timer1.Enabled)
             {
-                if (originalSize == Size.Empty)
-                    originalSize = this.Size;
-                this.FormBorderStyle = FormBorderStyle.None; // Hide the Title Bar and other UI
-                this.Location = new Point(0, 0);
-                this.Size = originalSize;
+                if (m_fHideTitlebarOnDemo)
+                {
+                    if (originalSize == Size.Empty)
+                        originalSize = this.Size;
+                    this.FormBorderStyle = FormBorderStyle.None; // Hide the Title Bar and other UI
+                    this.Location = new Point(0, 0);
+                    this.Size = originalSize;
+                }
                 groupBox1.Hide();
                 buttonChange.Hide();
                 buttonDemo.Hide();
@@ -615,10 +619,13 @@ namespace FireDemo
             {
                 Cursor.Show();
                 Cursor = Cursors.Default;
-                this.FormBorderStyle = FormBorderStyle.Sizable; // Show the Title Bar
-                if (originalSize != Size.Empty)
-                    this.Size = originalSize;
-                originalSize = Size.Empty;
+                if (m_fHideTitlebarOnDemo)
+                {
+                    this.FormBorderStyle = FormBorderStyle.Sizable; // Show the Title Bar
+                    if (originalSize != Size.Empty)
+                        this.Size = originalSize;
+                    originalSize = Size.Empty;
+                }
                 groupBox1.Show();
                 buttonChange.Show();
                 buttonDemo.Show();

@@ -463,7 +463,7 @@ namespace FireDemo
         {
 			// Don't need to spend time redrawing this every time, so we can just render once,
 			// or every once in a while to make sure no artifacts.
-			if (m_iNeedToRender++ % 60 == 1)
+			if (m_iNeedToRender++ % 60 == 5)
 			{
 				base.RenderOneFrameToScreen(graph);
 				//NaiveRender(graph);
