@@ -443,7 +443,10 @@ namespace FireDemo
 			{
 				for (int xx = 0; xx < xMax; ++xx)
 				{
-					if (xx < 1 || xx > xMax - 2 || yy < 2 || (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2))))
+					if ((xx < 1  || xx > xMax - 2 ) && (yy > 2) 
+						|| yy == 2 
+						|| yy == 3 
+						|| (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2))))
 					{
 						int x = xx * Sprite.Width * Sprite.Magnification;
 						int y = yy * Sprite.Height * Sprite.Magnification;
