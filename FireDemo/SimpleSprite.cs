@@ -277,66 +277,23 @@ namespace FireDemo
 		}
 	}
 
-
-	class CauldronBase : SimpleSprite
-	{
-		public CauldronBase()
-		{
-			int[][] pixels;
-			Color[] pal;
-
-			Width = 8;
-			Height = 5;
-
-			Color lightBrown = Color.FromArgb(red: 236, green: 100, blue: 55);
-			Color medBrown = Color.FromArgb(red: 168, green: 35, blue: 11);
-			Color darkBrown = Color.FromArgb(red: 71, green: 10, blue: 3);
-
-			pal = new Color[]{
-				Color.Transparent, //0 Transparent
-				lightBrown, // "1"
-				medBrown, // "2"
-				darkBrown, // 3
-				Color.White // 4
-			};
-
-			pixels = new int[][]
-			{
-				new int[]{1, 4, 4, 4, 4, 4, 4, 1},
-				new int[]{1, 1, 1, 1, 1, 1, 1, 1},
-				new int[]{0, 3, 3, 3, 3, 3, 3, 0},
-				new int[]{0, 2, 1, 1, 2, 2, 2, 0},
-				new int[]{0, 0, 3, 3, 3, 3, 0, 0},
-			};
-
-			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-
-			for (int y = 0; y < Height; ++y)
-			{
-				for (int x = 0; x < Width; ++x)
-				{
-					Color color = Color.Transparent;
-					int i = pixels[y][x];
-					if (i > 0)
-					{
-						color = pal[i];
-					}
-
-					Form.SetPixel(x, y, color);
-				}
-			}
-		}
-	}
-
 	class TorchHandle : SimpleSprite
 	{
 		public TorchHandle()
+		{
+			InitializeBitmap();
+		}
+
+		protected void InitializeBitmap(int heightLimit = -1)
 		{
 			int[][] pixels;
 			Color[] pal;
 
 			Width = 8;
 			Height = 16;
+
+			if (heightLimit != -1 && heightLimit < Height)
+				Height = heightLimit;
 
 			Color lightBrown = Color.FromArgb(red: 236, green: 100, blue: 55);
 			Color medBrown = Color.FromArgb(red: 168, green: 35, blue: 11);
@@ -386,6 +343,15 @@ namespace FireDemo
 					Form.SetPixel(x, y, color);
 				}
 			}
+		}
+	}
+
+	class CauldronBase : TorchHandle
+	{
+		public CauldronBase()
+		{
+			// The "cauldron" is exactly the same as the first 5 lines of the torch
+			InitializeBitmap(heightLimit: 5);
 		}
 	}
 
