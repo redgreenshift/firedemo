@@ -75,7 +75,7 @@ namespace FireDemo
             //RenderAtTopSpeed();
 //            buttonDndStatus_Click(null, null);
         }
-        }
+
 
         private void DemoPlasmaRainbow()
         {
