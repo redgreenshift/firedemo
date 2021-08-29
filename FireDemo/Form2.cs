@@ -593,21 +593,31 @@ namespace FireDemo
             UpdateVisibleUI();
         }
 
+        Size originalSize = Size.Empty;
         private void UpdateVisibleUI()
         {
             if (timer1.Enabled)
             {
+                if (originalSize == Size.Empty)
+                    originalSize = this.Size;
                 this.FormBorderStyle = FormBorderStyle.None; // Hide the Title Bar and other UI
                 this.Location = new Point(0, 0);
+                this.Size = originalSize;
                 groupBox1.Hide();
                 buttonChange.Hide();
                 buttonDemo.Hide();
+                Cursor = Cursors.UpArrow;
+                //Cursor = Cursors.IBeam;
+                Cursor.Hide();
             }
             else
             {
                 Cursor.Show();
                 Cursor = Cursors.Default;
                 this.FormBorderStyle = FormBorderStyle.Sizable; // Show the Title Bar
+                if (originalSize != Size.Empty)
+                    this.Size = originalSize;
+                originalSize = Size.Empty;
                 groupBox1.Show();
                 buttonChange.Show();
                 buttonDemo.Show();
