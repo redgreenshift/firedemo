@@ -645,6 +645,11 @@ namespace FireDemo
             int left = buttonDemo.Location.X + buttonDemo.Size.Width;
 
             Color[] palCandle = PalRealisticFire.New();
+
+            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38));
+            // Color.Maroon
+            // TODO: JRDV: Maroon == Color.FromArgb(223, 38, 38) Looks interesting!
+
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
@@ -895,6 +900,7 @@ namespace FireDemo
             CoolingStrategyMap csBonfire1 = new CoolingStrategyMap();
             csBonfire1.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
                 density: 0.5f, min: 8, max: 16, smoothing: 0,
+                //density: 0.6f, min: 8, max: 23, smoothing: 0,
                 shift: true, rotate: true);
 
             ILightPen lpBonfire1 = new LightPen(fill: 0.6f, min: 54, max: 255, useFullRange: true);
@@ -926,6 +932,7 @@ namespace FireDemo
             CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
             csBonfire2.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
                 density: 0.6f, min: 6, max: 13, smoothing: 0,
+                //density: 0.7f, min: 9, max: 21, smoothing: 0,
                 shift: true, rotate: true);
 
             ILightPen lpBonfire2 = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: true);

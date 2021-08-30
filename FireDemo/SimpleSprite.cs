@@ -493,7 +493,7 @@ namespace FireDemo
 			Gold = 0,
 			White = 1,
         };
-		public RingSprite(RColor c = RColor.Gold) // TODO: Parameterize the color???
+		public RingSprite(RColor c)
 		{
 			int[][] pixels;
 			Color[] pal;
@@ -578,7 +578,6 @@ namespace FireDemo
 	}
 
 
-
 	// Prototyping, not the final implementation. Fast enough, but not written very well.
 	// The idea is that I would like to be able to flatten multiple sprites into a single bitmap for speed,
 	// and eventually generalize that in this class. For now, it's hard coded for the one composite "scene"
@@ -589,14 +588,13 @@ namespace FireDemo
 
 		public SpriteCompositor()
         {
-			// TODO: Define how to parameterize this? For now I know I want the Pi device.
+			// TODO: parameterize this. For now I know the Pi device dimensions.
 			Width = 1024;
 			Height = 600;
 			Magnification = 1;
 		}
 
-
-		void Draw(SimpleSprite source, Bitmap dest, int x, int y, int magnification)
+		private void DrawSprite(SimpleSprite source, Bitmap dest, int x, int y, int magnification)
         {
 			for (int yy = y; yy < dest.Height && yy < y + source.Height; ++yy)
             {
@@ -622,9 +620,6 @@ namespace FireDemo
         }
 		public void Initialize()
         {
-			// TODO: Define how to parameterize this? For now I know I want the Pi device.
-			Width = 1024;
-			Height = 600;
 			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 
 			int xMax = Width / (Sprite.Width * Sprite.Magnification);
@@ -640,7 +635,7 @@ namespace FireDemo
 					{
 						int x = xx * Sprite.Width * Sprite.Magnification;
 						int y = yy * Sprite.Height * Sprite.Magnification;
-						Draw(Sprite, Form, x, y, Sprite.Magnification);
+						DrawSprite(Sprite, Form, x, y, Sprite.Magnification);
 					}
 				}
 			}
@@ -654,67 +649,48 @@ namespace FireDemo
 			for (int ii = 0; ii < 6; ++ii)
 			{
 				--filledHearts;
-				Draw(filledHearts > 0 ? heart : heartEmpty, Form, Width - (Width / 5) + ii * heart.Width * heartMag, heartY, magnification: heartMag);
+				DrawSprite(filledHearts > 0 ? heart : heartEmpty, Form, Width - (Width / 5) + ii * heart.Width * heartMag, heartY, magnification: heartMag);
 			}
 
 			RectangleSprite grayRect = new RectangleSprite(100, 50, Color.Gray, fill: true);
-			Draw(grayRect, Form, 100, 10, 1);
+			DrawSprite(grayRect, Form, 100, 10, 1);
 			RectangleSprite greenRect = new RectangleSprite(8, 8, Color.LightGreen, fill: true);
-			Draw(greenRect, Form, 150, 45, 1);
+			DrawSprite(greenRect, Form, 150, 45, 1);
 
 			RectangleSprite blueRect = new RectangleSprite(20, 14, Color.Blue, fill: false);
-			Draw(blueRect, Form, 600, 10, 3);
-			Draw(blueRect, Form, 500, 10, 3);
+			DrawSprite(blueRect, Form, 600, 10, 3);
+			DrawSprite(blueRect, Form, 500, 10, 3);
 
 			XSprite theX = new XSprite(width: 8, height: 8, Color.White);
-			Draw(theX, Form, 520, 5, 2);
+			DrawSprite(theX, Form, 520, 5, 2);
 
 			YSprite theY = new YSprite(width: 8, height: 8, Color.White);
-			Draw(theY, Form, 620, 5, 2);
+			DrawSprite(theY, Form, 620, 5, 2);
 
-			RingSprite ring = new RingSprite(0);
-			Draw(ring, Form, 420, 10, 2);
+			RingSprite ring = new RingSprite(RingSprite.RColor.Gold);
+			DrawSprite(ring, Form, 420, 10, 2);
 
 			RingSprite ringWhite = new RingSprite(RingSprite.RColor.White);
-			Draw(theX, Form, 437, 18, 1);
-			Draw(ringWhite, Form, 450, 10, 2);
+			DrawSprite(theX, Form, 437, 18, 1);
+			DrawSprite(ringWhite, Form, 450, 10, 2);
 		}
 
-		//public void SetGrid(List<Point> grid)
-		//{
-		//    int bmWidth = 16;
-		//    int bmHeight = 16;
-		//    Bitmap foo = new Bitmap(bmWidth, bmHeight, PixelFormat.Format32bppArgb);
-		//    // TODO: Define how to parameterize this? For now I know I want the Pi device.
-		//    Width = 1024;
-		//    Height = 600;
-		//    Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
-
-		//    int xMax = Width / Sprite.Width;
-		//    for (int xx = 0; xx < xMax; ++xx)
-		//    {
-		//        //Sprite.RenderOneFrameToScreen();
-		//        Form.
-		//    }
-
+		//private void NaiveRender(Graphics graph)
+        //{
+		//	int xMax = Width / (Sprite.Width * Sprite.Magnification);
+		//	int yMax = Height / (Sprite.Height * Sprite.Magnification);
+		//	for (int yy = 0; yy < yMax; ++yy)
+		//	{
+		//		for (int xx = 0; xx < xMax; ++xx)
+		//		{
+		//			if (xx < 1 || xx > xMax - 2 || yy < 2 || (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2))))
+		//			{
+		//				Sprite.Location = new Point(xx * Sprite.Width * Sprite.Magnification, yy * Sprite.Height * Sprite.Magnification);
+		//				Sprite.RenderOneFrameToScreen(graph);
+		//			}
+		//		}
+		//	}
 		//}
-
-		private void NaiveRender(Graphics graph)
-        {
-			int xMax = Width / (Sprite.Width * Sprite.Magnification);
-			int yMax = Height / (Sprite.Height * Sprite.Magnification);
-			for (int yy = 0; yy < yMax; ++yy)
-			{
-				for (int xx = 0; xx < xMax; ++xx)
-				{
-					if (xx < 1 || xx > xMax - 2 || yy < 2 || (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2))))
-					{
-						Sprite.Location = new Point(xx * Sprite.Width * Sprite.Magnification, yy * Sprite.Height * Sprite.Magnification);
-						Sprite.RenderOneFrameToScreen(graph);
-					}
-				}
-			}
-		}
 
 		int m_iNeedToRender = 0;
 		public override void RenderOneFrameToScreen(Graphics graph)

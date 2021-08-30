@@ -33,9 +33,6 @@ namespace FireDemo
             // Therefore this is fast enough for now.
             Form = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             poker = new BitmapLocker(Form);
-
-            //for (int x = 0; x < Width; ++x)
-            //    Form.SetPixel(x, Height - 1, Color.Transparent);
         }
 
         public void SetPalette(Color[] pal)
@@ -469,7 +466,8 @@ namespace FireDemo
             startOpt = (int)(Height / 3);
 
             // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
-            // But in any case needs to be retuned to whatever values we use in the LightShapeBatman
+            // But in any case needs to be retuned to whatever values we use in the LightShapeBatman.
+            // Hmm, seems to "Just Work"
 
             // Under the bat: 6@4 20@11.5
             x0 = (int)(6.0f / 52 * (Width - 1) + 1);
