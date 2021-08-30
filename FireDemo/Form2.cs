@@ -685,7 +685,7 @@ namespace FireDemo
                 Location = new Point(0, 0),
                 Text = "Away",
                 Color = Color.Yellow,
-                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(dbCandle);
@@ -705,7 +705,8 @@ namespace FireDemo
                 Text = "I'm OOF",
                 Location = new Point(300, 0),
                 Color = Color.DarkMagenta,
-                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                Size = new Size(160, 50),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -726,7 +727,8 @@ namespace FireDemo
                 Text = "I'm Busy",
                 Location = new Point(120, 0),
                 Color = Color.Red,
-                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                Size = new Size(160, 50),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -788,7 +790,8 @@ namespace FireDemo
                 Text = "Available",
                 Location = new Point(120, 0),
                 Color = Color.LightGreen,
-                Bounds = new Rectangle(x: 0, y: 0, width: 1024, height: 50),
+                Bounds = new Rectangle(x: 0, y: 0, width: 850, height: 50),
+                Size = new Size(170, 50),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -1023,8 +1026,9 @@ namespace FireDemo
             TextSprite lifeText = new TextSprite
             {
                 Text = "-LIFE-",
-                Location = new Point(Width - (Width / 5), 0),
                 Color = Color.Red,
+                Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 20.0f),
+                Location = new Point(Width - (Width / 5), 0),
             };
             m_dbSprites.Add(lifeText);
 
@@ -1034,7 +1038,7 @@ namespace FireDemo
             {
                 Text = "It's dangerous to bother me!\nGO AWAY! (use email)",
                 //Location = new Point(man.Location.X - 220, man.Location.Y - 95),
-                Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f, style: FontStyle.Regular),
+                Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
                 Bounds = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
                 Size = new Size(500, 91),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),

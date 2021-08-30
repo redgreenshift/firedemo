@@ -1172,8 +1172,8 @@ namespace FireDemo
         public TextSprite()
         {
             this.Brush = Brushes.White;
-            Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 20.0f, style: FontStyle.Regular);
-            Size = new Size(150, 100); // Available
+            Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f, style: FontStyle.Regular);
+            Size = new Size(150, 100);
 
             //Font = new Font(familyName: "Arial", emSize: 20.0f, style: FontStyle.Regular);
             //Font = new Font(familyName: "Times New Roman", emSize: 20.0f, style: FontStyle.Regular);
