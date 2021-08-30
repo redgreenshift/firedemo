@@ -261,6 +261,10 @@ namespace FireDemo
             // Average the designated pixels:
             int calc, coolingFactor, cPixelsToAverage = 0;
 
+            // Pixels are numbered like the Numeric Keypad:
+            // 7 8 9
+            // 4 5 6
+            // 1 2 3
             if (f1)
                 ++cPixelsToAverage;
             if (f2)
@@ -284,6 +288,9 @@ namespace FireDemo
                 cPixelsToAverage = 0;
 
             poker.LockBits(ImageLockMode.WriteOnly);
+
+            // The original Fire Demo went from 1 to MAX-1,
+            // so this should produce the same results!
             for (int y = 1; y < Height - 1; ++y)
             {
                 for (int x = 1; x < Width - 1; ++x)
@@ -344,12 +351,14 @@ namespace FireDemo
             //{ subtract a decay ammount.                        }
 
             // Average these pixels:
-            //. 8 .
-            //. 5 .
-            //1 2 3
+            // . 8 .
+            // . 5 .
+            // 1 2 3
             int calc, p1, p2, p3, p5, p8, coolingFactor;
 
             poker.LockBits(ImageLockMode.WriteOnly);
+            // The original Fire Demo went from 1 to MAX-1,
+            // so leave the fire calculation as-is.
             for (int y = 1; y < Height - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixelPrevious(0, y + 1);
@@ -403,6 +412,8 @@ namespace FireDemo
             int calc, p1, p2, p3, p5, coolingFactor;
 
             poker.LockBits(ImageLockMode.WriteOnly);
+            // The original Fire Demo went from 1 to MAX-1,
+            // so leave the fire calculation as-is.
             for (int y = 1; y < Height - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixelPrevious(0, y + 1);
@@ -452,9 +463,9 @@ namespace FireDemo
             //{ subtract a decay ammount.                        }
 
             // Average these pixels:
-            //. . .
-            //. 5 .
-            //1 2 3
+            // . . .
+            // . 5 .
+            // 1 2 3
             int calc, p1, p2, p3, p5, coolingFactor;
             int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
             bool doDraw, doInnerCheck;
@@ -498,7 +509,9 @@ namespace FireDemo
             y1inner = (int)(5.9f / 18 * (Height * 3 / 4) + (Height / 4));
 
             poker.LockBits(ImageLockMode.WriteOnly);
-
+            // The original Fire Demo went from 1 to MAX-1,
+            // so leave the fire calculation as-is.
+            // Plus the bat logo doesn't get near the sides.
             for (int y = 1; y < Height - 1; ++y)
             {
                 // There are large areas of pixels that will NEVER change in the Bat Logo.
@@ -603,9 +616,9 @@ namespace FireDemo
             //{ subtract a decay ammount.                        }
 
             // Average these pixels:
-            //. . .
-            //. 5 .
-            //1 2 3
+            // . . .
+            // . 5 .
+            // 1 2 3
             int calc, p1, p2, p3, p5, coolingFactor;
             int deadZone, endZone, startOpt, x0, y0, x1, y1, x0inner, x1inner, y1inner;
             bool doDraw, doInnerCheck;
@@ -951,13 +964,15 @@ namespace FireDemo
             //{ subtract a decay ammount.                        }
 
             // Average these pixels:
-            //. 8 .
-            //4 5 6
-            //. 2 .
+            // . 8 .
+            // 4 5 6
+            // . 2 .
             int calc, p2, p4, p5, p6, p8, coolingFactor;
 
             poker.LockBits(ImageLockMode.WriteOnly);
-
+            // While the original Fire Demo went from 1 to MAX-1,
+            // the lightning does touch the sides sometimes,
+            // so we do want to account for the edge pixels.
             for (int y = 0; y < Height; ++y)
             {
                 p5 = 0;
