@@ -24,6 +24,12 @@ namespace FireDemo
         int m_framesPerSecond = 64;
         int SecondsBeforeMovingTextAround = 10;
         bool m_fHideTitlebarOnDemo = true;
+        // Hacky solution. Windows auto scales stuff,
+        // so that I need to undo it when running on Linux,
+        // but C# doesn't make it easy to figure out the scale factor
+        //float m_scaleFactor = 1.0f; // Windows
+        float m_scaleFactor = 1.25f; // Linux
+        int Scaled(int i) => (int)(i * m_scaleFactor);
 
         public Form2()
         {
@@ -708,7 +714,7 @@ namespace FireDemo
                 Location = new Point(300, 0),
                 Color = Color.DarkMagenta,
                 Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
-                Size = new Size(160, 50),
+                Size = new Size(Scaled(160), Scaled(50)),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -730,7 +736,7 @@ namespace FireDemo
                 Location = new Point(120, 0),
                 Color = Color.Red,
                 Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
-                Size = new Size(160, 50),
+                Size = new Size(Scaled(160), Scaled(50)),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -746,8 +752,10 @@ namespace FireDemo
             int ringWidth = 129;
             int ringHeight = 131;
             int magnification = 2;
-            //fireWidth = 200;
-            //fireHeight = 200;
+            //ringWidth = 200;
+            //ringHeight = 200;
+            //ringWidth = 160;
+            //ringHeight = 162;
             magnification = 3;
             int left, top;
 
@@ -793,7 +801,7 @@ namespace FireDemo
                 Location = new Point(120, 0),
                 Color = Color.LightGreen,
                 Bounds = new Rectangle(x: 0, y: 0, width: 850, height: 50),
-                Size = new Size(170, 50),
+                Size = new Size(Scaled(170), Scaled(50)),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -1047,7 +1055,7 @@ namespace FireDemo
                 //Location = new Point(man.Location.X - 220, man.Location.Y - 95),
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
                 Bounds = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
-                Size = new Size(500, 91),
+                Size = new Size(Scaled(500), Scaled(91)),
                 Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
