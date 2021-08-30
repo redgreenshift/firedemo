@@ -62,6 +62,7 @@ namespace FireDemo
             Location = new Point(0, 0);
             this.BackColor = Color.DimGray;
             this.Text = "-- Friendly Neighborhood Status Indicator --";
+            this.CancelButton = buttonQuit;
 
             //SimpleCandle();
             DemoBatman(multithreaded: true);
