@@ -1060,7 +1060,7 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
-        private void buttonBatmanMultiThread_Click(object sender, EventArgs e)
+        private void buttonBatmanSingleThread_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
             DemoBatman(multithreaded: false);
@@ -1070,6 +1070,18 @@ namespace FireDemo
         private void buttonQuit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void buttonAdvanced_Click(object sender, EventArgs e)
+        {
+            Form form = new Form1();
+            form.ShowDialog();
+        }
+
+        private void buttonFastRender_Click(object sender, EventArgs e)
+        {
+            Form form = new Form3();
+            form.ShowDialog();
         }
     }
 }

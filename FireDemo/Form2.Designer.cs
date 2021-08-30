@@ -39,9 +39,11 @@ namespace FireDemo
             this.buttonAvailableStatus = new System.Windows.Forms.Button();
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.buttonBatmanMultiThread = new System.Windows.Forms.Button();
-            this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
+            this.buttonBatmanSingleThread = new System.Windows.Forms.Button();
+            this.buttonRainBORG = new System.Windows.Forms.Button();
+            this.buttonAdvanced = new System.Windows.Forms.Button();
+            this.buttonFastRender = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,8 +128,10 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonFastRender);
+            this.groupBox1.Controls.Add(this.buttonAdvanced);
             this.groupBox1.Controls.Add(this.buttonQuit);
-            this.groupBox1.Controls.Add(this.buttonBatmanMultiThread);
+            this.groupBox1.Controls.Add(this.buttonBatmanSingleThread);
             this.groupBox1.Controls.Add(this.buttonRainBORG);
             this.groupBox1.Controls.Add(this.buttonAwayStatus);
             this.groupBox1.Controls.Add(this.buttonDndStatus);
@@ -142,15 +146,25 @@ namespace FireDemo
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
             // 
-            // buttonBatmanMultiThread
+            // buttonQuit
             // 
-            this.buttonBatmanMultiThread.Location = new System.Drawing.Point(185, 117);
-            this.buttonBatmanMultiThread.Name = "buttonBatmanMultiThread";
-            this.buttonBatmanMultiThread.Size = new System.Drawing.Size(171, 90);
-            this.buttonBatmanMultiThread.TabIndex = 8;
-            this.buttonBatmanMultiThread.Text = "Batman ST";
-            this.buttonBatmanMultiThread.UseVisualStyleBackColor = true;
-            this.buttonBatmanMultiThread.Click += new System.EventHandler(this.buttonBatmanMultiThread_Click);
+            this.buttonQuit.Location = new System.Drawing.Point(414, 412);
+            this.buttonQuit.Name = "buttonQuit";
+            this.buttonQuit.Size = new System.Drawing.Size(175, 86);
+            this.buttonQuit.TabIndex = 9;
+            this.buttonQuit.Text = "Quit";
+            this.buttonQuit.UseVisualStyleBackColor = true;
+            this.buttonQuit.Click += new System.EventHandler(this.buttonQuit_Click);
+            // 
+            // buttonBatmanSingleThread
+            // 
+            this.buttonBatmanSingleThread.Location = new System.Drawing.Point(185, 117);
+            this.buttonBatmanSingleThread.Name = "buttonBatmanSingleThread";
+            this.buttonBatmanSingleThread.Size = new System.Drawing.Size(171, 90);
+            this.buttonBatmanSingleThread.TabIndex = 8;
+            this.buttonBatmanSingleThread.Text = "Batman ST";
+            this.buttonBatmanSingleThread.UseVisualStyleBackColor = true;
+            this.buttonBatmanSingleThread.Click += new System.EventHandler(this.buttonBatmanSingleThread_Click);
             // 
             // buttonRainBORG
             // 
@@ -162,15 +176,25 @@ namespace FireDemo
             this.buttonRainBORG.UseVisualStyleBackColor = true;
             this.buttonRainBORG.Click += new System.EventHandler(this.buttonRainBORG_Click);
             // 
-            // buttonQuit
+            // buttonAdvanced
             // 
-            this.buttonQuit.Location = new System.Drawing.Point(414, 412);
-            this.buttonQuit.Name = "buttonQuit";
-            this.buttonQuit.Size = new System.Drawing.Size(175, 86);
-            this.buttonQuit.TabIndex = 9;
-            this.buttonQuit.Text = "Quit";
-            this.buttonQuit.UseVisualStyleBackColor = true;
-            this.buttonQuit.Click += new System.EventHandler(this.buttonQuit_Click);
+            this.buttonAdvanced.Location = new System.Drawing.Point(362, 117);
+            this.buttonAdvanced.Name = "buttonAdvanced";
+            this.buttonAdvanced.Size = new System.Drawing.Size(172, 90);
+            this.buttonAdvanced.TabIndex = 10;
+            this.buttonAdvanced.Text = "Original Experiment";
+            this.buttonAdvanced.UseVisualStyleBackColor = true;
+            this.buttonAdvanced.Click += new System.EventHandler(this.buttonAdvanced_Click);
+            // 
+            // buttonFastRender
+            // 
+            this.buttonFastRender.Location = new System.Drawing.Point(362, 213);
+            this.buttonFastRender.Name = "buttonFastRender";
+            this.buttonFastRender.Size = new System.Drawing.Size(172, 90);
+            this.buttonFastRender.TabIndex = 11;
+            this.buttonFastRender.Text = "Fast Render Experiment";
+            this.buttonFastRender.UseVisualStyleBackColor = true;
+            this.buttonFastRender.Click += new System.EventHandler(this.buttonFastRender_Click);
             // 
             // Form2
             // 
@@ -201,7 +225,9 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonDndStatus;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button buttonRainBORG;
-        private System.Windows.Forms.Button buttonBatmanMultiThread;
+        private System.Windows.Forms.Button buttonBatmanSingleThread;
         private System.Windows.Forms.Button buttonQuit;
+        private System.Windows.Forms.Button buttonAdvanced;
+        private System.Windows.Forms.Button buttonFastRender;
     }
 }
