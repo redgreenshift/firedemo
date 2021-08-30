@@ -614,14 +614,16 @@ namespace FireDemo
                 groupBox1.Hide();
                 buttonChange.Hide();
                 buttonDemo.Hide();
-                Cursor = Cursors.UpArrow;
+                //Cursor = Cursors.UpArrow;
                 //Cursor = Cursors.IBeam;
-                Cursor.Hide();
+                //Cursor.Hide();
+                // Move the mouse cursor out of the way
+                Cursor.Position = new Point(this.Size.Width, this.Size.Height);
             }
             else
             {
-                Cursor.Show();
-                Cursor = Cursors.Default;
+                //Cursor.Show();
+                //Cursor = Cursors.Default;
                 if (m_fHideTitlebarOnDemo)
                 {
                     this.FormBorderStyle = FormBorderStyle.Sizable; // Show the Title Bar
