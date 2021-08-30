@@ -887,8 +887,13 @@ namespace FireDemo
 
             Color[] palCauldron;
             //palCauldron = PalRealisticFlameCurve.New(Color.DarkRed);
-            palCauldron = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.White);
+            //palCauldron = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.White);
             //palCauldron = PalFourPointLinear.New(Color.Black, Color.DarkOrange, Color.Yellow, Color.White);
+            palCauldron = PalFourPointLinear.New(
+                Color.Black,
+                Color.FromArgb(255, 185, 0),
+                Color.FromArgb(255, 255, 127),
+                Color.FromArgb(212, 212, 255));
             Color[] palTorch = PalRealisticFire.New();
             //palCauldron = palTorch;
 
