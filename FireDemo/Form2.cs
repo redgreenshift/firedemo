@@ -1012,10 +1012,24 @@ namespace FireDemo
             m_dbSprites.Add(dbTorch2);
 
 
+            TextSprite lifeText = new TextSprite
+            {
+                Text = "-LIFE-",
+                Location = new Point(Width - (Width / 5), 0),
+                Color = Color.Red,
+            };
+            m_dbSprites.Add(lifeText);
+
+
+            int dangerY = man.Location.Y - 95;
             TextSprite text = new TextSprite
             {
                 Text = "It's dangerous to bother me!\nGO AWAY! (use email)",
-                Location = new Point(man.Location.X - 120, man.Location.Y - 75)
+                //Location = new Point(man.Location.X - 220, man.Location.Y - 95),
+                Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f, style: FontStyle.Regular),
+                Bounds = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
+                Size = new Size(500, 91),
+                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 

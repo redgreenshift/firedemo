@@ -1140,34 +1140,46 @@ namespace FireDemo
 
     class TextSprite : AbstractDynamicSprite
     {
-        Random rng = new Random();
-        public string Text { get; set; }
+        private readonly Random rng = new Random();
 
-        private Color color;
+        public string Text { get; set; }
         public Color Color
         {
-            get { return color; }
-            set {
+            get => color;
+            set
+            {
                 color = value;
                 SetBrushColor(value);
             }
         }
-
-        public Rectangle Bounds { get; set; }
-        public TimeSpan Period { get; set; }
-
-        private Font Font { get; set; }
+        private Color color;
+        public Font Font { get; set; }
         private Brush Brush { get; set; }
+
+        /// <summary>
+        ///  Size of the region to blank out when randomly moving the <see cref="Text" />
+        /// </summary>
+        public Size Size { get; set; }
+
+        /// <summary>
+        /// Region within which to randomly move the text on <see cref="Period" /> (overrides <see cref="SimpleSprite.Location" />)
+        /// </summary>
+        public Rectangle Bounds { get; set; }
+
+        /// <summary>
+        ///  How often to move the <see cref="Text" />
+        /// </summary>
+        public TimeSpan Period { get; set; }
 
         public TextSprite()
         {
-            this.Font = SystemFonts.DefaultFont;
             this.Brush = Brushes.White;
+            Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 20.0f, style: FontStyle.Regular);
+            Size = new Size(150, 100); // Available
 
             //Font = new Font(familyName: "Arial", emSize: 20.0f, style: FontStyle.Regular);
             //Font = new Font(familyName: "Times New Roman", emSize: 20.0f, style: FontStyle.Regular);
-//            Font = new Font(familyName: "Noto Sans", emSize: 20.0f, style: FontStyle.Regular);
-            Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 20.0f, style: FontStyle.Regular);
+            //Font = new Font(familyName: "Noto Sans", emSize: 20.0f, style: FontStyle.Regular);
             //Font = new Font(familyName: "Comic Sans MS", emSize: 20.0f, style: FontStyle.Regular);
             // WINDOWS:
             // "Agency FB; Algerian; Arial; Arial Black; Arial Narrow; Arial Rounded MT Bold; Bahnschrift; Bahnschrift Condensed; Bahnschrift Light; Bahnschrift Light Condensed; Bahnschrift Light SemiCondensed; Bahnschrift SemiBold; Bahnschrift SemiBold Condensed; Bahnschrift SemiBold SemiConden; Bahnschrift SemiCondensed; Bahnschrift SemiLight; Bahnschrift SemiLight Condensed; Bahnschrift SemiLight SemiConde; Baskerville Old Face; Bauhaus 93; Bell MT; Berlin Sans FB; Berlin Sans FB Demi; Bernard MT Condensed; Blackadder ITC; Bodoni MT; Bodoni MT Black; Bodoni MT Condensed; Bodoni MT Poster Compressed; Book Antiqua; Bookman Old Style; Bookshelf Symbol 7; Bradley Hand ITC; Britannic Bold; Broadway; Brush Script MT; Calibri; Calibri Light; Californian FB; Calisto MT; Cambria; Cambria Math; Candara; Candara Light; Castellar; Centaur; Century; Century Gothic; Century Schoolbook; Chiller; Colonna MT; Comic Sans MS; Consolas; Constantia; Cooper Black; Copperplate Gothic Bold; Copperplate Gothic Light; Corbel; Corbel Light; Courier New; Curlz MT; Dubai; Dubai Light; Dubai Medium; Ebrima; Edwardian Script ITC; Elephant; Engravers MT; Eras Bold ITC; Eras Demi ITC; Eras Light ITC; Eras Medium ITC; Felix Titling; Footlight MT Light; Forte; Franklin Gothic Book; Franklin Gothic Demi; Franklin Gothic Demi Cond; Franklin Gothic Heavy; Franklin Gothic Medium; Franklin Gothic Medium Cond; Freestyle Script; French Script MT; Gabriola; Gadugi; Garamond; Georgia; Gigi; Gill Sans MT; Gill Sans MT Condensed; Gill Sans MT Ext Condensed Bold; Gill Sans Ultra Bold; Gill Sans Ultra Bold Condensed; Gloucester MT Extra Condensed; Goudy Old Style; Goudy Stout; Haettenschweiler; Harlow Solid Italic; Harrington; High Tower Text; HoloLens MDL2 Assets; Impact; Imprint MT Shadow; Informal Roman; Ink Free; Javanese Text; Jokerman; Juice ITC; Kristen ITC; Kunstler Script; Leelawadee UI; Leelawadee UI Semilight; Lucida Bright; Lucida Calligraphy; Lucida Console; Lucida Fax; Lucida Handwriting; Lucida Sans; Lucida Sans Typewriter; Lucida Sans Unicode; Magneto; Maiandra GD; Malgun Gothic; Malgun Gothic Semilight; Marlett; Matura MT Script Capitals; Microsoft Himalaya; Microsoft JhengHei; Microsoft JhengHei Light; Microsoft JhengHei UI; Microsoft JhengHei UI Light; Microsoft New Tai Lue; Microsoft PhagsPa; Microsoft Sans Serif; Microsoft Tai Le; Microsoft YaHei; Microsoft YaHei Light; Microsoft YaHei UI; Microsoft YaHei UI Light; Microsoft Yi Baiti; MingLiU-ExtB; MingLiU_HKSCS-ExtB; Mistral; Modern No. 20; Mongolian Baiti; Monotype Corsiva; MS Gothic; MS Outlook; MS PGothic; MS Reference Sans Serif; MS Reference Specialty; MS UI Gothic; MT Extra; MV Boli; Myanmar Text; Niagara Engraved; Niagara Solid; Nirmala UI; Nirmala UI Semilight; Noto Sans; NSimSun; OCR A Extended; OCRATTRegular; Old English Text MT; Onyx; Palace Script MT; Palatino Linotype; Papyrus; Parchment; Perpetua; Perpetua Titling MT; Playbill; PMingLiU-ExtB; Poor Richard; Pristina; Rage Italic; Ravie; Rockwell; Rockwell Condensed; Rockwell Extra Bold; Script MT Bold; Segoe MDL2 Assets; Segoe Print; Segoe Script; Segoe UI; Segoe UI Black; Segoe UI Emoji; Segoe UI Historic; Segoe UI Light; Segoe UI Semibold; Segoe UI Semilight; Segoe UI Symbol; Showcard Gothic; SimSun; SimSun-ExtB; Sitka Banner; Sitka Display; Sitka Heading; Sitka Small; Sitka Subheading; Sitka Text; Snap ITC; Stencil; Sylfaen; Symbol; Tahoma; Tempus Sans ITC; Times New Roman; Trebuchet MS; Tw Cen MT; Tw Cen MT Condensed; Tw Cen MT Condensed Extra Bold; Verdana; Viner Hand ITC; Vivaldi; Vladimir Script; Webdings; Wide Latin; Wingdings; Wingdings 2; Wingdings 3; Yu Gothic; Yu Gothic Light; Yu Gothic Medium; Yu Gothic UI; Yu Gothic UI Light; Yu Gothic UI Semibold; Yu Gothic UI Semilight; "
@@ -1227,13 +1239,13 @@ namespace FireDemo
                 Brush = new SolidBrush(color);
         }
 
-        DateTime lastMove = DateTime.MinValue;
+        private DateTime lastMove = DateTime.MinValue;
         public override void RenderOneFrameToScreen(Graphics graph)
         {
             DateTime thisTime = DateTime.Now;
             if (Period != TimeSpan.Zero && lastMove < thisTime - Period)
             {
-                graph.FillRectangle(Brushes.Black, Location.X, Location.Y, width: 150, height: 100);
+                graph.FillRectangle(Brushes.Black, Location.X, Location.Y, Size.Width, Size.Height);
 
                 lastMove = thisTime;
                 Location = new Point(rng.Next(Bounds.X, Bounds.X + Bounds.Width), rng.Next(Bounds.Y, Bounds.Y + Bounds.Height));

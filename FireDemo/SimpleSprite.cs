@@ -355,6 +355,230 @@ namespace FireDemo
 		}
 	}
 
+	class Heart : SimpleSprite
+	{
+		public Heart(bool empty = false)
+		{
+			int[][] pixels;
+			Color[] pal;
+
+			Width = 8;
+			Height = 8;
+
+			pal = new Color[]{
+				Color.Transparent, //0 Transparent
+				Color.DarkRed, // "1"
+				empty ? Color.Black :Color.Red, // 2
+			};
+
+			pixels = new int[][]
+			{
+				new int[] { 0, 0, 1, 0, 1, 0, 0, 0, },
+				new int[] { 0, 1, 2, 1, 2, 1, 0, 0, },
+				new int[] { 1, 2, 2, 2, 2, 2, 1, 0, },
+				new int[] { 1, 2, 2, 2, 2, 2, 1, 0, },
+				new int[] { 1, 2, 2, 2, 2, 2, 1, 0, },
+				new int[] { 0, 1, 2, 2, 2, 1, 0, 0, },
+				new int[] { 0, 0, 1, 2, 1, 0, 0, 0, },
+				new int[] { 0, 0, 0, 1, 0, 0, 0, 0, },
+			};
+
+			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+			for (int y = 0; y < Height; ++y)
+			{
+				for (int x = 0; x < Width; ++x)
+				{
+					Color color = Color.Transparent;
+					int i = pixels[y][x];
+					if (i > 0)
+					{
+						color = pal[i];
+					}
+
+					Form.SetPixel(x, y, color);
+				}
+
+			}
+		}
+	}
+
+	class RectangleSprite : SimpleSprite
+	{
+		public RectangleSprite(int width, int  height, Color color, bool fill = true)
+		{
+			Width = width;
+			Height = height;
+
+			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+			for (int y = 0; y < Height; ++y)
+			{
+				for (int x = 0; x < Width; ++x)
+				{
+					Color c = Color.Transparent;
+					if (fill || x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
+					{
+						c = color;
+					}
+
+					Form.SetPixel(x, y, c);
+				}
+
+			}
+		}
+	}
+
+	class XSprite : SimpleSprite
+	{
+		public XSprite(int width, int height, Color color)
+		{
+			Width = width;
+			Height = height;
+
+			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+			for (int y = 0; y < Height; ++y)
+			{
+				for (int x = 0; x < Width; ++x)
+				{
+					Color c = Color.Transparent;
+					if (x == y || x + y + 1 == Width)
+					{
+						c = color;
+					}
+
+					Form.SetPixel(x, y, c);
+				}
+
+			}
+		}
+	}
+
+	class YSprite : SimpleSprite
+	{
+		public YSprite(int width, int height, Color color)
+		{
+			Width = width;
+			Height = height;
+
+			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+			for (int y = 0; y < Height; ++y)
+			{
+				for (int x = 0; x < Width; ++x)
+				{
+					Color c = Color.Transparent;
+					if (y > Height / 2)
+                    {
+						if (x == Width / 2
+							|| x == Width / 2 - 1)
+							c = color;
+                    }
+					else if (x == y || x + y + 1 == Width)
+					{
+						c = color;
+					}
+
+					Form.SetPixel(x, y, c);
+				}
+
+			}
+		}
+	}
+
+	class RingSprite : SimpleSprite
+	{
+		public enum RColor {
+			Gold = 0,
+			White = 1,
+        };
+		public RingSprite(RColor c = RColor.Gold) // TODO: Parameterize the color???
+		{
+			int[][] pixels;
+			Color[] pal;
+
+			Width = 8;
+			Height = 8;
+
+			switch (c)
+			{
+				default:
+				case RColor.Gold:
+					pal = new Color[]{
+						Color.Transparent, //0 Transparent
+						Color.Gold, // "1"
+						Color.Yellow, // 2
+					};
+					break;
+				case RColor.White:
+					pal = new Color[]{
+						Color.Transparent, //0 Transparent
+						Color.White, // "1"
+						Color.Gray, // 2
+					};
+					break;
+			}
+
+            //pixels = new int[][]
+            //{
+            //	new int[] { 0, 0, 1, 1, 2, 0, 0, 0, },
+            //	new int[] { 0, 1, 2, 0, 1, 2, 0, 0, },
+            //	new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
+            //	new int[] { 1, 2, 0, 0, 0, 0, 1, 2, },
+            //	new int[] { 1, 2, 0, 0, 0, 0, 1, 2, },
+            //	new int[] { 0, 1, 2, 0, 0, 0, 1, 2, },
+            //	new int[] { 0, 0, 1, 2, 0, 1, 2, 0, },
+            //	new int[] { 0, 0, 0, 1, 1, 2, 0, 0, },
+            //};
+
+            //// better?
+            //pixels = new int[][]
+			//{
+            //    new int[] { 0, 0, 1, 2, 0, 0, 0, 0, },
+            //    new int[] { 0, 1, 2, 1, 2, 0, 0, 0, },
+            //    new int[] { 1, 2, 0, 0, 1, 2, 0, 0, },
+            //    new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
+            //    new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
+            //    new int[] { 0, 1, 2, 0, 0, 1, 2, 0, },
+            //    new int[] { 0, 0, 1, 2, 1, 2, 0, 0, },
+            //    new int[] { 0, 0, 0, 1, 2, 0, 0, 0, },
+			//};
+
+            pixels = new int[][]
+			{
+				new int[] { 0, 0, 1, 2, 0, 0, 0, 0, },
+				new int[] { 0, 1, 2, 1, 2, 0, 0, 0, },
+				new int[] { 1, 2, 0, 0, 1, 2, 0, 0, },
+				new int[] { 1, 2, 0, 0, 1, 2, 0, 0, },
+				new int[] { 1, 2, 0, 0, 1, 2, 0, 0, },
+				new int[] { 1, 2, 0, 0, 1, 2, 0, 0, },
+				new int[] { 0, 1, 2, 1, 2, 0, 0, 0, },
+				new int[] { 0, 0, 1, 2, 0, 0, 0, 0, },
+			};
+
+			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+			for (int y = 0; y < Height; ++y)
+			{
+				for (int x = 0; x < Width; ++x)
+				{
+					Color color = Color.Transparent;
+					int i = pixels[y][x];
+					if (i > 0)
+					{
+						color = pal[i];
+					}
+
+					Form.SetPixel(x, y, color);
+				}
+
+			}
+		}
+	}
+
+
+
 	// Prototyping, not the final implementation. Fast enough, but not written very well.
 	// The idea is that I would like to be able to flatten multiple sprites into a single bitmap for speed,
 	// and eventually generalize that in this class. For now, it's hard coded for the one composite "scene"
@@ -420,6 +644,40 @@ namespace FireDemo
 					}
 				}
 			}
+
+
+			Heart heart = new Heart();
+			Heart heartEmpty = new Heart(empty: true);
+			int heartMag = 3;
+			int heartY = 30;
+			int filledHearts = 3;
+			for (int ii = 0; ii < 6; ++ii)
+			{
+				--filledHearts;
+				Draw(filledHearts > 0 ? heart : heartEmpty, Form, Width - (Width / 5) + ii * heart.Width * heartMag, heartY, magnification: heartMag);
+			}
+
+			RectangleSprite grayRect = new RectangleSprite(100, 50, Color.Gray, fill: true);
+			Draw(grayRect, Form, 100, 10, 1);
+			RectangleSprite greenRect = new RectangleSprite(8, 8, Color.LightGreen, fill: true);
+			Draw(greenRect, Form, 150, 45, 1);
+
+			RectangleSprite blueRect = new RectangleSprite(20, 14, Color.Blue, fill: false);
+			Draw(blueRect, Form, 600, 10, 3);
+			Draw(blueRect, Form, 500, 10, 3);
+
+			XSprite theX = new XSprite(width: 8, height: 8, Color.White);
+			Draw(theX, Form, 520, 5, 2);
+
+			YSprite theY = new YSprite(width: 8, height: 8, Color.White);
+			Draw(theY, Form, 620, 5, 2);
+
+			RingSprite ring = new RingSprite(0);
+			Draw(ring, Form, 420, 10, 2);
+
+			RingSprite ringWhite = new RingSprite(RingSprite.RColor.White);
+			Draw(theX, Form, 437, 18, 1);
+			Draw(ringWhite, Form, 450, 10, 2);
 		}
 
 		//public void SetGrid(List<Point> grid)
