@@ -36,10 +36,27 @@ namespace FireDemo
         #endregion // LightShape implementation
 
         #region Internal Drawing Methods
+        /// <summary>
+        /// By default, only render to the previous buffer, so the seed values affect the next frame.
+        /// For some light effects, like candles, we need to set the seed value to both buffers,
+        /// because the last line is not otherwise copied when swapping the buffers.
+        /// The old code would copy this last line. Here in the refactored code, we can just draw to both buffers.
+        /// This is unnecessary for blending effects that seed in the middle (lightning/batman).
+        /// Only needed for shapes that seed on the edge (like candle)
+        /// If we blend the last row of pixels, then this becomes unnecessary.
+        /// </summary>
+        protected bool m_fDrawToBothBuffers = false;
         protected void DrawPixel(int x, int y, IntensityMap canvas)
         {
             if (pen.FShouldDrawNext())
-                canvas.SetPixelPrevious(x, y, pen.NextValue());
+            {
+                int nextVal = pen.NextValue();
+                canvas.SetPixelPrevious(x, y, nextVal);
+                if (m_fDrawToBothBuffers)
+                {
+                    canvas.SetPixelNext(x, y, nextVal);
+                }
+            }
         }
 
         protected void DrawCircle(int xCenter, int yCenter, int radius, IntensityMap canvas)
@@ -135,6 +152,12 @@ namespace FireDemo
 
     class LightShapeCandle : LightShapeBase
     {
+        public LightShapeCandle()
+        {
+            // need to draw the seed values to both the front and back buffers
+            m_fDrawToBothBuffers = true;
+        }
+
         override public void DrawOn(IntensityMap canvas)
         {
             // Draw the seed coal values for a candle flame
