@@ -13,7 +13,7 @@ namespace FireDemo
 {
     public partial class Form2 : Form
     {
-        Graphics m_graph;
+        Graphics m_graph = null;
         Color[] m_palette;
         CoolingStrategyMap m_coolingStrategy;
         ILightPen m_lightPen;
@@ -610,6 +610,16 @@ namespace FireDemo
             {
                 if (m_fHideTitlebarOnDemo)
                 {
+                    // Fix resizing issue on Pi device (TODO: Account for multiple monitors)
+                    Rectangle fullScreen = Screen.GetBounds(new Point(0, 0));
+                    if (!fullScreen.IsEmpty && (
+                        this.Size.Width > fullScreen.Width
+                        || Size.Height > fullScreen.Height
+                        || originalSize.Width > fullScreen.Width
+                        || originalSize.Height > fullScreen.Height))
+                    {
+                        originalSize = new Size(fullScreen.Width, fullScreen.Height);
+                    }
                     if (originalSize == Size.Empty)
                         originalSize = this.Size;
                     this.FormBorderStyle = FormBorderStyle.None; // Hide the Title Bar and other UI
