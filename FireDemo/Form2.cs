@@ -35,7 +35,6 @@ namespace FireDemo
         {
             InitializeComponent();
             this.Size = new Size(1024, 600); // Enlarge to the size of the Raspberry Pi device screen
-            m_graph = this.CreateGraphics();
             this.Click += Form2_Click;
         }
 
@@ -377,7 +376,7 @@ namespace FireDemo
             dbLightning.SetPalette(palLightning);
             dbLightning.AddShape(lsLightning);
             left = (this.Width - fireWidth * magnification) / 2;
-            top = (this.Height - fireHeight * magnification) / 2;
+            top = (this.Height - fireHeight * magnification);
             dbLightning.Location = new Point(x: left, y: top);
 
             m_palette = palLightning;
@@ -625,6 +624,9 @@ namespace FireDemo
                 //Cursor.Hide();
                 // Move the mouse cursor out of the way
                 Cursor.Position = new Point(this.Size.Width, this.Size.Height);
+
+                if (m_graph == null)
+                    m_graph = this.CreateGraphics();
             }
             else
             {
@@ -648,7 +650,7 @@ namespace FireDemo
             //SimpleCandle();
             int fireWidth = 21;
             int fireHeight = 75;
-            int magnification = 5;
+            int magnification = 7;
             int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
             int left = buttonDemo.Location.X + buttonDemo.Size.Width;
 
@@ -669,7 +671,7 @@ namespace FireDemo
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
-            AbstractRealtimeLightEffect dbCandle = new RealtimeCandleflame();
+            AbstractRealtimeLightEffect dbCandle;
             m_genericFlame = new GenericRealtimeFlame();
             m_largerFlame = true;
             m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
@@ -679,7 +681,7 @@ namespace FireDemo
             dbCandle.SetPalette(palCandle);
             dbCandle.AddShape(lsCandle);
             left = (this.Width - fireWidth * magnification) / 2;
-            top = (this.Height - fireHeight * magnification) / 2;
+            top = (this.Height - fireHeight * magnification);
             dbCandle.Location = new Point(x: left, y: top);
 
             m_palette = palCandle;
