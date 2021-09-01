@@ -71,7 +71,7 @@ namespace FireDemo
         public int NextValue()
         {
             if (useFullRange)
-                return rng.Next(minIntensity, maxIntensity);
+                return rng.Next(minIntensity, maxIntensity + 1);
             else if (rng.NextDouble() < 0.5)
                 return minIntensity;
             else
