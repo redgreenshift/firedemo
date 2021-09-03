@@ -240,13 +240,13 @@ namespace FireDemo
             else if (color == Color.Black)
             {
                 Color c2 = Color.White;
-                Color c3 = Color.Gray;
+                Color c3 = Color.Black;
                 Color c4 = Color.Black;
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4);
             }
             else if (color == Color.White)
             {
-                Color c2 = Color.Gray;
+                Color c2 = Color.White; // LightGray;
                 Color c3 = Color.White;
                 Color c4 = Color.White;
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4);
