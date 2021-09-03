@@ -666,14 +666,17 @@ namespace FireDemo
 
             Color[] palCandle = PalRealisticFire.New();
 
-            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38));
-            // Color.Maroon
-            // TODO: JRDV: Maroon == Color.FromArgb(223, 38, 38) Looks interesting!
+            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38)); // This looks good at low resolution in an 8bit video game (better than 4 point linear)
+            //palCandle = PalRealisticFlameCurve.New(Color.Maroon); // Color.Maroon == Color.FromArgb(128, 0, 0) not great
+            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1)); // Looks better as a "realistic" flame, not 8bit video game
 
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
-                density: 0.4f, min: 5, max: 13, smoothing: 5,
+                //density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code
+                //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling)
+                //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
+                density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo
                 shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
@@ -905,17 +908,20 @@ namespace FireDemo
             cauldronFireHeight = 25 * 2;
             cauldronFireMagnification = 1;
 
-            Color[] palCauldron;
-            //palCauldron = PalRealisticFlameCurve.New(Color.DarkRed);
-            //palCauldron = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.White);
-            //palCauldron = PalFourPointLinear.New(Color.Black, Color.DarkOrange, Color.Yellow, Color.White);
-            palCauldron = PalFourPointLinear.New(
+            Color[] palCauldron1;
+            Color[] palCauldron2;
+            //palCauldron1 = PalRealisticFlameCurve.New(Color.DarkRed);
+            //palCauldron1 = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.White);
+            //palCauldron1 = PalFourPointLinear.New(Color.Black, Color.DarkOrange, Color.Yellow, Color.White);
+            palCauldron1 = PalFourPointLinear.New(
                 Color.Black,
                 Color.FromArgb(255, 185, 0),
                 Color.FromArgb(255, 255, 127),
                 Color.FromArgb(212, 212, 255));
-            Color[] palTorch = PalRealisticFire.New();
-            //palCauldron = palTorch;
+            Color[] palTorch1 = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38)); // Great 8 bit fire palette
+            palCauldron1 = palTorch1;
+            Color[] palTorch2 = PalRealisticFire.New();
+            palCauldron2 = palTorch2;
 
             CauldronBase cauldronBase1 = new CauldronBase
             {
@@ -933,7 +939,7 @@ namespace FireDemo
                 //density: 0.6f, min: 8, max: 23, smoothing: 0,
                 shift: true, rotate: true);
 
-            ILightPen lpBonfire1 = new LightPen(fill: 0.6f, min: 54, max: 255, useFullRange: true);
+            ILightPen lpBonfire1 = new LightPen(fill: 0.6f, min: 54, max: 255, useFullRange: false);
             ILightShape lsBonfire1 = new LightShapeCandle();
             lsBonfire1.SetPen(lpBonfire1);
 
@@ -941,7 +947,7 @@ namespace FireDemo
             dbCauldronFire1.Initialize(cauldronFireWidth, cauldronFireHeight, cauldronFireMagnification);
             dbCauldronFire1.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbCauldronFire1.SetCoolingStrategy(csBonfire1);
-            dbCauldronFire1.SetPalette(palCauldron);
+            dbCauldronFire1.SetPalette(palCauldron1);
             dbCauldronFire1.AddShape(lsBonfire1);
             left = cauldronBase1.Location.X + 1;
             top = cauldronBase1.Location.Y - (dbCauldronFire1.Height - 1)* dbCauldronFire1.Magnification + 1;
@@ -958,28 +964,34 @@ namespace FireDemo
             };
             m_dbSprites.Add(cauldronBase2);
 
+
+            // J likes this cauldron2 better, more pixelated, with:
+            // cauldronFireWidth = 19 * 2 - 1;
+            // cauldronFireHeight = 25 * 2;
+            // density: 0.3f, min: 3, max: 35, smoothing: 0
+            // fill: 0.7f, min: 54, max: 255, useFullRange: false
             AbstractRealtimeLightEffect dbCauldronFire2 = new RealtimeFire();
             CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
             csBonfire2.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
-                density: 0.6f, min: 6, max: 13, smoothing: 0,
+                density: 0.3f, min: 3, max: 35, smoothing: 0, // looks good with realistic palette
+                //density: 0.2f, min: 3, max: 15, smoothing: 0,
+                //density: 0.6f, min: 6, max: 13, smoothing: 0, // looks good with 4 point linear palette
                 //density: 0.7f, min: 9, max: 21, smoothing: 0,
                 shift: true, rotate: true);
 
-            ILightPen lpBonfire2 = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: true);
+            ILightPen lpBonfire2 = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: false);
             ILightShape lsBonfire2 = new LightShapeCandle();
             lsBonfire2.SetPen(lpBonfire2);
 
             dbCauldronFire2.Initialize(cauldronFireWidth, cauldronFireHeight, cauldronFireMagnification);
             dbCauldronFire2.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbCauldronFire2.SetCoolingStrategy(csBonfire2);
-            dbCauldronFire2.SetPalette(palCauldron);
+            dbCauldronFire2.SetPalette(palCauldron2);
             dbCauldronFire2.AddShape(lsBonfire2);
             left = cauldronBase2.Location.X + 1;
             top = cauldronBase2.Location.Y - (dbCauldronFire2.Height - 1) * dbCauldronFire2.Magnification + 1;
             dbCauldronFire2.Location = new Point(x: left, y: top);
             m_dbSprites.Add(dbCauldronFire2);
-
-            // TODO: Add 2 torches, and the life bar
 
             ILightPen lpTorch;
             //lpTorch = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
@@ -1009,14 +1021,14 @@ namespace FireDemo
 
             CoolingStrategyMap csTorch1 = new CoolingStrategyMap();
             csTorch1.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
-                density: 0.4f, min: 3, max: 21, smoothing: 1,
+                density: 0.3f, min: 5, max: 23, smoothing: 1,
                 shift: true, rotate: true);
 
             AbstractRealtimeLightEffect dbTorch1 = new RealtimeFire();
             dbTorch1.Initialize(torchFlameWidth, torchFlameHeight, magnification: torchMagnification);
             dbTorch1.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbTorch1.SetCoolingStrategy(csTorch1);
-            dbTorch1.SetPalette(palTorch);
+            dbTorch1.SetPalette(palTorch1);
             dbTorch1.AddShape(lsTorch);
             left = torchHandle1.Location.X - 2;
             top = torchHandle1.Location.Y - (dbTorch1.Height - 1) * dbTorch1.Magnification + 1;
@@ -1033,6 +1045,11 @@ namespace FireDemo
             };
             m_dbSprites.Add(torchHandle2);
 
+            // J likes this torch2 better, moves more realistic, with:
+            // torchFlameHeight = 35;
+            // torchFlameWidth = 12;
+            // density: 0.3f, min: 5, max: 23, smoothing: 1
+            // lpTorch = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
             CoolingStrategyMap csTorch2 = new CoolingStrategyMap();
             csTorch2.SetMapParameters(width: torchFlameWidth, height: torchFlameHeight,
                 density: 0.3f, min: 5, max: 23, smoothing: 1,
@@ -1042,7 +1059,7 @@ namespace FireDemo
             dbTorch2.Initialize(torchFlameWidth, torchFlameHeight, magnification: torchMagnification);
             dbTorch2.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbTorch2.SetCoolingStrategy(csTorch2);
-            dbTorch2.SetPalette(palTorch);
+            dbTorch2.SetPalette(palTorch2);
             dbTorch2.AddShape(lsTorch);
             left = torchHandle2.Location.X - 2;
             top = torchHandle2.Location.Y - (dbTorch2.Height - 1) * dbTorch2.Magnification + 1;
@@ -1343,7 +1360,7 @@ namespace FireDemo
             m_dbSprites.Clear();
 
             Color[] colors = { Color.Red,
-                Color.FromArgb(255, 1, 1), // Color.DarkOrange,
+                Color.FromArgb(255, 1, 1), // Color.DarkOrange, ??? Color.FromArgb(223, 38, 38)
                 Color.Yellow,
                 Color.FromArgb(0, 255, 0) /* NOT Color.Green*/,
                 Color.FromArgb(0, 255, 128), // BlueGreen
