@@ -18,6 +18,22 @@ namespace FireDemo
 		public InterpolationMode InterpolationMode { get; set; }
 		public CompositingMode CompositingMode { get; set; }
 
+		public virtual void Initialize(int width, int height, int magnification)
+		{
+			this.Magnification = magnification;
+			this.Width = width;
+			this.Height = height;
+
+			//Form = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+			//Form = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
+			//Form = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+
+			// 32bit with Alpha seems slightly faster, or at the very least not noticibly slower
+			// for the largest fire shapes, so no need to parameterize the value for now.
+			// Therefore this is fast enough for now.
+			Form = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+		}
+
 		public Color GetPixel(int x, int y)
         {
 			return Form.GetPixel(x, y);
@@ -57,11 +73,43 @@ namespace FireDemo
 
 			graph.CompositingMode = cm;
 			graph.InterpolationMode = im;
-
 		}
 
 		public virtual void RenderOneFrameToScreen(Graphics graph)
 		{
+			DrawOn(graph);
+		}
+	}
+
+	/// <summary>
+	/// Blends multiple sprites together using the CompositingMode, to reduce flicker when rendering every frame
+	/// Generally used to eliminate flicker when drawing multiple DynamicSprites to the same area
+	/// Or call this a Layered Sprite, where each of the components are typically the same size and overlap
+	/// ...as opposed to the other "Background" SpriteCompositor which generally takes non-overlapping sprites and flattens to a single image which draws faster.
+	/// LayeredSprite vs GridSprite?
+	/// </summary>
+	class CompoundSprite : SimpleSprite
+	{
+        readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
+
+		public void Add(SimpleSprite sprite)
+		{
+			m_dbSprites.Add(sprite);
+		}
+		public void AddRange(IEnumerable<SimpleSprite> sprites)
+		{
+			m_dbSprites.AddRange(sprites);
+		}
+		public override void RenderOneFrameToScreen(Graphics graph)
+		{
+			using (Graphics g = Graphics.FromImage(Form))
+			{
+				foreach (SimpleSprite sprite in m_dbSprites)
+				{
+					sprite.RenderOneFrameToScreen(g);
+				}
+			}
+
 			DrawOn(graph);
 		}
 	}
@@ -582,11 +630,16 @@ namespace FireDemo
 	// The idea is that I would like to be able to flatten multiple sprites into a single bitmap for speed,
 	// and eventually generalize that in this class. For now, it's hard coded for the one composite "scene"
 	// I want to create that is reminicient of the "It's dangerous to go alone, take this thing"
-	class SpriteCompositor : SimpleSprite
+	// TODO: Generalize into a CompoundSprite or something named similar that can repeat sprites in a grid
+	// perhaps use "Using(Graphics g onthe(Form))
+	/// <summary>
+	/// Flattens multiple static sprites into a single image which renders a lot faster than multiple smaller sprites
+	/// </summary>
+	class SpriteVideoGameBackground : SimpleSprite
     {
 		public SimpleSprite Sprite { get; set; }
 
-		public SpriteCompositor()
+		public SpriteVideoGameBackground()
         {
 			// TODO: parameterize this. For now I know the Pi device dimensions.
 			Width = 1024;

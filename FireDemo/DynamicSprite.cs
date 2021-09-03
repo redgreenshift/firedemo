@@ -11,27 +11,12 @@ namespace FireDemo
 {
     abstract class AbstractDynamicSprite : SimpleSprite
     {
-        protected BitmapLocker poker;
+        protected BitmapLocker poker; // Optimization for accessing the Form faster
         protected Color[] thePalette;
 
-        protected AbstractDynamicSprite()
+        public override void Initialize(int width, int height, int magnification)
         {
-        }
-        public virtual void Initialize(int width, int height, int magnification)
-        {
-            Location = new Point(0, 0);
-            this.Magnification = magnification;
-            this.Width = width;
-            this.Height = height;
-
-            //Form = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            //Form = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
-            //Form = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-
-            // 32bit with Alpha seems slightly faster, or at the very least not noticibly slower
-            // for the largest fire shapes, so no need to parameterize the value for now.
-            // Therefore this is fast enough for now.
-            Form = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            base.Initialize(width, height, magnification);
             poker = new BitmapLocker(Form);
         }
 
@@ -375,7 +360,7 @@ namespace FireDemo
 
                     // Average the colors
                     calc = p8 + p5 + p1 + p2 + p3;
-                    calc /=  5;
+                    calc /= 5;
 
                     // Subtract the coolingFactor value, if necessary
                     coolingFactor = coolingStrategy.at(x, y);
@@ -408,7 +393,6 @@ namespace FireDemo
             //. . .
             //. 5 .
             //1 2 3
-            //"
             int calc, p1, p2, p3, p5, coolingFactor;
 
             poker.LockBits(ImageLockMode.WriteOnly);
@@ -445,6 +429,234 @@ namespace FireDemo
             poker.UnlockBits();
         }
     }
+
+
+    #region EXPERIMENTAL Sauron classes
+
+    /// <summary>
+    /// Optimized for flames flowing from the center of the screen
+    /// </summary>
+    class RealtimeFireSauronV1_PupilOutward : AbstractRealtimeLightEffect
+    {
+        protected override void RenderStage2And3()
+        {
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+
+            // Average these pixels:
+            // . . 9
+            // . 5 6
+            // . . 3
+            // OR Average these pixels (depending on direction):
+            // 7 . .
+            // 4 5 .
+            // 1 . .
+            int calc, coolingFactor;
+            bool f1, f2, f3, f4, f5, f6, f7, f8, f9;
+
+            f1 = false;
+            f2 = false;
+            f3 = true;
+            f4 = false;
+            f5 = true;
+            f6 = true;
+            f7 = false;
+            f8 = false;
+            f9 = true;
+
+            poker.LockBits(ImageLockMode.WriteOnly);
+            // The original Fire Demo went from 1 to MAX-1,
+            // so leave the fire calculation as-is.
+            for (int y = 1; y < Height - 1; ++y)
+            {
+                for (int x = 1; x < Width - 1; ++x)
+                {
+                    if (x == 1)
+                    {
+                        f1 = false;
+                        f2 = false;
+                        f3 = true;
+                        f4 = false;
+                        f5 = true;
+                        f6 = true;
+                        f7 = false;
+                        f8 = false;
+                        f9 = true;
+                    }
+                    else if (x == Width / 2)
+                    {
+                        f1 = true;
+                        f2 = false;
+                        f3 = false;
+                        f4 = true;
+                        f5 = true;
+                        f6 = false;
+                        f7 = true;
+                        f8 = false;
+                        f9 = false;
+                    }
+                    calc = 0;
+                    // Add the surrounding pixels
+                    if (f7)
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y - 1);
+                    if (f8)
+                        calc += intensityMatrix.GetPixelPrevious(x, y - 1);
+                    if (f9)
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y - 1);
+                    if (f4)
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y);
+                    if (f5)
+                        calc += intensityMatrix.GetPixelPrevious(x, y);
+                    if (f6)
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y);
+                    if (f1)
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y + 1);
+                    if (f2)
+                        calc += intensityMatrix.GetPixelPrevious(x, y + 1);
+                    if (f3)
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y + 1);
+
+
+                    // Add the surrounding pixels
+                    //p5 = intensityMatrix.GetPixelPrevious(x, y);
+                    //p1 = intensityMatrix.GetPixelPrevious(x - 1, y + 1);
+                    //p2 = intensityMatrix.GetPixelPrevious(x, y + 1);
+                    //p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
+
+                    // Average the colors
+                    //calc = p5 + p1 + p2 + p3;
+                    calc /= 4;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.SetPixelNext(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+            poker.UnlockBits();
+        }
+    }
+
+
+    /// <summary>
+    /// Optimized for flames flowing toward the center of the screen
+    /// </summary>
+    class RealtimeFireSauronV2_Inward : AbstractRealtimeLightEffect
+    {
+        protected override void RenderStage2And3()
+        {
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+
+            // Average these pixels:
+            // . . 9
+            // . 5 6
+            // . . 3
+            // OR Average these pixels (depending on direction):
+            // 7 . .
+            // 4 5 .
+            // 1 . .
+            int calc, coolingFactor;
+            bool f1, f2, f3, f4, f5, f6, f7, f8, f9;
+
+            f1 = true;
+            f2 = false;
+            f3 = false;
+            f4 = true;
+            f5 = true;
+            f6 = false;
+            f7 = true;
+            f8 = false;
+            f9 = false;
+
+            poker.LockBits(ImageLockMode.WriteOnly);
+            // The original Fire Demo went from 1 to MAX-1,
+            // so leave the fire calculation as-is.
+            for (int y = 1; y < Height - 1; ++y)
+            {
+                for (int x = 1; x < Width - 1; ++x)
+                {
+                    if (x == 1)
+                    {
+                        f1 = true;
+                        f2 = false;
+                        f3 = false;
+                        f4 = true;
+                        f5 = true;
+                        f6 = false;
+                        f7 = true;
+                        f8 = false;
+                        f9 = false;
+                    }
+                    else if (x == Width / 2)
+                    {
+                        f1 = false;
+                        f2 = false;
+                        f3 = true;
+                        f4 = false;
+                        f5 = true;
+                        f6 = true;
+                        f7 = false;
+                        f8 = false;
+                        f9 = true;
+                    }
+                    calc = 0;
+                    // Add the surrounding pixels
+                    if (f7)
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y - 1);
+                    if (f8)
+                        calc += intensityMatrix.GetPixelPrevious(x, y - 1);
+                    if (f9)
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y - 1);
+                    if (f4)
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y);
+                    if (f5)
+                        calc += intensityMatrix.GetPixelPrevious(x, y);
+                    if (f6)
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y);
+                    if (f1)
+                        calc += intensityMatrix.GetPixelPrevious(x - 1, y + 1);
+                    if (f2)
+                        calc += intensityMatrix.GetPixelPrevious(x, y + 1);
+                    if (f3)
+                        calc += intensityMatrix.GetPixelPrevious(x + 1, y + 1);
+
+
+                    // Add the surrounding pixels
+                    //p5 = intensityMatrix.GetPixelPrevious(x, y);
+                    //p1 = intensityMatrix.GetPixelPrevious(x - 1, y + 1);
+                    //p2 = intensityMatrix.GetPixelPrevious(x, y + 1);
+                    //p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
+
+                    // Average the colors
+                    //calc = p5 + p1 + p2 + p3;
+                    calc /= 4;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.SetPixelNext(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+            poker.UnlockBits();
+        }
+    }
+
+    #endregion // Sauron EXPERIMENT
 
     /// <summary>
     /// Optimized for Flaming Batman Logo

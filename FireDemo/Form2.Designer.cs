@@ -44,6 +44,8 @@ namespace FireDemo
             this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonAdvanced = new System.Windows.Forms.Button();
             this.buttonFastRender = new System.Windows.Forms.Button();
+            this.buttonSauronV1 = new System.Windows.Forms.Button();
+            this.buttonSauronV2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -128,6 +130,8 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonSauronV2);
+            this.groupBox1.Controls.Add(this.buttonSauronV1);
             this.groupBox1.Controls.Add(this.buttonFastRender);
             this.groupBox1.Controls.Add(this.buttonAdvanced);
             this.groupBox1.Controls.Add(this.buttonQuit);
@@ -178,7 +182,7 @@ namespace FireDemo
             // 
             // buttonAdvanced
             // 
-            this.buttonAdvanced.Location = new System.Drawing.Point(362, 117);
+            this.buttonAdvanced.Location = new System.Drawing.Point(7, 408);
             this.buttonAdvanced.Name = "buttonAdvanced";
             this.buttonAdvanced.Size = new System.Drawing.Size(172, 90);
             this.buttonAdvanced.TabIndex = 10;
@@ -188,13 +192,33 @@ namespace FireDemo
             // 
             // buttonFastRender
             // 
-            this.buttonFastRender.Location = new System.Drawing.Point(362, 213);
+            this.buttonFastRender.Location = new System.Drawing.Point(185, 408);
             this.buttonFastRender.Name = "buttonFastRender";
-            this.buttonFastRender.Size = new System.Drawing.Size(172, 90);
+            this.buttonFastRender.Size = new System.Drawing.Size(171, 90);
             this.buttonFastRender.TabIndex = 11;
             this.buttonFastRender.Text = "Fast Render Experiment";
             this.buttonFastRender.UseVisualStyleBackColor = true;
             this.buttonFastRender.Click += new System.EventHandler(this.buttonFastRender_Click);
+            // 
+            // buttonSauronV1
+            // 
+            this.buttonSauronV1.Location = new System.Drawing.Point(362, 117);
+            this.buttonSauronV1.Name = "buttonSauronV1";
+            this.buttonSauronV1.Size = new System.Drawing.Size(172, 90);
+            this.buttonSauronV1.TabIndex = 12;
+            this.buttonSauronV1.Text = "Sauron v2.1";
+            this.buttonSauronV1.UseVisualStyleBackColor = true;
+            this.buttonSauronV1.Click += new System.EventHandler(this.buttonSauronV1_Click);
+            // 
+            // buttonSauronV2
+            // 
+            this.buttonSauronV2.Location = new System.Drawing.Point(362, 213);
+            this.buttonSauronV2.Name = "buttonSauronV2";
+            this.buttonSauronV2.Size = new System.Drawing.Size(172, 90);
+            this.buttonSauronV2.TabIndex = 13;
+            this.buttonSauronV2.Text = "Sauron v2.2";
+            this.buttonSauronV2.UseVisualStyleBackColor = true;
+            this.buttonSauronV2.Click += new System.EventHandler(this.buttonSauronV2_Click);
             // 
             // Form2
             // 
@@ -229,5 +253,7 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonQuit;
         private System.Windows.Forms.Button buttonAdvanced;
         private System.Windows.Forms.Button buttonFastRender;
+        private System.Windows.Forms.Button buttonSauronV1;
+        private System.Windows.Forms.Button buttonSauronV2;
     }
 }

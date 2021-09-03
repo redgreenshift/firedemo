@@ -82,6 +82,60 @@ namespace FireDemo
             }
         }
 
+#if false
+        protected void DrawCurveY(int xCenter, int yCenter, int radius, float ptStart, float ptEnd, IntensityMap canvas)
+        {
+            // draw a circle from source to destination using the pen
+            int x, y, xx, xLast, width;
+
+            width = canvas.Width;
+
+            int iStart = (int)((yCenter - radius) + ptStart * (2 * radius));
+            int iEnd = (int)((yCenter + radius) - (1.0f - ptEnd) * (2 * radius));
+            y = (iStart - yCenter);
+            xLast = (int)Math.Sqrt(radius * radius - y * y) + xCenter;
+            for (int yy = iStart; yy <= iEnd; ++yy)
+            {
+                y = (yy - yCenter);
+                x = (int)Math.Sqrt(radius * radius - y * y);
+
+                xx = x + xCenter;
+
+                this.DrawLine(xx, yy, xLast, yy, canvas);
+
+                this.DrawLine((width - xx), yy, (width - xLast), yy, canvas);
+
+                xLast = xx;
+            }
+        }
+#endif
+
+        protected void DrawCurveX(int xCenter, int yCenter, int radius, float ptStart, float ptEnd, IntensityMap canvas, int xOffset)
+        {
+            // draw a circle from source to destination using the pen
+            int x, y, yy, yLast, height;
+
+            height = canvas.Height;
+
+            int iStart = (int)((xCenter - radius) + ptStart * (2 * radius));
+            int iEnd = (int)((xCenter + radius) - (1.0f - ptEnd) * (2 * radius));
+            x = (iStart - xCenter);
+            yLast = (int)Math.Sqrt(radius * radius - x * x) + yCenter;
+            for (int xx = iStart; xx <= iEnd; ++xx)
+            {
+                x = (xx - xCenter);
+                y = (int)Math.Sqrt(radius * radius - x * x);
+
+                yy = y + yCenter;
+
+                this.DrawLine(xx + xOffset, yy, xx + xOffset, yLast, canvas);
+
+                this.DrawLine(xx + xOffset, (height - yy), xx + xOffset, (height - yLast), canvas);
+
+                yLast = yy;
+            }
+        }
+
         protected void DrawLine(int x0, int y0, int x1, int y1, IntensityMap canvas)
         {
             // draw a line from source to destination using the pen
@@ -147,7 +201,7 @@ namespace FireDemo
                 }
             }
         }
-        #endregion // Internal Drawing Methods
+#endregion // Internal Drawing Methods
     }
 
     class LightShapeCandle : LightShapeBase
@@ -250,7 +304,7 @@ namespace FireDemo
         {
             rng = new Random();
         }
- 
+
         override public void DrawOn(IntensityMap canvas)
         {
             if (rng.Next(25) == 1)
@@ -415,7 +469,7 @@ namespace FireDemo
         }
     }
 
-    #region Borg Light Drawing
+#region Borg Light Drawing
     class LightShapeBorgPlasma : LightShapeLightning
     {
         override public void DrawOn(IntensityMap canvas)
@@ -447,5 +501,51 @@ namespace FireDemo
             this.DrawCircle(xCenter, yCenter, radius, canvas);
         }
     }
-    #endregion // Borg Light Drawing
+#endregion // Borg Light Drawing
+
+#region EXPERIMENT Sauron experiment
+    class LightShapeSauronV1_PupilOutward : LightShapeBase
+    {
+        override public void DrawOn(IntensityMap canvas)
+        {
+            // Draw the seed coal values for a Flaming Sauron Eye!
+
+            int width = canvas.Width;
+            int height = canvas.Height;
+            int radius = Math.Min(height, width) / 2;
+
+            /*
+             * < () >
+             */
+            //DrawLine(width / 2, 0, width / 2, height - 1, canvas);
+            //DrawCurveY(width / 2, height / 4 * 3, radius, 0, 0.2f, canvas);
+            //DrawCurveY(width / 2, height / 7 * 3, radius, 0.8f, 1, canvas);
+            int xOffset = -19; // TODO: Verify this is the correct offset
+            DrawCurveX(width / 4 * 3, height / 2, radius, 0, 0.165f, canvas, xOffset);
+            DrawCurveX(width / 7 * 3, height / 2, radius, 0.845f, 1, canvas, xOffset);
+
+        }
+    }
+
+    class LightShapeSauronV2_Inward : LightShapeBase
+    {
+        override public void DrawOn(IntensityMap canvas)
+        {
+            // Draw the seed coal values for a Flaming Sauron Eye!
+
+            int width = canvas.Width;
+            int height = canvas.Height;
+            int radius = Math.Min(height, width) / 2;
+
+            /*
+             * < () >
+             */
+            DrawLine(0, height / 2, width / 2, 0, canvas);
+            DrawLine(0, height / 2, width / 2, height - 1, canvas);
+            DrawLine(width / 2, 0, width - 1, height / 2, canvas);
+            DrawLine(width / 2, height - 1, width -1, height / 2, canvas);
+        }
+    }
+#endregion
+
 }
