@@ -627,6 +627,7 @@ namespace FireDemo
                     this.Size = originalSize;
                 }
                 groupBox1.Hide();
+                groupBoxExperiment.Hide();
                 buttonChange.Hide();
                 buttonDemo.Hide();
                 //Cursor = Cursors.UpArrow;
@@ -650,6 +651,7 @@ namespace FireDemo
                     originalSize = Size.Empty;
                 }
                 groupBox1.Show();
+                groupBoxExperiment.Show();
                 buttonChange.Show();
                 buttonDemo.Show();
             }
