@@ -237,6 +237,20 @@ namespace FireDemo
                 Color c4 = Color.FromArgb(red: 255, green: 192, blue: 255);
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4);
             }
+            else if (color == Color.Black)
+            {
+                Color c2 = Color.White;
+                Color c3 = Color.Gray;
+                Color c4 = Color.Black;
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4);
+            }
+            else if (color == Color.White)
+            {
+                Color c2 = Color.Gray;
+                Color c3 = Color.White;
+                Color c4 = Color.White;
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4);
+            }
             else
                 PalFourPointLinear.Fill(thePalette, Color.White, color, Color.White, Color.Black);
         }
