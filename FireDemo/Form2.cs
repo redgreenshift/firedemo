@@ -1317,8 +1317,6 @@ namespace FireDemo
             int fireWidth = 21;
             int fireHeight = 45;
             int magnification = 4;
-            int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
-            int left = buttonDemo.Location.X + buttonDemo.Size.Width;
 
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
@@ -1336,7 +1334,6 @@ namespace FireDemo
             dbCandle = new RealtimeCandleflame();
             dbCandle.Initialize(fireWidth, fireHeight, magnification);
             dbCandle.SetCoolingStrategy(coolingStrategy);
-            //dbCandle.SetPalette(palCandle);
             dbCandle.AddShape(lsCandle);
 
             return dbCandle;
@@ -1345,24 +1342,18 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
 
-            Color[] colors = { Color.FromArgb(255, 0, 0) /*same as Color.Red*/,
+            Color[] colors = { Color.Red, // Color.FromArgb(255, 0, 0) /*same as Color.Red*/,
                 Color.FromArgb(255, 1, 1), // Color.DarkOrange,
                 Color.Yellow,
                 Color.FromArgb(0, 255, 0) /* NOT Color.Green*/,
                 Color.FromArgb(0, 255, 128), // BlueGreen
                 Color.Blue,
-                Color.FromArgb(0, 255, 255), // same as Color.Cyan
+                Color.Cyan, // same as Color.Cyan
                 Color.FromArgb(128, 0, 255) /* NOT Color.Violet*/,
-                Color.FromArgb(255, 0, 255), // Same as Color.Magenta
+                Color.Magenta, // Same as Color.Magenta
                 Color.Black, Color.White };
 
             Color[] palCandle;
-            //palCandle = PalRealisticFire.New();
-            //palCandle = PalFlatPalette.New(Color.Orange);
-            //palCandle = PalRealisticFlameCurve.New(Color.White);
-            //palCandle = PalRealisticFlameCurve.New(Color.Black);
-            //palCandle = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.Blue);
-
             palCandle = PalRealisticFire.New();
             AbstractRealtimeLightEffect realCandle = GenerateCandle();
             realCandle.SetPalette(palCandle);

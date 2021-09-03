@@ -160,6 +160,86 @@ namespace FireDemo
     /// </summary>
     public class PalFourPointLinear : PaletteGenerator
     {
+        public static Color[] New(Color color)
+        {
+            Color[] thePalette = new Color[256];
+            Fill(thePalette, color);
+            return thePalette;
+        }
+
+        public static Color[] NewRaw(Color c2)
+        {
+            return NewRaw(c2, Color.White);
+        }
+
+        public static Color[] NewRaw(Color c2, Color c3)
+        {
+            Color[] thePalette = new Color[256];
+            PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.FromArgb(212, 212, 255));
+            return thePalette;
+        }
+
+        public static void Fill(Color[] thePalette, Color color)
+        {
+            Color c4Blue = Color.FromArgb(212, 212, 255);
+            // Tweak the basic colors to what I think looks best
+            if (color == Color.Red)
+            {
+                Color c3 = Color.FromArgb(red: 255, green: 170, blue: 0);
+                PalFourPointLinear.Fill(thePalette, Color.Black, color, c3, c4Blue);
+            }
+            else if (color == Color.Orange || color == Color.FromArgb(255, 1, 1))
+            {
+                Color c2 = Color.FromArgb(red: 255, green: 170, blue: 0);
+                Color c3 = Color.FromArgb(red: 255, green: 200, blue: 0);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            }
+            else if (color == Color.Yellow)
+            {
+                Color c2 = Color.FromArgb(red: 255, green: 255, blue: 0);
+                Color c3 = Color.FromArgb(red: 255, green: 255, blue: 128);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White /*not c4Blue*/);
+            }
+            else if (color == Color.Green || color == Color.FromArgb(0, 255, 0))
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 255, blue: 0);
+                Color c3 = Color.FromArgb(red: 128, green: 255, blue: 128);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            }
+            else if (color == Color.Blue)
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 0, blue: 255);
+                Color c3 = Color.FromArgb(red: 0, green: 255, blue: 255);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            }
+            else if (color == Color.Violet || color == Color.FromArgb(128, 0, 255))
+            {
+                Color c2 = Color.FromArgb(red: 128, green: 0, blue: 255);
+                Color c3 = Color.FromArgb(red: 128, green: 128, blue: 255);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            }
+            else if (color == Color.FromArgb(0, 255, 128)) // BlueGreen
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 0, blue: 255);
+                Color c3 = Color.FromArgb(red: 0, green: 128, blue: 64);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            }
+            else if (color == Color.Cyan)
+            {
+                Color c2 = Color.FromArgb(red: 0, green: 255, blue: 255);
+                Color c3 = Color.FromArgb(red: 128, green: 255, blue: 255);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            }
+            else if (color == Color.Magenta)
+            {
+                Color c2 = Color.FromArgb(red: 255, green: 0, blue: 255);
+                Color c3 = Color.FromArgb(red: 255, green: 128, blue: 255);
+                Color c4 = Color.FromArgb(red: 255, green: 192, blue: 255);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4);
+            }
+            else
+                PalFourPointLinear.Fill(thePalette, Color.White, color, Color.White, Color.Black);
+        }
         public static Color[] New(Color c1, Color c2, Color c3, Color c4)
         {
             Color[] thePalette = new Color[256];
