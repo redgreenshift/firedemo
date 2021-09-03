@@ -1328,17 +1328,26 @@ namespace FireDemo
             return dbSauron;
         }
 
-
+        /// <summary>
+        /// Caller is responsible for setting the palette
+        /// </summary>
+        /// <returns></returns>
         AbstractRealtimeLightEffect GenerateCandle()
         {
             int fireWidth = 21;
             int fireHeight = 45;
             int magnification = 4;
 
+            // delay to force the RNGs to seed with different values each time
+            // a candle is created, so all the flames don't look the same
+            // TODO: probably should directly set the seed...
+            Thread.Sleep(millisecondsTimeout: 2);
+
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
                 density: 0.4f, min: 5, max: 13, smoothing: 5,
+                //density: 0.3f, min: 5, max: 23, smoothing: 5,
                 shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
