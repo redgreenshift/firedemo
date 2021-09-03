@@ -434,10 +434,11 @@ namespace FireDemo
     #region EXPERIMENTAL Sauron classes
 
     /// <summary>
-    /// Optimized for flames flowing from the center of the screen
+    /// Optimized for flames flowing into (or outfrom) the center of the screen
     /// </summary>
     class RealtimeFireSauronV1_PupilOutward : AbstractRealtimeLightEffect
     {
+        protected bool Inward = false;
         protected override void RenderStage2And3()
         {
             //{ For flame effect scroll through every pixel and  }
@@ -473,29 +474,33 @@ namespace FireDemo
             {
                 for (int x = 1; x < Width - 1; ++x)
                 {
-                    if (x == 1)
+                    if (x == 1 || x == Width / 2)
                     {
-                        f1 = false;
-                        f2 = false;
-                        f3 = true;
-                        f4 = false;
-                        f5 = true;
-                        f6 = true;
-                        f7 = false;
-                        f8 = false;
-                        f9 = true;
-                    }
-                    else if (x == Width / 2)
-                    {
-                        f1 = true;
-                        f2 = false;
-                        f3 = false;
-                        f4 = true;
-                        f5 = true;
-                        f6 = false;
-                        f7 = true;
-                        f8 = false;
-                        f9 = false;
+                        bool goLeft = !Inward && x == 1 || Inward && x != 1;
+                        if (goLeft)
+                        {
+                            f1 = false;
+                            f2 = false;
+                            f3 = true;
+                            f4 = false;
+                            f5 = true;
+                            f6 = true;
+                            f7 = false;
+                            f8 = false;
+                            f9 = true;
+                        }
+                        else
+                        {
+                            f1 = true;
+                            f2 = false;
+                            f3 = false;
+                            f4 = true;
+                            f5 = true;
+                            f6 = false;
+                            f7 = true;
+                            f8 = false;
+                            f9 = false;
+                        }
                     }
                     calc = 0;
                     // Add the surrounding pixels
@@ -543,120 +548,20 @@ namespace FireDemo
             poker.UnlockBits();
         }
     }
-
 
     /// <summary>
     /// Optimized for flames flowing toward the center of the screen
     /// </summary>
-    class RealtimeFireSauronV2_Inward : AbstractRealtimeLightEffect
+    class RealtimeFireSauronV2_Inward : RealtimeFireSauronV1_PupilOutward
     {
-        protected override void RenderStage2And3()
+        public RealtimeFireSauronV2_Inward()
         {
-            //{ For flame effect scroll through every pixel and  }
-            //{ choose some other pixels around it. Divide by    }
-            //{ the ammount of pixels you added up and then      }
-            //{ subtract a decay ammount.                        }
-
-            // Average these pixels:
-            // . . 9
-            // . 5 6
-            // . . 3
-            // OR Average these pixels (depending on direction):
-            // 7 . .
-            // 4 5 .
-            // 1 . .
-            int calc, coolingFactor;
-            bool f1, f2, f3, f4, f5, f6, f7, f8, f9;
-
-            f1 = true;
-            f2 = false;
-            f3 = false;
-            f4 = true;
-            f5 = true;
-            f6 = false;
-            f7 = true;
-            f8 = false;
-            f9 = false;
-
-            poker.LockBits(ImageLockMode.WriteOnly);
-            // The original Fire Demo went from 1 to MAX-1,
-            // so leave the fire calculation as-is.
-            for (int y = 1; y < Height - 1; ++y)
-            {
-                for (int x = 1; x < Width - 1; ++x)
-                {
-                    if (x == 1)
-                    {
-                        f1 = true;
-                        f2 = false;
-                        f3 = false;
-                        f4 = true;
-                        f5 = true;
-                        f6 = false;
-                        f7 = true;
-                        f8 = false;
-                        f9 = false;
-                    }
-                    else if (x == Width / 2)
-                    {
-                        f1 = false;
-                        f2 = false;
-                        f3 = true;
-                        f4 = false;
-                        f5 = true;
-                        f6 = true;
-                        f7 = false;
-                        f8 = false;
-                        f9 = true;
-                    }
-                    calc = 0;
-                    // Add the surrounding pixels
-                    if (f7)
-                        calc += intensityMatrix.GetPixelPrevious(x - 1, y - 1);
-                    if (f8)
-                        calc += intensityMatrix.GetPixelPrevious(x, y - 1);
-                    if (f9)
-                        calc += intensityMatrix.GetPixelPrevious(x + 1, y - 1);
-                    if (f4)
-                        calc += intensityMatrix.GetPixelPrevious(x - 1, y);
-                    if (f5)
-                        calc += intensityMatrix.GetPixelPrevious(x, y);
-                    if (f6)
-                        calc += intensityMatrix.GetPixelPrevious(x + 1, y);
-                    if (f1)
-                        calc += intensityMatrix.GetPixelPrevious(x - 1, y + 1);
-                    if (f2)
-                        calc += intensityMatrix.GetPixelPrevious(x, y + 1);
-                    if (f3)
-                        calc += intensityMatrix.GetPixelPrevious(x + 1, y + 1);
-
-
-                    // Add the surrounding pixels
-                    //p5 = intensityMatrix.GetPixelPrevious(x, y);
-                    //p1 = intensityMatrix.GetPixelPrevious(x - 1, y + 1);
-                    //p2 = intensityMatrix.GetPixelPrevious(x, y + 1);
-                    //p3 = intensityMatrix.GetPixelPrevious(x + 1, y + 1);
-
-                    // Average the colors
-                    //calc = p5 + p1 + p2 + p3;
-                    calc /= 4;
-
-                    // Subtract the coolingFactor value, if necessary
-                    coolingFactor = coolingStrategy.at(x, y);
-                    if (calc > coolingFactor)
-                        calc -= coolingFactor;
-                    else
-                        calc = 0;
-
-                    intensityMatrix.SetPixelNext(x, y, calc);
-                    poker.SetPixel(x, y, this.thePalette[calc]);
-                }
-            }
-            poker.UnlockBits();
+            Inward = true;
         }
     }
 
     #endregion // Sauron EXPERIMENT
+
 
     /// <summary>
     /// Optimized for Flaming Batman Logo
