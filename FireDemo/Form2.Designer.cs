@@ -39,13 +39,14 @@ namespace FireDemo
             this.buttonAvailableStatus = new System.Windows.Forms.Button();
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonSauronV2 = new System.Windows.Forms.Button();
+            this.buttonSauronV1 = new System.Windows.Forms.Button();
+            this.buttonFastRender = new System.Windows.Forms.Button();
+            this.buttonAdvanced = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
             this.buttonBatmanSingleThread = new System.Windows.Forms.Button();
             this.buttonRainBORG = new System.Windows.Forms.Button();
-            this.buttonAdvanced = new System.Windows.Forms.Button();
-            this.buttonFastRender = new System.Windows.Forms.Button();
-            this.buttonSauronV1 = new System.Windows.Forms.Button();
-            this.buttonSauronV2 = new System.Windows.Forms.Button();
+            this.buttonRainbowFire = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -130,6 +131,7 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonRainbowFire);
             this.groupBox1.Controls.Add(this.buttonSauronV2);
             this.groupBox1.Controls.Add(this.buttonSauronV1);
             this.groupBox1.Controls.Add(this.buttonFastRender);
@@ -149,6 +151,46 @@ namespace FireDemo
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
+            // 
+            // buttonSauronV2
+            // 
+            this.buttonSauronV2.Location = new System.Drawing.Point(362, 213);
+            this.buttonSauronV2.Name = "buttonSauronV2";
+            this.buttonSauronV2.Size = new System.Drawing.Size(172, 90);
+            this.buttonSauronV2.TabIndex = 13;
+            this.buttonSauronV2.Text = "Sauron v2.2";
+            this.buttonSauronV2.UseVisualStyleBackColor = true;
+            this.buttonSauronV2.Click += new System.EventHandler(this.buttonSauronV2_Click);
+            // 
+            // buttonSauronV1
+            // 
+            this.buttonSauronV1.Location = new System.Drawing.Point(362, 117);
+            this.buttonSauronV1.Name = "buttonSauronV1";
+            this.buttonSauronV1.Size = new System.Drawing.Size(172, 90);
+            this.buttonSauronV1.TabIndex = 12;
+            this.buttonSauronV1.Text = "Sauron v2.1";
+            this.buttonSauronV1.UseVisualStyleBackColor = true;
+            this.buttonSauronV1.Click += new System.EventHandler(this.buttonSauronV1_Click);
+            // 
+            // buttonFastRender
+            // 
+            this.buttonFastRender.Location = new System.Drawing.Point(185, 408);
+            this.buttonFastRender.Name = "buttonFastRender";
+            this.buttonFastRender.Size = new System.Drawing.Size(171, 90);
+            this.buttonFastRender.TabIndex = 11;
+            this.buttonFastRender.Text = "Fast Render Experiment";
+            this.buttonFastRender.UseVisualStyleBackColor = true;
+            this.buttonFastRender.Click += new System.EventHandler(this.buttonFastRender_Click);
+            // 
+            // buttonAdvanced
+            // 
+            this.buttonAdvanced.Location = new System.Drawing.Point(7, 408);
+            this.buttonAdvanced.Name = "buttonAdvanced";
+            this.buttonAdvanced.Size = new System.Drawing.Size(172, 90);
+            this.buttonAdvanced.TabIndex = 10;
+            this.buttonAdvanced.Text = "Original Experiment";
+            this.buttonAdvanced.UseVisualStyleBackColor = true;
+            this.buttonAdvanced.Click += new System.EventHandler(this.buttonAdvanced_Click);
             // 
             // buttonQuit
             // 
@@ -180,45 +222,15 @@ namespace FireDemo
             this.buttonRainBORG.UseVisualStyleBackColor = true;
             this.buttonRainBORG.Click += new System.EventHandler(this.buttonRainBORG_Click);
             // 
-            // buttonAdvanced
+            // buttonRainbowFire
             // 
-            this.buttonAdvanced.Location = new System.Drawing.Point(7, 408);
-            this.buttonAdvanced.Name = "buttonAdvanced";
-            this.buttonAdvanced.Size = new System.Drawing.Size(172, 90);
-            this.buttonAdvanced.TabIndex = 10;
-            this.buttonAdvanced.Text = "Original Experiment";
-            this.buttonAdvanced.UseVisualStyleBackColor = true;
-            this.buttonAdvanced.Click += new System.EventHandler(this.buttonAdvanced_Click);
-            // 
-            // buttonFastRender
-            // 
-            this.buttonFastRender.Location = new System.Drawing.Point(185, 408);
-            this.buttonFastRender.Name = "buttonFastRender";
-            this.buttonFastRender.Size = new System.Drawing.Size(171, 90);
-            this.buttonFastRender.TabIndex = 11;
-            this.buttonFastRender.Text = "Fast Render Experiment";
-            this.buttonFastRender.UseVisualStyleBackColor = true;
-            this.buttonFastRender.Click += new System.EventHandler(this.buttonFastRender_Click);
-            // 
-            // buttonSauronV1
-            // 
-            this.buttonSauronV1.Location = new System.Drawing.Point(362, 117);
-            this.buttonSauronV1.Name = "buttonSauronV1";
-            this.buttonSauronV1.Size = new System.Drawing.Size(172, 90);
-            this.buttonSauronV1.TabIndex = 12;
-            this.buttonSauronV1.Text = "Sauron v2.1";
-            this.buttonSauronV1.UseVisualStyleBackColor = true;
-            this.buttonSauronV1.Click += new System.EventHandler(this.buttonSauronV1_Click);
-            // 
-            // buttonSauronV2
-            // 
-            this.buttonSauronV2.Location = new System.Drawing.Point(362, 213);
-            this.buttonSauronV2.Name = "buttonSauronV2";
-            this.buttonSauronV2.Size = new System.Drawing.Size(172, 90);
-            this.buttonSauronV2.TabIndex = 13;
-            this.buttonSauronV2.Text = "Sauron v2.2";
-            this.buttonSauronV2.UseVisualStyleBackColor = true;
-            this.buttonSauronV2.Click += new System.EventHandler(this.buttonSauronV2_Click);
+            this.buttonRainbowFire.Location = new System.Drawing.Point(184, 309);
+            this.buttonRainbowFire.Name = "buttonRainbowFire";
+            this.buttonRainbowFire.Size = new System.Drawing.Size(171, 90);
+            this.buttonRainbowFire.TabIndex = 14;
+            this.buttonRainbowFire.Text = "Rainbow Fire";
+            this.buttonRainbowFire.UseVisualStyleBackColor = true;
+            this.buttonRainbowFire.Click += new System.EventHandler(this.buttonRainbowFire_Click);
             // 
             // Form2
             // 
@@ -255,5 +267,6 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonFastRender;
         private System.Windows.Forms.Button buttonSauronV1;
         private System.Windows.Forms.Button buttonSauronV2;
+        private System.Windows.Forms.Button buttonRainbowFire;
     }
 }
