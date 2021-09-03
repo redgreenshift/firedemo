@@ -830,11 +830,11 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
 
-            int ringWidth = 129;
-            int ringHeight = 131;
+            int ringWidth;
+            int ringHeight;
             ringWidth = 129 / 2;
             ringHeight = 131 / 2;
-            int ringMagnification = 2;
+            int ringMagnification;
             ringMagnification = 1;
             int left, top;
 
@@ -903,9 +903,9 @@ namespace FireDemo
             m_dbSprites.Add(brickWall);
 
 
-            int cauldronFireWidth = 19;
-            int cauldronFireHeight = 25;
-            int cauldronFireMagnification = 2;
+            int cauldronFireWidth;
+            int cauldronFireHeight;
+            int cauldronFireMagnification;
             cauldronFireWidth = 19 * 2 - 1;
             cauldronFireHeight = 25 * 2;
             cauldronFireMagnification = 1;
@@ -1004,9 +1004,9 @@ namespace FireDemo
             ILightShape lsTorch = new LightShapeCandle();
             lsTorch.SetPen(lpTorch);
 
-            int torchFlameHeight = 25;
-            int torchFlameWidth = 10;
-            int torchMagnification = 4;
+            int torchFlameHeight;
+            int torchFlameWidth;
+            int torchMagnification;
             torchFlameHeight = 35;
             torchFlameWidth = 12;
             torchMagnification = 3;
@@ -1154,11 +1154,8 @@ namespace FireDemo
             //palFire = PalFourPointLinear.New(Color.DarkOrange);
             //palFire = PalPlasma.New(Color.Orange);
 
-            // I don't understand why this fixes the transparency issue on the Pi device.
-            // I'm just setting aplha to zero for a SINGLE color, and making nothing transparent,
-            // and yet, now all the colors 1-255 render perfectly opaque, and the final color 0 is perfectly transparent.
-            // Efefctively what this should do: palFire[0] = Color.Transparent;
             // Color.Transparent doesn't work in Linux, even though it works fine in Windows.
+            // Setting alpha to zero (effectively the same thing) does work in Linux.
             palFire[0] = Color.FromArgb(0, palFire[0]);
 
             foreach (AbstractDynamicSprite temp in dbSprites)
@@ -1246,33 +1243,23 @@ namespace FireDemo
             // Then "transform" it with a delta field to squish it into the eye shape?
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them.
-            Color[] palFire = PalRealisticFire.New();
-            palFire[0] = Color.Transparent;
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             LightShapeSauronV1_PupilOutward lsSauron = new LightShapeSauronV1_PupilOutward();
             ICoolingStrategy csSauron;
-            csSauron = new CoolingStrategyConst(2);
             m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(
-                width, height,
+            m_coolingStrategy.SetMapParameters(width, height,
                 density: 0.3f, min: 3, max: 15, smoothing: 1,
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsSauron.SetPen(lpSauronEye);
-            AbstractRealtimeLightEffect dbSauron;
-            //dbSauron = new RealtimeFireSauron();
-            dbSauron = new RealtimeFireSauronV1_PupilOutward();
+            AbstractRealtimeLightEffect dbSauron = new RealtimeFireSauronV1_PupilOutward();
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
-            dbSauron.SetPalette(palFire);
             dbSauron.AddShape(lsSauron);
 
             //LightShapeLightning lsLightning = new LightShapeLightning();
             //dbSauron.AddShape(lsLightning);
 
-            int left = (this.Width - width * magnification) / 2;
-            int top = (this.Height - height * magnification) / 2;
-            dbSauron.Location = new Point(x: left, y: top);
             return dbSauron;
         }
 
@@ -1291,32 +1278,24 @@ namespace FireDemo
             // Then "transform" it with a delta field to squish it into the eye shape?
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them.
-            Color[] palFire = PalRealisticFire.New();
-            palFire[0] = Color.Transparent;
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: false);
             LightShapeSauronV2_Inward lsSauron = new LightShapeSauronV2_Inward();
             ICoolingStrategy csSauron;
-            csSauron = new CoolingStrategyConst(2);
             m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(
-                width, height,
+            m_coolingStrategy.SetMapParameters(width, height,
                 density: 0.1f, min: 3, max: 25, smoothing: 1,
+                //density: 0.2f, min: 3, max: 15, smoothing: 0, // Copied from BATMAN
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsSauron.SetPen(lpSauronEye);
-            AbstractRealtimeLightEffect dbSauron;
-            dbSauron = new RealtimeFireSauronV2_Inward();
+            AbstractRealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
-            dbSauron.SetPalette(palFire);
             dbSauron.AddShape(lsSauron);
 
             //LightShapeLightning lsLightning = new LightShapeLightning();
             //dbSauron.AddShape(lsLightning);
 
-            int left = (this.Width - width * magnification) / 2;
-            int top = (this.Height - height * magnification) / 2;
-            dbSauron.Location = new Point(x: left, y: top);
             return dbSauron;
         }
 
@@ -1335,32 +1314,23 @@ namespace FireDemo
             // Then "transform" it with a delta field to squish it into the eye shape?
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them.
-            Color[] palFire = PalRealisticFire.New();
-            palFire[0] = Color.Transparent;
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: false);
             ILightShape lsSauron = new LightShapeBorgRing();
             ICoolingStrategy csSauron;
-            csSauron = new CoolingStrategyConst(2);
             m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(
-                width, height,
+            m_coolingStrategy.SetMapParameters(width, height,
                 density: 0.1f, min: 3, max: 25, smoothing: 1,
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsSauron.SetPen(lpSauronEye);
-            AbstractRealtimeLightEffect dbSauron;
-            dbSauron = new RealtimeFireSauronV2_Inward();
+            AbstractRealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
-            dbSauron.SetPalette(palFire);
             dbSauron.AddShape(lsSauron);
 
             //LightShapeLightning lsLightning = new LightShapeLightning();
             //dbSauron.AddShape(lsLightning);
 
-            int left = (this.Width - width * magnification) / 2;
-            int top = (this.Height - height * magnification) / 2;
-            dbSauron.Location = new Point(x: left, y: top);
             return dbSauron;
         }
 
