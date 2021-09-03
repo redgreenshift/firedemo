@@ -1139,10 +1139,33 @@ namespace FireDemo
             m_dbSprites.Clear();
 
             int magnification = 2;
-            List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>();
-            //dbSprites.Add(CreateSauron_EyeRingInward());
-            dbSprites.Add(CreateSauron_CornersOfEyeInward());
-            dbSprites.Add(CreateSauron_PupilOutward());
+            List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>()
+            {
+                CreateSauron_CornersOfEyeInward(),
+                //CreateSauron_EyeRingInward(),
+                CreateSauron_PupilOutward(),
+            };
+
+            Color[] palFire;
+            //palFire = PalFourPointLinear.New(Color.Orange);
+            //palFire = PalPlasma.New(Color.Orange);
+            palFire = PalRealisticFlameCurve.New(Color.Yellow);
+            palFire = PalRealisticFire.New();
+            //palFire = PalFourPointLinear.New(Color.DarkOrange);
+            //palFire = PalPlasma.New(Color.Orange);
+
+            // I don't understand why this fixes the transparency issue on the Pi device.
+            // I'm just setting aplha to zero for a SINGLE color, and making nothing transparent,
+            // and yet, now all the colors 1-255 render perfectly opaque, and the final color 0 is perfectly transparent.
+            // Efefctively what this should do: palFire[0] = Color.Transparent;
+            // Color.Transparent doesn't work in Linux, even though it works fine in Windows.
+            palFire[0] = Color.FromArgb(0, palFire[0]);
+
+            foreach (AbstractDynamicSprite temp in dbSprites)
+            {
+                temp.SetPalette(palFire);
+            }
+
             CompoundSprite dbSauron = new CompoundSprite();
 
             int width = 0;
@@ -1155,12 +1178,11 @@ namespace FireDemo
             }
 
             dbSauron.Initialize(width, height, magnification);
-            int left = (Width - width) / 2;
-            int top = (Height - height) / 2;
+            int left = (Width - width * magnification) / 2;
+            int top = (Height - height * magnification) / 2;
             dbSauron.Location = new Point(left, top);
 
-            foreach (AbstractDynamicSprite s in dbSprites)
-                dbSauron.Add(s);
+            dbSauron.AddRange(dbSprites);
 
             m_dbSprites.Add(dbSauron);
 
@@ -1171,11 +1193,23 @@ namespace FireDemo
             m_dbSprites.Clear();
 
             int magnification = 2;
-            List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>();
-            dbSprites.Add(CreateSauron_EyeRingInward());
-            //dbSprites.Add(CreateSauron_CornersOfEyeInward());
-            dbSprites.Add(CreateSauron_PupilOutward());
+            List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>
+            {
+                CreateSauron_EyeRingInward(),
+                //CreateSauron_CornersOfEyeInward(),
+                CreateSauron_PupilOutward(),
+            };
             CompoundSprite dbSauron = new CompoundSprite();
+
+            Color[] palFire;
+            palFire = PalRealisticFire.New();
+            palFire[0] = Color.FromArgb(0, palFire[0]);
+
+            foreach (AbstractDynamicSprite temp in dbSprites)
+            {
+                temp.SetPalette(palFire);
+            }
+
 
             int width = 0;
             int height = 0;
@@ -1187,8 +1221,8 @@ namespace FireDemo
             }
 
             dbSauron.Initialize(width, height, magnification);
-            int left = (Width - width) / 2;
-            int top = (Height - height) / 2;
+            int left = (Width - width * magnification) / 2;
+            int top = (Height - height * magnification) / 2;
             dbSauron.Location = new Point(left, top);
 
             dbSauron.AddRange(dbSprites);

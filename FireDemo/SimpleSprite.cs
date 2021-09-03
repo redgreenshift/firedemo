@@ -100,9 +100,24 @@ namespace FireDemo
 		{
 			m_dbSprites.AddRange(sprites);
 		}
-		public override void RenderOneFrameToScreen(Graphics graph)
+
+		/// <summary>
+		/// Temporary override to disgnose issues with overlay
+		/// </summary>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <param name="magnification"></param>
+        public override void Initialize(int width, int height, int magnification)
+        {
+            base.Initialize(width, height, magnification);
+			m_internalGraphics = Graphics.FromImage(Form);
+
+		}
+
+		Graphics m_internalGraphics;
+        public override void RenderOneFrameToScreen(Graphics graph)
 		{
-			using (Graphics g = Graphics.FromImage(Form))
+			Graphics g = m_internalGraphics;
 			{
 				foreach (SimpleSprite sprite in m_dbSprites)
 				{
