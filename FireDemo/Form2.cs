@@ -1342,7 +1342,7 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
 
-            Color[] colors = { Color.Red, // Color.FromArgb(255, 0, 0) /*same as Color.Red*/,
+            Color[] colors = { Color.Red,
                 Color.FromArgb(255, 1, 1), // Color.DarkOrange,
                 Color.Yellow,
                 Color.FromArgb(0, 255, 0) /* NOT Color.Green*/,
@@ -1368,17 +1368,40 @@ namespace FireDemo
             int width = realCandle.Width;
             int height = realCandle.Height;
             int magnification = realCandle.Magnification;
-            int bufferX = 50;
+            int bufferX = 45;
             int bufferY = 10;
             int iCandle = 1;
             foreach (Color color in colors)
             {
                 palCandle = PalRealisticFlameCurve.New(color);
-                //palCandle = PalFourPointLinear.New(color);
-                //palCandle = PalRealisticFlameCurveV2_EXPERIMENTAL.New(color);
                 AbstractRealtimeLightEffect dbCandle = GenerateCandle();
                 dbCandle.SetPalette(palCandle);
                 left = (width * magnification + bufferX) * (iCandle % 4);
+                top = (height * magnification + bufferY) * (iCandle / 4);
+                dbCandle.Location = new Point(x: left, y: top);
+
+                m_dbSprites.Add(dbCandle);
+                ++iCandle;
+            }
+
+
+            Color c2 = Color.FromArgb(red: 255, green: 185, blue: 0);
+            Color c3 = Color.FromArgb(red: 255, green: 255, blue: 127);
+            Color c4Blue = Color.FromArgb(212, 212, 255);
+            palCandle = PalFourPointLinear.New(Color.Black, c2, c3, c4Blue);
+            realCandle = GenerateCandle();
+            realCandle.SetPalette(palCandle);
+            realCandle.Location = new Point(x: Width / 2, y: 0);
+
+            m_dbSprites.Add(realCandle);
+
+            iCandle = 1;
+            foreach (Color color in colors)
+            {
+                palCandle = PalFourPointLinear.New(color);
+                AbstractRealtimeLightEffect dbCandle = GenerateCandle();
+                dbCandle.SetPalette(palCandle);
+                left = Width / 2 + (width * magnification + bufferX) * (iCandle % 4);
                 top = (height * magnification + bufferY) * (iCandle / 4);
                 dbCandle.Location = new Point(x: left, y: top);
 
