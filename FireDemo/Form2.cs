@@ -1332,41 +1332,48 @@ namespace FireDemo
         /// Caller is responsible for setting the palette
         /// </summary>
         /// <returns></returns>
-        AbstractRealtimeLightEffect GenerateCandle()
+        AbstractRealtimeLightEffect GenerateCandle(bool big = true)
         {
             int fireWidth = 21;
-            int fireHeight = 45;
+            int fireHeight = 50;
             int magnification = 4;
 
             // delay to force the RNGs to seed with different values each time
             // a candle is created, so all the flames don't look the same
             // TODO: probably should directly set the seed...
-            Thread.Sleep(millisecondsTimeout: 2);
+            Thread.Sleep(millisecondsTimeout: 3);
 
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
-                density: 0.4f, min: 5, max: 13, smoothing: 5,
+                //density: 0.4f, min: 5, max: 13, smoothing: 5,
                 //density: 0.3f, min: 5, max: 23, smoothing: 5,
+                density: 0.2f, min: 5, max: 29, smoothing: 5,
                 shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
+            // delay to force the RNGs to seed with different values each time
+            // a candle is created, so all the flames don't look the same
+            // TODO: probably should directly set the seed...
+            Thread.Sleep(millisecondsTimeout: 3);
             ILightPen lpCandle = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
             AbstractRealtimeLightEffect dbCandle;
-            //dbCandle = new GenericRealtimeFlame();
-            dbCandle = new RealtimeCandleflame();
+            dbCandle = big ? (AbstractRealtimeLightEffect)new RealtimeFire() : (AbstractRealtimeLightEffect)new RealtimeCandleflame();
             dbCandle.Initialize(fireWidth, fireHeight, magnification);
             dbCandle.SetCoolingStrategy(coolingStrategy);
             dbCandle.AddShape(lsCandle);
 
             return dbCandle;
         }
+
+        bool m_fBigRainbowFire = true;
         private void buttonRainbowFire_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
+            m_fBigRainbowFire = !m_fBigRainbowFire;
 
             Color[] colors = { Color.Red,
                 Color.FromArgb(255, 1, 1), // Color.DarkOrange, ??? Color.FromArgb(223, 38, 38)
@@ -1381,11 +1388,11 @@ namespace FireDemo
 
             Color[] palCandle;
             palCandle = PalRealisticFire.New();
-            AbstractRealtimeLightEffect realCandle = GenerateCandle();
+            AbstractRealtimeLightEffect realCandle = GenerateCandle(big: m_fBigRainbowFire);
             realCandle.SetPalette(palCandle);
 
-            int left = (this.Width - realCandle.Width * realCandle.Magnification) / 2;
-            int top = (this.Height - realCandle.Height * realCandle.Magnification) / 2;
+            int left;
+            int top;
             realCandle.Location = new Point(x: 0, y: 0);
 
             m_dbSprites.Add(realCandle);
@@ -1395,12 +1402,12 @@ namespace FireDemo
             int height = realCandle.Height;
             int magnification = realCandle.Magnification;
             int bufferX = 45;
-            int bufferY = 10;
+            int bufferY = 1;
             int iCandle = 1;
             foreach (Color color in colors)
             {
                 palCandle = PalRealisticFlameCurve.New(color);
-                AbstractRealtimeLightEffect dbCandle = GenerateCandle();
+                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
                 dbCandle.SetPalette(palCandle);
                 left = (width * magnification + bufferX) * (iCandle % 4);
                 top = (height * magnification + bufferY) * (iCandle / 4);
@@ -1415,7 +1422,7 @@ namespace FireDemo
             Color c3 = Color.FromArgb(red: 255, green: 255, blue: 127);
             Color c4Blue = Color.FromArgb(212, 212, 255);
             palCandle = PalFourPointLinear.New(Color.Black, c2, c3, c4Blue);
-            realCandle = GenerateCandle();
+            realCandle = GenerateCandle(big: m_fBigRainbowFire);
             realCandle.SetPalette(palCandle);
             realCandle.Location = new Point(x: Width / 2, y: 0);
 
@@ -1425,7 +1432,7 @@ namespace FireDemo
             foreach (Color color in colors)
             {
                 palCandle = PalFourPointLinear.New(color);
-                AbstractRealtimeLightEffect dbCandle = GenerateCandle();
+                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
                 dbCandle.SetPalette(palCandle);
                 left = Width / 2 + (width * magnification + bufferX) * (iCandle % 4);
                 top = (height * magnification + bufferY) * (iCandle / 4);
@@ -1434,7 +1441,6 @@ namespace FireDemo
                 m_dbSprites.Add(dbCandle);
                 ++iCandle;
             }
-
 
             buttonDemo_Click(null, null);
         }
