@@ -39,9 +39,20 @@ namespace FireDemo
 			return Form.GetPixel(x, y);
 		}
 
+		public static bool IsLinux
+		{
+			get
+			{
+				int p = (int)Environment.OSVersion.Platform;
+				return (p == 4) // Unix
+					|| (p == 6) // macOS
+					|| (p == 128); // Mono
+			}
+		}
+
 		public SimpleSprite()
 		{
-			this.InterpolationMode = InterpolationMode.Bicubic; // Default to BEST quality
+			this.InterpolationMode = IsLinux ? InterpolationMode.Bicubic : InterpolationMode.HighQualityBicubic; // Default to BEST quality
 			this.CompositingMode = CompositingMode.SourceOver; // Default to best QUALITY option (no blinking
 															   // due to blanking out the ENTIRE graph)
 															   // Caller can use SourceCopy for some extra speed

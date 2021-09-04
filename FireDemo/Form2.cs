@@ -1393,6 +1393,100 @@ namespace FireDemo
                 Color.Violet,
                 Color.Cyan,
                 Color.Magenta,
+                Color.FromArgb(0, 255, 128), // BlueGreen
+                Color.Indigo,
+                Color.Black,
+                Color.White,
+                Color.Transparent, // REALISTIC
+            };
+            Color[] colors4Point = {
+                Color.Transparent, // REALISTIC
+                Color.OrangeRed, // Kinda like it better than 4-point "realistic" :p
+                Color.FromArgb(0, 255, 128), // BlueGreen
+                Color.Red,
+                Color.Orange,
+                Color.Yellow,
+                Color.Green,
+                Color.Blue,
+                Color.Violet,
+                Color.Cyan,
+                Color.Magenta,
+            };
+
+            Color[] palCandle;
+            int left;
+            int top;
+            int width = -1;
+            int height = -1;
+            int magnification = -1;
+            int bufferX = 45;
+            int bufferY = 1;
+            int iCandle = 0;
+            foreach (Color color in colors)
+            {
+                if (color == Color.Transparent)
+                    palCandle = PalRealisticFire.New();
+                else
+                    palCandle = PalRealisticFlameCurve.New(color);
+                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                dbCandle.SetPalette(palCandle);
+
+                // LAZY INITIALIZATION!
+                if (width <= 0)
+                {
+                    width = dbCandle.Width;
+                    height = dbCandle.Height;
+                    magnification = dbCandle.Magnification;
+                }
+
+                left = (width * magnification + bufferX) * (iCandle % 8);
+                top = (height * magnification + bufferY) * (iCandle / 8);
+                dbCandle.Location = new Point(x: left, y: top);
+
+                m_dbSprites.Add(dbCandle);
+                ++iCandle;
+            }
+
+            foreach (Color color in colors4Point)
+            {
+                if (color == Color.Transparent)
+                {
+                    Color c2 = Color.FromArgb(red: 255, green: 185, blue: 0);
+                    Color c3 = Color.FromArgb(red: 255, green: 255, blue: 127);
+                    Color c4Blue = Color.FromArgb(212, 212, 255);
+                    palCandle = PalFourPointLinear.New(Color.Black, c2, c3, c4Blue);
+                }
+                else
+                    palCandle = PalFourPointLinear.New(color);
+                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                dbCandle.SetPalette(palCandle);
+                left = (width * magnification + bufferX) * (iCandle % 8);
+                top = (height * magnification + bufferY) * (iCandle / 8);
+                dbCandle.Location = new Point(x: left, y: top);
+
+                m_dbSprites.Add(dbCandle);
+                ++iCandle;
+            }
+
+            buttonDemo_Click(null, null);
+        }
+
+#if false // ExtraLargeRainbow (too slow)
+
+        private void LargerRainbowFire_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            m_fBigRainbowFire = !m_fBigRainbowFire;
+
+            Color[] colors = {
+                Color.Red,
+                Color.Orange,
+                Color.Yellow,
+                Color.Green,
+                Color.Blue,
+                Color.Violet,
+                Color.Cyan,
+                Color.Magenta,
                 Color.Transparent, // REALISTIC
                 Color.FromArgb(0, 255, 128), // BlueGreen
                 Color.Indigo,
@@ -1474,7 +1568,6 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-#if false // ExtraLargeRainbow (too slow)
         private void ExtraLargeRainbow(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
