@@ -439,8 +439,22 @@ namespace FireDemo
     class RealtimeFireSauronV1_PupilOutward : AbstractRealtimeLightEffect
     {
         protected bool Inward = false;
+        int frame = 0;
         protected override void RenderStage2And3()
         {
+            // HACK HACK HACK
+            if (!Inward)
+            {
+                // pupil, randomly move sometimes
+                if (frame % 60 == 0)
+                {
+                    Location = new Point(rng.Next(35, 65), y:  0);
+                }
+                ++frame;
+
+                //Location = new Point(35, 0);
+            }
+
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
             //{ the ammount of pixels you added up and then      }

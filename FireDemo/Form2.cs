@@ -1199,6 +1199,7 @@ namespace FireDemo
 
             Color[] palFire;
             palFire = PalRealisticFire.New();
+            palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
             palFire[0] = Color.FromArgb(0, palFire[0]);
 
             foreach (AbstractDynamicSprite temp in dbSprites)
@@ -1229,7 +1230,7 @@ namespace FireDemo
 
         private AbstractRealtimeLightEffect CreateSauron_PupilOutward()
         {
-            int width = 200;
+            int width = 100;
             int height = 100;
             int magnification = 1;
             // TODO: JRDV: Eye of Sauron?
@@ -1243,7 +1244,7 @@ namespace FireDemo
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them.
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
-            LightShapeSauronV1_PupilOutward lsSauron = new LightShapeSauronV1_PupilOutward();
+            ILightShape lsSauron = new LightShapeSauronV1_PupilNarrow();
             ICoolingStrategy csSauron;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width, height,
@@ -1278,7 +1279,7 @@ namespace FireDemo
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them.
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
-            LightShapeSauronV2_Inward lsSauron = new LightShapeSauronV2_Inward();
+            ILightShape lsSauron = new LightShapeSauronV2_Inward();
             ICoolingStrategy csSauron;
 
             // Copied from BATMAN! But doesn't work well here because I need long flames to cover a large area.

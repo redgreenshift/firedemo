@@ -523,7 +523,31 @@ namespace FireDemo
             int xOffset = -19; // TODO: Verify this is the correct offset
             DrawCurveX(width / 4 * 3, height / 2, radius, 0, 0.165f, canvas, xOffset);
             DrawCurveX(width / 7 * 3, height / 2, radius, 0.845f, 1, canvas, xOffset);
+        }
+    }
 
+    class LightShapeSauronV1_PupilNarrow : LightShapeBase
+    {
+        override public void DrawOn(IntensityMap canvas)
+        {
+            // Draw the seed coal values for a Flaming Sauron Eye!
+
+            int width = canvas.Width;
+            int height = canvas.Height;
+            int radius = Math.Min(height, width);
+
+            /*
+             * < () >
+             */
+            //DrawLine(width / 2, 0, width / 2, height - 1, canvas);
+            //DrawCurveY(width / 2, height / 4 * 3, radius, 0, 0.2f, canvas);
+            //DrawCurveY(width / 2, height / 7 * 3, radius, 0.8f, 1, canvas);
+            int xOffset = -19; // TODO: Verify this is the correct offset
+            // Worked fine at width 200
+            //DrawCurveX(width / 4 * 3 + 61, height / 2, radius, 0, 0.035f, canvas, xOffset);
+            //DrawCurveX(width / 7 * 3 - 58, height / 2, radius, 0.97f, 1, canvas, xOffset);
+            DrawCurveX(width / 4 * 3 + 84, height / 2, radius, 0, 0.035f, canvas, xOffset);
+            DrawCurveX(width / 7 * 3 - 67, height / 2, radius, 0.97f, 1, canvas, xOffset);
         }
     }
 
