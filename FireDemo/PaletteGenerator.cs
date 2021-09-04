@@ -188,9 +188,21 @@ namespace FireDemo
                 Color c3 = Color.FromArgb(red: 255, green: 170, blue: 0);
                 PalFourPointLinear.Fill(thePalette, Color.Black, color, c3, c4Blue);
             }
-            else if (color == Color.Orange || color == Color.FromArgb(255, 1, 1))
+            else if (color == Color.OrangeRed)
             {
-                Color c2 = Color.FromArgb(red: 255, green: 170, blue: 0);
+                Color c2 = Color.Red;
+                Color c3 = Color.FromArgb(red: 255, green: 170, blue: 0);
+                PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            }
+            //else if (color == Color.Orange) // This is too light. I much prefer the darker orange
+            //{
+            //    Color c2 = Color.FromArgb(red: 255, green: 170, blue: 0);
+            //    Color c3 = Color.FromArgb(red: 255, green: 200, blue: 0);
+            //    PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
+            //}
+            else if (color == Color.Orange || color == Color.DarkOrange|| color == Color.FromArgb(255, 1, 1))
+            {
+                Color c2 = Color.FromArgb(red: 255, green: 140, blue: 0); // Color.DarkOrange
                 Color c3 = Color.FromArgb(red: 255, green: 200, blue: 0);
                 PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, c4Blue);
             }
@@ -391,6 +403,14 @@ namespace FireDemo
                 InitializeRealisticFlameCurve(thePalette, color);
             return thePalette;
         }
+
+        static public Color[] NewRaw(Color color)
+        {
+            Color[] thePalette = new Color[256];
+            InitializeRealisticFlameCurve(thePalette, color);
+            return thePalette;
+        }
+
         static protected void InitializeRealisticFlameCurve(Color[] thePalette, Color target, float fIntensity = 1.0f)
         {
 #if false
