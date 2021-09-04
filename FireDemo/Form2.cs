@@ -1468,6 +1468,15 @@ namespace FireDemo
                 ++iCandle;
             }
 
+            // Unsure if this actually speeds anything up, it's about the same speed
+            // It's HALF the speed on Linux, so abandon this. Detecting Linux so we
+            // can use a faster InterpolationMode in Windows is a better option at this point
+            //CompoundSprite dbOptimizer = new CompoundSprite();
+            //dbOptimizer.Initialize(1024, 600, 1);
+            //dbOptimizer.AddRange(m_dbSprites);
+            //m_dbSprites.Clear();
+            //m_dbSprites.Add(dbOptimizer);
+
             buttonDemo_Click(null, null);
         }
 
