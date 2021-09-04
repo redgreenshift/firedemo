@@ -1147,9 +1147,6 @@ namespace FireDemo
             };
 
             Color[] palFire;
-            //palFire = PalFourPointLinear.New(Color.Orange);
-            //palFire = PalPlasma.New(Color.Orange);
-            palFire = PalRealisticFlameCurve.New(Color.Yellow);
             palFire = PalRealisticFire.New();
             palFire = PalFourPointLinear.New(Color.Red);
             palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
@@ -1283,6 +1280,10 @@ namespace FireDemo
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             LightShapeSauronV2_Inward lsSauron = new LightShapeSauronV2_Inward();
             ICoolingStrategy csSauron;
+
+            // Copied from BATMAN! But doesn't work well here because I need long flames to cover a large area.
+            // m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight, density: 0.2f, min: 3, max: 15, smoothing: 0, shift: true, rotate: false);
+            //ILightPen lpBatman = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: false);
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width, height,
                 density: 0.1f, min: 3, max: 25, smoothing: 1,
@@ -1444,6 +1445,88 @@ namespace FireDemo
                 dbCandle.SetPalette(palCandle);
                 left = Width / 2 + (width * magnification + bufferX) * (iCandle % 4);
                 top = (height * magnification + bufferY) * (iCandle / 4);
+                dbCandle.Location = new Point(x: left, y: top);
+
+                m_dbSprites.Add(dbCandle);
+                ++iCandle;
+            }
+
+            buttonDemo_Click(null, null);
+        }
+
+        private void ExtraLargeRainbow(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            m_fBigRainbowFire = !m_fBigRainbowFire;
+
+            Color[] colors = {
+                // REALISTIC is #1 and handled outside the loop!
+                Color.Red,
+                Color.Orange,
+                Color.Yellow,
+                Color.Green,
+                Color.Blue,
+                Color.Violet,
+                Color.Cyan,
+                Color.Magenta,
+                Color.Transparent,
+                Color.Indigo,
+                Color.FromArgb(0, 255, 128), // BlueGreen
+                Color.OrangeRed,
+                Color.Black,
+                Color.White,
+            };
+
+            Color[] palCandle;
+            palCandle = PalRealisticFire.New();
+            AbstractRealtimeLightEffect realCandle = GenerateCandle(big: m_fBigRainbowFire);
+            realCandle.SetPalette(palCandle);
+
+            int left;
+            int top;
+            realCandle.Location = new Point(x: 0, y: 0);
+
+            m_dbSprites.Add(realCandle);
+
+
+            int width = realCandle.Width;
+            int height = realCandle.Height;
+            int magnification = realCandle.Magnification;
+            int bufferX = 21;
+            int bufferY = 1;
+            int iCandle = 1;
+            foreach (Color color in colors)
+            {
+                palCandle = PalRealisticFlameCurve.New(color);
+                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                dbCandle.SetPalette(palCandle);
+                left = (width * magnification + bufferX) * (iCandle % 5);
+                top = (height * magnification + bufferY) * (iCandle / 5);
+                dbCandle.Location = new Point(x: left, y: top);
+
+                m_dbSprites.Add(dbCandle);
+                ++iCandle;
+            }
+
+
+            Color c2 = Color.FromArgb(red: 255, green: 185, blue: 0);
+            Color c3 = Color.FromArgb(red: 255, green: 255, blue: 127);
+            Color c4Blue = Color.FromArgb(212, 212, 255);
+            palCandle = PalFourPointLinear.New(Color.Black, c2, c3, c4Blue);
+            realCandle = GenerateCandle(big: m_fBigRainbowFire);
+            realCandle.SetPalette(palCandle);
+            realCandle.Location = new Point(x: Width / 2, y: 0);
+
+            m_dbSprites.Add(realCandle);
+
+            iCandle = 1;
+            foreach (Color color in colors)
+            {
+                palCandle = PalFourPointLinear.New(color);
+                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                dbCandle.SetPalette(palCandle);
+                left = Width / 2 + (width * magnification + bufferX) * (iCandle % 5);
+                top = (height * magnification + bufferY) * (iCandle / 5);
                 dbCandle.Location = new Point(x: left, y: top);
 
                 m_dbSprites.Add(dbCandle);
