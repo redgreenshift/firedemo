@@ -608,6 +608,12 @@ namespace FireDemo
                 int iIntensity = colTarget * (i / cDampen);
                 thePalette[i] = Color.FromArgb(iIntensity, iIntensity, iIntensity);
             }
+
+            Color[] pal4Point = PalFourPointLinear.New(Color.Black, thePalette[cDampen], Color.Black, Color.Black);
+            for (int i = 0; i < cDampen; ++i)
+            {
+                thePalette[i] = pal4Point[85 * i / cDampen];
+            }
         }
 
 

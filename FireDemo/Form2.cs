@@ -1401,7 +1401,7 @@ namespace FireDemo
             };
             Color[] colors4Point = {
                 Color.FromArgb(0, 255, 128), // BlueGreen
-                Color.Indigo, // Feel free to replace this if I find a better "interesting" color. This is just purple
+                Color.MediumVioletRed,
                 Color.Black,
                 Color.White,
                 Color.Transparent, // REALISTIC
