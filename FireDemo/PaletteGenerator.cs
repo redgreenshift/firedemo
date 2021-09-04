@@ -609,6 +609,19 @@ namespace FireDemo
                 thePalette[i] = Color.FromArgb(iIntensity, iIntensity, iIntensity);
             }
 
+            //int colMax = 0;
+            //for (int ii = 0; ii < thePalette.Length; ++ii)
+            //{
+            //    if (thePalette[ii].R > colMax)
+            //    {
+            //        colMax = thePalette[ii].R;
+            //        cDampen = ii;
+            //    }
+            //}
+
+            cDampen = 32; // I like 32!
+            //cDampen = 38;
+            cDampen = 42;
             Color[] pal4Point = PalFourPointLinear.New(Color.Black, thePalette[cDampen], Color.Black, Color.Black);
             for (int i = 0; i < cDampen; ++i)
             {

@@ -1401,9 +1401,9 @@ namespace FireDemo
             };
             Color[] colors4Point = {
                 Color.FromArgb(0, 255, 128), // BlueGreen
-                Color.MediumVioletRed,
                 Color.Black,
                 Color.White,
+                Color.MediumVioletRed,
                 Color.Transparent, // REALISTIC
                 Color.Red,
                 Color.Orange,
