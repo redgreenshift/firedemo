@@ -1151,6 +1151,8 @@ namespace FireDemo
             //palFire = PalPlasma.New(Color.Orange);
             palFire = PalRealisticFlameCurve.New(Color.Yellow);
             palFire = PalRealisticFire.New();
+            palFire = PalFourPointLinear.New(Color.Red);
+            palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
             //palFire = PalFourPointLinear.New(Color.DarkOrange);
             //palFire = PalPlasma.New(Color.Orange);
 
@@ -1278,7 +1280,7 @@ namespace FireDemo
             // Then "transform" it with a delta field to squish it into the eye shape?
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them.
-            LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: false);
+            LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             LightShapeSauronV2_Inward lsSauron = new LightShapeSauronV2_Inward();
             ICoolingStrategy csSauron;
             m_coolingStrategy = new CoolingStrategyMap();
