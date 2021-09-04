@@ -1400,10 +1400,11 @@ namespace FireDemo
                 Color.White,
             };
             Color[] colors4Point = {
-                Color.Black,
                 Color.FromArgb(0, 255, 128), // BlueGreen
-                //Color.Transparent, // REALISTIC
-                Color.OrangeRed, // Looks better than "realistic" so replacing it!
+                Color.Indigo, // Feel free to replace this if I find a better "interesting" color. This is just purple
+                Color.Black,
+                Color.White,
+                Color.Transparent, // REALISTIC
                 Color.Red,
                 Color.Orange,
                 Color.Yellow,
@@ -1412,9 +1413,7 @@ namespace FireDemo
                 Color.Violet,
                 Color.Cyan,
                 Color.Magenta,
-                //Color.OrangeRed,
-                //Color.Indigo,
-                //Color.White,
+                Color.OrangeRed, // Kinda like it better than 4-point "realistic" :p
             };
 
             Color[] palCandle;
@@ -1423,7 +1422,7 @@ namespace FireDemo
             int width = -1;
             int height = -1;
             int magnification = -1;
-            int bufferX = 45;
+            int bufferX = 33;
             int bufferY = 1;
             int iCandle = 0;
             foreach (Color color in colors)
@@ -1443,8 +1442,8 @@ namespace FireDemo
                     magnification = dbCandle.Magnification;
                 }
 
-                left = (width * magnification + bufferX) * (iCandle % 8);
-                top = (height * magnification + bufferY) * (iCandle / 8);
+                left = (width * magnification + bufferX) * (iCandle % 9);
+                top = (height * magnification + bufferY) * (iCandle / 9);
                 dbCandle.Location = new Point(x: left, y: top);
 
                 m_dbSprites.Add(dbCandle);
@@ -1464,8 +1463,8 @@ namespace FireDemo
                     palCandle = PalFourPointLinear.New(color);
                 AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
                 dbCandle.SetPalette(palCandle);
-                left = (width * magnification + bufferX) * (iCandle % 8);
-                top = (height * magnification + bufferY) * (iCandle / 8);
+                left = (width * magnification + bufferX) * (iCandle % 9);
+                top = (height * magnification + bufferY) * (iCandle / 9);
                 dbCandle.Location = new Point(x: left, y: top);
 
                 m_dbSprites.Add(dbCandle);
@@ -1475,6 +1474,7 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
+#if false // ExtraLargeRainbow (too slow)
         private void ExtraLargeRainbow(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
@@ -1556,5 +1556,6 @@ namespace FireDemo
 
             buttonDemo_Click(null, null);
         }
+#endif // ExtraLargeRainbow (too slow)
     }
 }
