@@ -1169,7 +1169,7 @@ namespace FireDemo
                 temp.SetPalette(palFire);
             }
 
-            CompoundSprite dbSauron = new CompoundSprite();
+            LayeredSprite dbSauron = new LayeredSprite();
 
             int width = 0;
             int height = 0;
@@ -1206,7 +1206,7 @@ namespace FireDemo
                 CreateSauron_EyeRingInward(sceneSize), // Ring for the outside of the eyeball
                 CreateSauron_PupilOutward(sceneSize, isNarrow: true), // Center for the pupil
             };
-            CompoundSprite dbSauron = new CompoundSprite();
+            LayeredSprite dbSauron = new LayeredSprite();
 
             Color[] palFire;
             palFire = PalRealisticFire.New();

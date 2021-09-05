@@ -84,11 +84,11 @@ namespace FireDemo
 	/// <summary>
 	/// Blends multiple sprites together using the CompositingMode, to reduce flicker when rendering every frame
 	/// Generally used to eliminate flicker when drawing multiple DynamicSprites to the same area
-	/// Or call this a Layered Sprite, where each of the components are typically the same size and overlap
-	/// ...as opposed to the other "Background" SpriteCompositor which generally takes non-overlapping sprites and flattens to a single image which draws faster.
-	/// LayeredSprite vs GridSprite?
+	/// ...as opposed to the other "Background" SpriteCompositor (SpriteVideoGameBackground)
+	/// which generally takes non-overlapping sprites and flattens to a single image which draws faster.
+	/// LayeredSprite vs GridSprite/SpriteGrid?
 	/// </summary>
-	class CompoundSprite : SimpleSprite
+	class LayeredSprite : SimpleSprite
 	{
         readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
 
