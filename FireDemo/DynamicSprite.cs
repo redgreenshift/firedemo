@@ -525,7 +525,9 @@ namespace FireDemo
                     // pupil, randomly move sometimes
                     if (frame % 60 == 0)
                     {
-                        Location = new Point(rng.Next(35, 65), y: 0);
+                        Location = new Point(
+                            x: LocationRange.Left + rng.Next(LocationRange.Width),
+                            y: LocationRange.Top + rng.Next(LocationRange.Height));
                     }
                     ++frame;
 

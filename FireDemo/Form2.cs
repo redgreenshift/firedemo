@@ -1137,13 +1137,14 @@ namespace FireDemo
         private void buttonSauronV1_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
+            Size size = new Size(width: 200, height: 100);
 
             int magnification = 2;
             List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>()
             {
                 CreateSauron_CornersOfEyeInward(),
                 //CreateSauron_EyeRingInward(),
-                CreateSauron_PupilOutward(isNarrow: false),
+                CreateSauron_PupilOutward(size, isNarrow: false),
             };
 
             Color[] palFire;
@@ -1183,16 +1184,17 @@ namespace FireDemo
         private void buttonSauronV2_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
+            Size sceneSize = new Size(width: 400, height: 100);
 
             int magnification = 2;
             List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>
             {
                 // TODO: JRDV: Add sideways layer of 4 Point red smoke
-                CreateSauronV3_SmokeOutward(left: true),
-                CreateSauronV3_SmokeOutward(left: false),
-                CreateSauron_EyeRingInward(),
+                CreateSauronV3_SmokeOutward(sceneSize, left: true),
+                CreateSauronV3_SmokeOutward(sceneSize, left: false),
+                CreateSauron_EyeRingInward(sceneSize),
                 //CreateSauron_CornersOfEyeInward(),
-                CreateSauron_PupilOutward(isNarrow: true),
+                CreateSauron_PupilOutward(sceneSize, isNarrow: true),
             };
             CompoundSprite dbSauron = new CompoundSprite();
 
@@ -1213,13 +1215,13 @@ namespace FireDemo
             dbSprites[1].SetPalette(palBackgroundSmoke);
 
 
-            int width = 0;
-            int height = 0;
-            foreach (AbstractDynamicSprite s in dbSprites)
-            {
-                width = Math.Max(width, s.Width);
-                height = Math.Max(height, s.Height);
-            }
+            int width = sceneSize.Width;
+            int height = sceneSize.Height;
+            //foreach (AbstractDynamicSprite s in dbSprites)
+            //{
+            //    width = Math.Max(width, s.Width);
+            //    height = Math.Max(height, s.Height);
+            //}
 
             dbSauron.Initialize(width, height, magnification);
             int left = (Width - width * magnification) / 2;
@@ -1232,11 +1234,15 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward(bool left)
+        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward(Size size, bool left)
         {
-            int width = 100;
-            int height = 100;
             int magnification = 1;
+            int dimension = Math.Min(size.Width, size.Height) / magnification;
+            int width = dimension; // TODO: Need to makethe other code work well when this isn't square...
+            int height = dimension;
+            int offset = 0;
+            if (size.Width > size.Height)
+                offset = (size.Width - size.Height - (width * magnification)) / 2;
             // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
             // Then "transform" it with a delta field to squish it into the eye shape?
             // Might be able to accomplish both transform functions simultaneously.
@@ -1252,8 +1258,10 @@ namespace FireDemo
             lsFireStick.SetPen(lpSauronBackground);
             GenericRealtimeFlame dbSauron = new GenericRealtimeFlame();
             dbSauron.Direction = left ? GenericRealtimeFlame.Orientation.Left : GenericRealtimeFlame.Orientation.Right;
-            if (!left)
-                dbSauron.Location = new Point(100, 0);
+            if (left)
+                dbSauron.Location = new Point(offset, 0);
+            else
+                dbSauron.Location = new Point(offset + width * magnification, 0);
             dbSauron.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
@@ -1262,11 +1270,15 @@ namespace FireDemo
             return dbSauron;
         }
 
-        private AbstractRealtimeLightEffect CreateSauron_PupilOutward(bool isNarrow)
+        private AbstractRealtimeLightEffect CreateSauron_PupilOutward(Size size, bool isNarrow)
         {
-            int width = isNarrow ? 100 : 200;
-            int height = 100;
             int magnification = 1;
+            //int dimension = Math.Min(size.Width, size.Height) / magnification;
+            int width = isNarrow ? 100 : 200;
+            int height = isNarrow ? 100 : 100; // pupil calculations are too specific for now. Need to generalize
+            int xCenter = (size.Width / 2);
+            int xLocation = xCenter - (width * magnification / 2);
+            int lookWidth = 30 * magnification;
             // Eye of Sauron
             // LightShape like a cat eye pupil (POC done)
             // Then define a fire blender that goes outward, (DONE)
@@ -1289,10 +1301,12 @@ namespace FireDemo
             RealtimeFireSauronV1_PupilOutward dbSauron = new RealtimeFireSauronV1_PupilOutward
             {
                 LookAround = isNarrow,
+                LocationRange = new Rectangle(x: xLocation - lookWidth / 2, y: 0, width: lookWidth, height: 0),
             };
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsPupil);
+            dbSauron.Location = new Point(xLocation, 0);
 
             if (!isNarrow)
             {
@@ -1334,11 +1348,11 @@ namespace FireDemo
             return dbSauron;
         }
 
-        private AbstractRealtimeLightEffect CreateSauron_EyeRingInward()
+        private AbstractRealtimeLightEffect CreateSauron_EyeRingInward(Size size)
         {
-            int width = 200;
-            int height = 100;
             int magnification = 1;
+            int width = Math.Min(size.Width, size.Height) / magnification; // Need to generalize the width/location calculations
+            int height = width;
 
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: false);
             ILightShape lsSauron = new LightShapeBorgRing();
@@ -1353,6 +1367,7 @@ namespace FireDemo
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsSauron);
+            dbSauron.Location = new Point((size.Width - width * magnification) / 2, 0);
 
             return dbSauron;
         }
