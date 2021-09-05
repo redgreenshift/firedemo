@@ -302,23 +302,20 @@ namespace FireDemo
             else if (Direction == Orientation.Left || Direction == Orientation.Right)
             {
                 Bitmap bmTemp = Form;
-                Bitmap bmRotatedForm; // = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+                using (Bitmap bmRotatedForm = new Bitmap(bmTemp)) // = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+                {
+                    bmRotatedForm.RotateFlip(Direction == Orientation.Left ? RotateFlipType.Rotate270FlipNone :
+                        RotateFlipType.Rotate90FlipNone);
+                    Form = bmRotatedForm;
+                    //int tempWidth = Width;
+                    //int tempHeight = Height;
 
-                // TODO: JRDV: Allocating a new Bitmap every frame is a big memory leak.
-                // It "works" but it's inefficient and leads to trhe app crashing after a few minutes.
-                // Checking it in since the old code had a memory leak too. Need to address this soon.
-                bmRotatedForm = new Bitmap(bmTemp);
-                bmRotatedForm.RotateFlip(Direction == Orientation.Left ? RotateFlipType.Rotate270FlipNone :
-                    RotateFlipType.Rotate90FlipNone);
-                Form = bmRotatedForm;
-                //int tempWidth = Width;
-                //int tempHeight = Height;
+                    base.RenderOneFrameToScreen(graph);
 
-                base.RenderOneFrameToScreen(graph);
-
-                //Height = tempHeight;
-                //Width = tempWidth;
-                Form = bmTemp;
+                    //Height = tempHeight;
+                    //Width = tempWidth;
+                    Form = bmTemp;
+                }
             }
         }
 
