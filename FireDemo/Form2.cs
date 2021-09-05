@@ -1187,6 +1187,7 @@ namespace FireDemo
             int magnification = 2;
             List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>
             {
+                CreateSauronV3_SmokeOutward(),
                 CreateSauron_EyeRingInward(),
                 //CreateSauron_CornersOfEyeInward(),
                 CreateSauron_PupilOutward(isNarrow: true),
@@ -1202,6 +1203,8 @@ namespace FireDemo
             {
                 temp.SetPalette(palFire);
             }
+
+            dbSprites[0].SetPalette(PalFourPointLinear.New(Color.Red));
 
 
             int width = 0;
@@ -1224,21 +1227,47 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
+        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward()
+        {
+            int width = 200;
+            int height = 100;
+            int magnification = 1;
+            // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
+            // Then "transform" it with a delta field to squish it into the eye shape?
+            // Might be able to accomplish both transform functions simultaneously.
+            // Do two of them. What do I mean two of them? OH, do two flames. Don't try to do both in the same layer
+            LightPen lpSauronBackground = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
+            LightShapeCandle lsFireStick = new LightShapeCandle();
+            lsFireStick.Vertical = true;
+            ICoolingStrategy csSauron;
+            m_coolingStrategy = new CoolingStrategyMap();
+            m_coolingStrategy.SetMapParameters(width, height,
+                density: 0.3f, min: 3, max: 15, smoothing: 1,
+                shift: true, rotate: false);
+            csSauron = m_coolingStrategy;
+            lsFireStick.SetPen(lpSauronBackground);
+            RealtimeFireSauronV1_PupilOutward dbSauron = new RealtimeFireSauronV1_PupilOutward
+            {
+                LookAround = false,
+            };
+            dbSauron.Initialize(width, height, magnification);
+            dbSauron.SetCoolingStrategy(csSauron);
+            dbSauron.AddShape(lsFireStick);
+
+            return dbSauron;
+        }
+
         private AbstractRealtimeLightEffect CreateSauron_PupilOutward(bool isNarrow)
         {
             int width = isNarrow ? 100 : 200;
             int height = 100;
             int magnification = 1;
-            // TODO: JRDV: Eye of Sauron?
-            // LightShape like a cat eye pupil?
-            // Then define a fire blender that goes outward,
+            // Eye of Sauron
+            // LightShape like a cat eye pupil (POC done)
+            // Then define a fire blender that goes outward, (DONE)
             // or inward with a MASSIVE cooling map in the pupil? That would be more failthful to the source. V2? Or port Greenshift?
-            // Then some directed lightning around the edge?
-            //
-            // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
-            // Then "transform" it with a delta field to squish it into the eye shape?
-            // Might be able to accomplish both transform functions simultaneously.
-            // Do two of them.
+            // Then some directed lightning around the edge? (not started)
+            // Maybe some sideways fire to make the background (in progress)
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             ILightShape lsPupil;
             if (isNarrow)
@@ -1266,21 +1295,15 @@ namespace FireDemo
             return dbSauron;
         }
 
+        /// <summary>
+        /// Old version that doesn't get the right shape or look, and I'm not sure it ever will.
+        /// </summary>
+        /// <returns></returns>
         private AbstractRealtimeLightEffect CreateSauron_CornersOfEyeInward()
         {
             int width = 200;
             int height = 100;
             int magnification = 1;
-            // TODO: JRDV: Eye of Sauron?
-            // LightShape like a cat eye pupil?
-            // Then define a fire blender that goes outward,
-            // or inward with a MASSIVE cooling map in the pupil? That would be more failthful to the source. V2? Or port Greenshift?
-            // Then some directed lightning around the edge?
-            //
-            // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
-            // Then "transform" it with a delta field to squish it into the eye shape?
-            // Might be able to accomplish both transform functions simultaneously.
-            // Do two of them.
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             ILightShape lsSauron = new LightShapeSauronV2_Inward();
             ICoolingStrategy csSauron;
@@ -1300,9 +1323,6 @@ namespace FireDemo
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsSauron);
 
-            //LightShapeLightning lsLightning = new LightShapeLightning();
-            //dbSauron.AddShape(lsLightning);
-
             return dbSauron;
         }
 
@@ -1311,16 +1331,7 @@ namespace FireDemo
             int width = 200;
             int height = 100;
             int magnification = 1;
-            // TODO: JRDV: Eye of Sauron?
-            // LightShape like a cat eye pupil?
-            // Then define a fire blender that goes outward,
-            // or inward with a MASSIVE cooling map in the pupil? That would be more failthful to the source. V2? Or port Greenshift?
-            // Then some directed lightning around the edge?
-            //
-            // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
-            // Then "transform" it with a delta field to squish it into the eye shape?
-            // Might be able to accomplish both transform functions simultaneously.
-            // Do two of them.
+
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: false);
             ILightShape lsSauron = new LightShapeBorgRing();
             ICoolingStrategy csSauron;
@@ -1334,9 +1345,6 @@ namespace FireDemo
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsSauron);
-
-            //LightShapeLightning lsLightning = new LightShapeLightning();
-            //dbSauron.AddShape(lsLightning);
 
             return dbSauron;
         }

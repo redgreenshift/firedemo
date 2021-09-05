@@ -207,6 +207,7 @@ namespace FireDemo
 
     class LightShapeCandle : LightShapeBase
     {
+        public bool Vertical { get; set; }
         public LightShapeCandle()
         {
             // need to draw the seed values to both the front and back buffers
@@ -219,7 +220,13 @@ namespace FireDemo
             // Set the next row of random coals to keep the fire going.
             int width = canvas.Width;
             int height = canvas.Height;
-            this.DrawLine(0, height - 1, width - 1, height - 1, canvas);
+            if (Vertical)
+            {
+                this.DrawLine(width / 2 - 1, 0, width / 2 - 1, height - 1, canvas);
+                this.DrawLine(width / 2, 0, width / 2, height - 1, canvas);
+            }
+            else
+                this.DrawLine(0, height - 1, width - 1, height - 1, canvas);
         }
     }
 
