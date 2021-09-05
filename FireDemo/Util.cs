@@ -11,10 +11,10 @@ namespace FireDemo
 		{
 			get
 			{
-				int p = (int)Environment.OSVersion.Platform;
-				return (p == 4) // Unix
-					|| (p == 6) // macOS
-					|| (p == 128); // Mono
+				PlatformID pid = Environment.OSVersion.Platform;
+				return (pid == PlatformID.Unix)
+					|| (pid == PlatformID.MacOSX)
+					|| ((int)pid == 128); // Mono
 			}
 		}
 	}
