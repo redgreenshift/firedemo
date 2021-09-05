@@ -212,6 +212,40 @@ namespace FireDemo
         }
     }
 
+    class StasisField : AbstractRealtimeLightEffect
+    {
+        protected override void RenderStage2And3()
+        {
+            // Copy over the bits without modification
+            poker.LockBits(ImageLockMode.WriteOnly);
+
+            // The original Fire Demo went from 1 to MAX-1,
+            // so this should produce the same results!
+            for (int y = 1; y < Height - 1; ++y)
+            {
+                for (int x = 1; x < Width - 1; ++x)
+                {
+                    int calc = intensityMatrix.GetPixelPrevious(x, y);
+
+                    // Subtract the coolingFactor value, if necessary
+                    int coolingFactor = coolingStrategy.at(x, y);
+                    // Uncomment to help debug the cooling map shift
+                    //if (coolingFactor < 0)
+                    //    calc = 255;
+                    //else
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.SetPixelNext(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+            poker.UnlockBits();
+        }
+    }
+
     /// <summary>
     /// Generalized implementation that allows changing the flame algorithm at runtime. Potentially slower, but more versatile.
     /// </summary>
@@ -226,7 +260,6 @@ namespace FireDemo
             Right,
         }
         public Orientation Direction { get; set; }
-        protected Bitmap RotatedForm { get; set; }
 
         public GenericRealtimeFlame()
         {
@@ -253,8 +286,8 @@ namespace FireDemo
             else if (Direction == Orientation.Left || Direction == Orientation.Right)
             {
                 Bitmap bmTemp = Form;
-                RotatedForm = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
-                Form = RotatedForm;
+                Bitmap bmRotatedForm = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+                Form = bmRotatedForm;
                 int tempWidth = Width;
                 int tempHeight = Height;
 
@@ -275,21 +308,6 @@ namespace FireDemo
             g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
             g.DrawImage(b, new Point(0, 0));
             return returnBitmap;
-        }
-
-        public override void Initialize(int width, int height, int magnification)
-        {
-            //if (Direction == Orientation.Up)
-            base.Initialize(width, height, magnification);
-            //else if (Direction == Orientation.Left || Direction == Orientation.Right)
-            //{
-            //    base.Initialize(height, width, magnification);
-            //    this.Width = width;
-            //    this.Height = height;
-            //    this.intensityMatrix = new IntensityMap(Width, Height);
-            //}
-            if (Direction == Orientation.Left || Direction == Orientation.Right)
-                RotatedForm = new Bitmap(Height, Width);
         }
 
         protected override void RenderStage2And3()

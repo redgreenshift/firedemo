@@ -1294,8 +1294,11 @@ namespace FireDemo
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsPupil);
 
-            //LightShapeLightning lsLightning = new LightShapeLightning();
-            //dbSauron.AddShape(lsLightning);
+            if (!isNarrow)
+            {
+                LightShapeLightning lsLightning = new LightShapeLightning();
+                dbSauron.AddShape(lsLightning);
+            }
 
             return dbSauron;
         }

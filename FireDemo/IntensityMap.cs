@@ -53,6 +53,7 @@ namespace FireDemo
         /// <param name="val">An integer representing the intensity of the specified pixel.</param>
         public void SetPixelPrevious(int x, int y, int val)
         {
+            //if (x >= 0 && x < Width && 0 <= y && y < Height)
             intensityMatrixPrevious[y * Width + x] = val;
         }
 
@@ -64,6 +65,7 @@ namespace FireDemo
         /// <param name="val">An integer representing the intensity of the specified pixel.</param>
         public void SetPixelNext(int x, int y, int val)
         {
+            //if (x >= 0 && x < Width && 0 <= y && y < Height)
             intensityMatrixNext[y * Width + x] = val;
         }
 
