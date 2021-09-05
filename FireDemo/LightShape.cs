@@ -64,7 +64,7 @@ namespace FireDemo
             // draw a circle from source to destination using the pen
             int x, y, xx, xLast, width;
 
-            xLast = radius;
+            xLast = xCenter;
             width = canvas.Width;
 
             for (int yy = yCenter - radius; yy <= yCenter + radius; ++yy)
