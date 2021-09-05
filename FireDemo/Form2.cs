@@ -70,7 +70,7 @@ namespace FireDemo
             this.CancelButton = buttonQuit;
 
             //SimpleCandle();
-            DemoBatman(multithreaded: true);
+            //DemoBatman(multithreaded: true);
             //DemoLightning();
             //DemoBorg();
             //DemoPlasmaRainbow();
@@ -81,6 +81,8 @@ namespace FireDemo
             //groupBox1.Hide();
             //RenderAtTopSpeed();
             //buttonDndStatus_Click(null, null);
+            //buttonRainbowFire_Click(null, null);
+            //buttonAwayStatus_Click(null, null);
         }
 
 
@@ -667,6 +669,8 @@ namespace FireDemo
             int left = buttonDemo.Location.X + buttonDemo.Size.Width;
 
             Color[] palCandle = PalRealisticFire.New();
+            //palCandle = PalFourPointLinear.New(Color.DarkOrange);
+            //palCandle = PalRealisticFlameCurve.New(Color.Black);
 
             //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38)); // This looks good at low resolution in an 8bit video game (better than 4 point linear)
             //palCandle = PalRealisticFlameCurve.New(Color.Maroon); // Color.Maroon == Color.FromArgb(128, 0, 0) not great
@@ -919,11 +923,13 @@ namespace FireDemo
                 Color.Black,
                 Color.FromArgb(255, 185, 0),
                 Color.FromArgb(255, 255, 127),
-                Color.FromArgb(212, 212, 255));
+                Color.FromArgb(212, 212, 255)); // great for larger bonfires, but not as nice for a small
             Color[] palTorch1 = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38)); // Great 8 bit fire palette
             palCauldron1 = palTorch1;
             Color[] palTorch2 = PalRealisticFire.New();
             palCauldron2 = palTorch2;
+            palCauldron1 = palTorch2;
+            //palCauldron1 = PalFourPointLinear.New(Color.DarkOrange);
 
             CauldronBase cauldronBase1 = new CauldronBase
             {
@@ -937,11 +943,14 @@ namespace FireDemo
 
             CoolingStrategyMap csBonfire1 = new CoolingStrategyMap();
             csBonfire1.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
-                density: 0.5f, min: 8, max: 16, smoothing: 0,
+                //density: 0.5f, min: 8, max: 16, smoothing: 0, // great with 8bit Realistic palette Color.FromArgb(223, 38, 38)
+                density: 0.4f, min: 5, max: 13, smoothing: 0, // great with Realistic palette
                 //density: 0.6f, min: 8, max: 23, smoothing: 0,
                 shift: true, rotate: true);
 
-            ILightPen lpBonfire1 = new LightPen(fill: 0.6f, min: 54, max: 255, useFullRange: false);
+            ILightPen lpBonfire1;
+            //lpBonfire1 = new LightPen(fill: 0.6f, min: 54, max: 255, useFullRange: false); // great for 8bit
+            lpBonfire1 = new LightPen(fill: 1.0f, min: 0, max: 255, useFullRange: false); // great for realistic
             ILightShape lsBonfire1 = new LightShapeCandle();
             lsBonfire1.SetPen(lpBonfire1);
 
@@ -975,6 +984,7 @@ namespace FireDemo
             AbstractRealtimeLightEffect dbCauldronFire2 = new RealtimeFire();
             CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
             csBonfire2.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
+                //density: 0.2f, min: 3, max: 20, smoothing: 0, // looks good with realistic palette? RealtimeFire_INCLUDING_COAL_SEED
                 density: 0.3f, min: 3, max: 35, smoothing: 0, // looks good with realistic palette
                 //density: 0.2f, min: 3, max: 15, smoothing: 0,
                 //density: 0.6f, min: 6, max: 13, smoothing: 0, // looks good with 4 point linear palette
