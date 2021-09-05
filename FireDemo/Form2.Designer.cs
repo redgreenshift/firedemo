@@ -153,7 +153,7 @@ namespace FireDemo
             this.buttonSauronV2.Name = "buttonSauronV2";
             this.buttonSauronV2.Size = new System.Drawing.Size(172, 90);
             this.buttonSauronV2.TabIndex = 13;
-            this.buttonSauronV2.Text = "Sauron v3.2";
+            this.buttonSauronV2.Text = "Sauron v3.4";
             this.buttonSauronV2.UseVisualStyleBackColor = true;
             this.buttonSauronV2.Click += new System.EventHandler(this.buttonSauronV2_Click);
             // 
