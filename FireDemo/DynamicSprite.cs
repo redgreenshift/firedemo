@@ -513,6 +513,7 @@ namespace FireDemo
     class RealtimeFireSauronV1_PupilOutward : AbstractRealtimeLightEffect
     {
         public bool LookAround { get; set; }
+        public Rectangle LocationRange { get; set; }
         protected bool Inward = false;
         int frame = 0;
         protected override void RenderStage2And3()
