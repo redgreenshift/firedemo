@@ -1237,6 +1237,11 @@ namespace FireDemo
 
             if (left)
                 xOffset = xCenter - smokeWidth * magnification;
+            else
+                // delay to force the RNGs to seed with different values each time
+                // a light is created, so all the two sides of Sauron don't look exactly the same
+                // TODO: probably should directly set the seed...
+                Thread.Sleep(millisecondsTimeout: 3);
 
             // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
             // Then "transform" it with a delta field to squish it into the eye shape?
