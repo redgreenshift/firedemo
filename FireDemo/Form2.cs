@@ -1191,8 +1191,9 @@ namespace FireDemo
             {
                 CreateSauronV3_SmokeOutward(sceneSize, left: true), // Add sideways layer of 4 Point red smoke
                 CreateSauronV3_SmokeOutward(sceneSize, left: false), // Add sideways layer of 4 Point red smoke
+                CreateSauronV3_Lightning(sceneSize, left: true), // Lightning bolts from the left
+                CreateSauronV3_Lightning(sceneSize, left: false), // Lightning bolts from the right
                 CreateSauron_EyeRingInward(sceneSize), // Ring for the outside of the eyeball
-                //CreateSauron_CornersOfEyeInward(),
                 CreateSauron_PupilOutward(sceneSize, isNarrow: true), // Center for the pupil
             };
             CompoundSprite dbSauron = new CompoundSprite();
@@ -1202,16 +1203,31 @@ namespace FireDemo
             palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
             palFire[0] = Color.FromArgb(0, palFire[0]); // TODO: Gradient of alpha across multiple colors so it blends better
 
-            foreach (AbstractDynamicSprite temp in dbSprites)
-            {
-                temp.SetPalette(palFire);
-            }
+            //foreach (AbstractDynamicSprite temp in dbSprites)
+            //{
+            //    temp.SetPalette(palFire);
+            //}
 
             Color[] palBackgroundSmoke;
             palBackgroundSmoke = PalFourPointLinear.New(Color.Red);
             palBackgroundSmoke = PalFourPointLinear.New(Color.OrangeRed);
-            dbSprites[0].SetPalette(palBackgroundSmoke);
-            dbSprites[1].SetPalette(palBackgroundSmoke);
+            palBackgroundSmoke = PalFlatPalette.New(Color.OrangeRed);
+
+            Color[] palLightning;
+            palLightning = PalLightning.New(Color.FromArgb(255, 1, 1));
+            palLightning = PalFourPointLinear.New(Color.FromArgb(255, 1, 1));
+            palLightning = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
+            palLightning = PalLightning.New();
+            palLightning[0] = Color.FromArgb(0, palLightning[0]);
+
+
+            int iLayer = 0;
+            dbSprites[iLayer++].SetPalette(palBackgroundSmoke);
+            dbSprites[iLayer++].SetPalette(palBackgroundSmoke);
+            dbSprites[iLayer++].SetPalette(palLightning);
+            dbSprites[iLayer++].SetPalette(palLightning);
+            dbSprites[iLayer++].SetPalette(palFire);
+            dbSprites[iLayer++].SetPalette(palFire);
 
 
             int width = sceneSize.Width;
@@ -1227,9 +1243,78 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward(Size size, bool left)
+        private AbstractRealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
         {
             int magnification = 1;
+            int smokeWidth = size.Width / 2 / magnification;
+            int smokeHeight = size.Height / magnification;
+            int xCenter = size.Width / 2;
+            int xOffset = xCenter;
+
+            if (left)
+                xOffset = xCenter - smokeWidth * magnification;
+            else
+                // delay to force the RNGs to seed with different values each time
+                // a light is created, so all the two sides of Sauron don't look exactly the same
+                // TODO: probably should directly set the seed...
+                Thread.Sleep(millisecondsTimeout: 3);
+
+            LightPen lpLightning = new LightPen(fill: 1, 200, 255, useFullRange: true);
+            LightShapeLightning lsBolt = new LightShapeLightning();
+            ICoolingStrategy csSauron = new CoolingStrategyConst(27);
+            lsBolt.SetPen(lpLightning);
+            GenericRealtimeFlame dbLightningBolt = new GenericRealtimeFlame();
+            dbLightningBolt.Direction = left ? GenericRealtimeFlame.Orientation.Left : GenericRealtimeFlame.Orientation.Right;
+            if (left)
+                dbLightningBolt.Location = new Point(xOffset, 0);
+            else
+                dbLightningBolt.Location = new Point(xCenter, 0);
+            dbLightningBolt.SetPixelMatrix(f4: true, f5: true, f6: true, f2: true);
+            dbLightningBolt.Initialize(smokeWidth, smokeHeight, magnification, dbLightningBolt.Direction);
+            dbLightningBolt.SetCoolingStrategy(csSauron);
+            dbLightningBolt.AddShape(lsBolt);
+
+            return dbLightningBolt;
+        }
+
+
+#if false // EXPERIMENTAL
+        private AbstractRealtimeLightEffect CreateSauronV3_Lightning_OLD(Size size, bool left)
+        {
+            int magnification = 1;
+            int lightWidth = 100;
+            int lightHeight = 50;
+            // delay to force the RNGs to seed with different values each time
+            // a light is created, so all the two sides of Sauron don't look exactly the same
+            // TODO: probably should directly set the seed...
+            Thread.Sleep(millisecondsTimeout: 3);
+
+            LightPen lpLightningBolt = new LightPen(fill: 1.0f, 255, 255, useFullRange: false);
+            DirectedLightning lsBolt = new DirectedLightning
+            {
+                Angle = left ? 90 : 270,
+                Length = 50, // lightWidth?
+                Location = new Point(0, lightHeight / 2)
+            };
+            ICoolingStrategy csSauron = new CoolingStrategyConst(27);
+            lsBolt.SetPen(lpLightningBolt);
+            RealtimeLightning dbSauron = new RealtimeLightning();
+            if (left)
+                dbSauron.Location = new Point(size.Width / 2 - (lightWidth * magnification), 0);
+            else
+                dbSauron.Location = new Point(size.Width / 2, 0);
+            dbSauron.Initialize(lightWidth, lightHeight, magnification);
+            dbSauron.SetCoolingStrategy(csSauron);
+            dbSauron.AddShape(lsBolt);
+
+            return dbSauron;
+        }
+#endif
+
+
+        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward(Size size, bool left)
+        {
+            int magnification = 3;
             int smokeWidth = size.Width / 2 / magnification;
             int smokeHeight = size.Height / magnification;
             int xCenter = size.Width / 2;
@@ -1253,7 +1338,7 @@ namespace FireDemo
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(smokeHeight, smokeWidth,
                 //density: 0.4f, min: 3, max: 5, smoothing: 1,
-                density: 0.45f, min: 2, max: 5, smoothing: 3,
+                density: 0.45f, min: 2, max: 15, smoothing: 3,
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsFireStick.SetPen(lpSauronBackground);
@@ -1283,7 +1368,7 @@ namespace FireDemo
             // LightShape like a cat eye pupil (POC done)
             // Then define a fire blender that goes outward, (DONE)
             // or inward with a MASSIVE cooling map in the pupil? That would be more failthful to the source. V2? Or port Greenshift?
-            // Then some directed lightning around the edge? (not started)
+            // Then some directed lightning around the edge? (in progress, minimally working)
             // Maybe some sideways fire to make the background (in progress, mostly working)
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             ILightShape lsPupil;

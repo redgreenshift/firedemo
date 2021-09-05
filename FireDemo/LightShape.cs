@@ -202,7 +202,7 @@ namespace FireDemo
                 }
             }
         }
-#endregion // Internal Drawing Methods
+        #endregion // Internal Drawing Methods
     }
 
     class LightShapeCandle : LightShapeBase
@@ -470,7 +470,51 @@ namespace FireDemo
         }
     }
 
-#region Borg Light Drawing
+
+#if false // Experimental
+    class DirectedLightning : LightShapeLightning
+    {
+        public float Angle { get; set; }
+        public int Length { get; set; }
+        public Point Location { get; set; }
+
+        override public void DrawOn(IntensityMap canvas)
+        {
+            // Draw the seed coal values for the inner lighting bolts for a plasma disc
+            int degrees, xCenter, yCenter;
+            int variance = rng.Next(-45, 45);
+            variance = 0; // TODO: JRDV: add this back in once I get it working
+
+            xCenter = canvas.Width / 2;
+            yCenter = canvas.Height / 2;
+
+            if (Angle == 0)
+            {
+                xCenter = canvas.Width / 2;
+                yCenter = 0;
+            }
+            if (Angle == 90)
+            {
+                xCenter = 0;
+                yCenter = canvas.Height / 2;
+            }
+            if (Angle == 270)
+            {
+                xCenter = canvas.Width - 1;
+                yCenter = canvas.Height / 2;
+            }
+            degrees = (int)(Angle + variance);
+
+
+            xCenter = Location.X;
+            yCenter = Location.Y;
+
+            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: Length, width: rng.Next(-2, 6) /*TODO: make better*/, canvas: canvas);
+        }
+    }
+#endif
+
+    #region Borg Light Drawing
     class LightShapeBorgPlasma : LightShapeLightning
     {
         override public void DrawOn(IntensityMap canvas)
