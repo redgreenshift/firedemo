@@ -261,6 +261,22 @@ namespace FireDemo
         }
         public Orientation Direction { get; set; }
 
+        public void Initialize(int width, int height, int magnification, Orientation o)
+        {
+            Direction = o;
+            if (o == Orientation.Up || o == Orientation.Down)
+            {
+                base.Initialize(width, height, magnification);
+            }
+            else if (o == Orientation.Left || o == Orientation.Right)
+            {
+                base.Initialize(height, width, magnification);
+                Height = height;
+                Width = width;
+            }
+        }
+
+
         public GenericRealtimeFlame()
         {
             Direction = Orientation.Up;
@@ -286,15 +302,22 @@ namespace FireDemo
             else if (Direction == Orientation.Left || Direction == Orientation.Right)
             {
                 Bitmap bmTemp = Form;
-                Bitmap bmRotatedForm = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+                Bitmap bmRotatedForm; // = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+
+                // TODO: JRDV: Allocating a new Bitmap every frame is a big memory leak.
+                // It "works" but it's inefficient and leads to trhe app crashing after a few minutes.
+                // Checking it in since the old code had a memory leak too. Need to address this soon.
+                bmRotatedForm = new Bitmap(bmTemp);
+                bmRotatedForm.RotateFlip(Direction == Orientation.Left ? RotateFlipType.Rotate270FlipNone :
+                    RotateFlipType.Rotate90FlipNone);
                 Form = bmRotatedForm;
-                int tempWidth = Width;
-                int tempHeight = Height;
+                //int tempWidth = Width;
+                //int tempHeight = Height;
 
                 base.RenderOneFrameToScreen(graph);
 
-                Height = tempHeight;
-                Width = tempWidth;
+                //Height = tempHeight;
+                //Width = tempWidth;
                 Form = bmTemp;
             }
         }
@@ -350,9 +373,9 @@ namespace FireDemo
 
             // The original Fire Demo went from 1 to MAX-1,
             // so this should produce the same results!
-            for (int y = 1; y < Height - 1; ++y)
+            for (int y = 1; y < intensityMatrix.Height - 1; ++y)
             {
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 1; x < intensityMatrix.Width - 1; ++x)
                 {
                     calc = 0;
                     // Add the surrounding pixels
