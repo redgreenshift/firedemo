@@ -1187,7 +1187,9 @@ namespace FireDemo
             int magnification = 2;
             List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>
             {
-                CreateSauronV3_SmokeOutward(),
+                // TODO: JRDV: Add sideways layer of 4 Point red smoke
+                CreateSauronV3_SmokeOutward(left: true),
+                CreateSauronV3_SmokeOutward(left: false),
                 CreateSauron_EyeRingInward(),
                 //CreateSauron_CornersOfEyeInward(),
                 CreateSauron_PupilOutward(isNarrow: true),
@@ -1197,21 +1199,24 @@ namespace FireDemo
             Color[] palFire;
             palFire = PalRealisticFire.New();
             palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
-            palFire[0] = Color.FromArgb(0, palFire[0]);
+            palFire[0] = Color.FromArgb(0, palFire[0]); // TODO: Gradient of alpha across multiple colors so it blends better
 
             foreach (AbstractDynamicSprite temp in dbSprites)
             {
                 temp.SetPalette(palFire);
             }
 
-            dbSprites[0].SetPalette(PalFourPointLinear.New(Color.Red));
+            Color[] palBackgroundSmoke;
+            palBackgroundSmoke = PalFourPointLinear.New(Color.Red);
+            palBackgroundSmoke = PalFourPointLinear.New(Color.OrangeRed);
+            dbSprites[0].SetPalette(palBackgroundSmoke);
+            dbSprites[1].SetPalette(palBackgroundSmoke);
 
 
             int width = 0;
             int height = 0;
             foreach (AbstractDynamicSprite s in dbSprites)
             {
-                s.Location = Point.Empty;
                 width = Math.Max(width, s.Width);
                 height = Math.Max(height, s.Height);
             }
@@ -1227,29 +1232,29 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward()
+        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward(bool left)
         {
-            int width = 200;
+            int width = 100;
             int height = 100;
             int magnification = 1;
             // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
             // Then "transform" it with a delta field to squish it into the eye shape?
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them. What do I mean two of them? OH, do two flames. Don't try to do both in the same layer
-            LightPen lpSauronBackground = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
+            LightPen lpSauronBackground = new LightPen(fill: 0.08f * 0 + 1, 200, 255, useFullRange: true);
             LightShapeCandle lsFireStick = new LightShapeCandle();
-            lsFireStick.Vertical = true;
             ICoolingStrategy csSauron;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width, height,
-                density: 0.3f, min: 3, max: 15, smoothing: 1,
+                density: 0.45f, min: 3, max: 5, smoothing: 1,
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsFireStick.SetPen(lpSauronBackground);
-            RealtimeFireSauronV1_PupilOutward dbSauron = new RealtimeFireSauronV1_PupilOutward
-            {
-                LookAround = false,
-            };
+            GenericRealtimeFlame dbSauron = new GenericRealtimeFlame();
+            dbSauron.Direction = left ? GenericRealtimeFlame.Orientation.Left : GenericRealtimeFlame.Orientation.Right;
+            if (!left)
+                dbSauron.Location = new Point(100, 0);
+            dbSauron.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsFireStick);
@@ -1267,7 +1272,7 @@ namespace FireDemo
             // Then define a fire blender that goes outward, (DONE)
             // or inward with a MASSIVE cooling map in the pupil? That would be more failthful to the source. V2? Or port Greenshift?
             // Then some directed lightning around the edge? (not started)
-            // Maybe some sideways fire to make the background (in progress)
+            // Maybe some sideways fire to make the background (in progress, minimally working)
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             ILightShape lsPupil;
             if (isNarrow)

@@ -218,9 +218,19 @@ namespace FireDemo
     class GenericRealtimeFlame : AbstractRealtimeLightEffect
     {
         bool f1, f2, f3, f4, f5, f6, f7, f8, f9;
+        public enum Orientation
+        {
+            Up,
+            Down,
+            Left,
+            Right,
+        }
+        public Orientation Direction { get; set; }
+        protected Bitmap RotatedForm { get; set; }
 
         public GenericRealtimeFlame()
         {
+            Direction = Orientation.Up;
             SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
         }
         public void SetPixelMatrix(bool f1 = false, bool f2 = false, bool f3 = false, bool f4 = false, bool f5 = false, bool f6 = false, bool f7 = false, bool f8 = false, bool f9 = false)
@@ -234,6 +244,52 @@ namespace FireDemo
             this.f7 = f7;
             this.f8 = f8;
             this.f9 = f9;
+        }
+
+        public override void RenderOneFrameToScreen(Graphics graph)
+        {
+            if (Direction == Orientation.Up)
+                base.RenderOneFrameToScreen(graph);
+            else if (Direction == Orientation.Left || Direction == Orientation.Right)
+            {
+                Bitmap bmTemp = Form;
+                RotatedForm = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+                Form = RotatedForm;
+                int tempWidth = Width;
+                int tempHeight = Height;
+
+                base.RenderOneFrameToScreen(graph);
+
+                Height = tempHeight;
+                Width = tempWidth;
+                Form = bmTemp;
+            }
+        }
+
+        private Bitmap rotateImage(Bitmap b, float angle)
+        {
+            Bitmap returnBitmap = new Bitmap(b.Height, b.Width);
+            Graphics g = Graphics.FromImage(returnBitmap);
+            g.TranslateTransform((float)b.Width / 2, (float)b.Height / 2);
+            g.RotateTransform(angle);
+            g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
+            g.DrawImage(b, new Point(0, 0));
+            return returnBitmap;
+        }
+
+        public override void Initialize(int width, int height, int magnification)
+        {
+            //if (Direction == Orientation.Up)
+            base.Initialize(width, height, magnification);
+            //else if (Direction == Orientation.Left || Direction == Orientation.Right)
+            //{
+            //    base.Initialize(height, width, magnification);
+            //    this.Width = width;
+            //    this.Height = height;
+            //    this.intensityMatrix = new IntensityMap(Width, Height);
+            //}
+            if (Direction == Orientation.Left || Direction == Orientation.Right)
+                RotatedForm = new Bitmap(Height, Width);
         }
 
         protected override void RenderStage2And3()
