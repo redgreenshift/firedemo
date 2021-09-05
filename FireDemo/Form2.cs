@@ -1143,15 +1143,11 @@ namespace FireDemo
             {
                 CreateSauron_CornersOfEyeInward(),
                 //CreateSauron_EyeRingInward(),
-                CreateSauron_PupilOutward(),
+                CreateSauron_PupilOutward(isNarrow: false),
             };
 
             Color[] palFire;
             palFire = PalRealisticFire.New();
-            palFire = PalFourPointLinear.New(Color.Red);
-            palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
-            //palFire = PalFourPointLinear.New(Color.DarkOrange);
-            //palFire = PalPlasma.New(Color.Orange);
 
             // Color.Transparent doesn't work in Linux, even though it works fine in Windows.
             // Setting alpha to zero (effectively the same thing) does work in Linux.
@@ -1193,7 +1189,7 @@ namespace FireDemo
             {
                 CreateSauron_EyeRingInward(),
                 //CreateSauron_CornersOfEyeInward(),
-                CreateSauron_PupilOutward(),
+                CreateSauron_PupilOutward(isNarrow: true),
             };
             CompoundSprite dbSauron = new CompoundSprite();
 
@@ -1228,9 +1224,9 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-        private AbstractRealtimeLightEffect CreateSauron_PupilOutward()
+        private AbstractRealtimeLightEffect CreateSauron_PupilOutward(bool isNarrow)
         {
-            int width = 100;
+            int width = isNarrow ? 100 : 200;
             int height = 100;
             int magnification = 1;
             // TODO: JRDV: Eye of Sauron?
@@ -1244,18 +1240,25 @@ namespace FireDemo
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them.
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
-            ILightShape lsSauron = new LightShapeSauronV1_PupilNarrow();
+            ILightShape lsPupil;
+            if (isNarrow)
+                lsPupil = new LightShapeSauronV3_PupilNarrow();
+            else
+                lsPupil = new LightShapeSauronV1_PupilOutward();
             ICoolingStrategy csSauron;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width, height,
                 density: 0.3f, min: 3, max: 15, smoothing: 1,
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
-            lsSauron.SetPen(lpSauronEye);
-            AbstractRealtimeLightEffect dbSauron = new RealtimeFireSauronV1_PupilOutward();
+            lsPupil.SetPen(lpSauronEye);
+            RealtimeFireSauronV1_PupilOutward dbSauron = new RealtimeFireSauronV1_PupilOutward
+            {
+                LookAround = isNarrow,
+            };
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
-            dbSauron.AddShape(lsSauron);
+            dbSauron.AddShape(lsPupil);
 
             //LightShapeLightning lsLightning = new LightShapeLightning();
             //dbSauron.AddShape(lsLightning);

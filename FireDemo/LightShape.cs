@@ -526,7 +526,7 @@ namespace FireDemo
         }
     }
 
-    class LightShapeSauronV1_PupilNarrow : LightShapeBase
+    class LightShapeSauronV3_PupilNarrow : LightShapeBase
     {
         override public void DrawOn(IntensityMap canvas)
         {
