@@ -784,7 +784,7 @@ namespace FireDemo
     {
 		public override void RenderOneFrameToScreen(Graphics graph)
 		{
-			int offset = 80;
+			int offset = 149;
 			Point[] points = {
 				new Point(offset, 400),
 				new Point(offset, 0),
@@ -803,13 +803,18 @@ namespace FireDemo
 				new Point(1000 - offset, 0),
 			};
             graph.DrawLine(Pens.White, offset, 599, offset, 0);
-            graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
+            //graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
             //graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
             //graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
             //graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
-            graph.DrawLine(Pens.White, 1000 - offset, 0, 1010 - offset, 0);
-            graph.DrawLine(Pens.White, 1010 - offset, 0, 1010 - offset, 599);
-            graph.DrawCurve(Pens.White, pointsTowerCurve);
+            //graph.DrawLine(Pens.White, 1000 - offset, 0, 1010 - offset, 0);
+            graph.DrawLine(Pens.White, 1000 - offset, 0, 1000 - offset, 599);
+
+			//graph.DrawCurve(Pens.White, pointsTowerCurve);
+			// graph.DrawArc(); // This should produce better results, since the shape I want is an elipse, I think
+			float width = 700.0f;
+			float height = 1190.0f;
+			graph.DrawArc(Pens.White, x: 850.0f - width, y: 599.0f - height, width: width, height: height, startAngle: 0.0f, sweepAngle: 180.0f);
 
 			graph.DrawLine(Pens.White, 485, 598, 500, 500);
 			graph.DrawLine(Pens.White, 500, 500, 515, 598);
