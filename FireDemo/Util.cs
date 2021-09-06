@@ -17,5 +17,24 @@ namespace FireDemo
 					|| ((int)pid == 128); // Mono
 			}
 		}
+
+		private static int? RandomSeed = null;
+		public static Random NewRandom()
+		{
+			Random rng;
+
+			if (RandomSeed.HasValue)
+			{
+				rng = new Random(RandomSeed.Value);
+				RandomSeed = RandomSeed.Value + 1;
+			}
+			else
+			{
+				rng = new Random();
+				RandomSeed = rng.Next();
+			}
+
+			return rng;
+		}
 	}
 }
