@@ -783,15 +783,36 @@ namespace FireDemo
 	class VectorSauronTowerSprite : SimpleSprite
     {
 		public override void RenderOneFrameToScreen(Graphics graph)
-        {
+		{
 			int offset = 80;
-			graph.DrawLine(Pens.White, offset, 400, offset, 0);
-			graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
-			graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
-			graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
-			graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
-			graph.DrawLine(Pens.White, 1000- offset, 0, 1010- offset, 0);
-			graph.DrawLine(Pens.White, 1010- offset, 0, 1010- offset, 400);
+			Point[] points = {
+				new Point(offset, 400),
+				new Point(offset, 0),
+				new Point(offset + 10, 0),
+				new Point(offset + 10, 300),
+				new Point(1000 - offset, 300),
+				new Point(1000 - offset, 0),
+				new Point(1010 - offset, 0),
+				new Point(1010 - offset, 400),
+			};
+			Point[] pointsTowerCurve = {
+				new Point(offset + 10, 0),
+				new Point(350, 500),
+				new Point(500, 599),
+				new Point(650, 500),
+				new Point(1000 - offset, 0),
+			};
+            graph.DrawLine(Pens.White, offset, 599, offset, 0);
+            graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
+            //graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
+            //graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
+            //graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
+            graph.DrawLine(Pens.White, 1000 - offset, 0, 1010 - offset, 0);
+            graph.DrawLine(Pens.White, 1010 - offset, 0, 1010 - offset, 599);
+            graph.DrawCurve(Pens.White, pointsTowerCurve);
+
+			graph.DrawLine(Pens.White, 485, 598, 500, 500);
+			graph.DrawLine(Pens.White, 500, 500, 515, 598);
 		}
 	}
 

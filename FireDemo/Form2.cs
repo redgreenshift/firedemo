@@ -1255,7 +1255,7 @@ namespace FireDemo
             int height = sceneSize.Height;
             dbSauron.Initialize(width, height, magnification);
             int left = (Width - width * magnification) / 2;
-            int top = (Height - height * magnification) / 4;
+            int top = (Height - height * magnification) / 10;
             dbSauron.Location = new Point(left, top);
 
             dbSauron.AddRange(dbSprites);
