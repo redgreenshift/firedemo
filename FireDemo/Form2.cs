@@ -1147,14 +1147,15 @@ namespace FireDemo
         private void buttonSauronV1_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            Size size = new Size(width: 200, height: 100);
+            Size sceneSize = new Size(width: 200, height: 100);
 
             int magnification = 2;
             List<DynamicSprite> dbSprites = new List<DynamicSprite>()
             {
                 CreateSauron_CornersOfEyeInward(),
-                //CreateSauron_EyeRingInward(),
-                CreateSauron_PupilOutward(size, isNarrow: false),
+                CreateSauronV3_Lightning(sceneSize, left: true), // Lightning bolts from the left
+                CreateSauronV3_Lightning(sceneSize, left: false), // Lightning bolts from the right
+                CreateSauron_PupilOutward(sceneSize, isNarrow: false),
             };
 
             Color[] palFire;
@@ -1209,26 +1210,32 @@ namespace FireDemo
             LayeredSprite dbSauron = new LayeredSprite();
 
             Color[] palFire;
-            palFire = PalRealisticFire.New();
+            //palFire = PalRealisticFire.New();
             palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
 
             Color[] palBackgroundSmoke;
-            palBackgroundSmoke = PalFourPointLinear.New(Color.Red);
-            palBackgroundSmoke = PalFourPointLinear.New(Color.OrangeRed);
+            //palBackgroundSmoke = PalFourPointLinear.New(Color.Red);
+            //palBackgroundSmoke = PalFourPointLinear.New(Color.OrangeRed);
             palBackgroundSmoke = PalFlatPalette.New(Color.OrangeRed);
 
             Color[] palLightning;
-            palLightning = PalLightning.New(Color.FromArgb(255, 1, 1));
-            palLightning = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
-            palLightning = PalLightning.New();
-            palLightning = PalFourPointLinear.New(Color.FromArgb(255, 1, 1));
-            //palLightning = PalFlatPalette.New(Color.FromArgb(255, 128, 0));
+            //palLightning = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
+            //palLightning = PalFourPointLinear.New(Color.FromArgb(255, 1, 1));
+            //palLightning = PalLightning.New(Color.FromArgb(255, 1, 1));
+            //palLightning = PalLightning.New();
+            palLightning = PalFourPointLinear.New(Color.FromArgb(250, 219, 125));
 
 
-
-            palFire[0] = Color.FromArgb(0, palFire[0]); // TODO: Gradient of alpha across multiple colors so it blends better
+            palFire[0] = Color.FromArgb(0, palFire[0]);
             palBackgroundSmoke[0] = Color.FromArgb(0, palBackgroundSmoke[0]);
             palLightning[0] = Color.FromArgb(0, palLightning[0]);
+
+            // Tried gradient of alpha across multiple colors so it blends better, but Linux doesn't honor alpha,
+            // other than 0 and not-zero. Anything greater than zero is 100% opaque.
+            //for (int ii = 1; ii < palLightning.Length; ++ii)
+            //{
+            //    palLightning[ii] = Color.FromArgb(128, palLightning[ii]);
+            //}
 
             int iLayer = 0;
             dbSprites[iLayer++].SetPalette(palBackgroundSmoke);
@@ -1243,7 +1250,7 @@ namespace FireDemo
             int height = sceneSize.Height;
             dbSauron.Initialize(width, height, magnification);
             int left = (Width - width * magnification) / 2;
-            int top = (Height - height * magnification) / 2;
+            int top = (Height - height * magnification) / 4;
             dbSauron.Location = new Point(left, top);
 
             dbSauron.AddRange(dbSprites);
@@ -1362,8 +1369,9 @@ namespace FireDemo
             // LightShape like a cat eye pupil (POC done)
             // Then define a fire blender that goes outward, (DONE)
             // or inward with a MASSIVE cooling map in the pupil? That would be more failthful to the source. V2? Or port Greenshift?
-            // Then some directed lightning around the edge? (in progress, minimally working)
-            // Maybe some sideways fire to make the background (in progress, mostly working)
+            // Then some directed lightning around the edge? (done)
+            // Maybe some sideways fire to make the background (done)
+            // Add the towers
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             ILightShape lsPupil;
             if (isNarrow)
@@ -1377,8 +1385,9 @@ namespace FireDemo
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsPupil.SetPen(lpSauronEye);
-            RealtimeFireSauronV1_PupilOutward dbSauron = new RealtimeFireSauronV1_PupilOutward
+            RealtimeSplitFire dbSauron = new RealtimeSplitFire
             {
+                Inward = false,
                 LocationPeriod = isNarrow ? TimeSpan.FromMilliseconds(1000) : TimeSpan.Zero,
                 LocationRange = new Rectangle(x: xLocation - lookWidth / 2, y: 0, width: lookWidth, height: 0),
             };
@@ -1419,7 +1428,10 @@ namespace FireDemo
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsSauron.SetPen(lpSauronEye);
-            RealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
+            RealtimeLightEffect dbSauron = new RealtimeSplitFire
+            {
+                Inward = true
+            };
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsSauron);
@@ -1430,7 +1442,7 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauron_EyeRingInward(Size size)
         {
             int magnification = 1;
-            int width = Math.Min(size.Width, size.Height) / magnification; // Need to generalize the width/location calculations
+            int width = Math.Min(size.Width, size.Height) / magnification;
             int height = width;
 
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: false);
@@ -1442,7 +1454,10 @@ namespace FireDemo
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsSauron.SetPen(lpSauronEye);
-            RealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
+            RealtimeLightEffect dbSauron = new RealtimeSplitFire
+            {
+                Inward = true
+            };
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsSauron);

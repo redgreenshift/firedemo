@@ -585,15 +585,12 @@ namespace FireDemo
         }
     }
 
-
-    #region EXPERIMENTAL Sauron classes
-
     /// <summary>
-    /// Optimized for flames flowing into (or outfrom) the center of the screen
+    /// Optimized for flames flowing into (or outfrom) the center of the sprite
     /// </summary>
-    class RealtimeFireSauronV1_PupilOutward : RealtimeLightEffect
+    class RealtimeSplitFire : RealtimeLightEffect
     {
-        protected bool Inward = false;
+        public bool Inward { get; set; }
 
         protected override void RenderStage2And3()
         {
@@ -706,19 +703,6 @@ namespace FireDemo
             poker.UnlockBits();
         }
     }
-
-    /// <summary>
-    /// Optimized for flames flowing toward the center of the screen
-    /// </summary>
-    class RealtimeFireSauronV2_Inward : RealtimeFireSauronV1_PupilOutward
-    {
-        public RealtimeFireSauronV2_Inward()
-        {
-            Inward = true;
-        }
-    }
-
-    #endregion // Sauron EXPERIMENT
 
 #if false
     class RealtimeFire_INCLUDING_COAL_SEED : RealtimeLightEffect
