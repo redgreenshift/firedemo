@@ -11,8 +11,28 @@ namespace FireDemo
 {
     abstract class DynamicSprite : SimpleSprite
     {
+        protected Random rng;
         protected BitmapLocker poker; // Optimization for accessing the Form faster
         protected Color[] thePalette;
+
+        /// <summary>
+        /// Region within which to randomly move the text on <see cref="LocationPeriod" /> (overrides <see cref="SimpleSprite.Location" />)
+        /// </summary>
+        public Rectangle LocationRange { get; set; }
+
+        /// <summary>
+        ///  How often to move the <see cref="SimpleSprite.Location" />
+        /// </summary>
+        public TimeSpan LocationPeriod { get; set; }
+
+
+        public DynamicSprite(Random r)
+        {
+            rng = r;
+        }
+        public DynamicSprite() : this(Util.NewRandom())
+        {
+        }
 
         public override void Initialize(int width, int height, int magnification)
         {
@@ -23,6 +43,32 @@ namespace FireDemo
         public void SetPalette(Color[] pal)
         {
             thePalette = pal;
+        }
+
+
+        private DateTime lastMove = DateTime.MinValue;
+        protected Point lastLocation = Point.Empty;
+        // Declare a delegate.
+        //delegate void UpdateLocationCallback_t(Graphics graph);
+
+        protected bool PeriodicallyUpdateLocation()
+        {
+            bool changed = false;
+            if (LocationPeriod == TimeSpan.Zero)
+                return false; // nothing to do
+
+            DateTime thisTime = DateTime.Now;
+            lastLocation = Location;
+            if (lastMove < thisTime - LocationPeriod)
+            {
+                changed = true;
+                lastMove = thisTime;
+                Location = new Point(
+                    x: LocationRange.Left + rng.Next(LocationRange.Width),
+                    y: LocationRange.Top + rng.Next(LocationRange.Height));
+            }
+
+            return changed;
         }
 
         #region EXPERIMENTAL Bicubic Interpolation is too slow
@@ -171,16 +217,15 @@ namespace FireDemo
             Right,
         }
 
+
         protected IntensityMap intensityMatrix;
-        protected Random rng;
         protected ICoolingStrategy coolingStrategy;
         List<ILightShape> lightShapes;
-        public Orientation Direction { get; set; }
+        protected Orientation Direction { get; set; }
 
         public RealtimeLightEffect()
         {
             Direction = Orientation.Up;
-            rng = new Random();
         }
 
         public override void Initialize(int width, int height, int magnification)
@@ -207,9 +252,12 @@ namespace FireDemo
 
         public override void RenderOneFrameToScreen(Graphics graph)
         {
-            this.renderStage1SeedShapes();
+            this.RenderStage1SeedShapes();
             this.RenderStage2And3();
+
+            this.PeriodicallyUpdateLocation();
             this.DrawAndRotate(graph);
+
             intensityMatrix.ProgressOneFrame();
             coolingStrategy.ProgressOneFrame();
         }
@@ -217,7 +265,7 @@ namespace FireDemo
         private void DrawAndRotate(Graphics graph)
         {
             if (Direction == Orientation.Up)
-                this.DrawOn(graph);
+                base.RenderOneFrameToScreen(graph);
             else
             {
                 Bitmap bmTemp = Form;
@@ -235,7 +283,7 @@ namespace FireDemo
 
                     // Temporarily swap out the Form to draw it rotated
                     Form = bmRotatedForm;
-                    this.DrawOn(graph);
+                    base.RenderOneFrameToScreen(graph);
                     Form = bmTemp;
                 }
             }
@@ -253,7 +301,7 @@ namespace FireDemo
         //    return returnBitmap;
         //}
 
-        protected void renderStage1SeedShapes()
+        protected void RenderStage1SeedShapes()
         {
             foreach (ILightShape ls in lightShapes)
             {
@@ -545,27 +593,10 @@ namespace FireDemo
     /// </summary>
     class RealtimeFireSauronV1_PupilOutward : RealtimeLightEffect
     {
-        public bool LookAround { get; set; }
-        public Rectangle LocationRange { get; set; }
         protected bool Inward = false;
-        int frame = 0;
+
         protected override void RenderStage2And3()
         {
-            // HACK HACK HACK
-            if (LookAround)
-            {
-                // pupil, randomly move sometimes...
-                if (frame % 60 == 0)
-                {
-                    Location = new Point(
-                        x: LocationRange.Left + rng.Next(LocationRange.Width),
-                        y: LocationRange.Top + rng.Next(LocationRange.Height));
-                }
-                ++frame;
-
-                //Location = new Point(35, 0);
-            }
-
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
             //{ the ammount of pixels you added up and then      }
@@ -1456,8 +1487,6 @@ namespace FireDemo
 
     class TextSprite : DynamicSprite
     {
-        private readonly Random rng = new Random();
-
         public string Text { get; set; }
         public Color Color
         {
@@ -1475,23 +1504,13 @@ namespace FireDemo
         /// <summary>
         ///  Size of the region to blank out when randomly moving the <see cref="Text" />
         /// </summary>
-        public Size Size { get; set; }
-
-        /// <summary>
-        /// Region within which to randomly move the text on <see cref="Period" /> (overrides <see cref="SimpleSprite.Location" />)
-        /// </summary>
-        public Rectangle Bounds { get; set; }
-
-        /// <summary>
-        ///  How often to move the <see cref="Text" />
-        /// </summary>
-        public TimeSpan Period { get; set; }
+        public Size BlankSize { get; set; }
 
         public TextSprite()
         {
             this.Brush = Brushes.White;
             Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f, style: FontStyle.Regular);
-            Size = new Size(150, 100);
+            BlankSize = new Size(150, 100);
 
             //Font = new Font(familyName: "Arial", emSize: 20.0f, style: FontStyle.Regular);
             //Font = new Font(familyName: "Times New Roman", emSize: 20.0f, style: FontStyle.Regular);
@@ -1555,16 +1574,15 @@ namespace FireDemo
                 Brush = new SolidBrush(color);
         }
 
-        private DateTime lastMove = DateTime.MinValue;
         public override void RenderOneFrameToScreen(Graphics graph)
         {
-            DateTime thisTime = DateTime.Now;
-            if (Period != TimeSpan.Zero && lastMove < thisTime - Period)
+            //Action callbackBeforeUpdateLocation = new Action(() => {
+            //    if (BlankSize != Size.Empty)
+            //        graph.FillRectangle(Brushes.Black, Location.X, Location.Y, BlankSize.Width, BlankSize.Height);
+            //});
+            if (PeriodicallyUpdateLocation() && !BlankSize.IsEmpty && Location != lastLocation)
             {
-                graph.FillRectangle(Brushes.Black, Location.X, Location.Y, Size.Width, Size.Height);
-
-                lastMove = thisTime;
-                Location = new Point(rng.Next(Bounds.X, Bounds.X + Bounds.Width), rng.Next(Bounds.Y, Bounds.Y + Bounds.Height));
+                graph.FillRectangle(Brushes.Black, lastLocation.X, lastLocation.Y, BlankSize.Width, BlankSize.Height);
             }
             graph.DrawString(Text, Font, Brush, Location);
         }

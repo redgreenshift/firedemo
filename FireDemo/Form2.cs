@@ -714,8 +714,8 @@ namespace FireDemo
                 Location = new Point(0, 0),
                 Text = "Away",
                 Color = Color.Yellow,
-                Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
-                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(dbCandle);
             m_dbSprites.Add(tsAway);
@@ -734,9 +734,9 @@ namespace FireDemo
                 Text = "I'm OOF",
                 Location = new Point(300, 0),
                 Color = Color.DarkMagenta,
-                Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
-                Size = new Size(Scaled(160), Scaled(50)),
-                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                BlankSize = new Size(Scaled(160), Scaled(50)),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 
@@ -756,9 +756,9 @@ namespace FireDemo
                 Text = "I'm Busy",
                 Location = new Point(120, 0),
                 Color = Color.Red,
-                Bounds = new Rectangle(x: 0, y: 0, width: 900, height: 50),
-                Size = new Size(Scaled(160), Scaled(50)),
-                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                BlankSize = new Size(Scaled(160), Scaled(50)),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 
@@ -821,9 +821,9 @@ namespace FireDemo
                 Text = "Available",
                 Location = new Point(120, 0),
                 Color = Color.LightGreen,
-                Bounds = new Rectangle(x: 0, y: 0, width: 850, height: 50),
-                Size = new Size(Scaled(170), Scaled(50)),
-                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+                LocationRange = new Rectangle(x: 0, y: 0, width: 850, height: 50),
+                BlankSize = new Size(Scaled(170), Scaled(50)),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 
@@ -1095,9 +1095,9 @@ namespace FireDemo
                 Text = "It's dangerous to bother me!\nGO AWAY! (use email)",
                 //Location = new Point(man.Location.X - 220, man.Location.Y - 95),
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
-                Bounds = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
-                Size = new Size(Scaled(500), Scaled(91)),
-                Period = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+                LocationRange = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
+                BlankSize = new Size(Scaled(500), Scaled(91)),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
 
@@ -1268,12 +1268,12 @@ namespace FireDemo
             ICoolingStrategy csSauron = new CoolingStrategyConst(27);
             lsBolt.SetPen(lpLightning);
             RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
-            dbLightningBolt.Direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
+            RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
             if (left)
                 dbLightningBolt.Location = new Point(xOffset, 0);
             else
                 dbLightningBolt.Location = new Point(xCenter, 0);
-            dbLightningBolt.Initialize(smokeWidth, smokeHeight, magnification, dbLightningBolt.Direction);
+            dbLightningBolt.Initialize(smokeWidth, smokeHeight, magnification, direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
             dbLightningBolt.AddShape(lsBolt);
 
@@ -1337,13 +1337,13 @@ namespace FireDemo
             csSauron = m_coolingStrategy;
             lsFireStick.SetPen(lpSauronBackground);
             GenericRealtimeFlame dbSauron = new GenericRealtimeFlame();
-            dbSauron.Direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
+            RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
             if (left)
                 dbSauron.Location = new Point(xOffset, 0);
             else
                 dbSauron.Location = new Point(xCenter, 0);
             dbSauron.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-            dbSauron.Initialize(smokeWidth, smokeHeight, magnification, dbSauron.Direction);
+            dbSauron.Initialize(smokeWidth, smokeHeight, magnification, direction);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsFireStick);
 
@@ -1379,7 +1379,7 @@ namespace FireDemo
             lsPupil.SetPen(lpSauronEye);
             RealtimeFireSauronV1_PupilOutward dbSauron = new RealtimeFireSauronV1_PupilOutward
             {
-                LookAround = isNarrow,
+                LocationPeriod = isNarrow ? TimeSpan.FromMilliseconds(1000) : TimeSpan.Zero,
                 LocationRange = new Rectangle(x: xLocation - lookWidth / 2, y: 0, width: lookWidth, height: 0),
             };
             dbSauron.Initialize(width, height, magnification);
