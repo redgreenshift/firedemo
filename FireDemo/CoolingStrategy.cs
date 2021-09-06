@@ -91,7 +91,7 @@ namespace FireDemo
         bool rotate = false;
 
 
-        public CoolingStrategyMap() : this(new Random())
+        public CoolingStrategyMap() : this(Util.NewRandom())
         {
         }
 

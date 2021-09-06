@@ -57,7 +57,7 @@ namespace FireDemo
             if (min > max)
                 throw new ArgumentOutOfRangeException("Max value must be between 0 and 255 inclusive.");
 
-            rng = new Random();
+            rng = Util.NewRandom();
             percentFill = fill;
             minIntensity = min;
             maxIntensity = max;

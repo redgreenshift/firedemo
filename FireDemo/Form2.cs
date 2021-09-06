@@ -449,7 +449,7 @@ namespace FireDemo
             int left = buttonDemo.Location.X + buttonDemo.Size.Width;
             // Clear the drawing region to eliminate artifacts from the previous flames
             //Bitmap bmEmpty = new Bitmap(fireWidth, fireHeight, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            //Random rng = new Random();
+            //Random rng = Util.NewRandom();
 
             //for (int x = 0; x < maxWidth; ++x)
             //    for (int y = 0; y < maxHeight; ++y)
@@ -1262,11 +1262,6 @@ namespace FireDemo
 
             if (left)
                 xOffset = xCenter - smokeWidth * magnification;
-            else
-                // delay to force the RNGs to seed with different values each time
-                // a light is created, so all the two sides of Sauron don't look exactly the same
-                // TODO: probably should directly set the seed...
-                Thread.Sleep(millisecondsTimeout: 3);
 
             LightPen lpLightning = new LightPen(fill: 1, 200, 255, useFullRange: true);
             LightShapeLightning lsBolt = new LightShapeLightning();
@@ -1292,10 +1287,6 @@ namespace FireDemo
             int magnification = 1;
             int lightWidth = 100;
             int lightHeight = 50;
-            // delay to force the RNGs to seed with different values each time
-            // a light is created, so all the two sides of Sauron don't look exactly the same
-            // TODO: probably should directly set the seed...
-            Thread.Sleep(millisecondsTimeout: 3);
 
             LightPen lpLightningBolt = new LightPen(fill: 1.0f, 255, 255, useFullRange: false);
             DirectedLightning lsBolt = new DirectedLightning
@@ -1330,11 +1321,6 @@ namespace FireDemo
 
             if (left)
                 xOffset = xCenter - smokeWidth * magnification;
-            else
-                // delay to force the RNGs to seed with different values each time
-                // a light is created, so all the two sides of Sauron don't look exactly the same
-                // TODO: probably should directly set the seed...
-                Thread.Sleep(millisecondsTimeout: 3);
 
             // IDEA: Render a regular/upright flame, with a curved seed shape, then "transform" it 90 degrees?
             // Then "transform" it with a delta field to squish it into the eye shape?
@@ -1475,11 +1461,6 @@ namespace FireDemo
             int fireHeight = 50;
             int magnification = 4;
 
-            // delay to force the RNGs to seed with different values each time
-            // a candle is created, so all the flames don't look the same
-            // TODO: probably should directly set the seed...
-            Thread.Sleep(millisecondsTimeout: 3);
-
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
@@ -1489,10 +1470,6 @@ namespace FireDemo
                 shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
-            // delay to force the RNGs to seed with different values each time
-            // a candle is created, so all the flames don't look the same
-            // TODO: probably should directly set the seed...
-            Thread.Sleep(millisecondsTimeout: 3);
             ILightPen lpCandle = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);

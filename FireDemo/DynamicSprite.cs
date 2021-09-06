@@ -281,14 +281,16 @@ namespace FireDemo
     {
         protected override void RenderStage2And3()
         {
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
             // Copy over the bits without modification
             poker.LockBits(ImageLockMode.WriteOnly);
 
             // The original Fire Demo went from 1 to MAX-1,
             // so this should produce the same results!
-            for (int y = 1; y < Height - 1; ++y)
+            for (int y = 1; y < matrixHeight - 1; ++y)
             {
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 1; x < matrixWidth - 1; ++x)
                 {
                     int calc = intensityMatrix.GetPixelPrevious(x, y);
 

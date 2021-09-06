@@ -7,34 +7,36 @@ namespace FireDemo
 {
     class Util
     {
-		public static bool IsLinux
-		{
-			get
-			{
-				PlatformID pid = Environment.OSVersion.Platform;
-				return (pid == PlatformID.Unix)
-					|| (pid == PlatformID.MacOSX)
-					|| ((int)pid == 128); // Mono
-			}
-		}
+        public static bool IsLinux
+        {
+            get
+            {
+                PlatformID pid = Environment.OSVersion.Platform;
+                return (pid == PlatformID.Unix)
+                    || (pid == PlatformID.MacOSX)
+                    || ((int)pid == 128); // Mono
+            }
+        }
 
-		private static int? RandomSeed = null;
-		public static Random NewRandom()
-		{
-			Random rng;
+        private static int? RandomSeed = null;
+        //private static Random SingletonRNG = new Random();
+        public static Random NewRandom()
+        {
+            //return SingletonRNG;
+            Random rng;
 
-			if (RandomSeed.HasValue)
-			{
-				rng = new Random(RandomSeed.Value);
-				RandomSeed = RandomSeed.Value + 1;
-			}
-			else
-			{
-				rng = new Random();
-				RandomSeed = rng.Next();
-			}
+            if (RandomSeed.HasValue)
+            {
+                rng = new Random(RandomSeed.Value);
+                RandomSeed = RandomSeed.Value + 1;
+            }
+            else
+            {
+                rng = new Random();
+                RandomSeed = rng.Next();
+            }
 
-			return rng;
-		}
-	}
+            return rng;
+        }
+    }
 }

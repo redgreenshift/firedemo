@@ -303,7 +303,7 @@ namespace FireDemo
 
         public LightShapeLightning()
         {
-            rng = new Random();
+            rng = Util.NewRandom();
         }
 
         override public void DrawOn(IntensityMap canvas)
