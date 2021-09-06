@@ -170,7 +170,7 @@ namespace FireDemo
             lsBatman.SetPen(lpBatman);
 
             //AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
-            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
+            RealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
             //dbBatman = new RealtimeCandleflame();
             dbBatman.Initialize(fireWidth, fireHeight, magnification);
             dbBatman.SetCoolingStrategy(coolingStrategy);
@@ -224,7 +224,7 @@ namespace FireDemo
             lsBatman.SetPen(lpBatman);
 
             //AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimized();
-            AbstractRealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
+            RealtimeLightEffect dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
             //dbBatman = new RealtimeCandleflame();
             dbBatman.Initialize(fireWidth, fireHeight, magnification);
             dbBatman.SetCoolingStrategy(coolingStrategy);

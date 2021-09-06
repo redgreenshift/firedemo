@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace FireDemo
 {
-    abstract class AbstractDynamicSprite : SimpleSprite
+    abstract class DynamicSprite : SimpleSprite
     {
         protected BitmapLocker poker; // Optimization for accessing the Form faster
         protected Color[] thePalette;
@@ -161,31 +161,99 @@ namespace FireDemo
         #endregion
     }
 
-    abstract class AbstractRealtimeLightEffect : AbstractDynamicSprite
+    abstract class RealtimeLightEffect : DynamicSprite
     {
+        public enum Orientation
+        {
+            Up,
+            Down,
+            Left,
+            Right,
+        }
+
         protected IntensityMap intensityMatrix;
         protected Random rng;
         protected ICoolingStrategy coolingStrategy;
         List<ILightShape> lightShapes;
+        public Orientation Direction { get; set; }
 
-        public AbstractRealtimeLightEffect()
+        public RealtimeLightEffect()
         {
+            Direction = Orientation.Up;
             rng = new Random();
         }
 
         public override void Initialize(int width, int height, int magnification)
         {
-            base.Initialize(width, height, magnification);
-            intensityMatrix = new IntensityMap(Width, Height);
+            Initialize(width, height, magnification, Orientation.Up);
+        }
+
+        public void Initialize(int width, int height, int magnification, Orientation o)
+        {
+            Direction = o;
+            if (o == Orientation.Up || o == Orientation.Down)
+            {
+                base.Initialize(width, height, magnification);
+                intensityMatrix = new IntensityMap(Width, Height);
+            }
+            else if (o == Orientation.Left || o == Orientation.Right)
+            {
+                base.Initialize(height, width, magnification);
+                intensityMatrix = new IntensityMap(height, width);
+                Height = height;
+                Width = width;
+            }
         }
 
         public override void RenderOneFrameToScreen(Graphics graph)
         {
             this.renderStage1SeedShapes();
             this.RenderStage2And3();
-            this.DrawOn(graph);
+            this.DrawAndRotate(graph);
             intensityMatrix.ProgressOneFrame();
             coolingStrategy.ProgressOneFrame();
+        }
+
+        private void DrawAndRotate(Graphics graph)
+        {
+            if (Direction == Orientation.Up)
+                this.DrawOn(graph);
+            else
+            {
+                Bitmap bmTemp = Form;
+                using (Bitmap bmRotatedForm = new Bitmap(bmTemp)) // = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+                {
+                    RotateFlipType type;
+                    if (Direction == Orientation.Left)
+                        type = RotateFlipType.Rotate270FlipNone; /* Rotate90FlipX? */
+                    else if (Direction == Orientation.Right)
+                        type = RotateFlipType.Rotate90FlipNone;
+                    else // Orientation.Down
+                        type = RotateFlipType.Rotate180FlipNone;
+
+                    bmRotatedForm.RotateFlip(type);
+                    Form = bmRotatedForm;
+                    //int tempWidth = Width;
+                    //int tempHeight = Height;
+
+                    this.DrawOn(graph);
+
+                    //Height = tempHeight;
+                    //Width = tempWidth;
+                    Form = bmTemp;
+                }
+            }
+        }
+
+        private Bitmap rotateImage(Bitmap b, float angle)
+        {
+            Bitmap returnBitmap = new Bitmap(b.Height, b.Width);
+            Graphics g = Graphics.FromImage(returnBitmap);
+            g.TranslateTransform((float)b.Width / 2, (float)b.Height / 2);
+            g.RotateTransform(angle);
+            g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
+            g.DrawImage(b, new Point(0, 0));
+            return returnBitmap;
         }
 
         protected void renderStage1SeedShapes()
@@ -212,7 +280,7 @@ namespace FireDemo
         }
     }
 
-    class StasisField : AbstractRealtimeLightEffect
+    class StasisField : RealtimeLightEffect
     {
         protected override void RenderStage2And3()
         {
@@ -249,37 +317,12 @@ namespace FireDemo
     /// <summary>
     /// Generalized implementation that allows changing the flame algorithm at runtime. Potentially slower, but more versatile.
     /// </summary>
-    class GenericRealtimeFlame : AbstractRealtimeLightEffect
+    class GenericRealtimeFlame : RealtimeLightEffect
     {
         bool f1, f2, f3, f4, f5, f6, f7, f8, f9;
-        public enum Orientation
-        {
-            Up,
-            Down,
-            Left,
-            Right,
-        }
-        public Orientation Direction { get; set; }
-
-        public void Initialize(int width, int height, int magnification, Orientation o)
-        {
-            Direction = o;
-            if (o == Orientation.Up || o == Orientation.Down)
-            {
-                base.Initialize(width, height, magnification);
-            }
-            else if (o == Orientation.Left || o == Orientation.Right)
-            {
-                base.Initialize(height, width, magnification);
-                Height = height;
-                Width = width;
-            }
-        }
-
 
         public GenericRealtimeFlame()
         {
-            Direction = Orientation.Up;
             SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
         }
         public void SetPixelMatrix(bool f1 = false, bool f2 = false, bool f3 = false, bool f4 = false, bool f5 = false, bool f6 = false, bool f7 = false, bool f8 = false, bool f9 = false)
@@ -295,41 +338,6 @@ namespace FireDemo
             this.f9 = f9;
         }
 
-        public override void RenderOneFrameToScreen(Graphics graph)
-        {
-            if (Direction == Orientation.Up)
-                base.RenderOneFrameToScreen(graph);
-            else if (Direction == Orientation.Left || Direction == Orientation.Right)
-            {
-                Bitmap bmTemp = Form;
-                using (Bitmap bmRotatedForm = new Bitmap(bmTemp)) // = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
-                {
-                    bmRotatedForm.RotateFlip(Direction == Orientation.Left ? RotateFlipType.Rotate270FlipNone :
-                        RotateFlipType.Rotate90FlipNone);
-                    Form = bmRotatedForm;
-                    //int tempWidth = Width;
-                    //int tempHeight = Height;
-
-                    base.RenderOneFrameToScreen(graph);
-
-                    //Height = tempHeight;
-                    //Width = tempWidth;
-                    Form = bmTemp;
-                }
-            }
-        }
-
-        private Bitmap rotateImage(Bitmap b, float angle)
-        {
-            Bitmap returnBitmap = new Bitmap(b.Height, b.Width);
-            Graphics g = Graphics.FromImage(returnBitmap);
-            g.TranslateTransform((float)b.Width / 2, (float)b.Height / 2);
-            g.RotateTransform(angle);
-            g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
-            g.DrawImage(b, new Point(0, 0));
-            return returnBitmap;
-        }
-
         protected override void RenderStage2And3()
         {
             //{ For flame effect scroll through every pixel and  }
@@ -339,6 +347,8 @@ namespace FireDemo
 
             // Average the designated pixels:
             int calc, coolingFactor, cPixelsToAverage = 0;
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
 
             // Pixels are numbered like the Numeric Keypad:
             // 7 8 9
@@ -370,9 +380,9 @@ namespace FireDemo
 
             // The original Fire Demo went from 1 to MAX-1,
             // so this should produce the same results!
-            for (int y = 1; y < intensityMatrix.Height - 1; ++y)
+            for (int y = 1; y < matrixHeight - 1; ++y)
             {
-                for (int x = 1; x < intensityMatrix.Width - 1; ++x)
+                for (int x = 1; x < matrixWidth - 1; ++x)
                 {
                     calc = 0;
                     // Add the surrounding pixels
@@ -420,7 +430,7 @@ namespace FireDemo
     /// <summary>
     ///  Optimized for a single small flame, like a candle
     /// </summary>
-    class RealtimeCandleflame : AbstractRealtimeLightEffect
+    class RealtimeCandleflame : RealtimeLightEffect
     {
         protected override void RenderStage2And3()
         {
@@ -434,16 +444,18 @@ namespace FireDemo
             // . 5 .
             // 1 2 3
             int calc, p1, p2, p3, p5, p8, coolingFactor;
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
 
             poker.LockBits(ImageLockMode.WriteOnly);
             // The original Fire Demo went from 1 to MAX-1,
             // so leave the fire calculation as-is.
-            for (int y = 1; y < Height - 1; ++y)
+            for (int y = 1; y < matrixHeight - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixelPrevious(0, y + 1);
                 p3 = intensityMatrix.GetPixelPrevious(1, y + 1);
 
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 1; x < matrixWidth - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
@@ -474,7 +486,7 @@ namespace FireDemo
     /// <summary>
     /// Optimized for regular flames
     /// </summary>
-    class RealtimeFire : AbstractRealtimeLightEffect
+    class RealtimeFire : RealtimeLightEffect
     {
         protected override void RenderStage2And3()
         {
@@ -488,16 +500,18 @@ namespace FireDemo
             //. 5 .
             //1 2 3
             int calc, p1, p2, p3, p5, coolingFactor;
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
 
             poker.LockBits(ImageLockMode.WriteOnly);
             // The original Fire Demo went from 1 to MAX-1,
             // so leave the fire calculation as-is.
-            for (int y = 1; y < Height - 1; ++y)
+            for (int y = 1; y < matrixHeight - 1; ++y)
             {
                 p2 = intensityMatrix.GetPixelPrevious(0, y + 1);
                 p3 = intensityMatrix.GetPixelPrevious(1, y + 1);
 
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 1; x < matrixWidth - 1; ++x)
                 {
                     // Add the surrounding pixels
                     p1 = p2;
@@ -530,7 +544,7 @@ namespace FireDemo
     /// <summary>
     /// Optimized for flames flowing into (or outfrom) the center of the screen
     /// </summary>
-    class RealtimeFireSauronV1_PupilOutward : AbstractRealtimeLightEffect
+    class RealtimeFireSauronV1_PupilOutward : RealtimeLightEffect
     {
         public bool LookAround { get; set; }
         public Rectangle LocationRange { get; set; }
@@ -541,19 +555,16 @@ namespace FireDemo
             // HACK HACK HACK
             if (LookAround)
             {
-                if (!Inward)
+                // pupil, randomly move sometimes...
+                if (frame % 60 == 0)
                 {
-                    // pupil, randomly move sometimes
-                    if (frame % 60 == 0)
-                    {
-                        Location = new Point(
-                            x: LocationRange.Left + rng.Next(LocationRange.Width),
-                            y: LocationRange.Top + rng.Next(LocationRange.Height));
-                    }
-                    ++frame;
-
-                    //Location = new Point(35, 0);
+                    Location = new Point(
+                        x: LocationRange.Left + rng.Next(LocationRange.Width),
+                        y: LocationRange.Top + rng.Next(LocationRange.Height));
                 }
+                ++frame;
+
+                //Location = new Point(35, 0);
             }
 
             //{ For flame effect scroll through every pixel and  }
@@ -571,6 +582,8 @@ namespace FireDemo
             // 1 . .
             int calc, coolingFactor;
             bool f1, f2, f3, f4, f5, f6, f7, f8, f9;
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
 
             f1 = false;
             f2 = false;
@@ -585,11 +598,11 @@ namespace FireDemo
             poker.LockBits(ImageLockMode.WriteOnly);
             // The original Fire Demo went from 1 to MAX-1,
             // so leave the fire calculation as-is.
-            for (int y = 1; y < Height - 1; ++y)
+            for (int y = 1; y < matrixHeight - 1; ++y)
             {
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 1; x < matrixWidth - 1; ++x)
                 {
-                    if (x == 1 || x == Width / 2)
+                    if (x == 1 || x == matrixWidth / 2)
                     {
                         bool goLeft = !Inward && x == 1 || Inward && x != 1;
                         if (goLeft)
@@ -677,6 +690,59 @@ namespace FireDemo
 
     #endregion // Sauron EXPERIMENT
 
+#if false
+    class RealtimeFire_INCLUDING_COAL_SEED : RealtimeLightEffect
+    {
+        protected override void RenderStage2And3()
+        {
+            //{ For flame effect scroll through every pixel and  }
+            //{ choose some other pixels around it. Divide by    }
+            //{ the ammount of pixels you added up and then      }
+            //{ subtract a decay ammount.                        }
+
+            // Average these pixels:
+            // . . .
+            // . 5 .
+            // 1 2 3
+            int calc, p1, p2, p3, p5, coolingFactor;
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
+
+            poker.LockBits(ImageLockMode.WriteOnly);
+            // The original Fire Demo went from 1 to MAX-1,
+            // so leave the fire calculation as-is.
+            for (int y = 1; y < matrixHeight; ++y)
+            {
+                p2 = y < matrixHeight - 1 ? intensityMatrix.GetPixelPrevious(0, y + 1) : 0;
+                p3 = y < matrixHeight - 1 ? intensityMatrix.GetPixelPrevious(1, y + 1) : 0;
+
+                for (int x = 1; x < matrixWidth - 1; ++x)
+                {
+                    // Add the surrounding pixels
+                    p1 = p2;
+                    p2 = p3;
+                    p5 = intensityMatrix.GetPixelPrevious(x, y);
+                    p3 = y < matrixHeight - 1 ? intensityMatrix.GetPixelPrevious(x + 1, y + 1) : 0;
+
+                    // Average the colors
+                    calc = p5 + p1 + p2 + p3;
+                    calc /= 4;
+
+                    // Subtract the coolingFactor value, if necessary
+                    coolingFactor = coolingStrategy.at(x, y);
+                    if (calc > coolingFactor)
+                        calc -= coolingFactor;
+                    else
+                        calc = 0;
+
+                    intensityMatrix.SetPixelNext(x, y, calc);
+                    poker.SetPixel(x, y, this.thePalette[calc]);
+                }
+            }
+            poker.UnlockBits();
+        }
+    }
+#endif
 
     /// <summary>
     /// Optimized for Flaming Batman Logo
@@ -703,20 +769,22 @@ namespace FireDemo
             bool doDraw, doInnerCheck;
             int y0inner;
             int ySkipInitial;
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
 
             deadZone = 0;
-            endZone = Width + 1;
-            startOpt = (int)(Height / 3);
+            endZone = matrixWidth + 1;
+            startOpt = (int)(matrixHeight / 3);
 
             // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
             // But in any case needs to be retuned to whatever values we use in the LightShapeBatman.
             // Hmm, seems to "Just Work"
 
             // Under the bat: 6@4 20@11.5
-            x0 = (int)(6.0f / 52 * (Width - 1) + 1);
-            y0 = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
-            x1 = (int)(20.0f / 52 * (Width - 1) + 1);
-            y1 = (int)(11.5f / 18 * (Height * 3 / 4) + (Height / 4));
+            x0 = (int)(6.0f / 52 * (matrixWidth - 1) + 1);
+            y0 = (int)(4.0f / 18 * (matrixHeight * 3 / 4) + (matrixHeight / 4));
+            x1 = (int)(20.0f / 52 * (matrixWidth - 1) + 1);
+            y1 = (int)(11.5f / 18 * (matrixHeight * 3 / 4) + (matrixHeight / 4));
 
             //"Inside the bat: 22.5@4
             //8@0 to 17@4
@@ -734,17 +802,17 @@ namespace FireDemo
             // Inside the bat: 22.5@4
             // 12@4 to 40@6
             ySkipInitial = 30;
-            ySkipInitial = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
-            x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
-            y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
-            x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
-            y1inner = (int)(5.9f / 18 * (Height * 3 / 4) + (Height / 4));
+            ySkipInitial = (int)(1.75f / 18 * (matrixHeight - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
+            x0inner = (int)(10.0f / 52 * (matrixWidth - 1) + 1);
+            y0inner = (int)(4.0f / 18 * (matrixHeight * 3 / 4) + (matrixHeight / 4));
+            x1inner = (int)(42.0f / 52 * (matrixWidth - 1) + 1);
+            y1inner = (int)(5.9f / 18 * (matrixHeight * 3 / 4) + (matrixHeight / 4));
 
             poker.LockBits(ImageLockMode.WriteOnly);
             // The original Fire Demo went from 1 to MAX-1,
             // so leave the fire calculation as-is.
             // Plus the bat logo doesn't get near the sides.
-            for (int y = 1; y < Height - 1; ++y)
+            for (int y = 1; y < matrixHeight - 1; ++y)
             {
                 // There are large areas of pixels that will NEVER change in the Bat Logo.
                 // Approximate these regions with rectangles, so we can quickly exclude them"
@@ -752,14 +820,14 @@ namespace FireDemo
                 if (y > y1)
                 {
                     deadZone = x1;
-                    endZone = (Width - x1);
+                    endZone = (matrixWidth - x1);
                 }
                 else
                 {
                     if (y > y0)
                     {
                         deadZone = x0;
-                        endZone = (Width - x0);
+                        endZone = (matrixWidth - x0);
                     }
                 }
 
@@ -769,7 +837,7 @@ namespace FireDemo
                 p2 = intensityMatrix.GetPixelPrevious(x: 0, y: y + 1);
                 p3 = intensityMatrix.GetPixelPrevious(x: 1, y: y + 1);
 
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 1; x < matrixWidth - 1; ++x)
                 {
                     //2 to: (width - 1) do: [:x |
                     // poke the raw data into the ColorForm.
@@ -840,8 +908,10 @@ namespace FireDemo
 
         protected void RenderStage2And3_Slice(int iSliceNum)
         {
-            int initialY = iSliceNum * Height / numThreads;
-            int endY = (iSliceNum + 1) * Height / numThreads - (iSliceNum == numThreads - 1 ? 1 : 0);
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
+            int initialY = iSliceNum * matrixHeight / numThreads;
+            int endY = (iSliceNum + 1) * matrixHeight / numThreads - (iSliceNum == numThreads - 1 ? 1 : 0);
             //{ For flame effect scroll through every pixel and  }
             //{ choose some other pixels around it. Divide by    }
             //{ the ammount of pixels you added up and then      }
@@ -858,17 +928,17 @@ namespace FireDemo
             int ySkipInitial;
 
             deadZone = 0;
-            endZone = Width + 1;
-            startOpt = (int)(Height / 3);
+            endZone = matrixWidth + 1;
+            startOpt = (int)(matrixHeight / 3);
 
             // TODO: JRDV: I bet these are all off bny 1 given I ported this from Smalltalk
             // But in any case needs to be retuned to whatever values we use in the LightShapeBatman
 
             // Under the bat: 6@4 20@11.5
-            x0 = (int)(6.0f / 52 * (Width - 1) + 1);
-            y0 = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
-            x1 = (int)(20.0f / 52 * (Width - 1) + 1);
-            y1 = (int)(11.5f / 18 * (Height * 3 / 4) + (Height / 4));
+            x0 = (int)(6.0f / 52 * (matrixWidth - 1) + 1);
+            y0 = (int)(4.0f / 18 * (matrixHeight * 3 / 4) + (Height / 4));
+            x1 = (int)(20.0f / 52 * (matrixWidth - 1) + 1);
+            y1 = (int)(11.5f / 18 * (matrixHeight * 3 / 4) + (Height / 4));
 
             //"Inside the bat: 22.5@4
             //8@0 to 17@4
@@ -884,11 +954,11 @@ namespace FireDemo
             // Inside the bat: 22.5@4
             // 12@4 to 40@6
             ySkipInitial = 30;
-            ySkipInitial = (int)(1.75f / 18 * (Height - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
-            x0inner = (int)(10.0f / 52 * (Width - 1) + 1);
-            y0inner = (int)(4.0f / 18 * (Height * 3 / 4) + (Height / 4));
-            x1inner = (int)(42.0f / 52 * (Width - 1) + 1);
-            y1inner = (int)(5.9f / 18 * (Height * 3 / 4) + (Height / 4));
+            ySkipInitial = (int)(1.75f / 18 * (matrixHeight - 1) + 1); // X / 18  * (299) + 1 == 30; 29 * 18 / 299 = 1.745
+            x0inner = (int)(10.0f / 52 * (matrixWidth - 1) + 1);
+            y0inner = (int)(4.0f / 18 * (matrixHeight * 3 / 4) + (Height / 4));
+            x1inner = (int)(42.0f / 52 * (matrixWidth - 1) + 1);
+            y1inner = (int)(5.9f / 18 * (matrixHeight * 3 / 4) + (Height / 4));
 
             for (int y = initialY; y < endY; ++y)
             {
@@ -905,14 +975,14 @@ namespace FireDemo
                 if (y > y1)
                 {
                     deadZone = x1;
-                    endZone = (Width - x1);
+                    endZone = (matrixWidth - x1);
                 }
                 else
                 {
                     if (y > y0)
                     {
                         deadZone = x0;
-                        endZone = (Width - x0);
+                        endZone = (matrixWidth - x0);
                     }
                 }
 
@@ -922,7 +992,7 @@ namespace FireDemo
                 p2 = intensityMatrix.GetPixelPrevious(x: 0, y: y + 1);
                 p3 = intensityMatrix.GetPixelPrevious(x: 1, y: y + 1);
 
-                for (int x = 1; x < Width - 1; ++x)
+                for (int x = 1; x < matrixWidth - 1; ++x)
                 {
                     //2 to: (width - 1) do: [:x |
                     // poke the raw data into the ColorForm.
@@ -1186,7 +1256,7 @@ namespace FireDemo
     /// <summary>
     /// Optimized for dissipating in place, like electricity
     /// </summary>
-    class RealtimeLightning : AbstractRealtimeLightEffect
+    class RealtimeLightning : RealtimeLightEffect
     {
         protected override void RenderStage2And3()
         {
@@ -1200,17 +1270,19 @@ namespace FireDemo
             // 4 5 6
             // . 2 .
             int calc, p2, p4, p5, p6, p8, coolingFactor;
+            int matrixWidth = intensityMatrix.Width;
+            int matrixHeight = intensityMatrix.Height;
 
             poker.LockBits(ImageLockMode.WriteOnly);
             // While the original Fire Demo went from 1 to MAX-1,
             // the lightning does touch the sides sometimes,
             // so we do want to account for the edge pixels.
-            for (int y = 0; y < Height; ++y)
+            for (int y = 0; y < matrixHeight; ++y)
             {
                 p5 = 0;
                 p6 = intensityMatrix.GetPixelPrevious(0, y);
 
-                for (int x = 0; x < Width; ++x)
+                for (int x = 0; x < matrixWidth; ++x)
                 {
                     // Add the surrounding pixels
                     // I'm not sure I like the extra conditions for bounds checks,
@@ -1219,8 +1291,8 @@ namespace FireDemo
                     p8 = y > 0 ? intensityMatrix.GetPixelPrevious(x, y - 1) : 0;
                     p4 = p5;
                     p5 = p6;
-                    p6 = x < Width - 1 ? intensityMatrix.GetPixelPrevious(x + 1, y) : 0;
-                    p2 = y < Height - 1 ? intensityMatrix.GetPixelPrevious(x, y + 1) : 0;
+                    p6 = x < matrixWidth - 1 ? intensityMatrix.GetPixelPrevious(x + 1, y) : 0;
+                    p2 = y < matrixHeight - 1 ? intensityMatrix.GetPixelPrevious(x, y + 1) : 0;
 
                     // Average the colors
                     calc = p8 + p6 + p5 + p4 + p2;
@@ -1383,7 +1455,7 @@ namespace FireDemo
     }
 
 
-    class TextSprite : AbstractDynamicSprite
+    class TextSprite : DynamicSprite
     {
         private readonly Random rng = new Random();
 

@@ -18,7 +18,7 @@ namespace FireDemo
         CoolingStrategyMap m_coolingStrategy;
         ILightPen m_lightPen;
         List<ILightShape> m_lightShapes = new List<ILightShape>();
-        AbstractDynamicSprite m_dbSprite;
+        DynamicSprite m_dbSprite;
         List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
         private GenericRealtimeFlame m_genericFlame;
         int m_framesPerSecond = 64;
@@ -103,70 +103,70 @@ namespace FireDemo
             lsBorgRing.SetPen(lpPlasma);
             lsBorgPlasma.SetPen(lpPlasma);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscRed = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscRed = new RealtimeLightning();
             dbPlasmaDiscRed.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscRed.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscRed.SetPalette(PalPlasma.New(Color.Red));
             dbPlasmaDiscRed.AddShape(lsBorgPlasma);
             dbPlasmaDiscRed.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscOrange = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscOrange = new RealtimeLightning();
             dbPlasmaDiscOrange.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscOrange.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscOrange.SetPalette(PalPlasma.New(Color.Orange));
             dbPlasmaDiscOrange.AddShape(lsBorgPlasma);
             dbPlasmaDiscOrange.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscYellow = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscYellow = new RealtimeLightning();
             dbPlasmaDiscYellow.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscYellow.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscYellow.SetPalette(PalPlasma.New(Color.Yellow));
             dbPlasmaDiscYellow.AddShape(lsBorgPlasma);
             dbPlasmaDiscYellow.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscGreen = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscGreen = new RealtimeLightning();
             dbPlasmaDiscGreen.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscGreen.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscGreen.SetPalette(PalPlasma.New(Color.Green));
             dbPlasmaDiscGreen.AddShape(lsBorgPlasma);
             dbPlasmaDiscGreen.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscBlue_Raw = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscBlue_Raw = new RealtimeLightning();
             dbPlasmaDiscBlue_Raw.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscBlue_Raw.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscBlue_Raw.SetPalette(PalPlasma.NewRaw(Color.Blue));
             dbPlasmaDiscBlue_Raw.AddShape(lsBorgPlasma);
             dbPlasmaDiscBlue_Raw.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscViolet_Raw = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscViolet_Raw = new RealtimeLightning();
             dbPlasmaDiscViolet_Raw.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscViolet_Raw.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscViolet_Raw.SetPalette(PalPlasma.NewRaw(Color.Violet));
             dbPlasmaDiscViolet_Raw.AddShape(lsBorgPlasma);
             dbPlasmaDiscViolet_Raw.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscVioletEX1 = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscVioletEX1 = new RealtimeLightning();
             dbPlasmaDiscVioletEX1.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscVioletEX1.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscVioletEX1.SetPalette(PalPlasma.NewRaw(Color.Violet));
             dbPlasmaDiscVioletEX1.AddShape(lsBorgPlasma);
             dbPlasmaDiscVioletEX1.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscDarkViolet = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscDarkViolet = new RealtimeLightning();
             dbPlasmaDiscDarkViolet.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscDarkViolet.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscDarkViolet.SetPalette(PalPlasma.New(Color.DarkViolet));
             dbPlasmaDiscDarkViolet.AddShape(lsBorgPlasma);
             dbPlasmaDiscDarkViolet.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscBlueViolet = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscBlueViolet = new RealtimeLightning();
             dbPlasmaDiscBlueViolet.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscBlueViolet.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscBlueViolet.SetPalette(PalPlasma.New(Color.BlueViolet));
             dbPlasmaDiscBlueViolet.AddShape(lsBorgPlasma);
             dbPlasmaDiscBlueViolet.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDiscBlue = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscBlue = new RealtimeLightning();
             dbPlasmaDiscBlue.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscBlue.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscBlue.SetPalette(PalPlasma.New(Color.Blue));
@@ -175,7 +175,7 @@ namespace FireDemo
 
             // I really like this color, but it's more of a Cyan, instead of the deep BLUE I'm looking for
             // BUT, it might be hapfway between?
-            AbstractRealtimeLightEffect dbPlasmaDiscBlueNICE = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscBlueNICE = new RealtimeLightning();
             dbPlasmaDiscBlueNICE.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscBlueNICE.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscBlueNICE.SetPalette(PalPlasma.NewRaw(
@@ -185,14 +185,14 @@ namespace FireDemo
             dbPlasmaDiscBlueNICE.AddShape(lsBorgRing);
 
             // This is very close to actual Cyan, but looks a tad too yellow
-            AbstractRealtimeLightEffect dbPlasmaDiscSkyBlue = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDiscSkyBlue = new RealtimeLightning();
             dbPlasmaDiscSkyBlue.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDiscSkyBlue.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDiscSkyBlue.SetPalette(PalPlasma.New(Color.DeepSkyBlue));
             dbPlasmaDiscSkyBlue.AddShape(lsBorgPlasma);
             dbPlasmaDiscSkyBlue.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteLightBlue = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc_FavoriteLightBlue = new RealtimeLightning();
             dbPlasmaDisc_FavoriteLightBlue.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc_FavoriteLightBlue.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc_FavoriteLightBlue.SetPalette(PalPlasma.NewRaw(
@@ -206,14 +206,14 @@ namespace FireDemo
             dbPlasmaDisc_FavoriteLightBlue.AddShape(lsBorgPlasma);
             dbPlasmaDisc_FavoriteLightBlue.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc_DarkBlue = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc_DarkBlue = new RealtimeLightning();
             dbPlasmaDisc_DarkBlue.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc_DarkBlue.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc_DarkBlue.SetPalette(PalPlasma.New(Color.DarkBlue));
             dbPlasmaDisc_DarkBlue.AddShape(lsBorgPlasma);
             dbPlasmaDisc_DarkBlue.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteBlue = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc_FavoriteBlue = new RealtimeLightning();
             dbPlasmaDisc_FavoriteBlue.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc_FavoriteBlue.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc_FavoriteBlue.SetPalette(PalPlasma.NewRaw(
@@ -222,14 +222,14 @@ namespace FireDemo
             dbPlasmaDisc_FavoriteBlue.AddShape(lsBorgPlasma);
             dbPlasmaDisc_FavoriteBlue.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteViolet = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc_FavoriteViolet = new RealtimeLightning();
             dbPlasmaDisc_FavoriteViolet.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc_FavoriteViolet.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc_FavoriteViolet.SetPalette(PalPlasma.New(Color.Magenta));
             dbPlasmaDisc_FavoriteViolet.AddShape(lsBorgPlasma);
             dbPlasmaDisc_FavoriteViolet.AddShape(lsBorgRing);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc_FavoriteDeepGreen = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc_FavoriteDeepGreen = new RealtimeLightning();
             dbPlasmaDisc_FavoriteDeepGreen.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc_FavoriteDeepGreen.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc_FavoriteDeepGreen.SetPalette(PalPlasma.NewRaw(
@@ -333,7 +333,7 @@ namespace FireDemo
             lsBorgRing.SetPen(lpPlasma);
             lsBorgPlasma.SetPen(lpPlasma);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
             dbPlasmaDisc.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc.SetPalette(palBorg);
@@ -372,7 +372,7 @@ namespace FireDemo
             ILightShape lsLightning = new LightShapeLightning();
             lsLightning.SetPen(lpLightning);
 
-            AbstractRealtimeLightEffect dbLightning = new RealtimeLightning();
+            RealtimeLightEffect dbLightning = new RealtimeLightning();
             dbLightning.Initialize(fireWidth, fireHeight, magnification);
             dbLightning.SetCoolingStrategy(coolingStrategy);
             dbLightning.SetPalette(palLightning);
@@ -415,7 +415,7 @@ namespace FireDemo
             ILightShape lsBatman = new LightShapeBatman();
             lsBatman.SetPen(lpBatman);
 
-            AbstractRealtimeLightEffect dbBatman;
+            RealtimeLightEffect dbBatman;
             if (multithreaded)
                 dbBatman = new RealtimeFireBatLogoOptimizedMT_ThreadPool();
             //dbBatman = new RealtimeFireBatLogoOptimizedMT_ManualLongThreads();
@@ -483,7 +483,7 @@ namespace FireDemo
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
-            AbstractRealtimeLightEffect dbCandle;
+            RealtimeLightEffect dbCandle;
             //dbCandle = new RealtimeCandleflame();
             m_genericFlame = new GenericRealtimeFlame();
             dbCandle = m_genericFlame;
@@ -690,7 +690,7 @@ namespace FireDemo
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
-            AbstractRealtimeLightEffect dbCandle;
+            RealtimeLightEffect dbCandle;
             m_genericFlame = new GenericRealtimeFlame();
             m_largerFlame = true;
             m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
@@ -797,7 +797,7 @@ namespace FireDemo
             lsBorgRing.SetPen(lpPlasma);
             lsBorgPlasma.SetPen(lpPlasma);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
             dbPlasmaDisc.Initialize(ringWidth, ringHeight, magnification);
             dbPlasmaDisc.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc.SetPalette(palBorg);
@@ -850,7 +850,7 @@ namespace FireDemo
             lsBorgRing.SetPen(lpPlasma);
             lsBorgPlasma.SetPen(lpPlasma);
 
-            AbstractRealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
+            RealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
             dbPlasmaDisc.Initialize(ringWidth, ringHeight, ringMagnification);
             dbPlasmaDisc.SetCoolingStrategy(coolingStrategy);
             dbPlasmaDisc.SetPalette(palBorg);
@@ -954,7 +954,7 @@ namespace FireDemo
             ILightShape lsBonfire1 = new LightShapeCandle();
             lsBonfire1.SetPen(lpBonfire1);
 
-            AbstractRealtimeLightEffect dbCauldronFire1 = new RealtimeFire();
+            RealtimeLightEffect dbCauldronFire1 = new RealtimeFire();
             dbCauldronFire1.Initialize(cauldronFireWidth, cauldronFireHeight, cauldronFireMagnification);
             dbCauldronFire1.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbCauldronFire1.SetCoolingStrategy(csBonfire1);
@@ -981,7 +981,7 @@ namespace FireDemo
             // cauldronFireHeight = 25 * 2;
             // density: 0.3f, min: 3, max: 35, smoothing: 0
             // fill: 0.7f, min: 54, max: 255, useFullRange: false
-            AbstractRealtimeLightEffect dbCauldronFire2 = new RealtimeFire();
+            RealtimeLightEffect dbCauldronFire2 = new RealtimeFire();
             CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
             csBonfire2.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
                 //density: 0.2f, min: 3, max: 20, smoothing: 0, // looks good with realistic palette? RealtimeFire_INCLUDING_COAL_SEED
@@ -1036,7 +1036,7 @@ namespace FireDemo
                 density: 0.3f, min: 5, max: 23, smoothing: 1,
                 shift: true, rotate: true);
 
-            AbstractRealtimeLightEffect dbTorch1 = new RealtimeFire();
+            RealtimeLightEffect dbTorch1 = new RealtimeFire();
             dbTorch1.Initialize(torchFlameWidth, torchFlameHeight, magnification: torchMagnification);
             dbTorch1.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbTorch1.SetCoolingStrategy(csTorch1);
@@ -1067,7 +1067,7 @@ namespace FireDemo
                 density: 0.3f, min: 5, max: 23, smoothing: 1,
                 shift: true, rotate: true);
 
-            AbstractRealtimeLightEffect dbTorch2 = new RealtimeFire();
+            RealtimeLightEffect dbTorch2 = new RealtimeFire();
             dbTorch2.Initialize(torchFlameWidth, torchFlameHeight, magnification: torchMagnification);
             dbTorch2.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbTorch2.SetCoolingStrategy(csTorch2);
@@ -1150,7 +1150,7 @@ namespace FireDemo
             Size size = new Size(width: 200, height: 100);
 
             int magnification = 2;
-            List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>()
+            List<DynamicSprite> dbSprites = new List<DynamicSprite>()
             {
                 CreateSauron_CornersOfEyeInward(),
                 //CreateSauron_EyeRingInward(),
@@ -1164,7 +1164,7 @@ namespace FireDemo
             // Setting alpha to zero (effectively the same thing) does work in Linux.
             palFire[0] = Color.FromArgb(0, palFire[0]);
 
-            foreach (AbstractDynamicSprite temp in dbSprites)
+            foreach (DynamicSprite temp in dbSprites)
             {
                 temp.SetPalette(palFire);
             }
@@ -1173,7 +1173,7 @@ namespace FireDemo
 
             int width = 0;
             int height = 0;
-            foreach (AbstractDynamicSprite s in dbSprites)
+            foreach (DynamicSprite s in dbSprites)
             {
                 s.Location = Point.Empty;
                 width = Math.Max(width, s.Width);
@@ -1197,7 +1197,7 @@ namespace FireDemo
             Size sceneSize = new Size(width: 600, height: 100);
 
             int magnification = 2;
-            List<AbstractDynamicSprite> dbSprites = new List<AbstractDynamicSprite>
+            List<DynamicSprite> dbSprites = new List<DynamicSprite>
             {
                 CreateSauronV3_SmokeOutward(sceneSize, left: true), // Add sideways layer of 4 Point red smoke
                 CreateSauronV3_SmokeOutward(sceneSize, left: false), // Add sideways layer of 4 Point red smoke
@@ -1212,11 +1212,6 @@ namespace FireDemo
             palFire = PalRealisticFire.New();
             palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
             palFire[0] = Color.FromArgb(0, palFire[0]); // TODO: Gradient of alpha across multiple colors so it blends better
-
-            //foreach (AbstractDynamicSprite temp in dbSprites)
-            //{
-            //    temp.SetPalette(palFire);
-            //}
 
             Color[] palBackgroundSmoke;
             palBackgroundSmoke = PalFourPointLinear.New(Color.Red);
@@ -1253,7 +1248,7 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-        private AbstractRealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
+        private RealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
         {
             int magnification = 1;
             int smokeWidth = size.Width / 2 / magnification;
@@ -1273,13 +1268,12 @@ namespace FireDemo
             LightShapeLightning lsBolt = new LightShapeLightning();
             ICoolingStrategy csSauron = new CoolingStrategyConst(27);
             lsBolt.SetPen(lpLightning);
-            GenericRealtimeFlame dbLightningBolt = new GenericRealtimeFlame();
-            dbLightningBolt.Direction = left ? GenericRealtimeFlame.Orientation.Left : GenericRealtimeFlame.Orientation.Right;
+            RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
+            dbLightningBolt.Direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
             if (left)
                 dbLightningBolt.Location = new Point(xOffset, 0);
             else
                 dbLightningBolt.Location = new Point(xCenter, 0);
-            dbLightningBolt.SetPixelMatrix(f4: true, f5: true, f6: true, f2: true);
             dbLightningBolt.Initialize(smokeWidth, smokeHeight, magnification, dbLightningBolt.Direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
             dbLightningBolt.AddShape(lsBolt);
@@ -1322,7 +1316,7 @@ namespace FireDemo
 #endif
 
 
-        private AbstractRealtimeLightEffect CreateSauronV3_SmokeOutward(Size size, bool left)
+        private RealtimeLightEffect CreateSauronV3_SmokeOutward(Size size, bool left)
         {
             int magnification = 3;
             int smokeWidth = size.Width / 2 / magnification;
@@ -1353,7 +1347,7 @@ namespace FireDemo
             csSauron = m_coolingStrategy;
             lsFireStick.SetPen(lpSauronBackground);
             GenericRealtimeFlame dbSauron = new GenericRealtimeFlame();
-            dbSauron.Direction = left ? GenericRealtimeFlame.Orientation.Left : GenericRealtimeFlame.Orientation.Right;
+            dbSauron.Direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
             if (left)
                 dbSauron.Location = new Point(xOffset, 0);
             else
@@ -1366,7 +1360,7 @@ namespace FireDemo
             return dbSauron;
         }
 
-        private AbstractRealtimeLightEffect CreateSauron_PupilOutward(Size size, bool isNarrow)
+        private RealtimeLightEffect CreateSauron_PupilOutward(Size size, bool isNarrow)
         {
             int magnification = 1;
             int width = isNarrow ? 100 : 200;
@@ -1416,7 +1410,7 @@ namespace FireDemo
         /// Old version that doesn't get the right shape or look, and I'm not sure it ever will.
         /// </summary>
         /// <returns></returns>
-        private AbstractRealtimeLightEffect CreateSauron_CornersOfEyeInward()
+        private RealtimeLightEffect CreateSauron_CornersOfEyeInward()
         {
             int width = 200;
             int height = 100;
@@ -1435,7 +1429,7 @@ namespace FireDemo
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsSauron.SetPen(lpSauronEye);
-            AbstractRealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
+            RealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsSauron);
@@ -1443,7 +1437,7 @@ namespace FireDemo
             return dbSauron;
         }
 
-        private AbstractRealtimeLightEffect CreateSauron_EyeRingInward(Size size)
+        private RealtimeLightEffect CreateSauron_EyeRingInward(Size size)
         {
             int magnification = 1;
             int width = Math.Min(size.Width, size.Height) / magnification; // Need to generalize the width/location calculations
@@ -1458,7 +1452,7 @@ namespace FireDemo
                 shift: true, rotate: false);
             csSauron = m_coolingStrategy;
             lsSauron.SetPen(lpSauronEye);
-            AbstractRealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
+            RealtimeLightEffect dbSauron = new RealtimeFireSauronV2_Inward();
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
             dbSauron.AddShape(lsSauron);
@@ -1471,7 +1465,7 @@ namespace FireDemo
         /// Caller is responsible for setting the palette
         /// </summary>
         /// <returns></returns>
-        AbstractRealtimeLightEffect GenerateCandle(bool big = true)
+        RealtimeLightEffect GenerateCandle(bool big = true)
         {
             int fireWidth = 21;
             int fireHeight = 50;
@@ -1499,8 +1493,8 @@ namespace FireDemo
             ILightShape lsCandle = new LightShapeCandle();
             lsCandle.SetPen(lpCandle);
 
-            AbstractRealtimeLightEffect dbCandle;
-            dbCandle = big ? (AbstractRealtimeLightEffect)new RealtimeFire() : (AbstractRealtimeLightEffect)new RealtimeCandleflame();
+            RealtimeLightEffect dbCandle;
+            dbCandle = big ? (RealtimeLightEffect)new RealtimeFire() : (RealtimeLightEffect)new RealtimeCandleflame();
             dbCandle.Initialize(fireWidth, fireHeight, magnification);
             dbCandle.SetCoolingStrategy(coolingStrategy);
             dbCandle.AddShape(lsCandle);
@@ -1558,7 +1552,7 @@ namespace FireDemo
                     palCandle = PalRealisticFire.New();
                 else
                     palCandle = PalRealisticFlameCurve.New(color);
-                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                RealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
                 dbCandle.SetPalette(palCandle);
 
                 // LAZY INITIALIZATION!
@@ -1588,7 +1582,7 @@ namespace FireDemo
                 }
                 else
                     palCandle = PalFourPointLinear.New(color);
-                AbstractRealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                RealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
                 dbCandle.SetPalette(palCandle);
                 left = (width * magnification + bufferX) * (iCandle % 8);
                 top = (height * magnification + bufferY) * (iCandle / 8);
