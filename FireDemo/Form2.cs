@@ -1200,6 +1200,7 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
             Size sceneSize = new Size(width: 600, height: 100);
+            //sceneSize = new Size(width: 400, height: 100);
 
             int magnification = 2;
             List<DynamicSprite> dbSprites = new List<DynamicSprite>
@@ -1258,7 +1259,10 @@ namespace FireDemo
             dbSauron.Location = new Point(left, top);
 
             dbSauron.AddRange(dbSprites);
+
+            VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
             m_dbSprites.Add(dbSauron);
+            //m_dbSprites.Add(tower);
 
             buttonDemo_Click(null, null);
         }
@@ -1266,13 +1270,14 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
         {
             int magnification = 1;
-            int smokeWidth = size.Width / 4 / magnification;
-            int smokeHeight = size.Height / magnification;
+            int lightWidth = (int)(size.Width / 4 / magnification);
+            //lightWidth = (int)(size.Width / 2.5 / magnification);
+            int lightHeight = size.Height / magnification;
             int xCenter = size.Width / 2;
             int xOffset = xCenter;
 
             if (left)
-                xOffset = xCenter - smokeWidth * magnification;
+                xOffset = xCenter - lightWidth * magnification;
 
             LightPen lpLightning = new LightPen(fill: 1, 200, 255, useFullRange: true);
             LightShapeLightning lsBolt = new LightShapeLightning();
@@ -1284,7 +1289,7 @@ namespace FireDemo
                 dbLightningBolt.Location = new Point(xOffset, 0);
             else
                 dbLightningBolt.Location = new Point(xCenter, 0);
-            dbLightningBolt.Initialize(smokeWidth, smokeHeight, magnification, direction);
+            dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
             dbLightningBolt.AddShape(lsBolt);
 
@@ -1375,7 +1380,7 @@ namespace FireDemo
             // or inward with a MASSIVE cooling map in the pupil? That would be more failthful to the source. V2? Or port Greenshift?
             // Then some directed lightning around the edge? (done)
             // Maybe some sideways fire to make the background (done)
-            // Add the towers
+            // Add the towers (in progress)
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: true);
             ILightShape lsPupil;
             if (isNarrow)

@@ -652,7 +652,7 @@ namespace FireDemo
 	// The idea is that I would like to be able to flatten multiple sprites into a single bitmap for speed,
 	// and eventually generalize that in this class. For now, it's hard coded for the one composite "scene"
 	// I want to create that is reminicient of the "It's dangerous to go alone, take this thing"
-	// TODO: Generalize into a CompoundSprite or something named similar that can repeat sprites in a grid
+	// TODO: Generalize into a CompoundSprite/GridSprite or something named similar that can repeat sprites in a grid
 	// perhaps use "Using(Graphics g onthe(Form))
 	/// <summary>
 	/// Flattens multiple static sprites into a single image which renders a lot faster than multiple smaller sprites
@@ -777,6 +777,21 @@ namespace FireDemo
 				base.RenderOneFrameToScreen(graph);
 				//NaiveRender(graph);
 			}
+		}
+	}
+
+	class VectorSauronTowerSprite : SimpleSprite
+    {
+		public override void RenderOneFrameToScreen(Graphics graph)
+        {
+			int offset = 80;
+			graph.DrawLine(Pens.White, offset, 400, offset, 0);
+			graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
+			graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
+			graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
+			graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
+			graph.DrawLine(Pens.White, 1000- offset, 0, 1010- offset, 0);
+			graph.DrawLine(Pens.White, 1010- offset, 0, 1010- offset, 400);
 		}
 	}
 
