@@ -221,7 +221,7 @@ namespace FireDemo
             else
             {
                 Bitmap bmTemp = Form;
-                using (Bitmap bmRotatedForm = new Bitmap(bmTemp)) // = rotateImage(Form, Direction == Orientation.Right ? 90 : 270);
+                using (Bitmap bmRotatedForm = new Bitmap(bmTemp))
                 {
                     RotateFlipType type;
                     if (Direction == Orientation.Left)
@@ -232,29 +232,26 @@ namespace FireDemo
                         type = RotateFlipType.Rotate180FlipNone;
 
                     bmRotatedForm.RotateFlip(type);
+
+                    // Temporarily swap out the Form to draw it rotated
                     Form = bmRotatedForm;
-                    //int tempWidth = Width;
-                    //int tempHeight = Height;
-
                     this.DrawOn(graph);
-
-                    //Height = tempHeight;
-                    //Width = tempWidth;
                     Form = bmTemp;
                 }
             }
         }
 
-        private Bitmap rotateImage(Bitmap b, float angle)
-        {
-            Bitmap returnBitmap = new Bitmap(b.Height, b.Width);
-            Graphics g = Graphics.FromImage(returnBitmap);
-            g.TranslateTransform((float)b.Width / 2, (float)b.Height / 2);
-            g.RotateTransform(angle);
-            g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
-            g.DrawImage(b, new Point(0, 0));
-            return returnBitmap;
-        }
+        // Doesn't handle non-square bitmaps, but does handle arbitrary angles
+        //private Bitmap rotateImage(Bitmap source, float angle)
+        //{
+        //    Bitmap returnBitmap = new Bitmap(source.Height, source.Width);
+        //    Graphics g = Graphics.FromImage(returnBitmap);
+        //    g.TranslateTransform((float) source.Width / 2, (float) source.Height / 2);
+        //    g.RotateTransform(angle);
+        //    g.TranslateTransform(-(float) source.Width / 2, -(float)source.Height / 2);
+        //    g.DrawImage(source, new Point(0, 0));
+        //    return returnBitmap;
+        //}
 
         protected void renderStage1SeedShapes()
         {

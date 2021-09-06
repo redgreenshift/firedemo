@@ -1211,7 +1211,6 @@ namespace FireDemo
             Color[] palFire;
             palFire = PalRealisticFire.New();
             palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
-            palFire[0] = Color.FromArgb(0, palFire[0]); // TODO: Gradient of alpha across multiple colors so it blends better
 
             Color[] palBackgroundSmoke;
             palBackgroundSmoke = PalFourPointLinear.New(Color.Red);
@@ -1220,11 +1219,16 @@ namespace FireDemo
 
             Color[] palLightning;
             palLightning = PalLightning.New(Color.FromArgb(255, 1, 1));
-            palLightning = PalFourPointLinear.New(Color.FromArgb(255, 1, 1));
             palLightning = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
             palLightning = PalLightning.New();
-            palLightning[0] = Color.FromArgb(0, palLightning[0]);
+            palLightning = PalFourPointLinear.New(Color.FromArgb(255, 1, 1));
+            //palLightning = PalFlatPalette.New(Color.FromArgb(255, 128, 0));
 
+
+
+            palFire[0] = Color.FromArgb(0, palFire[0]); // TODO: Gradient of alpha across multiple colors so it blends better
+            palBackgroundSmoke[0] = Color.FromArgb(0, palBackgroundSmoke[0]);
+            palLightning[0] = Color.FromArgb(0, palLightning[0]);
 
             int iLayer = 0;
             dbSprites[iLayer++].SetPalette(palBackgroundSmoke);
@@ -1251,7 +1255,7 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
         {
             int magnification = 1;
-            int smokeWidth = size.Width / 2 / magnification;
+            int smokeWidth = size.Width / 4 / magnification;
             int smokeHeight = size.Height / magnification;
             int xCenter = size.Width / 2;
             int xOffset = xCenter;

@@ -39,11 +39,11 @@ namespace FireDemo
             this.buttonAvailableStatus = new System.Windows.Forms.Button();
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonQuit = new System.Windows.Forms.Button();
             this.buttonSauronV2 = new System.Windows.Forms.Button();
             this.buttonSauronV1 = new System.Windows.Forms.Button();
             this.buttonFastRender = new System.Windows.Forms.Button();
             this.buttonAdvanced = new System.Windows.Forms.Button();
-            this.buttonQuit = new System.Windows.Forms.Button();
             this.buttonBatmanSingleThread = new System.Windows.Forms.Button();
             this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonRainbowFire = new System.Windows.Forms.Button();
@@ -147,13 +147,23 @@ namespace FireDemo
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
             // 
+            // buttonQuit
+            // 
+            this.buttonQuit.Location = new System.Drawing.Point(360, 408);
+            this.buttonQuit.Name = "buttonQuit";
+            this.buttonQuit.Size = new System.Drawing.Size(172, 90);
+            this.buttonQuit.TabIndex = 9;
+            this.buttonQuit.Text = "QUIT";
+            this.buttonQuit.UseVisualStyleBackColor = true;
+            this.buttonQuit.Click += new System.EventHandler(this.buttonQuit_Click);
+            // 
             // buttonSauronV2
             // 
             this.buttonSauronV2.Location = new System.Drawing.Point(184, 213);
             this.buttonSauronV2.Name = "buttonSauronV2";
             this.buttonSauronV2.Size = new System.Drawing.Size(172, 90);
             this.buttonSauronV2.TabIndex = 13;
-            this.buttonSauronV2.Text = "Sauron v3.4";
+            this.buttonSauronV2.Text = "Sauron v3.5";
             this.buttonSauronV2.UseVisualStyleBackColor = true;
             this.buttonSauronV2.Click += new System.EventHandler(this.buttonSauronV2_Click);
             // 
@@ -186,16 +196,6 @@ namespace FireDemo
             this.buttonAdvanced.Text = "Original Experiment";
             this.buttonAdvanced.UseVisualStyleBackColor = true;
             this.buttonAdvanced.Click += new System.EventHandler(this.buttonAdvanced_Click);
-            // 
-            // buttonQuit
-            // 
-            this.buttonQuit.Location = new System.Drawing.Point(360, 408);
-            this.buttonQuit.Name = "buttonQuit";
-            this.buttonQuit.Size = new System.Drawing.Size(172, 90);
-            this.buttonQuit.TabIndex = 9;
-            this.buttonQuit.Text = "QUIT";
-            this.buttonQuit.UseVisualStyleBackColor = true;
-            this.buttonQuit.Click += new System.EventHandler(this.buttonQuit_Click);
             // 
             // buttonBatmanSingleThread
             // 
