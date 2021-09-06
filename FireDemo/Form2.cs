@@ -33,6 +33,10 @@ namespace FireDemo
 
         public Form2()
         {
+            if (Util.IsLinux)
+                m_scaleFactor = 1.25f;
+            else
+                m_scaleFactor = 1.0f;
             InitializeComponent();
             this.Size = new Size(1024, 600); // Enlarge to the size of the Raspberry Pi device screen
             this.Click += Form2_Click;
