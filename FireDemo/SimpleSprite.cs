@@ -75,6 +75,11 @@ namespace FireDemo
 			graph.InterpolationMode = im;
 		}
 
+		// "Simple" sprites don't have frames. Dynamic sprites have frames,
+		// so this probably should go in a derived class, but
+		// what would that look like? TODO: Consider
+		// 
+		// DrawOn() => { RenderOneFrame(); base.DrawOn(graph); ProgressOneFrame(); }
 		public virtual void RenderOneFrameToScreen(Graphics graph)
 		{
 			DrawOn(graph);

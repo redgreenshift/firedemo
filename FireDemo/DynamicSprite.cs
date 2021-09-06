@@ -209,6 +209,7 @@ namespace FireDemo
 
     abstract class RealtimeLightEffect : DynamicSprite
     {
+        // TODO: JRDV: Consider moving this to base class Dynamic or even SimpleSprite, so the rotation logic can be shared.
         public enum Orientation
         {
             Up,
