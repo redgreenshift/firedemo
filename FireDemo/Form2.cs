@@ -19,6 +19,7 @@ namespace FireDemo
         ILightPen m_lightPen;
         List<ILightShape> m_lightShapes = new List<ILightShape>();
         DynamicSprite m_dbSprite;
+        TextSprite m_dbText;
         List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
         private GenericRealtimeFlame m_genericFlame;
         int m_framesPerSecond = 64;
@@ -525,6 +526,14 @@ namespace FireDemo
             }
             else
             {
+                // stop the timer if running
+                if (timer2 != null)
+                {
+                    timer2.Change(Timeout.Infinite, Timeout.Infinite);
+                    timer2.Dispose();
+                    timer2 = null;
+                }
+
                 timer1.Enabled = false;
                 buttonDemo.Text = "Start!";
                 this.BackColor = Color.DimGray;
@@ -1123,11 +1132,121 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
+        //System.Windows.Forms.Timer timer2 = new System.Windows.Forms.Timer();
+        System.Threading.Timer timer2; // timer for changing the demo at runtime
         private void buttonBatmanSingleThread_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
             DemoBatman(multithreaded: false);
             buttonDemo_Click(sender, e);
+        }
+
+        private void buttonRainbowBatman_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            DemoBatman(multithreaded: true);
+
+            TextSprite text = new TextSprite
+            {
+                Text = "I'm Busy",
+                Location = new Point(120, 0),
+                Color = Color.Red,
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbText = text;
+            m_dbSprites.Add(m_dbSprite); // Add the Flaming Batman logo
+            m_dbSprites.Add(text); // Add the text sprite
+
+            //ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadCallbacktoDoStuff), 0);
+            //ThreadPool.RegisterWaitForSingleObject()
+            timer2 = new System.Threading.Timer(
+                new TimerCallback(ThreadCallbackBatmanRainbowDemo),
+                null,
+                TimeSpan.FromSeconds(2),
+                TimeSpan.FromSeconds(2));
+
+            buttonDemo_Click(sender, e);
+        }
+
+        struct BatDemoState
+        {
+            public string text;
+            public Color textColor;
+            public Color fireColor;
+            public Color[] firePalette;
+        };
+        BatDemoState[] batDemoStates = {
+                new BatDemoState
+                {
+                    text = "I'm Busy",
+                    textColor = Color.Red,
+                    firePalette = PalRealisticFire.New(),
+                },
+                new BatDemoState
+                {
+                    text = "I'm Joking!",
+                    textColor = Color.Indigo,
+                    fireColor = Color.Indigo,
+                },
+                new BatDemoState
+                {
+                    text = "Red",
+                    textColor = Color.Red,
+                    fireColor = Color.Red,
+                },
+                new BatDemoState
+                {
+                    text = "Orange",
+                    textColor = Color.Orange,
+                    fireColor = Color.Orange,
+                },
+                new BatDemoState
+                {
+                    text = "Yellow",
+                    textColor = Color.Yellow,
+                    fireColor = Color.Yellow,
+                },
+                new BatDemoState
+                {
+                    text = "Green",
+                    textColor = Color.Green,
+                    fireColor = Color.Green,
+                },
+                new BatDemoState
+                {
+                    text = "Blue",
+                    textColor = Color.Blue,
+                    fireColor = Color.Blue,
+                },
+                new BatDemoState
+                {
+                    text = "Violet",
+                    textColor = Color.Violet,
+                    fireColor = Color.Violet,
+                },
+                new BatDemoState
+                {
+                    text = "Black",
+                    textColor = Color.White,
+                    fireColor = Color.Black,
+                },
+            };
+        int m_iDemoBatmanState = 0;
+        private void ThreadCallbackBatmanRainbowDemo(object state)
+        {
+            int ii = ++m_iDemoBatmanState % batDemoStates.Length;
+
+            Color textColor = batDemoStates[ii].textColor;
+            Color[] palFire;            
+            if (batDemoStates[ii].firePalette != null)
+                palFire = batDemoStates[ii].firePalette;
+            else
+                palFire = PalRealisticFlameCurve.New(batDemoStates[ii].fireColor);
+
+            m_dbSprite.SetPalette(palFire);
+            m_dbText.Color = textColor;
+            m_dbText.Text = batDemoStates[ii].text;
         }
 
         private void buttonQuit_Click(object sender, EventArgs e)
