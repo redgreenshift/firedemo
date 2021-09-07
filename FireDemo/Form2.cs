@@ -532,6 +532,7 @@ namespace FireDemo
                     timer2.Change(Timeout.Infinite, Timeout.Infinite);
                     timer2.Dispose();
                     timer2 = null;
+                    m_iDemoBatmanState = 0;
                 }
 
                 timer1.Enabled = false;
