@@ -1472,30 +1472,18 @@ namespace FireDemo
 
     class TextSprite : DynamicSprite
     {
-        public string Text { get; set; }
-        public Color Color
-        {
-            get => color;
-            set
-            {
-                color = value;
-                SetBrushColor(value);
-            }
-        }
+        public string Text { get => text; set { text = value; BlankBeforeNextDraw = true; } }
+        private string text;
+        public Color Color { get => color; set { color = value; SetBrushColor(value); } }
         private Color color;
-        public Font Font { get; set; }
+        public Font Font { get => font; set { font = value; BlankBeforeNextDraw = true; } }
+        private Font font;
         private Brush Brush { get; set; }
-
-        /// <summary>
-        ///  Size of the region to blank out when randomly moving the <see cref="Text" />
-        /// </summary>
-        public Size BlankSize { get; set; }
 
         public TextSprite()
         {
             this.Brush = Brushes.White;
             Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f, style: FontStyle.Regular);
-            BlankSize = new Size(150, 100);
 
             //Font = new Font(familyName: "Arial", emSize: 20.0f, style: FontStyle.Regular);
             //Font = new Font(familyName: "Times New Roman", emSize: 20.0f, style: FontStyle.Regular);
@@ -1559,16 +1547,24 @@ namespace FireDemo
                 Brush = new SolidBrush(color);
         }
 
+        private SizeF SizeOfLastDraw;
+        private bool BlankBeforeNextDraw = false;
+
         public override void RenderOneFrameToScreen(Graphics graph)
         {
             //Action callbackBeforeUpdateLocation = new Action(() => {
             //    if (BlankSize != Size.Empty)
             //        graph.FillRectangle(Brushes.Black, Location.X, Location.Y, BlankSize.Width, BlankSize.Height);
             //});
-            if (PeriodicallyUpdateLocation() && !BlankSize.IsEmpty && Location != lastLocation)
+            if (PeriodicallyUpdateLocation() && Location != lastLocation || BlankBeforeNextDraw)
             {
-                graph.FillRectangle(Brushes.Black, lastLocation.X, lastLocation.Y, BlankSize.Width, BlankSize.Height);
+                BlankBeforeNextDraw = false;
+
+                if (!SizeOfLastDraw.IsEmpty)
+                    graph.FillRectangle(Brushes.Black, lastLocation.X, lastLocation.Y, SizeOfLastDraw.Width, SizeOfLastDraw.Height);
             }
+
+            SizeOfLastDraw = graph.MeasureString(Text, Font);
             graph.DrawString(Text, Font, Brush, Location);
         }
     }

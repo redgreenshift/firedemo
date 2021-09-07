@@ -29,7 +29,7 @@ namespace FireDemo
         // but C# doesn't make it easy to figure out the scale factor
         //float m_scaleFactor = 1.0f; // Windows
         float m_scaleFactor = 1.25f; // Linux
-        int Scaled(int i) => (int)(i * m_scaleFactor);
+        int Scaled(int i) => (int)(i * m_scaleFactor); // Do we still need this?
 
         public Form2()
         {
@@ -739,7 +739,6 @@ namespace FireDemo
                 Location = new Point(300, 0),
                 Color = Color.DarkMagenta,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
-                BlankSize = new Size(Scaled(160), Scaled(50)),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -761,7 +760,6 @@ namespace FireDemo
                 Location = new Point(120, 0),
                 Color = Color.Red,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
-                BlankSize = new Size(Scaled(160), Scaled(50)),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -826,7 +824,6 @@ namespace FireDemo
                 Location = new Point(120, 0),
                 Color = Color.LightGreen,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 850, height: 50),
-                BlankSize = new Size(Scaled(170), Scaled(50)),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -1100,7 +1097,6 @@ namespace FireDemo
                 //Location = new Point(man.Location.X - 220, man.Location.Y - 95),
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
                 LocationRange = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
-                BlankSize = new Size(Scaled(500), Scaled(91)),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
