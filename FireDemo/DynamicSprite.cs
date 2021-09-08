@@ -20,7 +20,16 @@ namespace FireDemo
         /// 
         /// This is ignored if <see cref="LocationPeriod" /> is <see cref="TimeSpan.Zero" />
         /// </summary>
-        public Rectangle LocationRange { get; set; }
+        public Rectangle LocationRange
+        {
+            get => locationRange;
+            set
+            {
+                locationRange = value;
+                Location = new Point(value.X, value.Y);
+            }
+        }
+        private Rectangle locationRange;
 
         /// <summary>
         ///  How often to move the <see cref="SimpleSprite.Location" />. If <see cref="TimeSpan.Zero" />, do not move.
@@ -50,15 +59,15 @@ namespace FireDemo
 
         private DateTime lastMove = DateTime.MinValue;
         protected Point lastLocation = Point.Empty;
+        private bool SmoothTransition = true;
+        protected Point OriginalLocation;
+        protected Point FinalLocation;
         // Declare a delegate.
         //delegate void UpdateLocationCallback_t(Graphics graph);
 
         /// <summary>
         /// After a random amount of time less than <see cref="LocationPeriod" />,
         /// moves <see cref="SimpleSprite.Location" /> to a random position within <see cref="LocationRange" />.
-        /// 
-        /// TODO: path? Move the sprite gradually to the new location? I think the change could be contained to this function.
-        /// Simply return TRUE more often and change Location every frame until it reaches the FinalLocation.
         /// </summary>
         /// <returns>TRUE if the location changed; FALSE otherwise.</returns>
         protected bool PeriodicallyUpdateLocation()
@@ -73,9 +82,35 @@ namespace FireDemo
             {
                 changed = true;
                 lastMove = thisTime;
-                Location = new Point(
+                FinalLocation = new Point(
                     x: LocationRange.Left + rng.Next(LocationRange.Width),
                     y: LocationRange.Top + rng.Next(LocationRange.Height));
+            }
+
+            if (!SmoothTransition)
+                Location = FinalLocation;
+
+            if (Location != FinalLocation)
+            {
+                int x = Location.X;
+                int y = Location.Y;
+
+                if (x != FinalLocation.X)
+                {
+                    if (x < FinalLocation.X)
+                        ++x;
+                    else
+                        --x;
+                }
+                if (y != FinalLocation.Y)
+                {
+                    if (y < FinalLocation.Y)
+                        ++y;
+                    else
+                        --y;
+                }
+                Location = new Point(x: x, y: y);
+                changed = true;
             }
 
             return changed;

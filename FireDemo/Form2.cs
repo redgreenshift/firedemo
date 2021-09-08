@@ -1511,7 +1511,7 @@ namespace FireDemo
             {
                 Inward = false,
                 LocationPeriod = isNarrow ? TimeSpan.FromMilliseconds(1000) : TimeSpan.Zero,
-                LocationRange = new Rectangle(x: xLocation - lookWidth / 2, y: 0, width: lookWidth, height: 0),
+                LocationRange = new Rectangle(x: xLocation - lookWidth / 2, y: 0 - lookWidth / 4, width: lookWidth, height: lookWidth / 2),
             };
             dbSauron.Initialize(width, height, magnification);
             dbSauron.SetCoolingStrategy(csSauron);
