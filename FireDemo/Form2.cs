@@ -332,7 +332,7 @@ namespace FireDemo
             palBorg = PalPlasma.NewRaw(
                 Color.FromArgb(red: 0, green: 128, blue: 255),
                 Color.FromArgb(red: 224, green: 224, blue: 255));
-            palBorg = PalPlasma.New(Color.Blue);
+            palBorg = PalPlasma.New(Color.Green);
 
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
