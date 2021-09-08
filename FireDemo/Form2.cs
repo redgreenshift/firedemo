@@ -1383,7 +1383,7 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
         {
             int magnification = 1;
-            int lightWidth = (int)(size.Width / 4 / magnification);
+            int lightWidth = (int)(size.Width / 3.5 / magnification);
             //lightWidth = (int)(size.Width / 2.5 / magnification);
             int lightHeight = size.Height / magnification;
             int xCenter = size.Width / 2;
@@ -1404,6 +1404,7 @@ namespace FireDemo
                 dbLightningBolt.Location = new Point(xCenter, 0);
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
+            dbLightningBolt.AddShape(lsBolt);
             dbLightningBolt.AddShape(lsBolt);
 
             return dbLightningBolt;
