@@ -13,15 +13,17 @@ namespace FireDemo
     {
         protected Random rng;
         protected BitmapLocker poker; // Optimization for accessing the Form faster
-        protected Color[] thePalette;
+        protected Color[] thePalette; // array of 256 Colors
 
         /// <summary>
-        /// Region within which to randomly move the text on <see cref="LocationPeriod" /> (overrides <see cref="SimpleSprite.Location" />)
+        /// Region within which to randomly move the text on <see cref="LocationPeriod" />. (overrides <see cref="SimpleSprite.Location" />)
+        /// 
+        /// This is ignored if <see cref="LocationPeriod" /> is <see cref="TimeSpan.Zero" />
         /// </summary>
         public Rectangle LocationRange { get; set; }
 
         /// <summary>
-        ///  How often to move the <see cref="SimpleSprite.Location" />
+        ///  How often to move the <see cref="SimpleSprite.Location" />. If <see cref="TimeSpan.Zero" />, do not move.
         /// </summary>
         public TimeSpan LocationPeriod { get; set; }
 
@@ -51,6 +53,14 @@ namespace FireDemo
         // Declare a delegate.
         //delegate void UpdateLocationCallback_t(Graphics graph);
 
+        /// <summary>
+        /// After a random amount of time less than <see cref="LocationPeriod" />,
+        /// moves <see cref="SimpleSprite.Location" /> to a random position within <see cref="LocationRange" />.
+        /// 
+        /// TODO: path? Move the sprite gradually to the new location? I think the change could be contained to this function.
+        /// Simply return TRUE more often and change Location every frame until it reaches the FinalLocation.
+        /// </summary>
+        /// <returns>TRUE if the location changed; FALSE otherwise.</returns>
         protected bool PeriodicallyUpdateLocation()
         {
             bool changed = false;
@@ -209,7 +219,8 @@ namespace FireDemo
 
     abstract class RealtimeLightEffect : DynamicSprite
     {
-        // TODO: JRDV: Consider moving this to base class Dynamic or even SimpleSprite, so the rotation logic can be shared.
+        // TODO: JRDV: Consider moving the Direction/Orientation code to a base class DynamicSprite
+        // or even SimpleSprite, so the rotation logic can be shared.
         public enum Orientation
         {
             Up,
