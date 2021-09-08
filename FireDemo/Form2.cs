@@ -728,7 +728,6 @@ namespace FireDemo
 
             TextSprite tsAway = new TextSprite
             {
-                Location = new Point(0, 0),
                 Text = "Away",
                 Color = Color.Yellow,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
@@ -749,7 +748,6 @@ namespace FireDemo
             TextSprite text = new TextSprite
             {
                 Text = "I'm OOF",
-                Location = new Point(300, 0),
                 Color = Color.DarkMagenta,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -770,7 +768,6 @@ namespace FireDemo
             TextSprite text = new TextSprite
             {
                 Text = "I'm Busy",
-                Location = new Point(120, 0),
                 Color = Color.Red,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -834,7 +831,6 @@ namespace FireDemo
             TextSprite text = new TextSprite
             {
                 Text = "Available",
-                Location = new Point(120, 0),
                 Color = Color.LightGreen,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 850, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -1107,7 +1103,6 @@ namespace FireDemo
             TextSprite text = new TextSprite
             {
                 Text = "It's dangerous to bother me!\nGO AWAY! (use email)",
-                //Location = new Point(man.Location.X - 220, man.Location.Y - 95),
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
                 LocationRange = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -1150,7 +1145,6 @@ namespace FireDemo
             TextSprite text = new TextSprite
             {
                 Text = "I'm Busy",
-                Location = new Point(120, 0),
                 Color = Color.Red,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
