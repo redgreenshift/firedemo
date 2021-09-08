@@ -784,24 +784,25 @@ namespace FireDemo
     {
 		public override void RenderOneFrameToScreen(Graphics graph)
 		{
-			int offset = 149;
-			Point[] points = {
-				new Point(offset, 400),
-				new Point(offset, 0),
-				new Point(offset + 10, 0),
-				new Point(offset + 10, 300),
-				new Point(1000 - offset, 300),
-				new Point(1000 - offset, 0),
-				new Point(1010 - offset, 0),
-				new Point(1010 - offset, 400),
-			};
-			Point[] pointsTowerCurve = {
-				new Point(offset + 10, 0),
-				new Point(350, 500),
-				new Point(500, 599),
-				new Point(650, 500),
-				new Point(1000 - offset, 0),
-			};
+			int offset;
+			//offset = 149
+			//Point[] points = {
+			//	new Point(offset, 400),
+			//	new Point(offset, 0),
+			//	new Point(offset + 10, 0),
+			//	new Point(offset + 10, 300),
+			//	new Point(1000 - offset, 300),
+			//	new Point(1000 - offset, 0),
+			//	new Point(1010 - offset, 0),
+			//	new Point(1010 - offset, 400),
+			//};
+			//Point[] pointsTowerCurve = {
+			//	new Point(offset + 10, 0),
+			//	new Point(350, 500),
+			//	new Point(500, 599),
+			//	new Point(650, 500),
+			//	new Point(1000 - offset, 0),
+			//};
             //graph.DrawLine(Pens.White, offset, 599, offset, 0);
             ////graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
             ////graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
@@ -811,20 +812,19 @@ namespace FireDemo
             //graph.DrawLine(Pens.White, 1000 - offset, 0, 1000 - offset, 599);
 
 			//graph.DrawCurve(Pens.White, pointsTowerCurve);
-			// graph.DrawArc(); // This should produce better results, since the shape I want is an elipse, I think
 			float screenWidth = 1024;
 			float screenHeight = 600;
-			float towerWidth = 600.0f; // Sauron sprite width??
+			float towerWidth = 600.0f; // Sauron sprite width
 			float towerHeight = screenHeight - 3;
 			float elipseWidth = towerWidth + 100;
 			float elipseHeight = towerHeight * 2;
 			offset = (int)((screenWidth - elipseWidth) / 2.0f);
-            //graph.DrawArc(Pens.White, x: offset + 701.0f - width, y: 599.0f - height, width: width, height: height, startAngle: 0.0f, sweepAngle: 180.0f);
-            graph.DrawArc(Pens.White, x: offset, y: towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
+			Pen color = Pens.PaleGoldenrod;
+            graph.DrawArc(color, x: offset, y: towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
 
 			// Tower edges
-			graph.DrawLine(Pens.White, offset, screenHeight - 1, offset, 0);
-			graph.DrawLine(Pens.White, screenWidth - offset, 0, screenWidth - offset, screenHeight - 1);
+			graph.DrawLine(color, offset, screenHeight - 1, offset, 0);
+			graph.DrawLine(color, screenWidth - offset, 0, screenWidth - offset, screenHeight - 1);
 
 			// draw the middle bit
 			int xCenter = (int)(screenWidth / 2 + 0.5f);
@@ -832,8 +832,8 @@ namespace FireDemo
 			int littleWidth = littleHeight / 3;
 			int littleBottom = (int)(towerHeight);
 
-			graph.DrawLine(Pens.White, xCenter - littleWidth / 2, littleBottom, xCenter, towerHeight - littleHeight);
-			graph.DrawLine(Pens.White, xCenter, towerHeight - littleHeight, xCenter + littleWidth / 2, littleBottom);
+			graph.DrawLine(color, xCenter - littleWidth / 2, littleBottom, xCenter, towerHeight - littleHeight);
+			graph.DrawLine(color, xCenter, towerHeight - littleHeight, xCenter + littleWidth / 2, littleBottom);
 		}
 	}
 
