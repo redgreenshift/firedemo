@@ -802,22 +802,38 @@ namespace FireDemo
 				new Point(650, 500),
 				new Point(1000 - offset, 0),
 			};
-            graph.DrawLine(Pens.White, offset, 599, offset, 0);
-            //graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
-            //graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
-            //graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
-            //graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
-            //graph.DrawLine(Pens.White, 1000 - offset, 0, 1010 - offset, 0);
-            graph.DrawLine(Pens.White, 1000 - offset, 0, 1000 - offset, 599);
+            //graph.DrawLine(Pens.White, offset, 599, offset, 0);
+            ////graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
+            ////graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
+            ////graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
+            ////graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
+            ////graph.DrawLine(Pens.White, 1000 - offset, 0, 1010 - offset, 0);
+            //graph.DrawLine(Pens.White, 1000 - offset, 0, 1000 - offset, 599);
 
 			//graph.DrawCurve(Pens.White, pointsTowerCurve);
 			// graph.DrawArc(); // This should produce better results, since the shape I want is an elipse, I think
-			float width = 700.0f;
-			float height = 1190.0f;
-			graph.DrawArc(Pens.White, x: 850.0f - width, y: 599.0f - height, width: width, height: height, startAngle: 0.0f, sweepAngle: 180.0f);
+			float screenWidth = 1024;
+			float screenHeight = 600;
+			float towerWidth = 600.0f; // Sauron sprite width??
+			float towerHeight = screenHeight - 3;
+			float elipseWidth = towerWidth + 100;
+			float elipseHeight = towerHeight * 2;
+			offset = (int)((screenWidth - elipseWidth) / 2.0f);
+            //graph.DrawArc(Pens.White, x: offset + 701.0f - width, y: 599.0f - height, width: width, height: height, startAngle: 0.0f, sweepAngle: 180.0f);
+            graph.DrawArc(Pens.White, x: offset, y: towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
 
-			graph.DrawLine(Pens.White, 485, 598, 500, 500);
-			graph.DrawLine(Pens.White, 500, 500, 515, 598);
+			// Tower edges
+			graph.DrawLine(Pens.White, offset, screenHeight - 1, offset, 0);
+			graph.DrawLine(Pens.White, screenWidth - offset, 0, screenWidth - offset, screenHeight - 1);
+
+			// draw the middle bit
+			int xCenter = (int)(screenWidth / 2 + 0.5f);
+			int littleHeight = (int)(towerHeight / 6 + 0.5f);
+			int littleWidth = littleHeight / 3;
+			int littleBottom = (int)(towerHeight);
+
+			graph.DrawLine(Pens.White, xCenter - littleWidth / 2, littleBottom, xCenter, towerHeight - littleHeight);
+			graph.DrawLine(Pens.White, xCenter, towerHeight - littleHeight, xCenter + littleWidth / 2, littleBottom);
 		}
 	}
 
