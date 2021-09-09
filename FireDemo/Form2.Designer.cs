@@ -48,6 +48,7 @@ namespace FireDemo
             this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonRainbowFire = new System.Windows.Forms.Button();
             this.groupBoxExperiment = new System.Windows.Forms.GroupBox();
+            this.buttonHistoryOfFire = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
@@ -230,6 +231,7 @@ namespace FireDemo
             // 
             // groupBoxExperiment
             // 
+            this.groupBoxExperiment.Controls.Add(this.buttonHistoryOfFire);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowBatman);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV2);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowFire);
@@ -246,11 +248,21 @@ namespace FireDemo
             this.groupBoxExperiment.TabStop = false;
             this.groupBoxExperiment.Text = "Demos and Experiments";
             // 
+            // buttonHistoryOfFire
+            // 
+            this.buttonHistoryOfFire.Location = new System.Drawing.Point(6, 405);
+            this.buttonHistoryOfFire.Name = "buttonHistoryOfFire";
+            this.buttonHistoryOfFire.Size = new System.Drawing.Size(172, 90);
+            this.buttonHistoryOfFire.TabIndex = 16;
+            this.buttonHistoryOfFire.Text = "Evolution of Fire";
+            this.buttonHistoryOfFire.UseVisualStyleBackColor = true;
+            this.buttonHistoryOfFire.Click += new System.EventHandler(this.buttonHistoryOfFire_Click);
+            // 
             // buttonRainbowBatman
             // 
             this.buttonRainbowBatman.Location = new System.Drawing.Point(6, 309);
             this.buttonRainbowBatman.Name = "buttonRainbowBatman";
-            this.buttonRainbowBatman.Size = new System.Drawing.Size(171, 89);
+            this.buttonRainbowBatman.Size = new System.Drawing.Size(172, 90);
             this.buttonRainbowBatman.TabIndex = 15;
             this.buttonRainbowBatman.Text = "RainBAT";
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
@@ -296,5 +308,6 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonRainbowFire;
         private System.Windows.Forms.GroupBox groupBoxExperiment;
         private System.Windows.Forms.Button buttonRainbowBatman;
+        private System.Windows.Forms.Button buttonHistoryOfFire;
     }
 }

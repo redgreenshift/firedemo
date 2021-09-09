@@ -533,6 +533,7 @@ namespace FireDemo
                     timer2.Dispose();
                     timer2 = null;
                     m_iDemoBatmanState = 0;
+                    m_iDemoHistoryState = 0;
                 }
 
                 timer1.Enabled = false;
@@ -1242,6 +1243,181 @@ namespace FireDemo
             m_dbSprite.SetPalette(palFire);
             m_dbText.Color = textColor;
             m_dbText.Text = batDemoStates[ii].text;
+        }
+
+        private void buttonHistoryOfFire_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+
+            // DEMO:
+            // 1. Squeak Palette
+            // 2. Constant Cooling
+            // 3. Better 4 point linear palette
+            // 4. Cooling Map
+            // 5. Shifting Cooling Map (looks more natural)
+            // 6. Rotating Cooling Map (stops repeating)
+            // 7. Curved Palette
+            // 8. Average 4 pixels instead of 5
+            // 9. Batman
+            // 10. Lightning
+            // 11. Borg Plasma
+            // 12. Hero Cave
+            // 13. Sauron
+
+            TextSprite text = new TextSprite
+            {
+                Location = new Point(0, 0),
+                Color = Color.Red,
+            };
+            m_dbText = text;
+
+            timer2 = new System.Threading.Timer(
+                new TimerCallback(ThreadCallbackFireHistoryDemo),
+                null,
+                TimeSpan.FromSeconds(0),
+                TimeSpan.FromSeconds(2));
+
+            buttonDemo_Click(sender, e);
+        }
+
+        int m_iDemoHistoryState = 0;
+        private void ThreadCallbackFireHistoryDemo(object state)
+        {
+            int iMax = 12;
+            int ii = m_iDemoHistoryState++ % iMax;
+
+            if (ii == 0)
+            {
+                Func<int> foo = new System.Func<int>(() =>
+                {
+                    m_graph.Clear(Color.Black);
+                    m_dbSprites.Clear();
+                    SimpleCandle();
+                    m_dbText.Text = "I started this project because someone said\nSmalltalk was too slow for realtime fire generation.";
+                    m_dbSprites.Add(m_dbSprite); // Add the candle
+                    m_dbSprites.Add(m_dbText); // Add the text sprite
+                    m_dbSprite.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
+                    m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(0));
+
+                    return 1;
+                });
+                m_callbackToChangeStuff = foo;
+            }
+            else if (ii == 1)
+            {
+                m_dbText.Text = "Add a cooling factor";
+                m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
+                m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
+            }
+            else if (ii == 2)
+            {
+                m_dbText.Text = "A better palette that incorporates more than a single color,\nlooks better (4-point linear)";
+                Color c1 = Color.FromArgb(0, 0, 0);       // Black
+                Color c2 = Color.FromArgb(255, 185, 0);   // Orange
+                Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
+                Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
+                m_genericFlame.SetPalette(PalFourPointLinear.New(c1, c2, c3, c4));
+                m_genericFlame.InterpolationMode = InterpolationMode.Default;
+            }
+            else if (ii == 3)
+            {
+                m_dbText.Text = "Cooling Map";
+                ICoolingStrategy coolingStrategy;
+                m_coolingStrategy = new CoolingStrategyMap();
+                m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
+                    density: 0.4f, min: 5, max: 13, smoothing: 5,
+                    shift: false, rotate: false);
+                coolingStrategy = m_coolingStrategy;
+                m_genericFlame.SetCoolingStrategy(coolingStrategy);
+            }
+            else if (ii == 4)
+            {
+                m_dbText.Text = "Cooling Map (SHIFTING)";
+                ICoolingStrategy coolingStrategy;
+                m_coolingStrategy = new CoolingStrategyMap();
+                m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
+                    density: 0.4f, min: 5, max: 13, smoothing: 5,
+                    shift: true, rotate: false);
+                coolingStrategy = m_coolingStrategy;
+                m_genericFlame.SetCoolingStrategy(coolingStrategy);
+            }
+            else if (ii == 5)
+            {
+                m_dbText.Text = "Cooling Map (ROTATING)";
+                ICoolingStrategy coolingStrategy;
+                m_coolingStrategy = new CoolingStrategyMap();
+                m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
+                    density: 0.4f, min: 5, max: 13, smoothing: 5,
+                    shift: true, rotate: true);
+                coolingStrategy = m_coolingStrategy;
+                m_genericFlame.SetCoolingStrategy(coolingStrategy);
+            }
+            else if (ii == 6)
+            {
+                m_dbText.Text = "Derived an equation to better define a color curve";
+                m_genericFlame.SetPalette(PalRealisticFire.New());
+                if (Util.IsLinux)
+                    m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
+                else
+                    m_genericFlame.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            }
+            else if (ii == 7)
+            {
+                m_dbText.Text = "Made it so I could change the parameters on the fly";
+                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+            }
+            else if (ii == 8)
+            {
+                m_dbText.Text = "With that equation I was able to create flames of various colors";
+                m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Green));
+            }
+            else if (ii == 9)
+            {
+                Func<int> foo = new System.Func<int>(() =>
+                {
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "From there, I wanted to create SHAPES out of the fire!";
+                    m_dbSprites.Clear();
+                    DemoBatman(multithreaded: true);
+                    m_dbSprites.Add(m_dbSprite);
+                    m_dbSprites.Add(m_dbText);
+
+                    return 1;
+                });
+                m_callbackToChangeStuff = foo;
+            }
+            else if (ii == 10)
+            {
+                Func<int> foo = new System.Func<int>(() =>
+                {
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "Then I had an idea for lightning";
+                    m_dbSprites.Clear();
+                    DemoLightning();
+                    m_dbSprites.Add(m_dbSprite);
+                    m_dbSprites.Add(m_dbText);
+
+                    return 1;
+                });
+                m_callbackToChangeStuff = foo;
+            }
+            else if (ii == 11)
+            {
+                Func<int> foo = new System.Func<int>(() =>
+                {
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "Lightning I could use for Borg Regeneration Plasma Disc";
+                    m_dbSprites.Clear();
+                    DemoBorg();
+                    m_dbSprites.Add(m_dbSprite);
+                    m_dbSprites.Add(m_dbText);
+
+                    return 1;
+                });
+                m_callbackToChangeStuff = foo;
+            }
+
         }
 
         private void buttonQuit_Click(object sender, EventArgs e)
