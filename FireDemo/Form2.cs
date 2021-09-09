@@ -31,6 +31,7 @@ namespace FireDemo
         //float m_scaleFactor = 1.0f; // Windows
         float m_scaleFactor = 1.25f; // Linux
         int Scaled(int i) => (int)(i * m_scaleFactor); // Do we still need this?
+        Func<int> m_callbackToChangeStuff = null;
 
         public Form2()
         {
