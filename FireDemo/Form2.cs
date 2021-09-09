@@ -1312,9 +1312,7 @@ namespace FireDemo
         private void buttonSauronV2_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            Size sceneSize = new Size(width: 600, height: 100);
-            //sceneSize = new Size(width: 400, height: 100);
-
+            Size sceneSize = new Size(width: 350, height: 100);
             int magnification = 2;
             List<DynamicSprite> dbSprites = new List<DynamicSprite>
             {
@@ -1344,8 +1342,9 @@ namespace FireDemo
             palLightning = PalFourPointLinear.New(Color.FromArgb(250, 219, 125));
 
 
+            for (int ii = 0; ii < 1; ++ii)
+                palBackgroundSmoke[ii] = Color.FromArgb(0, palBackgroundSmoke[ii]);
             palFire[0] = Color.FromArgb(0, palFire[0]);
-            palBackgroundSmoke[0] = Color.FromArgb(0, palBackgroundSmoke[0]);
             palLightning[0] = Color.FromArgb(0, palLightning[0]);
 
             // Tried gradient of alpha across multiple colors so it blends better, but Linux doesn't honor alpha,
@@ -1383,8 +1382,7 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
         {
             int magnification = 1;
-            int lightWidth = (int)(size.Width / 3.5 / magnification);
-            //lightWidth = (int)(size.Width / 2.5 / magnification);
+            int lightWidth = (int)(size.Width / 2 / magnification);
             int lightHeight = size.Height / magnification;
             int xCenter = size.Width / 2;
             int xOffset = xCenter;
@@ -1456,11 +1454,11 @@ namespace FireDemo
             // Then "transform" it with a delta field to squish it into the eye shape?
             // Might be able to accomplish both transform functions simultaneously.
             // Do two of them. What do I mean two of them? OH, do two flames. Don't try to do both in the same layer
-            LightPen lpSauronBackground = new LightPen(fill: 0.08f * 0 + 1, 200, 255, useFullRange: true);
+            LightPen lpSauronBackground = new LightPen(fill: 1, 200, 255, useFullRange: true);
             LightShapeCandle lsFireStick = new LightShapeCandle();
             ICoolingStrategy csSauron;
             m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(smokeHeight, smokeWidth,
+            m_coolingStrategy.SetMapParameters(width: smokeHeight, height: smokeWidth,
                 //density: 0.4f, min: 3, max: 5, smoothing: 1,
                 density: 0.45f, min: 2, max: 15, smoothing: 3,
                 shift: true, rotate: false);
