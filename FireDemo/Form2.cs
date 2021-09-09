@@ -553,6 +553,11 @@ namespace FireDemo
             //    m_fUpdateFireDimensionsAfterNextFrame = false;
             //}
 
+            Func<int> bar = m_callbackToChangeStuff;
+            m_callbackToChangeStuff = null;
+            if (bar != null)
+                bar.Invoke();
+
             // Draw the frame once per tick.
 
             if (m_dbSprites.Count > 0)
