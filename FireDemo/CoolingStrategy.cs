@@ -102,6 +102,9 @@ namespace FireDemo
 
         public int at(int x, int y)
         {
+            //if (x > width || y > height)
+            //    throw new IndexOutOfRangeException();
+
             int i = (y * width + x + iCoolingOffset) % (width * height);
             // Uncomment to help debug the cooling map shift
             //if (i == 10)

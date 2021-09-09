@@ -100,8 +100,8 @@ namespace FireDemo
             int ringWidth = 129;
             int ringHeight = 131;
             int magnification = 1;
-            //fireWidth = 200;
-            //fireHeight = 200;
+            //ringWidth = 200;
+            //ringHeight = 200;
             int left, top;
 
             Color[] palBorgRed = PalPlasma.New(Color.Orange);
