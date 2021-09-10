@@ -1316,7 +1316,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "15 years later, I remembered that project and wanted to\nimprove it with a better palette with more colors\n(4-point linear looks better, but not quite real)";
+                    m_dbText.Text = "15 years later, I remembered that project and wanted to\nimprove it with a better palette with more colors\n(4-point linear looks better, but not quite realistic)";
                     Color c1 = Color.FromArgb(0, 0, 0);       // Black
                     Color c2 = Color.FromArgb(255, 185, 0);   // Orange
                     Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
@@ -1327,6 +1327,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_dbText.Text = "Derived a curved palette formula for more realistic color,\nall with the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
+                    m_dbText.Color = Color.Orange;
                     m_genericFlame.SetPalette(PalRealisticFire.New());
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
@@ -1363,6 +1364,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_dbText.Text = "The curved palette formula also works for arbitrary colors";
+                    m_dbText.Color = Color.LightBlue;
                     m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Blue));
                 }),
                 new Action(() =>
@@ -1396,7 +1398,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Color = Color.Green;
+                    m_dbText.Color = Color.LightGreen;
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "Plasma to create a Borg Regeneration ring.";
                     m_dbSprites.Clear();
@@ -1408,6 +1410,7 @@ namespace FireDemo
                 {
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "And then take all these pieces from the previous\niterations and recombine them to create...";
+                    m_dbText.Color = Color.LightSkyBlue;
                     // Demo RainBORG
                     m_dbSprites.Clear();
                     DemoPlasmaRainbow();
