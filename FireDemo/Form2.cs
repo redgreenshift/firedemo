@@ -1389,7 +1389,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    m_dbText.Color = Color.White;
+                    m_dbText.Color = Color.LightCyan;
                     m_dbText.Text = "Then I had an idea for lightning,\nwhich was just a step toward...";
                     m_dbSprites.Clear();
                     DemoLightning();
@@ -1537,6 +1537,15 @@ namespace FireDemo
             //dbSauron.InterpolationMode = InterpolationMode.NearestNeighbor;
             m_dbSprites.Add(dbSauron);
             m_dbSprites.Add(tower);
+
+            // TextSprite "Eye see you, did you bring the ring?"
+            //TextSprite text = new TextSprite()
+            //{
+            //    Color = Color.PaleGoldenrod, // Color.LightGoldenrodYellow,
+            //    Text = "Eye see you,\ngive me the ring.",
+            //    Location = new Point(370, 300),
+            //};
+            //m_dbSprites.Add(text);
 
             buttonDemo_Click(null, null);
         }
