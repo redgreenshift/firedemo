@@ -736,6 +736,7 @@ namespace FireDemo
 
             TextSprite tsAway = new TextSprite
             {
+                //Text = "Away (if I'm not back in 5 minutes,\njust wait longer)",
                 Text = "Away",
                 Color = Color.Yellow,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
@@ -1325,7 +1326,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "Derived an equation to better define a more realistic color curve,\nall with the EXACT same pixel averaging algorithm from 15 years\nearlier, JUST better palettes so far!";
+                    m_dbText.Text = "Derived a curved palette formula for more realistic color,\nall with the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
                     m_genericFlame.SetPalette(PalRealisticFire.New());
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
@@ -1361,7 +1362,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "With that equation I was able to create flames of various colors";
+                    m_dbText.Text = "The curved palette formula also works for arbitrary colors";
                     m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Blue));
                 }),
                 new Action(() =>
