@@ -1494,6 +1494,7 @@ namespace FireDemo
         private void buttonSauronV2_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
+            //Size sceneSize = new Size(width: 700, height: 200); // TODO: HiRez
             Size sceneSize = new Size(width: 350, height: 100);
             int magnification = 2;
             List<DynamicSprite> dbSprites = new List<DynamicSprite>
@@ -1509,7 +1510,13 @@ namespace FireDemo
 
             Color[] palFire;
             //palFire = PalRealisticFire.New();
+            //Color c1 = Color.FromArgb(0, 0, 0);       // Black
+            //Color c2 = Color.FromArgb(255, 185, 0);   // Orange
+            //Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
+            //Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
+            //palFire = PalFourPointLinear.New(c1, c2, c3, c4);
             palFire = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1));
+
 
             Color[] palBackgroundSmoke;
             //palBackgroundSmoke = PalFourPointLinear.New(Color.Red);
@@ -1555,8 +1562,10 @@ namespace FireDemo
             dbSauron.AddRange(dbSprites);
 
             VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
+            //dbSauron.Add(tower);
+            //dbSauron.InterpolationMode = InterpolationMode.NearestNeighbor;
             m_dbSprites.Add(dbSauron);
-            //m_dbSprites.Add(tower);
+            m_dbSprites.Add(tower);
 
             buttonDemo_Click(null, null);
         }
