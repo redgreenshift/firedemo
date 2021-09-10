@@ -1379,6 +1379,7 @@ namespace FireDemo
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "From there, I wanted to create SHAPES out of the fire!";
                     m_dbSprites.Clear();
+                    m_dbText.Color = Color.Yellow;
                     DemoBatman(multithreaded: true);
                     m_dbSprites.Add(m_dbSprite);
                     m_dbSprites.Add(m_dbText);
@@ -1386,7 +1387,8 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "Then I had an idea for lightning";
+                    m_dbText.Color = Color.White;
+                    m_dbText.Text = "Then I had an idea for lightning,\nwhich was just a step toward...";
                     m_dbSprites.Clear();
                     DemoLightning();
                     m_dbSprites.Add(m_dbSprite);
@@ -1394,8 +1396,9 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    m_dbText.Color = Color.Green;
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "Lightning to create a Borg Regeneration Plasma Disc.";
+                    m_dbText.Text = "Plasma to create a Borg Regeneration ring.";
                     m_dbSprites.Clear();
                     DemoBorg();
                     m_dbSprites.Add(m_dbSprite);
@@ -1403,10 +1406,32 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "And then I can take all these pieces and recombine them\nto create...";
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "And then take all these pieces from the previous\niterations and recombine them to create...";
+                    // Demo RainBORG
+                    m_dbSprites.Clear();
+                    DemoPlasmaRainbow();
+                    //int lastY = 0;
+                    int addY = 130;
+                    foreach (SimpleSprite s in m_dbSprites)
+                    {
+                        // 0, 196, 392
+                        if (s.Location.Y == 0)
+                            addY = 150;
+                        else if (s.Location.Y == 196)
+                            addY = 100;
+                        else if (s.Location.Y == 392)
+                            addY = 50;
+                        Point moveDown = new Point(0, addY);
+                        Point newPoint = s.Location;
+                        newPoint.Offset(moveDown);
+                        s.Location = newPoint;
+                    }
+                    m_dbSprites.Add(m_dbText);
                 }),
                 new Action(() =>
                 {
+                    m_dbText.Color = Color.Red;
                     LayeredSprite dbEyeOfSauron = CreateEyeOfSauronV3();
                     int left = (this.Width - dbEyeOfSauron.Width * dbEyeOfSauron.Magnification) / 2;
                     int top = (this.Height - dbEyeOfSauron.Height * dbEyeOfSauron.Magnification) / 2;
@@ -1800,7 +1825,7 @@ namespace FireDemo
         RealtimeLightEffect GenerateCandle(bool big = true)
         {
             int fireWidth = 21;
-            int fireHeight = 50;
+            int fireHeight = big ? 50 : 34;
             int magnification = 4;
 
             ICoolingStrategy coolingStrategy;
@@ -1896,6 +1921,8 @@ namespace FireDemo
 
                 left = (width * magnification + bufferX) * (iCandle % 8);
                 top = (height * magnification + bufferY) * (iCandle / 8);
+                if (!fBigRainbowFire)
+                    top += 100;
                 dbCandle.Location = new Point(x: left, y: top);
 
                 dbSprites.Add(dbCandle);
@@ -1917,6 +1944,8 @@ namespace FireDemo
                 dbCandle.SetPalette(palCandle);
                 left = (width * magnification + bufferX) * (iCandle % 8);
                 top = (height * magnification + bufferY) * (iCandle / 8);
+                if (!fBigRainbowFire)
+                    top += 100;
                 dbCandle.Location = new Point(x: left, y: top);
 
                 dbSprites.Add(dbCandle);
