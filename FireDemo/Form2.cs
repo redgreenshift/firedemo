@@ -1367,6 +1367,15 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
+                    m_dbText.Text = "Seriously, ANY color!";
+                    m_dbText.LocationRange = m_dbText.LocationRange;
+                    m_dbSprites.Clear();
+                    m_dbSprites.AddRange(CreateRainbowFlames(fBigRainbowFire: false));
+                    m_dbSprites.Add(m_dbText);
+                }),
+                new Action(() =>
+                {
+                    m_graph.Clear(Color.Black);
                     m_dbText.Text = "From there, I wanted to create SHAPES out of the fire!";
                     m_dbSprites.Clear();
                     DemoBatman(multithreaded: true);
@@ -1821,6 +1830,14 @@ namespace FireDemo
             m_dbSprites.Clear();
             m_fBigRainbowFire = !m_fBigRainbowFire;
 
+            m_dbSprites.AddRange(CreateRainbowFlames(m_fBigRainbowFire));
+
+            buttonDemo_Click(null, null);
+        }
+
+        private List<SimpleSprite> CreateRainbowFlames(bool fBigRainbowFire)
+        {
+            List<SimpleSprite> dbSprites = new List<SimpleSprite>();
             Color[] colors = {
                 Color.Red,
                 Color.Orange,
@@ -1865,7 +1882,7 @@ namespace FireDemo
                     palCandle = PalRealisticFire.New();
                 else
                     palCandle = PalRealisticFlameCurve.New(color);
-                RealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                RealtimeLightEffect dbCandle = GenerateCandle(big: fBigRainbowFire);
                 dbCandle.SetPalette(palCandle);
 
                 // LAZY INITIALIZATION!
@@ -1880,7 +1897,7 @@ namespace FireDemo
                 top = (height * magnification + bufferY) * (iCandle / 8);
                 dbCandle.Location = new Point(x: left, y: top);
 
-                m_dbSprites.Add(dbCandle);
+                dbSprites.Add(dbCandle);
                 ++iCandle;
             }
 
@@ -1895,26 +1912,26 @@ namespace FireDemo
                 }
                 else
                     palCandle = PalFourPointLinear.New(color);
-                RealtimeLightEffect dbCandle = GenerateCandle(big: m_fBigRainbowFire);
+                RealtimeLightEffect dbCandle = GenerateCandle(big: fBigRainbowFire);
                 dbCandle.SetPalette(palCandle);
                 left = (width * magnification + bufferX) * (iCandle % 8);
                 top = (height * magnification + bufferY) * (iCandle / 8);
                 dbCandle.Location = new Point(x: left, y: top);
 
-                m_dbSprites.Add(dbCandle);
+                dbSprites.Add(dbCandle);
                 ++iCandle;
             }
 
             // Unsure if this actually speeds anything up, it's about the same speed
             // It's HALF the speed on Linux, so abandon this. Detecting Linux so we
             // can use a faster InterpolationMode in Windows is a better option at this point
-            //CompoundSprite dbOptimizer = new CompoundSprite();
+            //CompoundSprite dbOptimizer = new LayeredSprite();
             //dbOptimizer.Initialize(1024, 600, 1);
-            //dbOptimizer.AddRange(m_dbSprites);
-            //m_dbSprites.Clear();
-            //m_dbSprites.Add(dbOptimizer);
+            //dbOptimizer.AddRange(dbSprites);
+            //dbSprites.Clear();
+            //dbSprites.Add(dbOptimizer);
 
-            buttonDemo_Click(null, null);
+            return dbSprites;
         }
 
 #if false // ExtraLargeRainbow (too slow)
