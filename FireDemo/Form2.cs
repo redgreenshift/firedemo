@@ -1534,8 +1534,9 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauronV36_SmallLightning(Size size, bool left)
         {
             int magnification = 1;
-            int lightWidth = (int)(size.Width / 2.5 / magnification);
-            int lightHeight = size.Height / 2 / magnification;
+            float factor = 2.7f;
+            int lightWidth = (int)(size.Width / factor / magnification);
+            int lightHeight = (int)(size.Height / factor / magnification);
             int xCenter = size.Width / 2;
             int yCenter = size.Height / 2;
             int xOffset; //  = xCenter;
