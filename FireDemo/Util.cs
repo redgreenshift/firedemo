@@ -25,10 +25,10 @@ namespace FireDemo
             //return SingletonRNG;
             Random rng;
 
-            if (RandomSeed.HasValue)
+            if (RandomSeed != null)
             {
                 rng = new Random(RandomSeed.Value);
-                RandomSeed = RandomSeed.Value + 1;
+                ++RandomSeed;
             }
             else
             {

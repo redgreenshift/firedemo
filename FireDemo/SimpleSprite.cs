@@ -123,11 +123,11 @@ namespace FireDemo
 		{
 			Graphics g = m_internalGraphics;
 
-			// blank the bitmap before compositing, to clear out the
-			// tansparent areas that never update (i.e. fix stuck pixels)
-			g.Clear(Color.Black);
+            // blank the bitmap before compositing, to clear out the
+            // tansparent areas that never update (i.e. fix stuck pixels)
+            g.Clear(Color.Black);
 
-			foreach (SimpleSprite sprite in m_dbSprites)
+            foreach (SimpleSprite sprite in m_dbSprites)
 			{
 				sprite.RenderOneFrameToScreen(g);
 			}
