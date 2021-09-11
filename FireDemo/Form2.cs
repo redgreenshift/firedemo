@@ -1301,7 +1301,7 @@ namespace FireDemo
                     m_graph.Clear(Color.Black);
                     m_dbSprites.Clear();
                     SimpleCandle();
-                    m_dbText.Text = "...I started this project because someone said\n\"Smalltalk is too slow for realtime fire generation.\"\nAnd I just had to prove them wrong.";
+                    m_dbText.Text = "...I started this project when someone said\n\"Smalltalk is too slow for realtime fire generation.\"\nAnd I just had to prove them wrong.";
                     m_dbSprites.Add(m_dbSprite); // Add the candle
                     m_dbSprites.Add(m_dbText); // Add the text sprite
                     m_dbSprite.InterpolationMode = InterpolationMode.NearestNeighbor;
