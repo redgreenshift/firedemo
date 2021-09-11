@@ -1481,6 +1481,7 @@ namespace FireDemo
             form.ShowDialog();
         }
 
+        // repurposed for v2
         private void buttonSauronV1_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
@@ -1529,6 +1530,40 @@ namespace FireDemo
 
             buttonDemo_Click(null, null);
         }
+
+        private RealtimeLightEffect CreateSauronV36_SmallLightning(Size size, bool left)
+        {
+            int magnification = 1;
+            int lightWidth = (int)(size.Width / 3 / magnification);
+            int lightHeight = size.Height / 2 / magnification;
+            int xCenter = size.Width / 2;
+            int xOffset = xCenter;
+
+            if (left)
+                xOffset = 0;
+            else
+                xOffset = size.Width - lightWidth * magnification;
+
+            LightPen lpLightning = new LightPen(fill: 1, 200, 255, useFullRange: true);
+            LightShapeLightning lsBolt = new LightShapeLightning();
+            ICoolingStrategy csSauron = new CoolingStrategyConst(27);
+            lsBolt.SetPen(lpLightning);
+            RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
+            RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
+            if (left)
+                dbLightningBolt.Location = new Point(xOffset, 0);
+            else
+                dbLightningBolt.Location = new Point(xCenter, 0);
+            dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
+            dbLightningBolt.SetCoolingStrategy(csSauron);
+
+            // TODO: Remove the second set after parametrizing the lightning, so I can increase the frequency
+            dbLightningBolt.AddShape(lsBolt);
+
+            return dbLightningBolt;
+        }
+
+        // repurposed for v3.5
         private void buttonSauronV2_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
@@ -1552,9 +1587,47 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
+        // latest v3
+        private void buttonSauronV3_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            LayeredSprite dbSauron = CreateEyeOfSauronV3();
+
+
+            // TODO: JRDV: If this works, then DELETE the HiRez stuff!!! Just layer the small lightning over top HERE!
+            // It seems faster than the resized stuff, but at least no worse than doing it the more complicated way
+            LayeredSprite db2 = new LayeredSprite();
+            db2.Initialize(dbSauron.Width * dbSauron.Magnification, dbSauron.Height * dbSauron.Magnification, 1);
+            db2.Add(dbSauron);
+            Size scene = new Size(db2.Width, db2.Height);
+            Color[] palLightning;
+            palLightning = PalFourPointLinear.New(Color.FromArgb(250, 219, 125));
+            palLightning[0] = Color.FromArgb(0, palLightning[0]);
+
+            RealtimeLightEffect dbExampleLightning = CreateSauronV36_SmallLightning(scene, left: true);
+            dbExampleLightning.SetPalette(palLightning);
+            db2.Add(dbExampleLightning);
+
+            dbExampleLightning = CreateSauronV36_SmallLightning(scene, left: false);
+            dbExampleLightning.SetPalette(palLightning);
+            db2.Add(dbExampleLightning);
+
+
+            db2.Location = dbSauron.Location;
+            dbSauron.Location = Point.Empty;
+
+            VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
+            //dbSauron.Add(tower);
+            //dbSauron.InterpolationMode = InterpolationMode.NearestNeighbor;
+            m_dbSprites.Add(db2);
+            m_dbSprites.Add(tower);
+
+            buttonDemo_Click(null, null);
+        }
+
         private LayeredSprite CreateEyeOfSauronV3()
         {
-            //Size sceneSize = new Size(width: 700, height: 200); // TODO: HiRez
+            //Size sceneSize = new Size(width: 700, height: 200); // TODO: HiRez so I can add smaller lightning bolts around the perimiter
             Size sceneSize = new Size(width: 350, height: 100);
             int magnification = 2;
             List<DynamicSprite> dbSprites = new List<DynamicSprite>

@@ -50,6 +50,7 @@ namespace FireDemo
             this.groupBoxExperiment = new System.Windows.Forms.GroupBox();
             this.buttonHistoryOfFire = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
+            this.buttonSauronV3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
             this.SuspendLayout();
@@ -232,6 +233,7 @@ namespace FireDemo
             // 
             // groupBoxExperiment
             // 
+            this.groupBoxExperiment.Controls.Add(this.buttonSauronV3);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowBatman);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV2);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowFire);
@@ -267,6 +269,16 @@ namespace FireDemo
             this.buttonRainbowBatman.Text = "RainBAT";
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
             this.buttonRainbowBatman.Click += new System.EventHandler(this.buttonRainbowBatman_Click);
+            // 
+            // buttonSauronV3
+            // 
+            this.buttonSauronV3.Location = new System.Drawing.Point(184, 309);
+            this.buttonSauronV3.Name = "buttonSauronV3";
+            this.buttonSauronV3.Size = new System.Drawing.Size(172, 90);
+            this.buttonSauronV3.TabIndex = 16;
+            this.buttonSauronV3.Text = "Sauron v3.6";
+            this.buttonSauronV3.UseVisualStyleBackColor = true;
+            this.buttonSauronV3.Click += new System.EventHandler(this.buttonSauronV3_Click);
             // 
             // Form2
             // 
@@ -309,5 +321,6 @@ namespace FireDemo
         private System.Windows.Forms.GroupBox groupBoxExperiment;
         private System.Windows.Forms.Button buttonRainbowBatman;
         private System.Windows.Forms.Button buttonHistoryOfFire;
+        private System.Windows.Forms.Button buttonSauronV3;
     }
 }
