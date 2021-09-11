@@ -1534,10 +1534,12 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauronV36_SmallLightning(Size size, bool left)
         {
             int magnification = 1;
-            int lightWidth = (int)(size.Width / 3 / magnification);
+            int lightWidth = (int)(size.Width / 2.5 / magnification);
             int lightHeight = size.Height / 2 / magnification;
             int xCenter = size.Width / 2;
-            int xOffset = xCenter;
+            int yCenter = size.Height / 2;
+            int xOffset; //  = xCenter;
+            int yOffset = (size.Height - lightHeight * magnification) / 2;
 
             if (left)
                 xOffset = 0;
@@ -1550,14 +1552,15 @@ namespace FireDemo
             lsBolt.SetPen(lpLightning);
             RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
             RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
-            if (left)
-                dbLightningBolt.Location = new Point(xOffset, 0);
-            else
-                dbLightningBolt.Location = new Point(xCenter, 0);
+            //if (left)
+                dbLightningBolt.Location = new Point(xOffset, yOffset);
+            //else
+            //    dbLightningBolt.Location = new Point(xOffset, 0);
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
 
             // TODO: Remove the second set after parametrizing the lightning, so I can increase the frequency
+            dbLightningBolt.AddShape(lsBolt);
             dbLightningBolt.AddShape(lsBolt);
 
             return dbLightningBolt;
