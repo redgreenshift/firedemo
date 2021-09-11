@@ -1317,7 +1317,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "I like the result, even with simple constant cooling.\nThe palette isn't great, but it's a proof-of-concept.\n(2-point linear algorithm)";
+                    m_dbText.Text = "I like the result, even with simple constant cooling.\nThe palette isn't great, but it's a proof-of-concept.\n(2-point linear palette algorithm)";
                     m_dbText.LocationPeriod = TimeSpan.FromSeconds(10);
                     m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
@@ -1369,14 +1369,14 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "The curved palette formula works for \narbitrary colors.";
+                    m_dbText.Text = "The curved palette formula works for \narbitrary colors...";
                     m_dbText.Color = Color.LightBlue;
                     m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Blue));
                 }),
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "Seriously, ANY color!";
+                    m_dbText.Text = "...seriously, ANY color!";
                     m_dbText.Color = Color.SkyBlue;
                     m_dbText.LocationRange = m_dbText.LocationRange;
                     m_dbSprites.Clear();
@@ -1407,7 +1407,7 @@ namespace FireDemo
                 {
                     m_dbText.Color = Color.LightGreen;
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "Plasma for the Borg Alcove Regeneration Disc.";
+                    m_dbText.Text = "...plasma for the Borg Alcove Regeneration Disc.";
                     m_dbSprites.Clear();
                     DemoBorg();
                     m_dbSprites.Add(m_dbSprite);
@@ -1416,12 +1416,11 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "And then take all these pieces from the previous\niterations to refactor and recombine them into...";
+                    m_dbText.Text = "And then took all these pieces from the previous\niterations to refactor and recombine them into...";
                     m_dbText.Color = Color.LightSkyBlue;
                     // Demo RainBORG
                     m_dbSprites.Clear();
                     DemoPlasmaRainbow();
-                    //int lastY = 0;
                     foreach (SimpleSprite s in m_dbSprites)
                     {
                         // 0, 196, 392
@@ -1453,7 +1452,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     // Let Sauron go for double length
-                    m_dbText.Text = "And now I can use these graphics to communicate\nwhether I'm busy or not, all because...";
+                    m_dbText.Text = "And now I use these graphics to communicate\nwhether I'm busy or not, all because...";
                 }),
                 //new Action(() =>
                 //{
