@@ -315,22 +315,46 @@ namespace FireDemo
                 base.RenderOneFrameToScreen(graph);
             else
             {
+                // Instead of crteating a new temporary bitmap, and then rotate that, it seems
+                // to be consistently faster to rotate the bitmap in-place, (**DEBATABLE)
+                // and then rotate/flip it back when done. (stays at 60 instead of sometimes dipping to 50-55)
+                // It seems like this should involve the same number of allocations,
+                // and pixel copies PLUS the addional work to rotate the pixels an extra time,
+                // but maybe it is more efficient because Bitmap has optimizations???
+                // But there is also the risk that the Form doesn't match the BitmapLocker,
+                // but that is no different from not matching the intensityMatrix.
+                // If we don't rotate it back, then there are MULTIPLE things that will fail.
+                // It still makes me uneasy rotating it in place... especially since
+                // further testing was inconclusive, as the framerate stopped dipping for the copy,
+                // so I can't conclusively say the new way never dips fps.
+                // Keep the prototype commented so I can investigate more later.
                 Bitmap bmTemp = Form;
                 using (Bitmap bmRotatedForm = new Bitmap(bmTemp))
                 {
                     RotateFlipType type;
+                    //RotateFlipType inverse;
                     if (Direction == Orientation.Left)
+                    {
                         type = RotateFlipType.Rotate270FlipNone; /* Rotate90FlipX? */
+                        //inverse = RotateFlipType.Rotate90FlipNone;
+                    }
                     else if (Direction == Orientation.Right)
+                    {
                         type = RotateFlipType.Rotate90FlipNone;
+                        //inverse = RotateFlipType.Rotate270FlipNone;
+                    }
                     else // Orientation.Down
+                    {
                         type = RotateFlipType.Rotate180FlipNone;
-
-                    bmRotatedForm.RotateFlip(type);
+                        //inverse = type;
+                    }
 
                     // Temporarily swap out the Form to draw it rotated
+                    bmRotatedForm.RotateFlip(type);
                     Form = bmRotatedForm;
+                    //Form.RotateFlip(type);
                     base.RenderOneFrameToScreen(graph);
+                    //Form.RotateFlip(inverse);
                     Form = bmTemp;
                 }
             }
