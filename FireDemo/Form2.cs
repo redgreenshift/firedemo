@@ -1298,7 +1298,14 @@ namespace FireDemo
                     m_graph.Clear(Color.Black);
                     m_dbSprites.Clear();
                     SimpleCandle();
-                    m_dbText.Text = "...in 2001, I started this project when someone said\n\"Smalltalk is too slow for realtime fire generation.\"\nAnd I just had to prove them wrong.";
+                    int fireWidth = m_dbSprite.Width;
+                    int fireHeight = 70;
+                    int magnification = 6;
+                    m_dbSprite.Initialize(fireWidth, fireHeight, magnification);
+                    int left = (this.Width - fireWidth * magnification) / 2;
+                    int top = (this.Height - fireHeight * magnification);
+                    m_dbSprite.Location = new Point(left, top);
+                    m_dbText.Text = "...in 2001, I started this project when someone\nsaid, \"Smalltalk is too slow for realtime fire\ngeneration.\" And I just had to prove them wrong.";
                     m_dbText.LocationPeriod = TimeSpan.Zero;
                     m_dbText.Location = new Point(0, 0);
                     m_dbText.Color = Color.Red;
@@ -1310,7 +1317,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "Even with a constant cooling factor, I liked the result.\nThe palette wasn't great, but it's a proof-of-concept.\n(2-point linear algorithm)";
+                    m_dbText.Text = "I like the result, even with simple constant cooling.\nThe palette isn't great, but it's a proof-of-concept.\n(2-point linear algorithm)";
                     m_dbText.LocationPeriod = TimeSpan.FromSeconds(10);
                     m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
@@ -1319,13 +1326,13 @@ namespace FireDemo
                 {
                     Color color = Color.FromArgb(64, 128, 255); // LightBlue
                     m_dbText.Color = color;
-                    m_dbText.Text = "In blue, it really does remind me of the pilot light\nof a propane grill that I watched as a child\nwhile my dad grilled.";
+                    m_dbText.Text = "In blue, it really reminds me of the pilot light\nof a propane grill that I watched as a child\nwhile my dad grilled.";
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                     m_genericFlame.SetPalette(PalFlatPalette.New(color));
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "15 years later, I remembered the challenge and wanted\nto improve it with a better palette and more colors\n(4-point linear looks better, but not quite realistic)";
+                    m_dbText.Text = "15 years later, I remembered the challenge,\nimproved the palettes and added more colors\n(4-point linear is better, but not quite realistic)";
                     m_dbText.Color = Color.DarkOrange;
                     Color c1 = Color.FromArgb(0, 0, 0);       // Black
                     Color c2 = Color.FromArgb(255, 185, 0);   // Orange
@@ -1336,7 +1343,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "Derived a curved palette formula for more realistic color,\nall with the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
+                    m_dbText.Text = "Derived a curved formula for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
                     m_dbText.Color = Color.OrangeRed;
                     m_genericFlame.SetPalette(PalRealisticFire.New());
                     if (Util.IsLinux)
@@ -1346,7 +1353,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "and added a Cooling Map for improved realism";
+                    m_dbText.Text = "Then added a Cooling Map for improved realism";
                     ICoolingStrategy coolingStrategy;
                     m_coolingStrategy = new CoolingStrategyMap();
                     m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
@@ -1357,12 +1364,12 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "and enabled changing the parameters on the fly";
+                    m_dbText.Text = "and enabled changing the parameters on the fly.";
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "The curved palette formula works for arbitrary colors";
+                    m_dbText.Text = "The curved palette formula works for \narbitrary colors.";
                     m_dbText.Color = Color.LightBlue;
                     m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Blue));
                 }),
@@ -1379,7 +1386,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "From there, I wanted to create SHAPES out of the fire!";
+                    m_dbText.Text = "From there, I wanted to create SHAPES\nout of the fire!";
                     m_dbSprites.Clear();
                     m_dbText.Color = Color.Yellow;
                     DemoBatman(multithreaded: true);
@@ -1415,16 +1422,14 @@ namespace FireDemo
                     m_dbSprites.Clear();
                     DemoPlasmaRainbow();
                     //int lastY = 0;
-                    int addY = 130;
                     foreach (SimpleSprite s in m_dbSprites)
                     {
                         // 0, 196, 392
-                        if (s.Location.Y == 0)
-                            addY = 150;
-                        else if (s.Location.Y == 196)
-                            addY = 100;
-                        else if (s.Location.Y == 392)
-                            addY = 50;
+                        int addY = 150;
+                        if (s.Location.Y > 0)
+                            addY -= 50;
+                        if (s.Location.Y > 200)
+                            addY -= 50;
                         Point moveDown = new Point(0, addY);
                         Point newPoint = s.Location;
                         newPoint.Offset(moveDown);
