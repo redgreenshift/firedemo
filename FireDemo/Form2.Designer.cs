@@ -135,6 +135,7 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonHistoryOfFire);
             this.groupBox1.Controls.Add(this.buttonQuit);
             this.groupBox1.Controls.Add(this.buttonAwayStatus);
             this.groupBox1.Controls.Add(this.buttonDndStatus);
@@ -151,11 +152,11 @@ namespace FireDemo
             // 
             // buttonQuit
             // 
-            this.buttonQuit.Location = new System.Drawing.Point(360, 408);
+            this.buttonQuit.Location = new System.Drawing.Point(360, 405);
             this.buttonQuit.Name = "buttonQuit";
             this.buttonQuit.Size = new System.Drawing.Size(172, 90);
             this.buttonQuit.TabIndex = 9;
-            this.buttonQuit.Text = "QUIT";
+            this.buttonQuit.Text = "EXIT";
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.buttonQuit_Click);
             // 
@@ -231,7 +232,6 @@ namespace FireDemo
             // 
             // groupBoxExperiment
             // 
-            this.groupBoxExperiment.Controls.Add(this.buttonHistoryOfFire);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowBatman);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV2);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowFire);
@@ -250,11 +250,11 @@ namespace FireDemo
             // 
             // buttonHistoryOfFire
             // 
-            this.buttonHistoryOfFire.Location = new System.Drawing.Point(6, 405);
+            this.buttonHistoryOfFire.Location = new System.Drawing.Point(182, 405);
             this.buttonHistoryOfFire.Name = "buttonHistoryOfFire";
             this.buttonHistoryOfFire.Size = new System.Drawing.Size(172, 90);
             this.buttonHistoryOfFire.TabIndex = 16;
-            this.buttonHistoryOfFire.Text = "Evolution of Fire";
+            this.buttonHistoryOfFire.Text = "About";
             this.buttonHistoryOfFire.UseVisualStyleBackColor = true;
             this.buttonHistoryOfFire.Click += new System.EventHandler(this.buttonHistoryOfFire_Click);
             // 
