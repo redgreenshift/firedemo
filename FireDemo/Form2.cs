@@ -1274,9 +1274,6 @@ namespace FireDemo
 
             TextSprite text = new TextSprite
             {
-                Location = new Point(0, 0),
-                Color = Color.Red,
-                LocationPeriod = TimeSpan.FromSeconds(10),
                 LocationRange = new Rectangle(0, 0, 50, 75),
             };
             m_dbText = text;
@@ -1301,7 +1298,10 @@ namespace FireDemo
                     m_graph.Clear(Color.Black);
                     m_dbSprites.Clear();
                     SimpleCandle();
-                    m_dbText.Text = "...I started this project when someone said\n\"Smalltalk is too slow for realtime fire generation.\"\nAnd I just had to prove them wrong.";
+                    m_dbText.Text = "...in 2001, I started this project when someone said\n\"Smalltalk is too slow for realtime fire generation.\"\nAnd I just had to prove them wrong.";
+                    m_dbText.LocationPeriod = TimeSpan.Zero;
+                    m_dbText.Location = new Point(0, 0);
+                    m_dbText.Color = Color.Red;
                     m_dbSprites.Add(m_dbSprite); // Add the candle
                     m_dbSprites.Add(m_dbText); // Add the text sprite
                     m_dbSprite.InterpolationMode = InterpolationMode.NearestNeighbor;
@@ -1310,13 +1310,23 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "I added a cooling factor, and I liked the result.\nThe palette wasn't great, but it's a proof-of-concept.";
+                    m_dbText.Text = "Even with a constant cooling factor, I liked the result.\nThe palette wasn't great, but it's a proof-of-concept.\n(2-point linear algorithm)";
+                    m_dbText.LocationPeriod = TimeSpan.FromSeconds(10);
                     m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "15 years later, I remembered that project and wanted to\nimprove it with a better palette with more colors\n(4-point linear looks better, but not quite realistic)";
+                    Color color = Color.FromArgb(64, 128, 255); // LightBlue
+                    m_dbText.Color = color;
+                    m_dbText.Text = "In blue, it really does remind me of the pilot light\nof a propane grill that I watched as a child\nwhile my dad grilled.";
+                    m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
+                    m_genericFlame.SetPalette(PalFlatPalette.New(color));
+                }),
+                new Action(() =>
+                {
+                    m_dbText.Text = "15 years later, I remembered the challenge and wanted\nto improve it with a better palette and more colors\n(4-point linear looks better, but not quite realistic)";
+                    m_dbText.Color = Color.DarkOrange;
                     Color c1 = Color.FromArgb(0, 0, 0);       // Black
                     Color c2 = Color.FromArgb(255, 185, 0);   // Orange
                     Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
@@ -1327,7 +1337,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_dbText.Text = "Derived a curved palette formula for more realistic color,\nall with the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
-                    m_dbText.Color = Color.Orange;
+                    m_dbText.Color = Color.OrangeRed;
                     m_genericFlame.SetPalette(PalRealisticFire.New());
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
@@ -1336,7 +1346,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "Then added a Cooling Map";
+                    m_dbText.Text = "and added a Cooling Map for improved realism";
                     ICoolingStrategy coolingStrategy;
                     m_coolingStrategy = new CoolingStrategyMap();
                     m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
@@ -1347,23 +1357,12 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "And if we \"rotate\" in a new Cooling Map\nevery few seconds, then it doesn't repeat";
-                    ICoolingStrategy coolingStrategy;
-                    m_coolingStrategy = new CoolingStrategyMap();
-                    m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
-                        density: 0.4f, min: 5, max: 13, smoothing: 5,
-                        shift: true, rotate: true);
-                    coolingStrategy = m_coolingStrategy;
-                    m_genericFlame.SetCoolingStrategy(coolingStrategy);
-                }),
-                new Action(() =>
-                {
-                    m_dbText.Text = "Made it so I could change the parameters on the fly";
+                    m_dbText.Text = "and enabled changing the parameters on the fly";
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "The curved palette formula also works for arbitrary colors";
+                    m_dbText.Text = "The curved palette formula works for arbitrary colors";
                     m_dbText.Color = Color.LightBlue;
                     m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Blue));
                 }),
@@ -1371,6 +1370,7 @@ namespace FireDemo
                 {
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "Seriously, ANY color!";
+                    m_dbText.Color = Color.SkyBlue;
                     m_dbText.LocationRange = m_dbText.LocationRange;
                     m_dbSprites.Clear();
                     m_dbSprites.AddRange(CreateRainbowFlames(fBigRainbowFire: false));
@@ -1390,7 +1390,7 @@ namespace FireDemo
                 {
                     m_graph.Clear(Color.Black);
                     m_dbText.Color = Color.LightCyan;
-                    m_dbText.Text = "Then I had an idea for lightning,\nwhich was just a step toward...";
+                    m_dbText.Text = "Then I had an idea for lightning,\nwhich was just a step toward making...";
                     m_dbSprites.Clear();
                     DemoLightning();
                     m_dbSprites.Add(m_dbSprite);
@@ -1400,7 +1400,7 @@ namespace FireDemo
                 {
                     m_dbText.Color = Color.LightGreen;
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "Plasma to create a Borg Regeneration ring.";
+                    m_dbText.Text = "Plasma for the Borg Alcove Regeneration Disc.";
                     m_dbSprites.Clear();
                     DemoBorg();
                     m_dbSprites.Add(m_dbSprite);
@@ -1409,7 +1409,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "And then take all these pieces from the previous\niterations and recombine them to create...";
+                    m_dbText.Text = "And then take all these pieces from the previous\niterations to refactor and recombine them into...";
                     m_dbText.Color = Color.LightSkyBlue;
                     // Demo RainBORG
                     m_dbSprites.Clear();
@@ -1434,7 +1434,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Color = Color.Red;
+                    m_dbText.Color = Color.OrangeRed;
                     LayeredSprite dbEyeOfSauron = CreateEyeOfSauronV3();
                     int left = (this.Width - dbEyeOfSauron.Width * dbEyeOfSauron.Magnification) / 2;
                     int top = (this.Height - dbEyeOfSauron.Height * dbEyeOfSauron.Magnification) / 2;
@@ -1447,11 +1447,8 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    // Nothing. Let Sauron go for double length
-                }),
-                new Action(() =>
-                {
-                    m_dbText.Text = "And now I can use all this to communicate\nwhether I'm busy or not, all because...";
+                    // Let Sauron go for double length
+                    m_dbText.Text = "And now I can use these graphics to communicate\nwhether I'm busy or not, all because...";
                 }),
                 //new Action(() =>
                 //{
