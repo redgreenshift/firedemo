@@ -1326,7 +1326,7 @@ namespace FireDemo
                 {
                     Color color = Color.FromArgb(64, 128, 255); // LightBlue
                     m_dbText.Color = color;
-                    m_dbText.Text = "In blue, it really reminds me of the pilot light\nof a propane grill that I watched as a child\nwhile my dad grilled.";
+                    m_dbText.Text = "In blue, it really reminds me of the pilot light\nof a propane grill that I watched as a child\nwhile my dad grilled burgers.";
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                     m_genericFlame.SetPalette(PalFlatPalette.New(color));
                 }),
