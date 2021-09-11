@@ -1400,6 +1400,7 @@ namespace FireDemo
                     m_dbText.Text = "Then I had an idea for lightning,\nwhich was just a step toward making...";
                     m_dbSprites.Clear();
                     DemoLightning();
+                    m_dbSprite.Initialize(m_dbSprite.Width * 2, m_dbSprite.Height * 2, 1);
                     m_dbSprites.Add(m_dbSprite);
                     m_dbSprites.Add(m_dbText);
                 }),
