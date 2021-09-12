@@ -1305,7 +1305,7 @@ namespace FireDemo
                     int left = (this.Width - fireWidth * magnification) / 2;
                     int top = (this.Height - fireHeight * magnification);
                     m_dbSprite.Location = new Point(left, top);
-                    m_dbText.Text = "...in 2001, I started this project when someone\nsaid, \"Smalltalk is too slow for realtime fire\ngeneration.\" And I just had to prove them wrong.";
+                    m_dbText.Text = "...in 2001, I wrote a prototype when someone\nsaid, \"Smalltalk is too slow for realtime fire\ngeneration.\" And I just had to prove them wrong.";
                     m_dbText.LocationPeriod = TimeSpan.Zero;
                     m_dbText.Location = new Point(0, 0);
                     m_dbText.Color = Color.Red;
@@ -1317,7 +1317,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "I like the result, even with simple constant cooling.\nThe palette isn't great, but it's a proof-of-concept.\n(2-point linear palette algorithm)";
+                    m_dbText.Text = "I liked the result, even with plain constant cooling.\nThe palette isn't great, but it's a proof-of-concept.\n(2-point linear palette algorithm)";
                     m_dbText.LocationPeriod = TimeSpan.FromSeconds(10);
                     m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
@@ -1343,7 +1343,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "Derived a curved formula for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
+                    m_dbText.Text = "Derived a palette formula curve for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
                     m_dbText.Color = Color.OrangeRed;
                     m_genericFlame.SetPalette(PalRealisticFire.New());
                     if (Util.IsLinux)
@@ -1353,7 +1353,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "Then added a Cooling Map for improved realism";
+                    m_dbText.Text = "...added a Cooling Map for improved realism";
                     ICoolingStrategy coolingStrategy;
                     m_coolingStrategy = new CoolingStrategyMap();
                     m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
@@ -1364,7 +1364,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "and enabled changing the parameters on the fly.";
+                    m_dbText.Text = "...and enabled changing parameters on the fly.";
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
@@ -1376,7 +1376,8 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "...seriously, ANY color!";
+                    m_dbText.Text = "...ANY color!";
+                    m_dbText.Font = new Font(m_dbText.Font, FontStyle.Italic);
                     m_dbText.Color = Color.SkyBlue;
                     m_dbText.LocationRange = m_dbText.LocationRange;
                     m_dbSprites.Clear();
@@ -1387,6 +1388,7 @@ namespace FireDemo
                 {
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "From there, I wanted to create SHAPES\nout of the fire!";
+                    m_dbText.Font = new Font(m_dbText.Font, FontStyle.Regular);
                     m_dbSprites.Clear();
                     m_dbText.Color = Color.Yellow;
                     DemoBatman(multithreaded: true);
@@ -1453,7 +1455,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     // Let Sauron go for double length
-                    m_dbText.Text = "And now I use these graphics to communicate\nwhether I'm busy or not, all because...";
+                    m_dbText.Text = "And now I use these graphics to communicate\nwhether I'm busy or not at Work, all because...";
                 }),
                 //new Action(() =>
                 //{
