@@ -1529,7 +1529,7 @@ namespace FireDemo
             dbLightningBolt.Location = new Point(xOffset, yOffset);
             dbLightningBolt.LocationRange = new Rectangle(x: xOffset, y: size.Height / 4, width: 0, height: size.Height / 2);
             dbLightningBolt.LocationPeriod = TimeSpan.FromMilliseconds(100);
-            dbLightningBolt.SmoothTransition = false;
+            //dbLightningBolt.SmoothTransition = false;
             //else
             //    dbLightningBolt.Location = new Point(xOffset, 0);
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
