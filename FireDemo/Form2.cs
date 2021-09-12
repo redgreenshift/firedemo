@@ -1265,7 +1265,7 @@ namespace FireDemo
                     SimpleCandle();
                     int fireWidth = m_dbSprite.Width;
                     int fireHeight = 70;
-                    int magnification = 6;
+                    int magnification = 7;
                     m_dbSprite.Initialize(fireWidth, fireHeight, magnification);
                     int left = (this.Width - fireWidth * magnification) / 2;
                     int top = (this.Height - fireHeight * magnification);
@@ -1279,6 +1279,7 @@ namespace FireDemo
                     m_dbSprite.InterpolationMode = InterpolationMode.NearestNeighbor;
                     m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(0));
+                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
                 {
@@ -1330,13 +1331,14 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_dbText.Text = "...and enabled changing parameters on the fly.";
-                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
                 {
                     m_dbText.Text = "The curved palette formula works for \narbitrary colors...";
                     m_dbText.Color = Color.LightBlue;
                     m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Blue));
+                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
                 {
