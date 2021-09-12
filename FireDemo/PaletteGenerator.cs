@@ -301,26 +301,26 @@ namespace FireDemo
     /// </summary>
     public class PalPlasma : PalFourPointLinear
     {
-        public static Color[] New(Color color)
+        public static new Color[] New(Color color)
         {
             Color[] thePalette = new Color[256];
             Fill(thePalette, color);
             return thePalette;
         }
 
-        public static Color[] NewRaw(Color c2)
+        public static new Color[] NewRaw(Color c2)
         {
             return NewRaw(c2, Color.White);
         }
 
-        public static Color[] NewRaw(Color c2, Color c3)
+        public static new Color[] NewRaw(Color c2, Color c3)
         {
             Color[] thePalette = new Color[256];
             PalFourPointLinear.Fill(thePalette, Color.Black, c2, c3, Color.White);
             return thePalette;
         }
 
-        public static void Fill(Color[] thePalette, Color color)
+        public static new void Fill(Color[] thePalette, Color color)
         {
             // Tweak the basic colors to what I think looks best
             if (color == Color.Red)
