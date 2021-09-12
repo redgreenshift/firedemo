@@ -1277,7 +1277,7 @@ namespace FireDemo
                     m_dbSprites.Add(m_dbSprite); // Add the candle
                     m_dbSprites.Add(m_dbText); // Add the text sprite
                     m_dbSprite.InterpolationMode = InterpolationMode.NearestNeighbor;
-                    m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
+                    m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalFlatPalette.New(Color.Orange)));
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(0));
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 }),
@@ -1285,7 +1285,6 @@ namespace FireDemo
                 {
                     m_dbText.Text = "I liked the result, even with plain constant cooling.\nThe palette isn't great, but it's a proof-of-concept.\n(2-point linear palette algorithm)";
                     m_dbText.LocationPeriod = TimeSpan.FromSeconds(10);
-                    m_genericFlame.SetPalette(PalFlatPalette.New(Color.Orange));
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                 }),
                 new Action(() =>
@@ -1294,7 +1293,7 @@ namespace FireDemo
                     m_dbText.Color = color;
                     m_dbText.Text = "In blue, it really reminds me of the pilot light\nof a propane grill that I watched as a child\nwhile my dad grilled burgers.";
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
-                    m_genericFlame.SetPalette(PalFlatPalette.New(color));
+                    m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalFlatPalette.New(color)));
                 }),
                 new Action(() =>
                 {
@@ -1304,18 +1303,18 @@ namespace FireDemo
                     Color c2 = Color.FromArgb(255, 185, 0);   // Orange
                     Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
                     Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
-                    m_genericFlame.SetPalette(PalFourPointLinear.New(c1, c2, c3, c4));
                     m_genericFlame.InterpolationMode = InterpolationMode.Default;
+                    m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalFourPointLinear.New(c1, c2, c3, c4)));
                 }),
                 new Action(() =>
                 {
                     m_dbText.Text = "Derived a palette formula curve for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
                     m_dbText.Color = Color.OrangeRed;
-                    m_genericFlame.SetPalette(PalRealisticFire.New());
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
                     else
                         m_genericFlame.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalRealisticFire.New()));
                 }),
                 new Action(() =>
                 {
@@ -1337,7 +1336,7 @@ namespace FireDemo
                 {
                     m_dbText.Text = "The curved palette formula works for \narbitrary colors...";
                     m_dbText.Color = Color.LightBlue;
-                    m_genericFlame.SetPalette(PalRealisticFlameCurve.New(Color.Blue));
+                    m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalRealisticFlameCurve.New(Color.Blue)));
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
@@ -1645,8 +1644,8 @@ namespace FireDemo
 
             for (int ii = 0; ii < 1; ++ii)
                 palBackgroundSmoke[ii] = Color.FromArgb(0, palBackgroundSmoke[ii]);
-            palFire[0] = Color.FromArgb(0, palFire[0]);
-            palLightning[0] = Color.FromArgb(0, palLightning[0]);
+            palFire = PaletteGenerator.MakeTransparent(palFire);
+            palLightning = PaletteGenerator.MakeTransparent(palLightning);
 
             // Tried gradient of alpha across multiple colors so it blends better, but Linux doesn't honor alpha,
             // other than 0 and not-zero. Anything greater than zero is 100% opaque.
