@@ -1534,7 +1534,7 @@ namespace FireDemo
         private RealtimeLightEffect CreateSauronV36_SmallLightning(Size size, bool left)
         {
             int magnification = 1;
-            float factor = 2.7f;
+            float factor = 4.7f;
             int lightWidth = (int)(size.Width / factor / magnification);
             int lightHeight = (int)(size.Height / factor / magnification);
             int xCenter = size.Width / 2;
@@ -1554,7 +1554,10 @@ namespace FireDemo
             RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
             RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
             //if (left)
-                dbLightningBolt.Location = new Point(xOffset, yOffset);
+            dbLightningBolt.Location = new Point(xOffset, yOffset);
+            dbLightningBolt.LocationRange = new Rectangle(x: xOffset, y: size.Height / 4, width: 0, height: size.Height / 2);
+            dbLightningBolt.LocationPeriod = TimeSpan.FromMilliseconds(100);
+            dbLightningBolt.SmoothTransition = false;
             //else
             //    dbLightningBolt.Location = new Point(xOffset, 0);
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
@@ -1591,7 +1594,7 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-        // latest v3
+        // latest v3 (tempted to mirror everything except the pupil, which should dramatically increase speed)
         private void buttonSauronV3_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
