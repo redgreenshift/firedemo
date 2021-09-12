@@ -1380,6 +1380,9 @@ namespace FireDemo
                     m_dbText.Text = "...plasma for the Borg Alcove Regeneration Disc.";
                     m_dbSprites.Clear();
                     DemoBorg();
+                    Point newLocation = m_dbSprite.Location;
+                    newLocation.Offset(0, 50);
+                    m_dbSprite.Location = newLocation;
                     m_dbSprites.Add(m_dbSprite);
                     m_dbSprites.Add(m_dbText);
                 }),
