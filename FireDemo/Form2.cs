@@ -317,26 +317,36 @@ namespace FireDemo
         {
             int ringWidth = 129;
             int ringHeight = 131;
-            int magnification = 2;
+            int magnification;
+            //magnification = 2;
             //fireWidth = 200;
             //fireHeight = 200;
-            magnification = 2;
+            magnification = 3;
             int left, top;
 
-            Color[] palBorg = PaletteGenerator.GetHardCodedBorgPalette();
-            palBorg = PalPlasma.New(Color.DarkViolet);
-            palBorg = PalPlasma.NewRaw(
-                Color.FromArgb(red: 0, green: 200, blue: 0),
-                Color.FromArgb(red: 200, green: 200, blue: 200));
-            palBorg = PalPlasma.NewRaw(
-                Color.FromArgb(red: 0, green: 128, blue: 255),
-                Color.FromArgb(red: 192, green: 192, blue: 255));
-            palBorg = PalPlasma.NewRaw(
-                Color.FromArgb(red: 0, green: 128, blue: 255),
-                Color.FromArgb(red: 224, green: 224, blue: 255));
+            Color[] palBorg;
+            //palBorg = PaletteGenerator.GetHardCodedBorgPalette()
+            //palBorg = PalPlasma.New(Color.DarkViolet);
+            //palBorg = PalPlasma.NewRaw(
+            //    Color.FromArgb(red: 0, green: 200, blue: 0),
+            //    Color.FromArgb(red: 200, green: 200, blue: 200));
+            //palBorg = PalPlasma.NewRaw(
+            //    Color.FromArgb(red: 0, green: 128, blue: 255),
+            //    Color.FromArgb(red: 192, green: 192, blue: 255));
+            //palBorg = PalPlasma.NewRaw(
+            //    Color.FromArgb(red: 0, green: 128, blue: 255),
+            //    Color.FromArgb(red: 224, green: 224, blue: 255));
             palBorg = PalPlasma.New(Color.Green);
 
-            ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
+            ICoolingStrategy coolingStrategy;
+            //coolingStrategy = new CoolingStrategyConst(7);
+            // Varying the density showed no improvement over constant cooling (for Plasma)
+            //m_coolingStrategy = new CoolingStrategyMap();
+            //m_coolingStrategy.SetMapParameters(width: ringWidth, height: ringHeight,
+            //    density: 1.0f, min: 10, max: 13, smoothing: 0,
+            //    shift: false, rotate: false);
+            //coolingStrategy = m_coolingStrategy;
+            coolingStrategy = new CoolingStrategyConst(11); // 11 looks better. Looks faster than 7
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
             ILightShape lsBorgRing = new LightShapeBorgRing();
             ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
@@ -789,52 +799,7 @@ namespace FireDemo
         private void buttonAvailableStatus_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            //DemoBorg();
-
-            int ringWidth = 129;
-            int ringHeight = 131;
-            int magnification = 2;
-            //ringWidth = 200;
-            //ringHeight = 200;
-            //ringWidth = 160;
-            //ringHeight = 162;
-            magnification = 3;
-            int left, top;
-
-            Color[] palBorg = PalPlasma.New(Color.Green);
-
-            ICoolingStrategy coolingStrategy;
-            //coolingStrategy = new CoolingStrategyConst(7);
-            // Varying the density showed no improvement over constant cooling (for Plasma)
-            //m_coolingStrategy = new CoolingStrategyMap();
-            //m_coolingStrategy.SetMapParameters(width: ringWidth, height: ringHeight,
-            //    density: 1.0f, min: 10, max: 13, smoothing: 0,
-            //    shift: false, rotate: false);
-            //coolingStrategy = m_coolingStrategy;
-            coolingStrategy = new CoolingStrategyConst(11); // 11 looks better. Looks faster than 7
-            ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
-            ILightShape lsBorgRing = new LightShapeBorgRing();
-            ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
-            lsBorgRing.SetPen(lpPlasma);
-            lsBorgPlasma.SetPen(lpPlasma);
-
-            RealtimeLightEffect dbPlasmaDisc = new RealtimeLightning();
-            dbPlasmaDisc.Initialize(ringWidth, ringHeight, magnification);
-            dbPlasmaDisc.SetCoolingStrategy(coolingStrategy);
-            dbPlasmaDisc.SetPalette(palBorg);
-            dbPlasmaDisc.AddShape(lsBorgPlasma);
-            dbPlasmaDisc.AddShape(lsBorgRing);
-            left = (this.Width - ringWidth * magnification) / 2;
-            top = (this.Height - ringHeight * magnification) / 2;
-            dbPlasmaDisc.Location = new Point(x: left, y: top);
-
-            m_palette = palBorg;
-            m_lightPen = lpPlasma;
-            m_lightShapes.Clear();
-            m_lightShapes.Add(lsBorgPlasma);
-            m_lightShapes.Add(lsBorgRing);
-            m_dbSprite = dbPlasmaDisc;
-
+            DemoBorg();
 
             m_dbSprites.Add(m_dbSprite);
             TextSprite text = new TextSprite
