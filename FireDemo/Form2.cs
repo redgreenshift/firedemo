@@ -1907,7 +1907,7 @@ namespace FireDemo
             lsCandle.SetPen(lpCandle);
 
             RealtimeLightEffect dbCandle;
-            dbCandle = big ? (RealtimeLightEffect)new RealtimeFire() : (RealtimeLightEffect)new RealtimeCandleflame();
+            dbCandle = big ? new RealtimeFire() : (RealtimeLightEffect)new RealtimeCandleflame();
             dbCandle.Initialize(fireWidth, fireHeight, magnification);
             dbCandle.SetCoolingStrategy(coolingStrategy);
             dbCandle.AddShape(lsCandle);

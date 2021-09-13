@@ -290,8 +290,12 @@ namespace FireDemo
             }
             else if (o == Orientation.Left || o == Orientation.Right)
             {
+                // The parameters passed in above are always the FINAL dimensions after rotation
+                // so initialize the internal buffers with whatever dimensions are needed to
+                // calculate the values before rotation.
                 base.Initialize(height, width, magnification);
                 intensityMatrix = new IntensityMap(height, width);
+                // now put the final dimensions back, as visible externally
                 Height = height;
                 Width = width;
             }
@@ -1283,7 +1287,8 @@ namespace FireDemo
         ///  - simple.
         ///  CONS:
         ///   - none.
-        ///   - Really don't want to use any other DynamicSprites at the same time?
+        ///   - Well, the one downside is it uses all the cores so I really
+        ///     don't want to use any other DynamicSprites at the same time.
         /// </summary>
         public RealtimeFireBatLogoOptimizedMT_ThreadPool()
         {
