@@ -13,8 +13,8 @@ namespace FireDemo
 		protected Bitmap Form { get; set; }
 		public int Height { get; protected set; }
 		public int Width { get; protected set; }
-		public int Magnification { get; set; }
-		public Point Location { get; set; }
+		public int Magnification = 1;
+		public Point Location;
 		public InterpolationMode InterpolationMode { get; set; }
 		public CompositingMode CompositingMode { get; set; }
 

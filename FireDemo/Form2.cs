@@ -1078,6 +1078,7 @@ namespace FireDemo
             {
                 Text = "It's dangerous to bother me!\nGO AWAY! (use email)",
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
+                SmoothTransition = true,
                 LocationRange = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
@@ -1224,7 +1225,8 @@ namespace FireDemo
 
             // DEMO:
             // 1. Squeak Palette
-            // 2. Constant Cooling
+            // 2. Constant Cooling (good enough for a proof-of-concept)
+            // Bilinear interpolation (default in C#):
             // 3. Better 4 point linear palette
             // 4. Cooling Map
             // 5. Shifting Cooling Map (looks more natural)
@@ -1235,6 +1237,7 @@ namespace FireDemo
             // 10. Lightning
             // 11. Borg Plasma
             // 12. Hero Cave
+            // Bicubic interpolation:
             // 13. Sauron
 
             TextSprite text = new TextSprite
@@ -1255,6 +1258,7 @@ namespace FireDemo
         int m_iDemoHistoryState = 0;
         private void ThreadCallbackFireHistoryDemo(object state)
         {
+            Rectangle fullRange = new Rectangle(0, 0, 50, 75);
             //Func<int>[] variousStages =
             Action[] variousStages =
             {
@@ -1270,11 +1274,10 @@ namespace FireDemo
                     int left = (this.Width - fireWidth * magnification) / 2;
                     int top = (this.Height - fireHeight * magnification);
                     m_dbSprite.Location = new Point(left, top);
-                    m_dbText.LocationPeriod = TimeSpan.Zero;
-                    m_dbText.Location = new Point(0, 0);
                     m_dbText.Text = "...in 2001, I wrote a prototype when someone\n" +
                     "said, \"Smalltalk is too slow for realtime fire\n" +
                     "generation.\" And I just had to prove them wrong.";
+                    m_dbText.SetLocationParameters(newLocation: Point.Empty, range: fullRange);
                     m_dbText.Color = Color.Red;
                     m_dbSprites.Add(m_dbSprite); // Add the candle
                     m_dbSprites.Add(m_dbText); // Add the text sprite
@@ -1288,7 +1291,11 @@ namespace FireDemo
                     m_dbText.Text = "I liked the result, even with plain constant cooling.\n" +
                     "The palette isn't great, but it's a proof-of-concept.";
                     // "(Flat 2-point linear palette algorithm)"
-                    m_dbText.LocationPeriod = TimeSpan.FromSeconds(10);
+                    Rectangle partialRange = new Rectangle(fullRange.Location, fullRange.Size) { Width = 0 };
+                    m_dbText.SetLocationParameters(newLocation: new Point(0, partialRange.Height),
+                        smoothTransition: true,
+                        period: TimeSpan.FromSeconds(10),
+                        range: partialRange);
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                 }),
                 new Action(() =>
@@ -1298,6 +1305,7 @@ namespace FireDemo
                     m_dbText.Text = "In blue, it really reminds me of the flame\n" +
                     "of a propane grill that I watched as a child\n" +
                     "while my dad cooked burgers.";
+                    m_dbText.SetLocationParameters(range: fullRange);
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                     m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalFlatPalette.New(color)));
                 }),
@@ -1325,6 +1333,7 @@ namespace FireDemo
                     // 
                     // So far only changed the palette, therefore Smalltalk is fast enough to run the algorithm from 15 years prior.
                     // Still the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!
+                    m_dbText.SetLocationParameters(newLocation: Point.Empty);
                     m_dbText.Color = Color.OrangeRed;
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
@@ -1361,7 +1370,7 @@ namespace FireDemo
                     m_dbText.Text = "...ANY color!";
                     m_dbText.Font = new Font(m_dbText.Font, FontStyle.Italic);
                     m_dbText.Color = Color.SkyBlue;
-                    m_dbText.LocationRange = m_dbText.LocationRange;
+                    //m_dbText.LocationRange = m_dbText.LocationRange;
                     m_dbSprites.Clear();
                     m_dbSprites.AddRange(CreateRainbowFlames(fBigRainbowFire: false));
                     m_dbSprites.Add(m_dbText);
@@ -1544,7 +1553,7 @@ namespace FireDemo
             dbLightningBolt.Location = new Point(xOffset, yOffset);
             dbLightningBolt.LocationRange = new Rectangle(x: xOffset, y: size.Height / 4, width: 0, height: size.Height / 2);
             dbLightningBolt.LocationPeriod = TimeSpan.FromMilliseconds(100);
-            //dbLightningBolt.SmoothTransition = false;
+            dbLightningBolt.SmoothTransition = false;
             //else
             //    dbLightningBolt.Location = new Point(xOffset, 0);
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
@@ -1821,6 +1830,7 @@ namespace FireDemo
             RealtimeSplitFire dbSauron = new RealtimeSplitFire
             {
                 Inward = false,
+                LocationStep = magnification,
                 LocationPeriod = isNarrow ? TimeSpan.FromMilliseconds(1000) : TimeSpan.Zero,
                 LocationRange = new Rectangle(x: xLocation - lookWidth / 2, y: 0 - lookWidth / 4, width: lookWidth, height: lookWidth / 2),
             };

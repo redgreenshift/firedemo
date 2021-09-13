@@ -32,9 +32,13 @@ namespace FireDemo
         private Rectangle locationRange;
 
         /// <summary>
-        ///  How often to move the <see cref="SimpleSprite.Location" />. If <see cref="TimeSpan.Zero" />, do not move.
+        ///  How often to move the <see cref="SimpleSprite.Location" />. If <see cref="TimeSpan.Zero" />, do not move unless a newLocation is manually set.
         /// </summary>
-        public TimeSpan LocationPeriod { get; set; }
+        public TimeSpan LocationPeriod;
+        /// <summary>
+        /// How fast to move when transitioning
+        /// </summary>
+        public int LocationStep = 1;
 
 
         public DynamicSprite(Random r)
@@ -59,36 +63,77 @@ namespace FireDemo
 
         private DateTime lastMove = DateTime.MinValue;
         protected Point lastLocation = Point.Empty;
-        private bool SmoothTransition = true;
-        protected Point OriginalLocation;
-        protected Point FinalLocation;
-        // Declare a delegate.
-        //delegate void UpdateLocationCallback_t(Graphics graph);
+        public bool SmoothTransition = true;
+        public Point FinalLocation = new Point(x: -1, y: -1);
+
+        /// <summary>
+        /// Handles setting the various location related members in the correct order
+        /// </summary>
+        /// <param name="newLocation"></param>
+        /// <param name="smoothTransition"></param>
+        /// <param name="period"></param>
+        /// <param name="range"></param>
+        public void SetLocationParameters(
+            Point? newLocation = null,
+            bool? smoothTransition = null,
+            TimeSpan? period = null,
+            Rectangle? range = null)
+        {
+            if (smoothTransition.HasValue)
+                SmoothTransition = smoothTransition.Value;
+
+            if (newLocation != null)
+            {
+                lastMove = DateTime.Now;
+                if (!SmoothTransition)
+                {
+                    Location = newLocation.Value;
+                }
+                else
+                {
+                    FinalLocation = newLocation.Value;
+                }
+            }
+
+            if (range != null)
+                locationRange = range.Value; // set internal locationRange so we do NOT change the Location
+
+            if (period != null)
+                LocationPeriod = period.Value;
+        }
 
         /// <summary>
         /// After a random amount of time less than <see cref="LocationPeriod" />,
         /// moves <see cref="SimpleSprite.Location" /> to a random position within <see cref="LocationRange" />.
+        /// 
+        /// If <see cref="FinalLocation" /> was set previously, moves one step closer to the <see cref="FinalLocation" />.
         /// </summary>
         /// <returns>TRUE if the location changed; FALSE otherwise.</returns>
         protected bool PeriodicallyUpdateLocation()
         {
             bool changed = false;
-            if (LocationPeriod == TimeSpan.Zero)
-                return false; // nothing to do
 
-            DateTime thisTime = DateTime.Now;
-            lastLocation = Location;
-            if (lastMove < thisTime - LocationPeriod)
+            if (LocationPeriod != TimeSpan.Zero)
             {
-                changed = true;
-                lastMove = thisTime;
-                FinalLocation = new Point(
-                    x: LocationRange.Left + rng.Next(LocationRange.Width),
-                    y: LocationRange.Top + rng.Next(LocationRange.Height));
+                DateTime thisTime = DateTime.Now;
+                lastLocation = Location;
+                if (lastMove < thisTime - LocationPeriod)
+                {
+                    lastMove = thisTime;
+                    FinalLocation = new Point(
+                        x: LocationRange.Left + rng.Next(LocationRange.Width),
+                        y: LocationRange.Top + rng.Next(LocationRange.Height));
+                }
             }
 
+            if (FinalLocation.X < 0)
+                return false; // nothing to do
+
             if (!SmoothTransition)
+            {
+                changed = Location != FinalLocation;
                 Location = FinalLocation;
+            }
 
             if (Location != FinalLocation)
             {
@@ -97,17 +142,23 @@ namespace FireDemo
 
                 if (x != FinalLocation.X)
                 {
-                    if (x < FinalLocation.X)
-                        ++x;
+                    // If the distance is less than step, then DONE! (set to final)
+                    if (Math.Abs(x - FinalLocation.X) <= LocationStep)
+                        x = FinalLocation.X;
+                    else if (x < FinalLocation.X)
+                        x += LocationStep;
                     else
-                        --x;
+                        x -= LocationStep;
                 }
                 if (y != FinalLocation.Y)
                 {
-                    if (y < FinalLocation.Y)
-                        ++y;
+                    // If the distance is less than step, then DONE! (set to final)
+                    if (Math.Abs(y - FinalLocation.Y) <= LocationStep)
+                        y = FinalLocation.Y;
+                    else if (y < FinalLocation.Y)
+                        y += LocationStep;
                     else
-                        --y;
+                        y -= LocationStep;
                 }
                 Location = new Point(x: x, y: y);
                 changed = true;
