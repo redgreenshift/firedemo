@@ -1890,9 +1890,9 @@ namespace FireDemo
             ICoolingStrategy coolingStrategy;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
-                //density: 0.4f, min: 5, max: 13, smoothing: 5,
+                density: 0.4f, min: 5, max: 13, smoothing: 5,
                 //density: 0.3f, min: 5, max: 23, smoothing: 5,
-                density: 0.2f, min: 5, max: 29, smoothing: 5,
+                //density: 0.2f, min: 5, max: 29, smoothing: 5,
                 shift: true, rotate: true);
             coolingStrategy = m_coolingStrategy;
 
