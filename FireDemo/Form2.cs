@@ -1566,7 +1566,19 @@ namespace FireDemo
 
 
             // TODO: JRDV: If this works, then DELETE the HiRez stuff!!! Just layer the small lightning over top HERE!
-            // It seems faster than the resized stuff, but at least no worse than doing it the more complicated way
+            // It seems faster than the resized stuff, but at least no worse than doing it the more complicated way.
+            // It's still 39-46 FPS, EVEN with NO additional lightning!
+            // So this method of nesting LayeredSprites is a bit slower than the v3.5 method,
+            // so maybe I don't want to pursue this line...
+            //
+            // What am I trying to solve?
+            // 1) blinking in Windows (not a problem on Pi device)
+            // 2) would like more varied smaller bolts (prototypes look bad)
+            //
+            // Time would be better spent:
+            // 1) making the TOWER
+            // 2) Parameterize the lightning code so I can rotate bolts and
+            //      vary the forking and frequency more easily.
             LayeredSprite db2 = new LayeredSprite();
             db2.Initialize(dbSauron.Width * dbSauron.Magnification, dbSauron.Height * dbSauron.Magnification, 1);
             db2.Add(dbSauron);
