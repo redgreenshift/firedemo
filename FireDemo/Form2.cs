@@ -1352,7 +1352,7 @@ namespace FireDemo
                     m_coolingStrategy = new CoolingStrategyMap();
                     m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
                         density: 0.4f, min: 5, max: 13, smoothing: 5,
-                        shift: true, rotate: false);
+                        shift: true, rotate: true);
                     coolingStrategy = m_coolingStrategy;
                     m_genericFlame.SetCoolingStrategy(coolingStrategy);
                 }),
