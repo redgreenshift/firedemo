@@ -1250,7 +1250,7 @@ namespace FireDemo
                 new TimerCallback(ThreadCallbackFireHistoryDemo),
                 null,
                 TimeSpan.FromSeconds(0),
-                TimeSpan.FromMilliseconds(10000));
+                TimeSpan.FromMilliseconds(5000));
 
             buttonDemo_Click(sender, e);
         }
@@ -1320,8 +1320,8 @@ namespace FireDemo
                     Color c2 = Color.FromArgb(255, 185, 0);   // Orange
                     Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
                     Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
-                    m_genericFlame.InterpolationMode = InterpolationMode.Default;
                     m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalFourPointLinear.New(c1, c2, c3, c4)));
+                    //m_genericFlame.InterpolationMode = InterpolationMode.Default;
                 }),
                 new Action(() =>
                 {
@@ -1335,15 +1335,19 @@ namespace FireDemo
                     // Still the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!
                     m_dbText.SetLocationParameters(newLocation: Point.Empty);
                     m_dbText.Color = Color.OrangeRed;
-                    if (Util.IsLinux)
-                        m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
-                    else
-                        m_genericFlame.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalRealisticFire.New()));
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "NOW with 15 additional years of processing power,\nI can generate a Cooling Map for improved realism...";
+                    m_dbText.Text = "NOW with 15 additional years of processing power,\nI can use bicubic interpolation, and...";
+                    if (Util.IsLinux)
+                        m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
+                    else
+                        m_genericFlame.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                }),
+                new Action(() =>
+                {
+                    m_dbText.Text = "...generate a Cooling Map for greatly improved realism.";
                     ICoolingStrategy coolingStrategy;
                     m_coolingStrategy = new CoolingStrategyMap();
                     m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
@@ -1352,11 +1356,11 @@ namespace FireDemo
                     coolingStrategy = m_coolingStrategy;
                     m_genericFlame.SetCoolingStrategy(coolingStrategy);
                 }),
-                new Action(() =>
-                {
-                    m_dbText.Text = "...and enable changing parameters on the fly.";
-                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
-                }),
+                //new Action(() =>
+                //{
+                //    m_dbText.Text = "...and enable changing parameters on the fly.";
+                //    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+                //}),
                 new Action(() =>
                 {
                     m_dbText.Text = "The generalized curved palette formula\nworks for arbitrary colors...";
@@ -1370,7 +1374,6 @@ namespace FireDemo
                     m_dbText.Text = "...ANY color!";
                     m_dbText.Font = new Font(m_dbText.Font, FontStyle.Italic);
                     m_dbText.Color = Color.SkyBlue;
-                    //m_dbText.LocationRange = m_dbText.LocationRange;
                     m_dbSprites.Clear();
                     m_dbSprites.AddRange(CreateRainbowFlames(fBigRainbowFire: false));
                     m_dbSprites.Add(m_dbText);
@@ -1404,9 +1407,7 @@ namespace FireDemo
                     m_dbText.Text = "...plasma for the Borg Alcove Regeneration Disc.";
                     m_dbSprites.Clear();
                     DemoBorg();
-                    Point newLocation = m_dbSprite.Location;
-                    newLocation.Offset(0, 50);
-                    m_dbSprite.Location = newLocation;
+                    m_dbSprite.Location.Offset(0, 50);
                     m_dbSprites.Add(m_dbSprite);
                     m_dbSprites.Add(m_dbText);
                 }),
@@ -1427,9 +1428,7 @@ namespace FireDemo
                         if (s.Location.Y > 200)
                             addY -= 50;
                         Point moveDown = new Point(0, addY);
-                        Point newPoint = s.Location;
-                        newPoint.Offset(moveDown);
-                        s.Location = newPoint;
+                        s.Location.Offset(moveDown);
                     }
                     m_dbSprites.Add(m_dbText);
                 }),
@@ -1448,7 +1447,11 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    // Let Sauron go for double length
+                    // Let Sauron go for double length, since I'm speeding up the demo
+                }),
+                new Action(() =>
+                {
+                    // Let Sauron go for extra
                     m_dbText.Text = "And now I use these graphics to communicate\nwhether or not I'm busy Working, all because...";
                 }),
                 //new Action(() =>
