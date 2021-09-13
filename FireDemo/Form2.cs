@@ -1270,9 +1270,11 @@ namespace FireDemo
                     int left = (this.Width - fireWidth * magnification) / 2;
                     int top = (this.Height - fireHeight * magnification);
                     m_dbSprite.Location = new Point(left, top);
-                    m_dbText.Text = "...in 2001, I wrote a prototype when someone\nsaid, \"Smalltalk is too slow for realtime fire\ngeneration.\" And I just had to prove them wrong.";
                     m_dbText.LocationPeriod = TimeSpan.Zero;
                     m_dbText.Location = new Point(0, 0);
+                    m_dbText.Text = "...in 2001, I wrote a prototype when someone\n" +
+                    "said, \"Smalltalk is too slow for realtime fire\n" +
+                    "generation.\" And I just had to prove them wrong.";
                     m_dbText.Color = Color.Red;
                     m_dbSprites.Add(m_dbSprite); // Add the candle
                     m_dbSprites.Add(m_dbText); // Add the text sprite
@@ -1283,7 +1285,9 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "I liked the result, even with plain constant cooling.\nThe palette isn't great, but it's a proof-of-concept.\n(2-point linear palette algorithm)";
+                    m_dbText.Text = "I liked the result, even with plain constant cooling.\n" +
+                    "The palette isn't great, but it's a proof-of-concept.";
+                    // "(Flat 2-point linear palette algorithm)"
                     m_dbText.LocationPeriod = TimeSpan.FromSeconds(10);
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                 }),
@@ -1291,13 +1295,18 @@ namespace FireDemo
                 {
                     Color color = Color.FromArgb(64, 128, 255); // LightBlue
                     m_dbText.Color = color;
-                    m_dbText.Text = "In blue, it really reminds me of the pilot light\nof a propane grill that I watched as a child\nwhile my dad grilled burgers.";
+                    m_dbText.Text = "In blue, it really reminds me of the flame\n" +
+                    "of a propane grill that I watched as a child\n" +
+                    "while my dad cooked burgers.";
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                     m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalFlatPalette.New(color)));
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "15 years later, I remembered the challenge,\nimproved the palettes and added more colors\n(4-point linear is better, but not quite realistic)";
+                    m_dbText.Text = "15 years later, I remembered the challenge,\n" +
+                    "improved the palettes and added more colors,\n" +
+                    "but it's not quite realistic enough, so I...";
+                    // "(4-point linear is better, but not quite realistic)"
                     m_dbText.Color = Color.DarkOrange;
                     Color c1 = Color.FromArgb(0, 0, 0);       // Black
                     Color c2 = Color.FromArgb(255, 185, 0);   // Orange
@@ -1308,7 +1317,14 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "Derived a palette formula curve for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
+                    //m_dbText.Text = "Derived a palette formula curve for realistic color.\nProved the algorithm is fast enough for Smalltalk.";
+                    //m_dbText.Text = "Derived a palette formula curve for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
+                    m_dbText.Text = "Derived a palette formula curve for realistic color.\n" +
+                    "This is only a palette change, further proving\n" +
+                    "Smalltalk was fast enough for realistic fire.";
+                    // 
+                    // So far only changed the palette, therefore Smalltalk is fast enough to run the algorithm from 15 years prior.
+                    // Still the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!
                     m_dbText.Color = Color.OrangeRed;
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
@@ -1318,7 +1334,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "...added a Cooling Map for improved realism";
+                    m_dbText.Text = "NOW with 15 additional years of processing power,\nI can generate a Cooling Map for improved realism...";
                     ICoolingStrategy coolingStrategy;
                     m_coolingStrategy = new CoolingStrategyMap();
                     m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
@@ -1329,12 +1345,12 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "...and enabled changing parameters on the fly.";
+                    m_dbText.Text = "...and enable changing parameters on the fly.";
                     m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "The curved palette formula works for \narbitrary colors...";
+                    m_dbText.Text = "The generalized curved palette formula\nworks for arbitrary colors...";
                     m_dbText.Color = Color.LightBlue;
                     m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalRealisticFlameCurve.New(Color.Blue)));
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
@@ -1424,7 +1440,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     // Let Sauron go for double length
-                    m_dbText.Text = "And now I use these graphics to communicate\nwhether I'm busy or not at Work, all because...";
+                    m_dbText.Text = "And now I use these graphics to communicate\nwhether or not I'm busy Working, all because...";
                 }),
                 //new Action(() =>
                 //{
