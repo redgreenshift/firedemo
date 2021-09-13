@@ -465,17 +465,8 @@ namespace FireDemo
             int fireWidth = 21;
             int fireHeight = 75;
             int magnification = 4;
-            int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
-            int left = buttonDemo.Location.X + buttonDemo.Size.Width;
-            // Clear the drawing region to eliminate artifacts from the previous flames
-            //Bitmap bmEmpty = new Bitmap(fireWidth, fireHeight, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            //Random rng = Util.NewRandom();
-
-            //for (int x = 0; x < maxWidth; ++x)
-            //    for (int y = 0; y < maxHeight; ++y)
-            //        bmEmpty.SetPixel(x, y, Color.FromArgb(rng.Next(255), rng.Next(255), rng.Next(255)));
-
-            //graph.DrawImage(bmEmpty, left, top, maxWidth*magnification, maxHeight * magnification);
+            int top;
+            int left;
 
             Color[] palCandle;
             //palCandle = PalRealisticFire.New();
@@ -483,13 +474,18 @@ namespace FireDemo
             //palCandle = PalRealisticFlameCurve.New(Color.White);
             //palCandle = PalRealisticFlameCurve.New(Color.Black);
             //palCandle = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.Blue);
+            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38)); // This looks good at low resolution in an 8bit video game (better than 4 point linear)
+            //palCandle = PalRealisticFlameCurve.New(Color.Maroon); // Color.Maroon == Color.FromArgb(128, 0, 0) not great
+            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1)); // Looks better as a "realistic" flame, not 8bit video game
 
-            Color c1 = Color.FromArgb(0, 0, 0);       // Black
-            Color c2 = Color.FromArgb(255, 185, 0);   // Orange
-            Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
-            Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
-            palCandle = PalFourPointLinear.New(c1, c2, c3, c4);
+            // Best, most realistic of 4-Point Linear method
+            //Color c1 = Color.FromArgb(0, 0, 0);       // Black
+            //Color c2 = Color.FromArgb(255, 185, 0);   // Orange
+            //Color c3 = Color.FromArgb(255, 255, 127); // Bright Yellow
+            //Color c4 = Color.FromArgb(212, 212, 255); // Light Blue
+            //palCandle = PalFourPointLinear.New(c1, c2, c3, c4);
 
+            palCandle = PalRealisticFire.New();
             //palCandle = PalLightning.New(Color.Yellow); // A way to test the lightning algorithm is to see how it looks in candle form
 
             ICoolingStrategy coolingStrategy;
@@ -696,53 +692,23 @@ namespace FireDemo
         private void buttonAwayStatus_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            //SimpleCandle();
-            int fireWidth = 21;
-            int fireHeight = 75;
-            int magnification = 7;
-            int top = buttonDemo.Location.Y + buttonDemo.Size.Height;
-            int left = buttonDemo.Location.X + buttonDemo.Size.Width;
+            SimpleCandle();
 
-            Color[] palCandle = PalRealisticFire.New();
-            //palCandle = PalFourPointLinear.New(Color.DarkOrange);
-            //palCandle = PalRealisticFlameCurve.New(Color.Black);
+            m_dbSprite.Magnification = 7;
+            int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
+            int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
+            m_dbSprite.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(m_dbSprite); // Add the candle
 
-            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38)); // This looks good at low resolution in an 8bit video game (better than 4 point linear)
-            //palCandle = PalRealisticFlameCurve.New(Color.Maroon); // Color.Maroon == Color.FromArgb(128, 0, 0) not great
-            //palCandle = PalRealisticFlameCurve.New(Color.FromArgb(255, 1, 1)); // Looks better as a "realistic" flame, not 8bit video game
-
-            ICoolingStrategy coolingStrategy;
-            m_coolingStrategy = new CoolingStrategyMap();
-            m_coolingStrategy.SetMapParameters(width: fireWidth, height: fireHeight,
-                //density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code
-                //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling)
+            m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
+                density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
+                //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
                 //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
-                density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo
+                //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                 shift: true, rotate: true);
-            coolingStrategy = m_coolingStrategy;
 
-            ILightPen lpCandle = new LightPen(fill: 0.08f, min: 54, max: 255, useFullRange: true);
-            ILightShape lsCandle = new LightShapeCandle();
-            lsCandle.SetPen(lpCandle);
-
-            RealtimeLightEffect dbCandle;
-            m_genericFlame = new GenericRealtimeFlame();
             m_largerFlame = true;
             m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-            dbCandle = m_genericFlame;
-            dbCandle.Initialize(fireWidth, fireHeight, magnification);
-            dbCandle.SetCoolingStrategy(coolingStrategy);
-            dbCandle.SetPalette(palCandle);
-            dbCandle.AddShape(lsCandle);
-            left = (this.Width - fireWidth * magnification) / 2;
-            top = (this.Height - fireHeight * magnification);
-            dbCandle.Location = new Point(x: left, y: top);
-
-            m_palette = palCandle;
-            m_lightPen = lpCandle;
-            m_lightShapes.Clear();
-            m_lightShapes.Add(lsCandle);
-            m_dbSprite = dbCandle;
 
             TextSprite tsAway = new TextSprite
             {
@@ -752,7 +718,6 @@ namespace FireDemo
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
-            m_dbSprites.Add(dbCandle);
             m_dbSprites.Add(tsAway);
 
             buttonDemo_Click(sender, e);
@@ -1827,7 +1792,7 @@ namespace FireDemo
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width, height,
                 density: 0.3f, min: 3, max: 15, smoothing: 1,
-                shift: true, rotate: false);
+                shift: true, rotate: false); // TODO: This may be worth the cost of rotating, since the pupil will likely be looked at more
             csSauron = m_coolingStrategy;
             lsPupil.SetPen(lpSauronEye);
             RealtimeSplitFire dbSauron = new RealtimeSplitFire
