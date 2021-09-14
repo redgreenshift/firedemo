@@ -373,7 +373,8 @@ namespace FireDemo
 
                         isFirstIteration = false;
 
-                        canvas.SetPixelPrevious(eachx, y, 255); // TODO: JRDV: Should some bolts start dimmer? No.
+                        if (pen.FShouldDrawNext())
+                            canvas.SetPixelPrevious(eachx, y, pen.NextValue());
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
@@ -451,17 +452,20 @@ namespace FireDemo
                         int xRender = (int)(xTemp * Math.Cos(rotationAngle) - yTemp * Math.Sin(rotationAngle)) + xCenter;
                         int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
 
-                        canvas.SetPixelPrevious(xRender, yRender, 255);
-                        // Hacky prototype of wider bolts. Probably want something nicer.
-                        // Want to also implment TEXT
-                        if (width >= 2)
-                            canvas.SetPixelPrevious(xRender + 1, yRender + 1, 255);
-                        if (width >= 3)
-                            canvas.SetPixelPrevious(xRender - 1, yRender - 1, 255);
-                        if (width >= 4)
-                            canvas.SetPixelPrevious(xRender + 1, yRender - 1, 255);
-                        if (width >= 5)
-                            canvas.SetPixelPrevious(xRender - 1, yRender + 1, 255);
+                        if (pen.FShouldDrawNext())
+                        {
+                            int intensity = pen.NextValue();
+                            canvas.SetPixelPrevious(xRender, yRender, intensity);
+                            // Hacky prototype of wider bolts. Probably want something nicer.
+                            if (width >= 2)
+                                canvas.SetPixelPrevious(xRender + 1, yRender + 1, intensity);
+                            if (width >= 3)
+                                canvas.SetPixelPrevious(xRender - 1, yRender - 1, intensity);
+                            if (width >= 4)
+                                canvas.SetPixelPrevious(xRender + 1, yRender - 1, intensity);
+                            if (width >= 5)
+                                canvas.SetPixelPrevious(xRender - 1, yRender + 1, intensity);
+                        }
                     } while (eachx != x);
 
                     nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
