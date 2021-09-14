@@ -1215,12 +1215,13 @@ namespace FireDemo
             timer2 = new System.Threading.Timer(
                 new TimerCallback(ThreadCallbackFireHistoryDemo),
                 null,
-                TimeSpan.FromSeconds(0),
-                TimeSpan.FromMilliseconds(5000));
+                TimeSpan.Zero,
+                historyDemoPeriod);
 
             buttonDemo_Click(sender, e);
         }
 
+        TimeSpan historyDemoPeriod = TimeSpan.FromMilliseconds(6000);
         int m_iDemoHistoryState = 0;
         private void ThreadCallbackFireHistoryDemo(object state)
         {
@@ -1230,6 +1231,7 @@ namespace FireDemo
             {
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_graph.Clear(Color.Black);
                     m_dbSprites.Clear();
                     SimpleCandle();
@@ -1254,18 +1256,20 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_dbText.Text = "I liked the result, even with plain constant cooling.\n" +
                     "The palette isn't great, but it's a proof-of-concept.";
                     // "(Flat 2-point linear palette algorithm)"
                     Rectangle partialRange = new Rectangle(fullRange.Location, fullRange.Size) { Width = 0 };
                     m_dbText.SetLocationParameters(newLocation: new Point(0, partialRange.Height),
                         smoothTransition: true,
-                        period: TimeSpan.FromSeconds(10),
+                        period: historyDemoPeriod,
                         range: partialRange);
                     m_genericFlame.SetCoolingStrategy(new CoolingStrategyConst(2));
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     Color color = Color.FromArgb(64, 128, 255); // LightBlue
                     m_dbText.Color = color;
                     m_dbText.Text = "In blue, it really reminds me of the flame\n" +
@@ -1277,6 +1281,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_dbText.Text = "15 years later, I remembered the challenge,\n" +
                     "improved the palettes and added more colors,\n" +
                     "but it's not quite realistic enough, so I...";
@@ -1291,6 +1296,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     //m_dbText.Text = "Derived a palette formula curve for realistic color.\nProved the algorithm is fast enough for Smalltalk.";
                     //m_dbText.Text = "Derived a palette formula curve for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
                     m_dbText.Text = "Derived a palette formula curve for realistic color.\n" +
@@ -1305,7 +1311,9 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    m_dbText.Text = "NOW with 15 additional years of processing power,\nI can use bicubic interpolation, and...";
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_dbText.Text = "NOW with 15 additional years of processing power,\n" +
+                    "I can use bicubic interpolation, and...";
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
                     else
@@ -1313,6 +1321,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_dbText.Text = "...generate a Cooling Map for greatly improved realism.";
                     ICoolingStrategy coolingStrategy;
                     m_coolingStrategy = new CoolingStrategyMap();
@@ -1324,11 +1333,13 @@ namespace FireDemo
                 }),
                 //new Action(() =>
                 //{
+                //    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                 //    m_dbText.Text = "...and enable changing parameters on the fly.";
                 //    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
                 //}),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_dbText.Text = "The generalized curved palette formula\nworks for arbitrary colors...";
                     m_dbText.Color = Color.LightBlue;
                     m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalRealisticFlameCurve.New(Color.Blue)));
@@ -1336,6 +1347,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "...ANY color!";
                     m_dbText.Font = new Font(m_dbText.Font, FontStyle.Italic);
@@ -1346,6 +1358,7 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "From there, I wanted to create SHAPES\nout of the fire!";
                     m_dbText.Font = new Font(m_dbText.Font, FontStyle.Regular);
@@ -1357,6 +1370,10 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    TimeSpan tsMax = TimeSpan.FromSeconds(3);
+                    TimeSpan tsHalf = TimeSpan.FromTicks(historyDemoPeriod.Ticks / 2);
+                    TimeSpan ts = tsHalf.CompareTo(tsMax) < 0 ? tsHalf : tsMax;
+                    timer2.Change(ts, TimeSpan.Zero);
                     m_graph.Clear(Color.Black);
                     m_dbText.Color = Color.LightCyan;
                     m_dbText.Text = "Then I had an idea for lightning,\nwhich was just a step toward making...";
@@ -1368,9 +1385,15 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_dbText.Color = Color.LightGreen;
                     m_graph.Clear(Color.Black);
                     m_dbText.Text = "...plasma for the Borg Alcove Regeneration Disc.";
+                    // Reset the text period timer so it randomly moves
+                    // as the pictures change.
+                    m_dbText.SetLocationParameters(
+                        newLocation: Point.Empty,
+                        period: historyDemoPeriod);
                     m_dbSprites.Clear();
                     DemoBorg();
                     m_dbSprite.Location.Offset(0, 50);
@@ -1379,8 +1402,10 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "And then took all these pieces from the previous\niterations to refactor and recombine them into...";
+                    m_dbText.Text = "And then took all these pieces from the previous\n" +
+                    "iterations to refactor and recombine them into...";
                     m_dbText.Color = Color.LightSkyBlue;
                     // Demo RainBORG
                     m_dbSprites.Clear();
@@ -1400,6 +1425,8 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
+                    // Let Sauron go for double length, since I'm speeding up the demo
+                    timer2.Change(historyDemoPeriod.Add(historyDemoPeriod), TimeSpan.Zero);
                     m_dbText.Color = Color.OrangeRed;
                     LayeredSprite dbEyeOfSauron = CreateEyeOfSauronV3();
                     int left = (this.Width - dbEyeOfSauron.Width * dbEyeOfSauron.Magnification) / 2;
@@ -1413,15 +1440,14 @@ namespace FireDemo
                 }),
                 new Action(() =>
                 {
-                    // Let Sauron go for double length, since I'm speeding up the demo
-                }),
-                new Action(() =>
-                {
                     // Let Sauron go for extra
-                    m_dbText.Text = "And now I use these graphics to communicate\nwhether or not I'm busy Working, all because...";
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_dbText.Text = "And now I use these graphics to communicate\n" +
+                    "whether or not I'm busy Working, all because...";
                 }),
                 //new Action(() =>
                 //{
+                //  timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                 //}),
             };
 
