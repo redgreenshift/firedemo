@@ -1569,7 +1569,7 @@ namespace FireDemo
             else
                 xOffset = size.Width - lightWidth * magnification;
 
-            LightPen lpLightning = new LightPen(fill: 1, 200, 255, useFullRange: true);
+            LightPen lpLightning = new LightPen(fill: 1, 255, 255, useFullRange: false);
             LightShapeLightning lsBolt = new LightShapeLightning();
             ICoolingStrategy csSauron = new CoolingStrategyConst(27);
             lsBolt.SetPen(lpLightning);
@@ -1751,7 +1751,7 @@ namespace FireDemo
             if (left)
                 xOffset = xCenter - lightWidth * magnification;
 
-            LightPen lpLightning = new LightPen(fill: 1, 200, 255, useFullRange: true);
+            LightPen lpLightning = new LightPen(fill: 1, 127, 255, useFullRange: true);
             LightShapeLightning lsBolt = new LightShapeLightning();
             ICoolingStrategy csSauron = new CoolingStrategyConst(27);
             lsBolt.SetPen(lpLightning);
