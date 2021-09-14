@@ -1189,6 +1189,37 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
 
+            // 2001 - I started this project because someone said Smalltalk was too slow for realtime fire generation.
+            // I remembered seeing a fire algorithm earlier that just averaged a few pixels and ended up creating
+            // something that looked pretty realistic. Sadly, I couldn't find the code anymore, so I played
+            // around with averaging different pixels until I figured out something that looked ok.
+            // I came up with a proof of concept and was reasonably happy with what I created.
+            // Proving that Smalltalk was fast "enough."
+            //
+            // 2015/2016 - When thinking about FHL ideas, I remembered that fun project from years ago and wanted
+            // to extend it to create a toy program. The goals were twofold.
+            // 1) create more realistic fire.
+            // 2) allow changing all the parameters at runtime, via UI, so I could quickly see the differences
+            // when averaging different pixels, and change the color too.
+            // I remembered that project and wanted to try to make the fire look even more realistic.
+            // I generated a better palette, and added cooling maps.
+            // And created an even *better* palette... (NEW SLIDE)
+            //
+            // 2020 - Then I wanted to create fire in fun shapes, like the Batman Logo. (NEW SLIDE)
+            // Purchased a Raspberry Pi device kit, learned Linux, well started anyway.
+            //
+            // 2020/2021? Then I had the idea to create a Borg Regeneration Ring.
+            // Starting with lightning (SLIDE), I then progressed to the Plasma Disc (SLIDE).
+            //
+            // 2021 - the code was getting cumbersome and needed to be refactored
+            // (one "boring" FHL refactoring in Smalltalk, and another porting the changes to C#,
+            // but this sped up future development)
+            //
+            // 2021 - the Eye of Sauron (SLIDE)
+            //
+            // All because someone said realtime fire was impossible in Smalltalk.
+
+
             // DEMO:
             // 1. Squeak Palette
             // 2. Constant Cooling (good enough for a proof-of-concept)
@@ -1554,7 +1585,9 @@ namespace FireDemo
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
 
-            // TODO: Remove the second set after parametrizing the lightning, so I can increase the frequency
+            // This one I may want to remove the second set after eventually parametrizing the lightning,
+            // so we can have more small bolts, but don't clutter them with too many at the same time,
+            // but the v3.6 isn't looking as good as v3.5 so I may stop at 3.5 and stop developing v3.6
             dbLightningBolt.AddShape(lsBolt);
             dbLightningBolt.AddShape(lsBolt);
 
@@ -1730,6 +1763,9 @@ namespace FireDemo
                 dbLightningBolt.Location = new Point(xCenter, 0);
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
+
+            // I think I like this doubling, even after eventually parametrizing the lightning,
+            // so we can sometimes have double the bolts in the same frame
             dbLightningBolt.AddShape(lsBolt);
             dbLightningBolt.AddShape(lsBolt);
 
