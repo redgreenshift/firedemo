@@ -1044,6 +1044,7 @@ namespace FireDemo
                 Text = "It's dangerous to bother me!\nGO AWAY! (use email)",
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
                 SmoothTransition = true,
+                Location = new Point(x: 32, y: dangerY),
                 LocationRange = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };

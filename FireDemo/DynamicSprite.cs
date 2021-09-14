@@ -20,16 +20,7 @@ namespace FireDemo
         /// 
         /// This is ignored if <see cref="LocationPeriod" /> is <see cref="TimeSpan.Zero" />
         /// </summary>
-        public Rectangle LocationRange
-        {
-            get => locationRange;
-            set
-            {
-                locationRange = value;
-                Location = new Point(value.X, value.Y);
-            }
-        }
-        private Rectangle locationRange;
+        public Rectangle LocationRange;
 
         /// <summary>
         ///  How often to move the <see cref="SimpleSprite.Location" />. If <see cref="TimeSpan.Zero" />, do not move unless a newLocation is manually set.
@@ -39,6 +30,7 @@ namespace FireDemo
         /// How fast to move when transitioning
         /// </summary>
         public int LocationStep = 1;
+        public bool SmoothTransition = true;
 
 
         public DynamicSprite(Random r)
@@ -59,12 +51,6 @@ namespace FireDemo
         {
             thePalette = pal;
         }
-
-
-        private DateTime lastMove = DateTime.MinValue;
-        protected Point lastLocation = Point.Empty;
-        public bool SmoothTransition = true;
-        public Point FinalLocation = new Point(x: -1, y: -1);
 
         /// <summary>
         /// Handles setting the various location related members in the correct order
@@ -95,13 +81,23 @@ namespace FireDemo
                 }
             }
 
+            // NOTE: if Location is not within LocationRange, should we change it? We used to,
+            // but I'm thinking Keep It Simple. Don't auto move it here. Caller can set it.
+            // If the caller explicitly specifies something outside the range, LET THEM!
+            // The problem was when we did NOT want to auto move it, caller couldn't opt out
+            // when modifying the range, this limited the caller's options, which was part of
+            // the motivation of writing SetLocationParameters.
+            // Then in PeriodicallyUpdateLocation we'll of course honor the range.
             if (range != null)
-                locationRange = range.Value; // set internal locationRange so we do NOT change the Location
+                LocationRange = range.Value;
 
             if (period != null)
                 LocationPeriod = period.Value;
         }
 
+        private DateTime lastMove = DateTime.MinValue;
+        protected Point lastLocation = Point.Empty;
+        protected Point FinalLocation = new Point(x: -1, y: -1);
         /// <summary>
         /// After a random amount of time less than <see cref="LocationPeriod" />,
         /// moves <see cref="SimpleSprite.Location" /> to a random position within <see cref="LocationRange" />.
