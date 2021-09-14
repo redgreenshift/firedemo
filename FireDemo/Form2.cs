@@ -1517,7 +1517,7 @@ namespace FireDemo
             ICoolingStrategy csSauron = new CoolingStrategyConst(27);
             lsBolt.SetPen(lpLightning);
             RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
-            RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
+            RotateFlipType direction = left ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone;
             //if (left)
             dbLightningBolt.Location = new Point(xOffset, yOffset);
             dbLightningBolt.LocationRange = new Rectangle(x: xOffset, y: size.Height / 4, width: 0, height: size.Height / 2);
@@ -1697,7 +1697,7 @@ namespace FireDemo
             ICoolingStrategy csSauron = new CoolingStrategyConst(27);
             lsBolt.SetPen(lpLightning);
             RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
-            RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
+            RotateFlipType direction = left ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone;
             if (left)
                 dbLightningBolt.Location = new Point(xOffset, 0);
             else
@@ -1767,7 +1767,7 @@ namespace FireDemo
             csSauron = m_coolingStrategy;
             lsFireStick.SetPen(lpSauronBackground);
             GenericRealtimeFlame dbSauron = new GenericRealtimeFlame();
-            RealtimeLightEffect.Orientation direction = left ? RealtimeLightEffect.Orientation.Left : RealtimeLightEffect.Orientation.Right;
+            RotateFlipType direction = left ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone;
             if (left)
                 dbSauron.Location = new Point(xOffset, 0);
             else

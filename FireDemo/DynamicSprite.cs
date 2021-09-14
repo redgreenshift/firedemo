@@ -301,41 +301,32 @@ namespace FireDemo
 
     abstract class RealtimeLightEffect : DynamicSprite
     {
-        // TODO: JRDV: Consider moving the Direction/Orientation code to a base class DynamicSprite
-        // or even SimpleSprite, so the rotation logic can be shared.
-        public enum Orientation
-        {
-            Up,
-            Down,
-            Left,
-            Right,
-        }
-
-
         protected IntensityMap intensityMatrix;
         protected ICoolingStrategy coolingStrategy;
         List<ILightShape> lightShapes;
-        protected Orientation Direction { get; set; }
-
-        public RealtimeLightEffect()
-        {
-            Direction = Orientation.Up;
-        }
+        /// <summary>
+        /// Specifies how much the sprite is rotated and in what way it's flipped before rendering.
+        /// </summary>
+        /// <returns>One of the <see cref="RotateFlipType"/> values.</returns>
+        protected RotateFlipType rotateFlipType { get; set; }
 
         public override void Initialize(int width, int height, int magnification)
         {
-            Initialize(width, height, magnification, Orientation.Up);
+            Initialize(width, height, magnification, RotateFlipType.RotateNoneFlipNone);
         }
 
-        public void Initialize(int width, int height, int magnification, Orientation o)
+        public void Initialize(int width, int height, int magnification, RotateFlipType rtype)
         {
-            Direction = o;
-            if (o == Orientation.Up || o == Orientation.Down)
+            rotateFlipType = rtype;
+            if (rtype == RotateFlipType.RotateNoneFlipNone
+                || rtype == RotateFlipType.Rotate180FlipNone
+                || rtype == RotateFlipType.Rotate180FlipY
+                || rtype == RotateFlipType.RotateNoneFlipY)
             {
                 base.Initialize(width, height, magnification);
                 intensityMatrix = new IntensityMap(Width, Height);
             }
-            else if (o == Orientation.Left || o == Orientation.Right)
+            else
             {
                 // The parameters passed in above are always the FINAL dimensions after rotation
                 // so initialize the internal buffers with whatever dimensions are needed to
@@ -362,10 +353,21 @@ namespace FireDemo
 
         private void DrawAndRotate(Graphics graph)
         {
-            if (Direction == Orientation.Up)
+            if (rotateFlipType == RotateFlipType.RotateNoneFlipNone)
                 base.RenderOneFrameToScreen(graph);
             else
             {
+#if true
+                Bitmap bmTemp = Form;
+                using (Bitmap bmRotatedForm = new Bitmap(bmTemp))
+                {
+                    // Temporarily swap out the Form to draw it rotated
+                    bmRotatedForm.RotateFlip(rotateFlipType);
+                    Form = bmRotatedForm;
+                    base.RenderOneFrameToScreen(graph);
+                    Form = bmTemp;
+                }
+#else
                 // Instead of crteating a new temporary bitmap, and then rotate that, it seems
                 // to be consistently faster to rotate the bitmap in-place, (**DEBATABLE)
                 // and then rotate/flip it back when done. (stays at 60 instead of sometimes dipping to 50-55)
@@ -379,35 +381,55 @@ namespace FireDemo
                 // further testing was inconclusive, as the framerate stopped dipping for the copy,
                 // so I can't conclusively say the new way never dips fps.
                 // Keep the prototype commented so I can investigate more later.
-                Bitmap bmTemp = Form;
-                using (Bitmap bmRotatedForm = new Bitmap(bmTemp))
+                RotateFlipType inverse;
+                switch (rotateFlipType)
                 {
-                    RotateFlipType type;
-                    //RotateFlipType inverse;
-                    if (Direction == Orientation.Left)
-                    {
-                        type = RotateFlipType.Rotate270FlipNone; /* Rotate90FlipX? */
-                        //inverse = RotateFlipType.Rotate90FlipNone;
-                    }
-                    else if (Direction == Orientation.Right)
-                    {
-                        type = RotateFlipType.Rotate90FlipNone;
-                        //inverse = RotateFlipType.Rotate270FlipNone;
-                    }
-                    else // Orientation.Down
-                    {
-                        type = RotateFlipType.Rotate180FlipNone;
-                        //inverse = type;
-                    }
+                    default:
+                    case RotateFlipType.RotateNoneFlipNone: // Up
+                    //case RotateFlipType.Rotate180FlipXY = 0:
+                        inverse = RotateFlipType.RotateNoneFlipNone;
+                        break;
+                    case RotateFlipType.Rotate90FlipNone: // Right
+                    //case RotateFlipType.Rotate270FlipXY = 1:
+                        inverse = RotateFlipType.Rotate270FlipNone;
+                        break;
 
-                    // Temporarily swap out the Form to draw it rotated
-                    bmRotatedForm.RotateFlip(type);
-                    Form = bmRotatedForm;
-                    //Form.RotateFlip(type);
-                    base.RenderOneFrameToScreen(graph);
-                    //Form.RotateFlip(inverse);
-                    Form = bmTemp;
+                    case RotateFlipType.Rotate180FlipNone: // Down
+                    //case RotateFlipType.RotateNoneFlipXY = 2,
+                        inverse = RotateFlipType.Rotate180FlipNone;
+                        break;
+
+                    case RotateFlipType.Rotate270FlipNone: // Left
+                    //case RotateFlipType.Rotate90FlipXY = 3,
+                        inverse = RotateFlipType.Rotate90FlipNone;
+                        break;
+
+                    case RotateFlipType.RotateNoneFlipX:
+                    //case RotateFlipType.Rotate180FlipY = 4,
+                        inverse = RotateFlipType.RotateNoneFlipX;
+                        break;
+
+                    case RotateFlipType.Rotate90FlipX:
+                    //case RotateFlipType.Rotate270FlipY = 5,
+                        inverse = RotateFlipType.Rotate270FlipX;
+                        break;
+
+                    //case RotateFlipType.Rotate180FlipX = 6,
+                    case RotateFlipType.RotateNoneFlipY:
+                        inverse = RotateFlipType.RotateNoneFlipY;
+                        break;
+
+                    case RotateFlipType.Rotate270FlipX:
+                    //case RotateFlipType.Rotate90FlipY = 7
+                        inverse = RotateFlipType.Rotate90FlipX;
+                        break;
                 }
+
+                // Temporarily rotate the Form to draw it rotated, then rotate it back
+                Form.RotateFlip(rotateFlipType);
+                base.RenderOneFrameToScreen(graph);
+                Form.RotateFlip(inverse);
+#endif
             }
         }
 
