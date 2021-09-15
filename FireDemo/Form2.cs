@@ -1598,7 +1598,7 @@ namespace FireDemo
         private void buttonSauronV2_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            SimpleSprite dbSauron = CreateEyeOfSauronV3();
+            LayeredSprite dbSauron = CreateEyeOfSauronV3();
 
             VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
             //dbSauron.Add(tower);
@@ -1620,6 +1620,11 @@ namespace FireDemo
 
         // latest v3 (tempted to mirror everything except the pupil, which should dramatically increase speed)
         private void buttonSauronV3_Click(object sender, EventArgs e)
+        {
+            RunSauronFullHiRez();
+        }
+
+        void RunSauronQuickHiRez()
         {
             m_dbSprites.Clear();
             LayeredSprite dbSauron = CreateEyeOfSauronV3();
@@ -1660,28 +1665,63 @@ namespace FireDemo
             dbSauron.Location = Point.Empty;
 
             VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
-            //dbSauron.Add(tower);
-            //dbSauron.InterpolationMode = InterpolationMode.NearestNeighbor;
             m_dbSprites.Add(db2);
             m_dbSprites.Add(tower);
 
             buttonDemo_Click(null, null);
         }
 
-        private LayeredSprite CreateEyeOfSauronV3()
+        // This is slightly faster than the Quick method, continue this path
+        // Removing the lightning runs at 56 FPS on Raspberry-Pi,
+        // so if I can optimizethe lightning, then maybe this path is valid again
+        void RunSauronFullHiRez()
         {
-            //Size sceneSize = new Size(width: 700, height: 200); // TODO: HiRez so I can add smaller lightning bolts around the perimiter
+            m_dbSprites.Clear();
+            LayeredSprite dbSauron = CreateEyeOfSauronV3(hiRez: true);
+
+            VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
+            m_dbSprites.Add(dbSauron);
+            m_dbSprites.Add(tower);
+
+            buttonDemo_Click(null, null);
+        }
+
+        private LayeredSprite CreateEyeOfSauronV3(bool hiRez = false)
+        {
             Size sceneSize = new Size(width: 350, height: 100);
-            int magnification = 2;
-            List<DynamicSprite> dbSprites = new List<DynamicSprite>
+            // HiRez so I can add smaller lightning bolts around the perimiter
+            // And eliminate flicker in Windows
+            if (hiRez)
+                sceneSize = new Size(width: sceneSize.Width * 2, height: sceneSize.Height * 2);
+            int magnification = hiRez ? 1 : 2;
+            List<DynamicSprite> dbSprites;
+
+            if (hiRez)
             {
-                CreateSauronV3_SmokeOutward(sceneSize, left: true), // Add sideways layer of 4 Point red smoke
-                CreateSauronV3_SmokeOutward(sceneSize, left: false), // Add sideways layer of 4 Point red smoke
-                CreateSauronV3_Lightning(sceneSize, left: true), // Lightning bolts from the left
-                CreateSauronV3_Lightning(sceneSize, left: false), // Lightning bolts from the right
-                CreateSauron_EyeRingInward(sceneSize), // Ring for the outside of the eyeball
-                CreateSauron_PupilOutward(sceneSize, isNarrow: true), // Center for the pupil
-            };
+                dbSprites = new List<DynamicSprite>
+                {
+                    CreateSauronV3_SmokeOutward(sceneSize, left: true, hiRez), // Add sideways layer of 4 Point red smoke
+                    CreateSauronV3_SmokeOutward(sceneSize, left: false, hiRez), // Add sideways layer of 4 Point red smoke
+                    CreateSauronV3_Lightning(sceneSize, left: true, hiRez), // Lightning bolts from the left
+                    CreateSauronV3_Lightning(sceneSize, left: false, hiRez), // Lightning bolts from the right
+                    CreateSauronV36_SmallLightning(sceneSize, left: true),
+                    CreateSauronV36_SmallLightning(sceneSize, left: false),
+                    CreateSauron_EyeRingInward(sceneSize, hiRez), // Ring for the outside of the eyeball
+                    CreateSauron_PupilOutward(sceneSize, isNarrow: true, hiRez), // Center for the pupil
+                };
+            }
+            else
+            {
+                dbSprites = new List<DynamicSprite>
+                {
+                    CreateSauronV3_SmokeOutward(sceneSize, left: true), // Add sideways layer of 4 Point red smoke
+                    CreateSauronV3_SmokeOutward(sceneSize, left: false), // Add sideways layer of 4 Point red smoke
+                    CreateSauronV3_Lightning(sceneSize, left: true), // Lightning bolts from the left
+                    CreateSauronV3_Lightning(sceneSize, left: false), // Lightning bolts from the right
+                    CreateSauron_EyeRingInward(sceneSize), // Ring for the outside of the eyeball
+                    CreateSauron_PupilOutward(sceneSize, isNarrow: true), // Center for the pupil
+                };
+            }
             LayeredSprite dbSauron = new LayeredSprite();
 
             Color[] palFire;
@@ -1724,6 +1764,11 @@ namespace FireDemo
             dbSprites[iLayer++].SetPalette(palBackgroundSmoke);
             dbSprites[iLayer++].SetPalette(palLightning);
             dbSprites[iLayer++].SetPalette(palLightning);
+            if (hiRez)
+            {
+                dbSprites[iLayer++].SetPalette(palLightning);
+                dbSprites[iLayer++].SetPalette(palLightning);
+            }
             dbSprites[iLayer++].SetPalette(palFire);
             dbSprites[iLayer++].SetPalette(palFire);
 
@@ -1737,14 +1782,25 @@ namespace FireDemo
 
             dbSauron.AddRange(dbSprites);
 
+            if (hiRez && !Util.IsLinux)
+            {
+                // Reduce the flicker in Windows
+                SimpleSprite spTower = new VectorSauronTowerSprite
+                {
+                    Location = new Point(-left, -top)
+                };
+                dbSauron.Add(spTower);
+            }
+
             return dbSauron;
         }
 
-        private RealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left)
+        private RealtimeLightEffect CreateSauronV3_Lightning(Size size, bool left, bool hiRez = false)
         {
-            int magnification = 1;
+            int magnification = hiRez ? 2 : 1;
             int lightWidth = (int)(size.Width / 2 / magnification);
             int lightHeight = size.Height / magnification;
+            int yOffset = (size.Height - lightHeight) / 2;
             int xCenter = size.Width / 2;
             int xOffset = xCenter;
 
@@ -1758,9 +1814,9 @@ namespace FireDemo
             RealtimeLightEffect dbLightningBolt = new RealtimeLightning();
             RotateFlipType direction = left ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone;
             if (left)
-                dbLightningBolt.Location = new Point(xOffset, 0);
+                dbLightningBolt.Location = new Point(xOffset, yOffset);
             else
-                dbLightningBolt.Location = new Point(xCenter, 0);
+                dbLightningBolt.Location = new Point(xCenter, yOffset);
             dbLightningBolt.Initialize(lightWidth, lightHeight, magnification, direction);
             dbLightningBolt.SetCoolingStrategy(csSauron);
 
@@ -1803,9 +1859,9 @@ namespace FireDemo
 #endif
 
 
-        private RealtimeLightEffect CreateSauronV3_SmokeOutward(Size size, bool left)
+        private RealtimeLightEffect CreateSauronV3_SmokeOutward(Size size, bool left, bool hiRez = false)
         {
-            int magnification = 3;
+            int magnification = hiRez ? 6 : 3;
             int smokeWidth = size.Width / 2 / magnification;
             int smokeHeight = size.Height / magnification;
             int xCenter = size.Width / 2;
@@ -1842,9 +1898,9 @@ namespace FireDemo
             return dbSauron;
         }
 
-        private RealtimeLightEffect CreateSauron_PupilOutward(Size size, bool isNarrow)
+        private RealtimeLightEffect CreateSauron_PupilOutward(Size size, bool isNarrow, bool hiRez = false)
         {
-            int magnification = 1;
+            int magnification = hiRez ? 2 : 1;
             int width = isNarrow ? 100 : 200;
             int height = isNarrow ? 100 : 100; // pupil calculations are too specific for now. Need to generalize
             int xCenter = (size.Width / 2);
@@ -1925,9 +1981,9 @@ namespace FireDemo
             return dbSauron;
         }
 
-        private RealtimeLightEffect CreateSauron_EyeRingInward(Size size)
+        private RealtimeLightEffect CreateSauron_EyeRingInward(Size size, bool hiRez = false)
         {
-            int magnification = 1;
+            int magnification = hiRez ? 2 : 1;
             int width = Math.Min(size.Width, size.Height) / magnification;
             int height = width;
 

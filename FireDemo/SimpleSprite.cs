@@ -818,9 +818,9 @@ namespace FireDemo
 			float towerHeight = screenHeight - 3;
 			float elipseWidth = towerWidth + 100;
 			float elipseHeight = towerHeight * 2;
-			offset = (int)((screenWidth - elipseWidth) / 2.0f);
+			offset = (int)((screenWidth - elipseWidth) / 2.0f) + Location.X;
 			Pen color = Pens.PaleGoldenrod;
-            graph.DrawArc(color, x: offset, y: towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
+            graph.DrawArc(color, x: offset, y: Location.Y + towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
 
 			// Tower edges
 			graph.DrawLine(color, offset, screenHeight - 1, offset, 0);
