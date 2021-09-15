@@ -1695,32 +1695,20 @@ namespace FireDemo
                 sceneSize = new Size(width: sceneSize.Width * 2, height: sceneSize.Height * 2);
             int magnification = hiRez ? 1 : 2;
             List<DynamicSprite> dbSprites;
+            dbSprites = new List<DynamicSprite>
+            {
+                CreateSauronV3_SmokeOutward(sceneSize, left: true, hiRez), // Add sideways layer of 4 Point red smoke
+                CreateSauronV3_SmokeOutward(sceneSize, left: false, hiRez), // Add sideways layer of 4 Point red smoke
+                CreateSauronV3_Lightning(sceneSize, left: true, hiRez), // Lightning bolts from the left
+                CreateSauronV3_Lightning(sceneSize, left: false, hiRez), // Lightning bolts from the right
+                CreateSauron_EyeRingInward(sceneSize, hiRez), // Ring for the outside of the eyeball
+                CreateSauron_PupilOutward(sceneSize, isNarrow: true, hiRez), // Center for the pupil
+            };
 
             if (hiRez)
             {
-                dbSprites = new List<DynamicSprite>
-                {
-                    CreateSauronV3_SmokeOutward(sceneSize, left: true, hiRez), // Add sideways layer of 4 Point red smoke
-                    CreateSauronV3_SmokeOutward(sceneSize, left: false, hiRez), // Add sideways layer of 4 Point red smoke
-                    CreateSauronV3_Lightning(sceneSize, left: true, hiRez), // Lightning bolts from the left
-                    CreateSauronV3_Lightning(sceneSize, left: false, hiRez), // Lightning bolts from the right
-                    CreateSauronV36_SmallLightning(sceneSize, left: true),
-                    CreateSauronV36_SmallLightning(sceneSize, left: false),
-                    CreateSauron_EyeRingInward(sceneSize, hiRez), // Ring for the outside of the eyeball
-                    CreateSauron_PupilOutward(sceneSize, isNarrow: true, hiRez), // Center for the pupil
-                };
-            }
-            else
-            {
-                dbSprites = new List<DynamicSprite>
-                {
-                    CreateSauronV3_SmokeOutward(sceneSize, left: true), // Add sideways layer of 4 Point red smoke
-                    CreateSauronV3_SmokeOutward(sceneSize, left: false), // Add sideways layer of 4 Point red smoke
-                    CreateSauronV3_Lightning(sceneSize, left: true), // Lightning bolts from the left
-                    CreateSauronV3_Lightning(sceneSize, left: false), // Lightning bolts from the right
-                    CreateSauron_EyeRingInward(sceneSize), // Ring for the outside of the eyeball
-                    CreateSauron_PupilOutward(sceneSize, isNarrow: true), // Center for the pupil
-                };
+                dbSprites.Add(CreateSauronV36_SmallLightning(sceneSize, left: true));
+                dbSprites.Add(CreateSauronV36_SmallLightning(sceneSize, left: false));
             }
             LayeredSprite dbSauron = new LayeredSprite();
 
@@ -1764,13 +1752,13 @@ namespace FireDemo
             dbSprites[iLayer++].SetPalette(palBackgroundSmoke);
             dbSprites[iLayer++].SetPalette(palLightning);
             dbSprites[iLayer++].SetPalette(palLightning);
+            dbSprites[iLayer++].SetPalette(palFire);
+            dbSprites[iLayer++].SetPalette(palFire);
             if (hiRez)
             {
                 dbSprites[iLayer++].SetPalette(palLightning);
                 dbSprites[iLayer++].SetPalette(palLightning);
             }
-            dbSprites[iLayer++].SetPalette(palFire);
-            dbSprites[iLayer++].SetPalette(palFire);
 
 
             int width = sceneSize.Width;
