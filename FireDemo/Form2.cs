@@ -1788,7 +1788,7 @@ namespace FireDemo
             int magnification = hiRez ? 2 : 1;
             int lightWidth = (int)(size.Width / 2 / magnification);
             int lightHeight = size.Height / magnification;
-            int yOffset = (size.Height - lightHeight) / 2;
+            int yOffset = (size.Height - lightHeight * magnification) / 2;
             int xCenter = size.Width / 2;
             int xOffset = xCenter;
 
