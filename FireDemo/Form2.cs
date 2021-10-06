@@ -1252,7 +1252,7 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
-        TimeSpan historyDemoPeriod = TimeSpan.FromMilliseconds(6000);
+        TimeSpan historyDemoPeriod = TimeSpan.FromMilliseconds(9000);
         int m_iDemoHistoryState = 0;
         private void ThreadCallbackFireHistoryDemo(object state)
         {
