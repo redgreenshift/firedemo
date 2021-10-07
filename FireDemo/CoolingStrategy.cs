@@ -188,14 +188,11 @@ namespace FireDemo
             // Top Row
             for (x = 1; x < width - 1; ++x)
             {
-                int iFinal = 0;
-                int iOriginal, iNextRow, iPreviousRow;
-
-                iOriginal = x + (0 * width);
-                iNextRow = iOriginal + width;
-                iPreviousRow = (height * width) + iOriginal - width;
-
-                iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
+                // Get the surrounding cooling values, average them, then write the result
+                int iOriginal = x + (0 * width);
+                int iNextRow = iOriginal + width;
+                int iPreviousRow = (height * width) + iOriginal - width;
+                int iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
                 destinationMap[iOriginal] = iFinal;
             }
 
@@ -204,15 +201,11 @@ namespace FireDemo
             {
                 for (x = 1; x < width - 1; ++x) // Don't include the left and right edges
                 {
-                    // Get the surrounding colors, subtract some amount, average them, then write the result
-                    int iFinal = 0;
-
-                    int iOriginal, iNextRow, iPreviousRow;
-
-                    iOriginal = x + (y * width);
-                    iNextRow = iOriginal + width;
-                    iPreviousRow = iOriginal - width;
-                    iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
+                    // Get the surrounding cooling values, average them, then write the result
+                    int iOriginal = x + (y * width);
+                    int iNextRow = iOriginal + width;
+                    int iPreviousRow = iOriginal - width;
+                    int iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
                     destinationMap[iOriginal] = iFinal;
                 }
             }
@@ -220,44 +213,33 @@ namespace FireDemo
             // Bottom Row
             for (x = 1; x < width - 1; ++x)
             {
-                int iFinal = 0;
-                int iOriginal, iNextRow, iPreviousRow;
-
-                iOriginal = x + (height * width) - width;
-                iNextRow = iOriginal % width;
-                iPreviousRow = iOriginal - width;
-
-                iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
+                // Get the surrounding cooling values, average them, then write the result
+                int iOriginal = x + (height * width) - width;
+                int iNextRow = iOriginal % width;
+                int iPreviousRow = iOriginal - width;
+                int iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
                 destinationMap[iOriginal] = iFinal;
             }
 
             // The left side
             for (y = 1; y < height - 1; ++y)
             {
-                // Get the surrounding colors, subtract some amount, average them, then write the result
-                int iFinal = 0;
-
-                int iOriginal, iNextRow, iPreviousRow;
-
-                iOriginal = 0 + (y * width);
-                iNextRow = iOriginal + width;
-                iPreviousRow = iOriginal - width;
-                iFinal = (sourceMap[iOriginal + width - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
+                // Get the surrounding cooling values, average them, then write the result
+                int iOriginal = 0 + (y * width);
+                int iNextRow = iOriginal + width;
+                int iPreviousRow = iOriginal - width;
+                int iFinal = (sourceMap[iOriginal + width - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
                 destinationMap[iOriginal] = iFinal;
             }
 
             // The right side
             for (y = 1; y < height - 1; ++y)
             {
-                // Get the surrounding colors, subtract some amount, average them, then write the result
-                int iFinal = 0;
-
-                int iOriginal, iNextRow, iPreviousRow;
-
-                iOriginal = width - 1 + (y * width);
-                iNextRow = iOriginal + width;
-                iPreviousRow = iOriginal - width;
-                iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1 - width] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
+                // Get the surrounding cooling values, average them, then write the result
+                int iOriginal = width - 1 + (y * width);
+                int iNextRow = iOriginal + width;
+                int iPreviousRow = iOriginal - width;
+                int iFinal = (sourceMap[iOriginal - 1] + sourceMap[iOriginal] + sourceMap[iOriginal + 1 - width] + sourceMap[iPreviousRow] + sourceMap[iNextRow]) / 5;
                 destinationMap[iOriginal] = iFinal;
             }
 
@@ -321,7 +303,7 @@ namespace FireDemo
                 {
                     originalCoolingMap[ii] = originalCoolingMap[ii + fireSize];
                 }
-                FillCoolingMap(originalCoolingMap, fireSize, rotatingCoolingMapSize);
+                FillCoolingMap(originalCoolingMap, start: fireSize, end: rotatingCoolingMapSize);
             }
 
             if (this.smoothing == 0)
