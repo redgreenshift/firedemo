@@ -132,7 +132,7 @@ namespace FireDemo
                 {
                     // Wait wait wait, this was the problem I was missing.
                     // Need to reset the frame back to zero that so we DO
-                    // NOT REGERERATE THE COOLING MAP EVERY FRAME
+                    // NOT REGENERATE THE COOLING MAP EVERY FRAME
                     // after the first loop through (iFrame > height)!
                     iFrame = 0;
                     UpdateRotatingCoolingMap();
