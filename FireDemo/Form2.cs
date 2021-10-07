@@ -2142,6 +2142,31 @@ namespace FireDemo
             return dbSprites;
         }
 
+        private void buttonSauron_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            LayeredSprite dbSauron = CreateEyeOfSauronV3();
+
+            VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
+            m_dbSprites.Add(dbSauron);
+            m_dbSprites.Add(tower);
+
+            //TextSprite "Eye see you, did you bring the ring?"
+            Point topLeft = new Point(270, 300);
+            TextSprite text = new TextSprite()
+            {
+                Color = Color.PaleGoldenrod, // Color.LightGoldenrodYellow,
+                //Text = "Eye see you,\ngive me the ring.",
+                Text = "Working, but it's OK to\nchat (I miss people :')",
+                Location = topLeft,
+                LocationRange = new Rectangle(topLeft.X, topLeft.Y, 100, 10),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbSprites.Add(text);
+
+            buttonDemo_Click(null, null);
+        }
+
 #if false // ExtraLargeRainbow (too slow)
 
         private void LargerRainbowFire_Click(object sender, EventArgs e)
