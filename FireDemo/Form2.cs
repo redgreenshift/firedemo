@@ -46,6 +46,9 @@ namespace FireDemo
             }
             else
                 m_scaleFactor = 1.0f;
+
+            buttonDemo.Hide();
+            buttonChange.Hide();
         }
 
         private void Form2_Click(object sender, EventArgs e)
@@ -685,8 +688,8 @@ namespace FireDemo
                 }
                 groupBox1.Show();
                 groupBoxExperiment.Show();
-                buttonChange.Show();
-                buttonDemo.Show();
+                //buttonChange.Show();
+                //buttonDemo.Show();
             }
         }
         private void buttonAwayStatus_Click(object sender, EventArgs e)
