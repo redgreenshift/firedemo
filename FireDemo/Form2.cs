@@ -2373,8 +2373,7 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    TimeSpan ts = TimeSpan.FromTicks(historyDemoPeriod.Ticks * 2);
-                    timer2.Change(ts, TimeSpan.Zero);
+                    timer2.Change(historyDemoPeriod.Add(historyDemoPeriod), TimeSpan.Zero);
                     buttonDndStatus_Click(null, null);
                 }),
                 //new Action(() =>
