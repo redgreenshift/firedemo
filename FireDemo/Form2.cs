@@ -2205,7 +2205,7 @@ namespace FireDemo
             };
             m_dbText = text;
 
-            historyDemoPeriod = TimeSpan.FromMilliseconds(9000);
+            historyDemoPeriod = TimeSpan.FromMilliseconds(6000);
             timer2 = new System.Threading.Timer(
                 new TimerCallback(ThreadCallbackFhlDemo),
                 null,
@@ -2296,7 +2296,7 @@ namespace FireDemo
                     timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_dbText.Color = Color.LightGreen;
                     m_graph.Clear(Color.Black);
-                    m_dbText.Text = "FHL3: ...plasma for the Borg Regeneration Disc.";
+                    m_dbText.Text = "FHL3: ...plasma Borg Regeneration Disc.";
                     // Reset the text period timer so it randomly moves
                     // as the pictures change.
                     m_dbText.SetLocationParameters(
@@ -2313,7 +2313,7 @@ namespace FireDemo
                     timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_graph.Clear(Color.Black);
                     // I spent the last 2 FHLs redesigning and re-factoring everything because it was just getting way too cumbersome, and hard to modify.
-                    m_dbText.Text = "FHL4&5: I spent the last 2 FHLs redesigning and\nre-factoring everything...";
+                    m_dbText.Text = "FHL4&5: I spent a couple FHLs redesigning and\nre-factoring everything...";
                     m_dbText.Color = Color.LightSkyBlue;
                     // Demo RainBORG
                     m_dbSprites.Clear();
@@ -2373,7 +2373,8 @@ namespace FireDemo
                 new Action(() =>
                 {
                     m_graph.Clear(Color.Black);
-                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    TimeSpan ts = TimeSpan.FromTicks(historyDemoPeriod.Ticks * 2);
+                    timer2.Change(ts, TimeSpan.Zero);
                     buttonDndStatus_Click(null, null);
                 }),
                 //new Action(() =>
