@@ -1062,7 +1062,8 @@ namespace FireDemo
             // Commenting out. This is why it blinks on the Pi.
             //m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster (NO! It blinks if we do this!)
 
-            buttonDemo_Click(sender, e);
+            if (!timer1.Enabled && timer2 == null)
+                buttonDemo_Click(sender, e);
         }
 
         private void buttonRainBORG_Click(object sender, EventArgs e)
@@ -2168,6 +2169,221 @@ namespace FireDemo
             m_dbSprites.Add(text);
 
             buttonDemo_Click(null, null);
+        }
+
+        private void buttonDemoFHL_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+
+            //THE SHORTENED CONDENSED VERSION:
+            //Every FHL I tackle a new problem to extend this Raspberry Pi project.
+
+            //(AWAY) like realtime generated candle flame,
+            //(BUSY)fire drawn in fun shapes,
+            //(OOF) lightning,
+            //(Available)and plasma
+
+            //I spent the last 2 FHLs redesigning and re-factoring everything because it was just getting way too cumbersome, and hard to modify.
+
+            //This time I’m back to making interesting realtime graphics. (DO NOT DISTURB)
+
+            //This time due to the refactor I am now able to re-combine many of the previous components like Legos and create(CLICK) the Eye of Sauron.
+
+            // Steps:
+            // 1) Small flame
+            // 2) Large flame
+            // 3) Batman
+            // 4) Lightning
+            // 5) Plasma
+            // ) Hero
+            // ) Sauron
+
+
+            TextSprite text = new TextSprite
+            {
+                LocationRange = new Rectangle(0, 0, 50, 75),
+            };
+            m_dbText = text;
+
+            historyDemoPeriod = TimeSpan.FromMilliseconds(9000);
+            timer2 = new System.Threading.Timer(
+                new TimerCallback(ThreadCallbackFhlDemo),
+                null,
+                TimeSpan.Zero,
+                historyDemoPeriod);
+
+            buttonDemo_Click(sender, e);
+        }
+
+        //TimeSpan historyDemoPeriod = TimeSpan.FromMilliseconds(9000);
+        //int m_iDemoHistoryState = 0;
+        private void ThreadCallbackFhlDemo(object state)
+        {
+            Rectangle fullRange = new Rectangle(0, 0, 50, 75);
+            //Func<int>[] variousStages =
+            Action[] variousStages =
+            {
+                new Action(() =>
+                {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_graph.Clear(Color.Black);
+                    m_dbSprites.Clear();
+                    SimpleCandle();
+                    int fireWidth = m_dbSprite.Width;
+                    int fireHeight = 70;
+                    int magnification = 7;
+                    m_dbSprite.Initialize(fireWidth, fireHeight, magnification);
+                    int left = (this.Width - fireWidth * magnification) / 2;
+                    int top = (this.Height - fireHeight * magnification);
+                    m_dbSprite.Location = new Point(left, top);
+                    m_dbText.Text = "Every FHL, I tackle a new problem to extend\nthis Raspberry Pi project.";
+                    m_dbText.SetLocationParameters(newLocation: Point.Empty, range: fullRange);
+                    m_dbText.Color = Color.Red;
+                    m_dbText.SetLocationParameters(range: new Rectangle(0, 0, 50, 75));
+                    m_dbSprites.Add(m_dbSprite); // Add the candle
+                    m_dbSprites.Add(m_dbText); // Add the text sprite
+                    ICoolingStrategy coolingStrategy;
+                    m_coolingStrategy = new CoolingStrategyMap();
+                    m_coolingStrategy.SetMapParameters(width: m_genericFlame.Width, height: m_genericFlame.Height,
+                        density: 0.4f, min: 5, max: 13, smoothing: 5,
+                        shift: true, rotate: true);
+                    coolingStrategy = m_coolingStrategy;
+                    m_genericFlame.SetCoolingStrategy(coolingStrategy);
+                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+                    m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalRealisticFire.New()));
+                }),
+                new Action(() =>
+                {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_dbText.Text = "FHL1: realtime generated candle flame.";
+                    m_dbText.Color = Color.DarkOrange;
+                    Rectangle partialRange = new Rectangle(fullRange.Location, fullRange.Size) { Width = 0 };
+                    m_dbText.SetLocationParameters(newLocation: new Point(0, partialRange.Height),
+                        smoothTransition: true,
+                        period: historyDemoPeriod,
+                        range: partialRange);
+                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+                }),
+                new Action(() =>
+                {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "FHL2: Fire drawn in FUN SHAPES!";
+                    m_dbText.Font = new Font(m_dbText.Font, FontStyle.Regular);
+                    m_dbSprites.Clear();
+                    m_dbText.Color = Color.Yellow;
+                    DemoBatman(multithreaded: true);
+                    m_dbSprites.Add(m_dbSprite);
+                    m_dbSprites.Add(m_dbText);
+                }),
+                new Action(() =>
+                {
+                    TimeSpan tsMax = TimeSpan.FromSeconds(3);
+                    TimeSpan tsHalf = TimeSpan.FromTicks(historyDemoPeriod.Ticks / 2);
+                    TimeSpan ts = tsHalf.CompareTo(tsMax) < 0 ? tsHalf : tsMax;
+                    timer2.Change(ts, TimeSpan.Zero);
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Color = Color.LightCyan;
+                    m_dbText.Text = "FHL3: Lightning,\nwhich was just a step toward making...";
+                    m_dbSprites.Clear();
+                    DemoLightning();
+                    m_dbSprite.Initialize(m_dbSprite.Width * 2, m_dbSprite.Height * 2, 1);
+                    m_dbSprites.Add(m_dbSprite);
+                    m_dbSprites.Add(m_dbText);
+                }),
+                new Action(() =>
+                {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_dbText.Color = Color.LightGreen;
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "FHL3: ...plasma for the Borg Regeneration Disc.";
+                    // Reset the text period timer so it randomly moves
+                    // as the pictures change.
+                    m_dbText.SetLocationParameters(
+                        newLocation: Point.Empty,
+                        period: historyDemoPeriod);
+                    m_dbSprites.Clear();
+                    DemoBorg();
+                    m_dbSprite.Location.Offset(0, 50);
+                    m_dbSprites.Add(m_dbSprite);
+                    m_dbSprites.Add(m_dbText);
+                }),
+                new Action(() =>
+                {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_graph.Clear(Color.Black);
+                    // I spent the last 2 FHLs redesigning and re-factoring everything because it was just getting way too cumbersome, and hard to modify.
+                    m_dbText.Text = "FHL4&5: I spent the last 2 FHLs redesigning and\nre-factoring everything...";
+                    m_dbText.Color = Color.LightSkyBlue;
+                    // Demo RainBORG
+                    m_dbSprites.Clear();
+                    DemoPlasmaRainbow();
+                    foreach (SimpleSprite s in m_dbSprites)
+                    {
+                        // 0, 196, 392
+                        int addY = 150;
+                        if (s.Location.Y > 0)
+                            addY -= 50;
+                        if (s.Location.Y > 200)
+                            addY -= 50;
+                        Point moveDown = new Point(0, addY);
+                        s.Location.Offset(moveDown);
+                    }
+                    m_dbSprites.Add(m_dbText);
+                }),
+                new Action(() =>
+                {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "FHL4&5: And then recombined all these pieces\n" +
+                    "from the previous iterations into...";
+                    m_dbText.Font = new Font(m_dbText.Font, FontStyle.Regular);
+                    m_dbText.Color = Color.SkyBlue;
+                    Rectangle partialRange = new Rectangle(fullRange.Location, fullRange.Size) { Width = 0 };
+                    m_dbText.SetLocationParameters(newLocation: new Point(0, 0),
+                        smoothTransition: true,
+                        period: historyDemoPeriod,
+                        range: partialRange);
+                    m_dbSprites.Clear();
+                    m_dbSprites.AddRange(CreateRainbowFlames(fBigRainbowFire: false));
+                    m_dbSprites.Add(m_dbText);
+                }),
+                new Action(() =>
+                {
+                    // Let Sauron go for double length, since I'm speeding up the demo
+                    timer2.Change(historyDemoPeriod.Add(historyDemoPeriod), TimeSpan.Zero);
+                    m_dbText.Color = Color.OrangeRed;
+                    LayeredSprite dbEyeOfSauron = CreateEyeOfSauronV3();
+                    int left = (this.Width - dbEyeOfSauron.Width * dbEyeOfSauron.Magnification) / 2;
+                    int top = (this.Height - dbEyeOfSauron.Height * dbEyeOfSauron.Magnification) / 2;
+                    dbEyeOfSauron.Location = new Point(left, top);
+                    m_graph.Clear(Color.Black);
+                    m_dbText.Text = "FHL6: the Eye of Sauron!";
+                    m_dbSprites.Clear();
+                    m_dbSprites.Add(dbEyeOfSauron);
+                    m_dbSprites.Add(m_dbText);
+                }),
+                new Action(() =>
+                {
+                    // Let Sauron go for extra
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    m_dbText.Text = "And now I use these graphics to communicate\n" +
+                    "whether or not I'm busy Working.";
+                }),
+                new Action(() =>
+                {
+                    m_graph.Clear(Color.Black);
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                    buttonDndStatus_Click(null, null);
+                }),
+                //new Action(() =>
+                //{
+                //    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+                //}),
+            };
+
+            int ii = m_iDemoHistoryState++ % variousStages.Length;
+            m_callbackToChangeStuff = variousStages[ii];
         }
 
 #if false // ExtraLargeRainbow (too slow)
