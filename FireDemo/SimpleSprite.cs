@@ -823,8 +823,10 @@ namespace FireDemo
             graph.DrawArc(color, x: offset, y: Location.Y + towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
 
 			// Tower edges
-			graph.DrawLine(color, offset, screenHeight - 1, offset, 0);
-			graph.DrawLine(color, screenWidth - offset, 0, screenWidth - offset, screenHeight - 1);
+			int leftTower = offset - 10;
+			int rightTower = (int)screenWidth - leftTower;
+			graph.DrawLine(color, leftTower, screenHeight - 1, leftTower, 0);
+			graph.DrawLine(color, rightTower, 0, rightTower, screenHeight - 1);
 
 			// draw the middle bit
 			int xCenter = (int)(screenWidth / 2 + 0.5f);
