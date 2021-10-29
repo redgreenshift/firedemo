@@ -716,7 +716,7 @@ namespace FireDemo
             TextSprite tsAway = new TextSprite
             {
                 //Text = "Away (if I'm not back in 5 minutes,\njust wait longer)",
-                Text = "Away",
+                Text = "Away (I'll be back)",
                 Color = Color.Yellow,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -754,7 +754,7 @@ namespace FireDemo
             m_dbSprites.Add(m_dbSprite);
             TextSprite text = new TextSprite
             {
-                Text = "I'm Busy",
+                Text = "I'm Busy (fighting crime)",
                 Color = Color.Red,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -772,7 +772,7 @@ namespace FireDemo
             m_dbSprites.Add(m_dbSprite);
             TextSprite text = new TextSprite
             {
-                Text = "Available (you will be assimilated)",
+                Text = "Available (you will be assimilated...\nplease talk to me)",
                 Color = Color.LightGreen,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 850, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
