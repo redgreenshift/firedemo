@@ -2386,6 +2386,188 @@ namespace FireDemo
             m_callbackToChangeStuff = variousStages[ii];
         }
 
+        private void buttonFrustratedStatus_Click(object sender, EventArgs e)
+        {
+            // TODO: Dupster Fire!
+            m_dbSprites.Clear();
+
+            int left, top;
+
+
+            int cauldronFireWidth;
+            int cauldronFireHeight;
+            int cauldronFireMagnification;
+            cauldronFireWidth = 19 * 2 - 1;
+            cauldronFireHeight = 25 * 2;
+            cauldronFireMagnification = 3;
+
+            Dumpster dumpsterFireBase = new Dumpster
+            {
+                Magnification = 5,
+                InterpolationMode = InterpolationMode.NearestNeighbor,
+            };
+            left = this.Location.X + this.Width / 2 - dumpsterFireBase.Width / 2 - 100;
+            top = this.Location.Y + this.Height / 2 - dumpsterFireBase.Height + 100;
+            dumpsterFireBase.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dumpsterFireBase);
+
+            TextSprite dumpText = new TextSprite
+            {
+                Text = "2020",
+                Color = Color.Red,
+                Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 20.0f),
+                Location = new Point(Width - (Width / 5), 0),
+            };
+            left = dumpsterFireBase.Location.X + dumpsterFireBase.Width / 2 + 30;
+            top = dumpsterFireBase.Location.Y + dumpsterFireBase.Height * dumpsterFireBase.Magnification / 2 - 5;
+            dumpText.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dumpText);
+
+
+            Color[] palCauldron1;
+            Color[] palCauldron2;
+            //palCauldron1 = PalRealisticFlameCurve.New(Color.DarkRed);
+            //palCauldron1 = PalFourPointLinear.New(Color.Black, Color.Orange, Color.Yellow, Color.White);
+            //palCauldron1 = PalFourPointLinear.New(Color.Black, Color.DarkOrange, Color.Yellow, Color.White);
+            palCauldron1 = PalFourPointLinear.New(
+                Color.Black,
+                Color.FromArgb(255, 185, 0),
+                Color.FromArgb(255, 255, 127),
+                Color.FromArgb(212, 212, 255)); // great for larger bonfires, but not as nice for a small
+            Color[] palTorch1 = PalRealisticFlameCurve.New(Color.FromArgb(223, 38, 38)); // Great 8 bit fire palette
+            palCauldron1 = palTorch1;
+            Color[] palTorch2 = PalRealisticFire.New();
+            palCauldron2 = palTorch2;
+            palCauldron1 = palTorch2;
+            //palCauldron1 = PalFourPointLinear.New(Color.DarkOrange);
+
+            CoolingStrategyMap csBonfire1 = new CoolingStrategyMap();
+            csBonfire1.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
+                //density: 0.5f, min: 8, max: 16, smoothing: 0, // great with 8bit Realistic palette Color.FromArgb(223, 38, 38)
+                density: 0.4f, min: 5, max: 13, smoothing: 0, // great with Realistic palette
+                                                              //density: 0.6f, min: 8, max: 23, smoothing: 0,
+                shift: true, rotate: true);
+
+            ILightPen lpBonfire1;
+            //lpBonfire1 = new LightPen(fill: 0.6f, min: 54, max: 255, useFullRange: false); // great for 8bit
+            lpBonfire1 = new LightPen(fill: 1.0f, min: 0, max: 255, useFullRange: false); // great for realistic
+            ILightShape lsBonfire1 = new LightShapeCandle();
+            lsBonfire1.SetPen(lpBonfire1);
+
+            RealtimeLightEffect dbCauldronFire1 = new RealtimeFire();
+            dbCauldronFire1.Initialize(cauldronFireWidth, cauldronFireHeight, cauldronFireMagnification+2);
+            dbCauldronFire1.InterpolationMode = InterpolationMode.NearestNeighbor;
+            dbCauldronFire1.SetCoolingStrategy(csBonfire1);
+            dbCauldronFire1.SetPalette(palCauldron1);
+            dbCauldronFire1.AddShape(lsBonfire1);
+            left = dumpsterFireBase.Location.X + 1;
+            top = dumpsterFireBase.Location.Y - (dbCauldronFire1.Height - 1) * dbCauldronFire1.Magnification + 20;
+            dbCauldronFire1.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(dbCauldronFire1);
+
+
+
+            // J likes this cauldron2 better, more pixelated, with:
+            // cauldronFireWidth = 19 * 2 - 1;
+            // cauldronFireHeight = 25 * 2;
+            // density: 0.3f, min: 3, max: 35, smoothing: 0
+            // fill: 0.7f, min: 54, max: 255, useFullRange: false
+            RealtimeLightEffect dbCauldronFire2 = new RealtimeFire();
+            CoolingStrategyMap csBonfire2 = new CoolingStrategyMap();
+            csBonfire2.SetMapParameters(width: cauldronFireWidth, height: cauldronFireHeight,
+                //density: 0.2f, min: 3, max: 20, smoothing: 0, // looks good with realistic palette? RealtimeFire_INCLUDING_COAL_SEED
+                density: 0.3f, min: 3, max: 35, smoothing: 0, // looks good with realistic palette
+                                                              //density: 0.2f, min: 3, max: 15, smoothing: 0,
+                                                              //density: 0.6f, min: 6, max: 13, smoothing: 0, // looks good with 4 point linear palette
+                                                              //density: 0.7f, min: 9, max: 21, smoothing: 0,
+                shift: true, rotate: true);
+
+            ILightPen lpBonfire2 = new LightPen(fill: 0.7f, min: 54, max: 255, useFullRange: false);
+            ILightShape lsBonfire2 = new LightShapeCandle();
+            lsBonfire2.SetPen(lpBonfire2);
+
+            dbCauldronFire2.Initialize(cauldronFireWidth, cauldronFireHeight, cauldronFireMagnification);
+            dbCauldronFire2.InterpolationMode = InterpolationMode.NearestNeighbor;
+            dbCauldronFire2.SetCoolingStrategy(csBonfire2);
+            dbCauldronFire2.SetPalette(palCauldron2);
+            dbCauldronFire2.AddShape(lsBonfire2);
+            left = dumpsterFireBase.Location.X + 100;
+            top = dumpsterFireBase.Location.Y - (dbCauldronFire2.Height - 1) * dbCauldronFire2.Magnification + 1;
+            dbCauldronFire2.Location = new Point(x: left, y: top);
+            //m_dbSprites.Add(dbCauldronFire2); // I like the first fire better for dumpster
+
+
+
+
+            int dangerY = 0;
+            TextSprite text = new TextSprite
+            {
+                Color = Color.Red,
+                Text = "It's fine, feel free to interrupt.",
+                Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
+                SmoothTransition = true,
+                Location = new Point(x: 32, y: dangerY),
+                LocationRange = new Rectangle(x: 32, y: dangerY, width: 490 - 32, height: 200),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbSprites.Add(text);
+
+            foreach (SimpleSprite db in m_dbSprites)
+            {
+                // This is SLOWER than SourceCopy, but necessary
+                // to be able to render multiple plasma discs in Linux
+                db.CompositingMode = CompositingMode.SourceOver;
+            }
+            // Commenting out. This is why it blinks on the Pi.
+            //m_dbSprites[0].CompositingMode = CompositingMode.SourceCopy; // let the first one draw faster (NO! It blinks if we do this!)
+
+            if (!timer1.Enabled && timer2 == null)
+                buttonDemo_Click(sender, e);
+        }
+
+        private void buttonLunchStatus_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            SimpleCandle();
+
+            m_dbSprite.Magnification = 7;
+            int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
+            int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
+            m_dbSprite.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(m_dbSprite); // Add the candle
+
+            m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
+                density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
+                                                              //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
+                                                              //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
+                                                              //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
+                shift: true, rotate: true);
+
+
+                //m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+                m_dbSprites.Clear();
+                DemoBatman(multithreaded: true);
+
+                TextSprite text = new TextSprite
+                {
+                    Text = "At Lunch (back in a few)",
+                    Color = Color.Red,
+                    LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                    LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+                };
+                m_dbText = text;
+
+                Color[] palFire = PalRealisticFlameCurve.New(Color.Indigo);
+                m_dbSprite.SetPalette(palFire);
+                m_dbText.Color = palFire[145];
+                m_dbText.Color = palFire[105];
+
+                m_dbSprites.Add(m_dbSprite); // Add the Flaming Batman logo
+                m_dbSprites.Add(text); // Add the text sprite
+
+                buttonDemo_Click(sender, e);
+        }
+
 #if false // ExtraLargeRainbow (too slow)
 
         private void LargerRainbowFire_Click(object sender, EventArgs e)
