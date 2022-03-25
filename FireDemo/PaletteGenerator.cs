@@ -743,7 +743,37 @@ namespace FireDemo
         #endregion
     }
 
+    /// <summary>
+    /// Generalized function for calculating a curved gradient, based on a single color.
+    /// </summary>
+    public class PalDarkFlameCurve : PalRealisticFlameCurve
+    {
+        static public new Color[] New(Color color)
+        {
+            Color[] thePalette = PalRealisticFlameCurve.New(color);
+            if (color == Color.White)
+                thePalette = PalRealisticFlameCurve.New(color);
+            else if (color == Color.Black)
+                thePalette = PalRealisticFlameCurve.New(color);
+            else
+            {
+                thePalette = PalRealisticFlameCurve.New(Color.Black);
 
+                for (int i = 0; i < thePalette.Length; i++)
+                {
+                    float rPercent = color.R / (float)255;
+                    float gPercent = color.G / (float)255;
+                    float bPercent = color.B / (float)255;
+                    byte rValue = (byte)(thePalette[i].R * rPercent);
+                    byte gValue = (byte)(thePalette[i].G * gPercent);
+                    byte bValue = (byte)(thePalette[i].B * bPercent);
+                    thePalette[i] = Color.FromArgb(rValue, gValue, bValue);
+                }
+            }
+
+            return thePalette;
+        }
+    }
 
     public class PalRealisticFlameCurveV2_EXPERIMENTAL : PaletteGenerator
     {
