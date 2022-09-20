@@ -39,6 +39,9 @@ namespace FireDemo
             this.buttonAvailableStatus = new System.Windows.Forms.Button();
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonInMeeting = new System.Windows.Forms.Button();
+            this.buttonFrustratedStatus = new System.Windows.Forms.Button();
+            this.buttonLunchStatus = new System.Windows.Forms.Button();
             this.buttonDemoFHL = new System.Windows.Forms.Button();
             this.buttonSauron = new System.Windows.Forms.Button();
             this.buttonHistoryOfFire = new System.Windows.Forms.Button();
@@ -53,8 +56,7 @@ namespace FireDemo
             this.groupBoxExperiment = new System.Windows.Forms.GroupBox();
             this.buttonSauronV3 = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
-            this.buttonLunchStatus = new System.Windows.Forms.Button();
-            this.buttonFrustratedStatus = new System.Windows.Forms.Button();
+            this.buttonRainbowFireDark = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
             this.SuspendLayout();
@@ -97,11 +99,11 @@ namespace FireDemo
             // buttonOofStatus
             // 
             this.buttonOofStatus.BackColor = System.Drawing.Color.DarkViolet;
-            this.buttonOofStatus.Location = new System.Drawing.Point(183, 309);
+            this.buttonOofStatus.Location = new System.Drawing.Point(360, 309);
             this.buttonOofStatus.Name = "buttonOofStatus";
             this.buttonOofStatus.Size = new System.Drawing.Size(172, 90);
             this.buttonOofStatus.TabIndex = 7;
-            this.buttonOofStatus.Text = "Out";
+            this.buttonOofStatus.Text = "Sad?";
             this.buttonOofStatus.UseVisualStyleBackColor = false;
             this.buttonOofStatus.Click += new System.EventHandler(this.buttonOofStatus_Click);
             // 
@@ -140,6 +142,7 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonInMeeting);
             this.groupBox1.Controls.Add(this.buttonFrustratedStatus);
             this.groupBox1.Controls.Add(this.buttonLunchStatus);
             this.groupBox1.Controls.Add(this.buttonDemoFHL);
@@ -158,6 +161,41 @@ namespace FireDemo
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
+            // 
+            // buttonInMeeting
+            // 
+            this.buttonInMeeting.BackColor = System.Drawing.Color.OrangeRed;
+            this.buttonInMeeting.Location = new System.Drawing.Point(183, 213);
+            this.buttonInMeeting.Name = "buttonInMeeting";
+            this.buttonInMeeting.Size = new System.Drawing.Size(172, 90);
+            this.buttonInMeeting.TabIndex = 13;
+            this.buttonInMeeting.Text = "In a Meeting";
+            this.buttonInMeeting.UseVisualStyleBackColor = false;
+            this.buttonInMeeting.Click += new System.EventHandler(this.buttonInMeeting_Click);
+            // 
+            // buttonFrustratedStatus
+            // 
+            this.buttonFrustratedStatus.BackColor = System.Drawing.Color.DarkGreen;
+            this.buttonFrustratedStatus.ForeColor = System.Drawing.Color.Yellow;
+            this.buttonFrustratedStatus.Location = new System.Drawing.Point(183, 309);
+            this.buttonFrustratedStatus.Name = "buttonFrustratedStatus";
+            this.buttonFrustratedStatus.Size = new System.Drawing.Size(172, 90);
+            this.buttonFrustratedStatus.TabIndex = 12;
+            this.buttonFrustratedStatus.Text = "Frustrated / FireDrill";
+            this.buttonFrustratedStatus.UseVisualStyleBackColor = false;
+            this.buttonFrustratedStatus.Click += new System.EventHandler(this.buttonFrustratedStatus_Click);
+            // 
+            // buttonLunchStatus
+            // 
+            this.buttonLunchStatus.BackColor = System.Drawing.Color.Indigo;
+            this.buttonLunchStatus.ForeColor = System.Drawing.Color.Lime;
+            this.buttonLunchStatus.Location = new System.Drawing.Point(183, 117);
+            this.buttonLunchStatus.Name = "buttonLunchStatus";
+            this.buttonLunchStatus.Size = new System.Drawing.Size(172, 90);
+            this.buttonLunchStatus.TabIndex = 11;
+            this.buttonLunchStatus.Text = "Lunch";
+            this.buttonLunchStatus.UseVisualStyleBackColor = false;
+            this.buttonLunchStatus.Click += new System.EventHandler(this.buttonLunchStatus_Click);
             // 
             // buttonDemoFHL
             // 
@@ -272,6 +310,7 @@ namespace FireDemo
             // 
             // groupBoxExperiment
             // 
+            this.groupBoxExperiment.Controls.Add(this.buttonRainbowFireDark);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV3);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowBatman);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV2);
@@ -309,25 +348,15 @@ namespace FireDemo
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
             this.buttonRainbowBatman.Click += new System.EventHandler(this.buttonRainbowBatman_Click);
             // 
-            // buttonLunchStatus
+            // buttonRainbowFireDark
             // 
-            this.buttonLunchStatus.Location = new System.Drawing.Point(183, 117);
-            this.buttonLunchStatus.Name = "buttonLunchStatus";
-            this.buttonLunchStatus.Size = new System.Drawing.Size(172, 90);
-            this.buttonLunchStatus.TabIndex = 11;
-            this.buttonLunchStatus.Text = "Lunch";
-            this.buttonLunchStatus.UseVisualStyleBackColor = true;
-            this.buttonLunchStatus.Click += new System.EventHandler(this.buttonLunchStatus_Click);
-            // 
-            // buttonFrustratedStatus
-            // 
-            this.buttonFrustratedStatus.Location = new System.Drawing.Point(183, 213);
-            this.buttonFrustratedStatus.Name = "buttonFrustratedStatus";
-            this.buttonFrustratedStatus.Size = new System.Drawing.Size(172, 90);
-            this.buttonFrustratedStatus.TabIndex = 12;
-            this.buttonFrustratedStatus.Text = "Frustrated";
-            this.buttonFrustratedStatus.UseVisualStyleBackColor = true;
-            this.buttonFrustratedStatus.Click += new System.EventHandler(this.buttonFrustratedStatus_Click);
+            this.buttonRainbowFireDark.Location = new System.Drawing.Point(6, 405);
+            this.buttonRainbowFireDark.Name = "buttonRainbowFireDark";
+            this.buttonRainbowFireDark.Size = new System.Drawing.Size(172, 90);
+            this.buttonRainbowFireDark.TabIndex = 31;
+            this.buttonRainbowFireDark.Text = "Rainbow Fire Dark";
+            this.buttonRainbowFireDark.UseVisualStyleBackColor = true;
+            this.buttonRainbowFireDark.Click += new System.EventHandler(this.buttonRainbowFireDark_Click);
             // 
             // Form2
             // 
@@ -375,5 +404,7 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonDemoFHL;
         private System.Windows.Forms.Button buttonLunchStatus;
         private System.Windows.Forms.Button buttonFrustratedStatus;
+        private System.Windows.Forms.Button buttonInMeeting;
+        private System.Windows.Forms.Button buttonRainbowFireDark;
     }
 }

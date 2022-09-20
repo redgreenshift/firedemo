@@ -622,7 +622,7 @@ namespace FireDemo
             m_dbSprite.InterpolationMode = modes[ii].mode;
         }
 #endif
-        bool m_largerFlame = false;
+        bool m_largerFlame = false; // TODO: Generalize all the various counters into a single counter
         /// <summary>
         /// Just a proof-of-concept that I can still change things on the fly, even in the refactored form
         /// </summary>
@@ -710,8 +710,12 @@ namespace FireDemo
                 //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                 shift: true, rotate: true);
 
-            m_largerFlame = true;
-            m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+            m_largerFlame = !m_largerFlame;
+
+            if (m_largerFlame)
+                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+            else
+                m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
 
             TextSprite tsAway = new TextSprite
             {
@@ -726,15 +730,47 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
+        uint m_fUseCandleOOF = 0; // TODO: Generalize all the various counters into a single counter
         private void buttonOofStatus_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            DemoLightning();
+
+            ++m_fUseCandleOOF;
+
+            if (m_fUseCandleOOF % 3 != 1)
+            {
+                SimpleCandle();
+                Color[] palFlame = PalRealisticFlameCurve.New(Color.Black);
+                m_dbSprite.SetPalette(palFlame);
+
+                m_dbSprite.Magnification = 7;
+                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
+                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
+                m_dbSprite.Location = new Point(x: left, y: top);
+                m_dbSprites.Add(m_dbSprite); // Add the candle
+
+                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
+                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
+                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
+                    shift: true, rotate: true);
+
+                m_largerFlame = m_fUseCandleOOF % 3 != 0;
+                if (m_largerFlame)
+                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+                else
+                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+            }
+            else
+            {
+                DemoLightning();
+            }
 
             m_dbSprites.Add(m_dbSprite);
             TextSprite text = new TextSprite
             {
-                Text = "I'm OOF",
+                Text = "I'm Sad",
                 Color = Color.DarkMagenta,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -744,17 +780,60 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
+        uint m_fUseCandle = 0; // TODO: Generalize all the various counters into a single counter
         private void buttonBusyStatus_Click(object sender, EventArgs e)
+        {
+            RedFlameAndBatmanFightingCrime(sender, e, "I'm Busy");
+        }
+
+        // TODO: JRDV: First step in generalizing. Need to lift some stuff out, and consolidate the toggle variables
+        private void RedFlameAndBatmanFightingCrime(object sender, EventArgs e, string statusText)
         {
             m_dbSprites.Clear();
             UpdateVisibleUI();
+            ++m_fUseCandle;
 
-            DemoBatman(multithreaded: true);
+            if (m_fUseCandle % 3 != 1)
+            {
+                SimpleCandle();
+                Color[] palFlame = PalRealisticFlameCurve.New(Color.Red);
+                m_dbSprite.SetPalette(palFlame);
+
+                m_dbSprite.Magnification = 7;
+                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
+                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
+                m_dbSprite.Location = new Point(x: left, y: top);
+                m_dbSprites.Add(m_dbSprite); // Add the candle
+
+                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
+                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
+                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
+                    shift: true, rotate: true);
+
+                if (m_fUseCandle % 3 == 0)
+                {
+                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+                    m_largerFlame = false;
+                }
+                else
+                {
+                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+                    m_largerFlame = true;
+                }
+            }
+            else
+            {
+                DemoBatman(multithreaded: true);
+
+                statusText += " (fighting crime)";
+            }
 
             m_dbSprites.Add(m_dbSprite);
             TextSprite text = new TextSprite
             {
-                Text = "I'm Busy (fighting crime)",
+                Text = statusText,
                 Color = Color.Red,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -764,15 +843,51 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
+        uint s_isBorgOrFlame = 0; // TODO: Generalize all the various counters into a single counter
         private void buttonAvailableStatus_Click(object sender, EventArgs e)
         {
+            string t = "Available";
+            ++s_isBorgOrFlame;
             m_dbSprites.Clear();
-            DemoBorg();
 
-            m_dbSprites.Add(m_dbSprite);
+            if (s_isBorgOrFlame % 3 == 1)
+            {
+                DemoBorg();
+
+                m_dbSprites.Add(m_dbSprite);
+
+                t += " (you will be assimilated...\nplease talk to me)";
+            }
+            else
+            {
+                // DemoAwayFlame
+                SimpleCandle();
+                Color[] palFlame = PalRealisticFlameCurve.New(Color.Green);
+                m_dbSprite.SetPalette(palFlame);
+
+                m_dbSprite.Magnification = 7;
+                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
+                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
+                m_dbSprite.Location = new Point(x: left, y: top);
+                m_dbSprites.Add(m_dbSprite); // Add the candle
+
+                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
+                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
+                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
+                    shift: true, rotate: true);
+
+                m_largerFlame = s_isBorgOrFlame % 3 != 0;
+                if (m_largerFlame)
+                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+                else
+                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+            }
+
             TextSprite text = new TextSprite
             {
-                Text = "Available (you will be assimilated...\nplease talk to me)",
+                Text = t,
                 Color = Color.LightGreen,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 850, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -1335,8 +1450,24 @@ namespace FireDemo
                     //m_dbText.Text = "Derived a palette formula curve for realistic color.\nProved the algorithm is fast enough for Smalltalk.";
                     //m_dbText.Text = "Derived a palette formula curve for realistic color,\nwith the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!";
                     m_dbText.Text = "Derived a palette formula curve for realistic color.\n" +
-                    "This is only a palette change, further proving\n" +
-                    "Smalltalk was fast enough for realistic fire.";
+                    "This is *only* a palette change, further proving\n" +
+                    "Smalltalk was fast enough for realistic fire in 2001.";
+                    // 
+                    // So far only changed the palette, therefore Smalltalk is fast enough to run the algorithm from 15 years prior.
+                    // Still the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!
+                    m_dbText.SetLocationParameters(newLocation: Point.Empty);
+                    m_dbText.Color = Color.OrangeRed;
+                    m_genericFlame.SetPalette(PaletteGenerator.MakeTransparent(PalRealisticFire.New()));
+                }),
+                new Action(() =>
+                {
+                    timer2.Change(historyDemoPeriod, TimeSpan.Zero);
+
+                    m_dbText.Text =
+                    "I want to reiterate that so far in the demo, computational\n" +
+                    "cost hasn't increased, proving the algorithm worked.\n" +
+                    "I didn't have a palette to demonstrate it very well.";
+
                     // 
                     // So far only changed the palette, therefore Smalltalk is fast enough to run the algorithm from 15 years prior.
                     // Still the EXACT same pixel averaging algorithm\nfrom 15 years earlier, JUST better palettes so far!
@@ -1617,7 +1748,17 @@ namespace FireDemo
             //    Text = "Eye see you,\ngive me the ring.",
             //    Location = new Point(370, 300),
             //};
-            //m_dbSprites.Add(text);
+            Point topLeft = new Point(270, 300);
+            TextSprite text = new TextSprite()
+            {
+                Color = Color.PaleGoldenrod, // Color.LightGoldenrodYellow,
+                //Text = "Eye see you,\ngive me the ring.",
+                Text = "Working, but it's OK to\nchat (I miss people :'-)",
+                Location = topLeft,
+                LocationRange = new Rectangle(topLeft.X, topLeft.Y, 100, 10),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbSprites.Add(text);
 
             buttonDemo_Click(null, null);
         }
@@ -2043,7 +2184,17 @@ namespace FireDemo
             buttonDemo_Click(null, null);
         }
 
-        private List<SimpleSprite> CreateRainbowFlames(bool fBigRainbowFire)
+        private void buttonRainbowFireDark_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            m_fBigRainbowFire = !m_fBigRainbowFire;
+
+            m_dbSprites.AddRange(CreateRainbowFlames(m_fBigRainbowFire, dark: true));
+
+            buttonDemo_Click(null, null);
+        }
+
+        private List<SimpleSprite> CreateRainbowFlames(bool fBigRainbowFire, bool dark = false)
         {
             List<SimpleSprite> dbSprites = new List<SimpleSprite>();
             Color[] colors = {
@@ -2064,6 +2215,19 @@ namespace FireDemo
             Color[] colors4Point = {
                 Color.Transparent, // REALISTIC
                 Color.OrangeRed, // Kinda like it better than 4-point "realistic" :p
+                Color.FromArgb(0, 255, 128), // BlueGreen
+                Color.Red,
+                Color.Orange,
+                Color.Yellow,
+                Color.Green,
+                Color.Blue,
+                Color.Violet,
+                Color.Cyan,
+                Color.Magenta,
+            };
+            Color[] colorsDark = {
+                Color.OrangeRed,
+                Color.Indigo,
                 Color.FromArgb(0, 255, 128), // BlueGreen
                 Color.Red,
                 Color.Orange,
@@ -2111,6 +2275,24 @@ namespace FireDemo
                 ++iCandle;
             }
 
+            if (dark)
+            {
+                foreach (Color color in colorsDark)
+                {
+                    palCandle = PalDarkFlameCurve.New(color);
+                    RealtimeLightEffect dbCandle = GenerateCandle(big: fBigRainbowFire);
+                    dbCandle.SetPalette(palCandle);
+                    left = (width * magnification + bufferX) * (iCandle % 8);
+                    top = (height * magnification + bufferY) * (iCandle / 8);
+                    if (!fBigRainbowFire)
+                        top += 100;
+                    dbCandle.Location = new Point(x: left, y: top);
+
+                    dbSprites.Add(dbCandle);
+                    ++iCandle;
+                }
+            }
+            else
             foreach (Color color in colors4Point)
             {
                 if (color == Color.Transparent)
@@ -2543,7 +2725,12 @@ namespace FireDemo
                                                               //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                 shift: true, rotate: true);
 
+            m_largerFlame = !m_largerFlame; // TODO: JRDV: Generalize this, something like a counter, and each button press increments it, and each takes the modulus of the number of options
 
+            if (m_largerFlame)
+                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+            else
+            {
                 //m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
                 m_dbSprites.Clear();
                 DemoBatman(multithreaded: true);
@@ -2566,6 +2753,25 @@ namespace FireDemo
                 m_dbSprites.Add(text); // Add the text sprite
 
                 buttonDemo_Click(sender, e);
+                return;
+            }
+
+            TextSprite tsAway = new TextSprite
+            {
+                //Text = "Away (if I'm not back in 5 minutes,\njust wait longer)",
+                Text = "At Lunch (I'll be back in a few)",
+                Color = Color.Yellow,
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbSprites.Add(tsAway);
+
+            buttonDemo_Click(sender, e);
+        }
+
+        private void buttonInMeeting_Click(object sender, EventArgs e)
+        {
+            RedFlameAndBatmanFightingCrime(sender, e, "In a Meeting");
         }
 
 #if false // ExtraLargeRainbow (too slow)
