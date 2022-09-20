@@ -54,9 +54,10 @@ namespace FireDemo
             this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonRainbowFire = new System.Windows.Forms.Button();
             this.groupBoxExperiment = new System.Windows.Forms.GroupBox();
+            this.buttonRainbowFireDark = new System.Windows.Forms.Button();
             this.buttonSauronV3 = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
-            this.buttonRainbowFireDark = new System.Windows.Forms.Button();
+            this.buttonFluxCapacitor = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
             this.SuspendLayout();
@@ -310,6 +311,7 @@ namespace FireDemo
             // 
             // groupBoxExperiment
             // 
+            this.groupBoxExperiment.Controls.Add(this.buttonFluxCapacitor);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowFireDark);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV3);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowBatman);
@@ -327,6 +329,16 @@ namespace FireDemo
             this.groupBoxExperiment.TabIndex = 8;
             this.groupBoxExperiment.TabStop = false;
             this.groupBoxExperiment.Text = "Demos and Experiments";
+            // 
+            // buttonRainbowFireDark
+            // 
+            this.buttonRainbowFireDark.Location = new System.Drawing.Point(6, 405);
+            this.buttonRainbowFireDark.Name = "buttonRainbowFireDark";
+            this.buttonRainbowFireDark.Size = new System.Drawing.Size(172, 90);
+            this.buttonRainbowFireDark.TabIndex = 31;
+            this.buttonRainbowFireDark.Text = "Rainbow Fire Dark";
+            this.buttonRainbowFireDark.UseVisualStyleBackColor = true;
+            this.buttonRainbowFireDark.Click += new System.EventHandler(this.buttonRainbowFireDark_Click);
             // 
             // buttonSauronV3
             // 
@@ -348,15 +360,15 @@ namespace FireDemo
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
             this.buttonRainbowBatman.Click += new System.EventHandler(this.buttonRainbowBatman_Click);
             // 
-            // buttonRainbowFireDark
+            // buttonFluxCapacitor
             // 
-            this.buttonRainbowFireDark.Location = new System.Drawing.Point(6, 405);
-            this.buttonRainbowFireDark.Name = "buttonRainbowFireDark";
-            this.buttonRainbowFireDark.Size = new System.Drawing.Size(172, 90);
-            this.buttonRainbowFireDark.TabIndex = 31;
-            this.buttonRainbowFireDark.Text = "Rainbow Fire Dark";
-            this.buttonRainbowFireDark.UseVisualStyleBackColor = true;
-            this.buttonRainbowFireDark.Click += new System.EventHandler(this.buttonRainbowFireDark_Click);
+            this.buttonFluxCapacitor.Location = new System.Drawing.Point(183, 405);
+            this.buttonFluxCapacitor.Name = "buttonFluxCapacitor";
+            this.buttonFluxCapacitor.Size = new System.Drawing.Size(172, 90);
+            this.buttonFluxCapacitor.TabIndex = 32;
+            this.buttonFluxCapacitor.Text = "Flux";
+            this.buttonFluxCapacitor.UseVisualStyleBackColor = true;
+            this.buttonFluxCapacitor.Click += new System.EventHandler(this.buttonFluxCapacitor_Click);
             // 
             // Form2
             // 
@@ -406,5 +418,6 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonFrustratedStatus;
         private System.Windows.Forms.Button buttonInMeeting;
         private System.Windows.Forms.Button buttonRainbowFireDark;
+        private System.Windows.Forms.Button buttonFluxCapacitor;
     }
 }

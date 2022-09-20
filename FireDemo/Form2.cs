@@ -2774,6 +2774,12 @@ namespace FireDemo
             RedFlameAndBatmanFightingCrime(sender, e, "In a Meeting");
         }
 
+        private void buttonFluxCapacitor_Click(object sender, EventArgs e)
+        {
+            // TODO: Prototype the Flux Capacitor
+            RedFlameAndBatmanFightingCrime(sender, e, "In a Meeting");
+        }
+
 #if false // ExtraLargeRainbow (too slow)
 
         private void LargerRainbowFire_Click(object sender, EventArgs e)
