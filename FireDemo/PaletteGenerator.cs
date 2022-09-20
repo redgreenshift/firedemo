@@ -289,7 +289,7 @@ namespace FireDemo
 
         private static void InitializePalette(Color[] thePalette, Color c1, Color c2, Color c3, Color c4)
         {
-            ColorRange[] colorRange4PointLinear= {
+            ColorRange[] colorRange4PointLinear = {
                 new ColorRange(c1, 85),
                 new ColorRange(c2, 85),
                 new ColorRange(c3, 85),
@@ -941,7 +941,7 @@ namespace FireDemo
             }
             else if (fGreen)
             {
-                // Thought it was too turquoise, but it actually does look accurate to some flames I see on the internet :P
+                // Thought it was too turquoise, but it actually does look accurate when compared to some real green flames I used for reference on the internet :P
                 GetColorForPrimary(ref G, ref B, ref R, factor1, factor2, factor3);
             }
 
