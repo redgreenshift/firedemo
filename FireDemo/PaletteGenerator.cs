@@ -744,32 +744,52 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Generalized function for calculating a curved gradient, based on a single color.
+    /// Generalized function for calculating a DARK curved gradient, based on a single color.
     /// </summary>
     public class PalDarkFlameCurve : PalRealisticFlameCurve
     {
         static public new Color[] New(Color color)
         {
-            Color[] thePalette = PalRealisticFlameCurve.New(color);
+            Color[] thePalette = new Color[256];
+
             if (color == Color.White)
                 thePalette = PalRealisticFlameCurve.New(color);
             else if (color == Color.Black)
                 thePalette = PalRealisticFlameCurve.New(color);
+            else if (color == Color.Orange || color == Color.DarkOrange)
+                InitializeDarkFlameCurve(thePalette, Color.FromArgb(red: 255, green: 127, blue: 0));
+            else if (color == Color.Green)
+                InitializeDarkFlameCurve(thePalette, Color.FromArgb(0, 160, 0));
+            else if (color == Color.Violet)
+                InitializeDarkFlameCurve(thePalette, Color.FromArgb(128, 0, 255));
             else
-            {
-                thePalette = PalRealisticFlameCurve.New(Color.Black);
+                InitializeDarkFlameCurve(thePalette, color);
 
-                for (int i = 0; i < thePalette.Length; i++)
-                {
-                    float rPercent = color.R / (float)255;
-                    float gPercent = color.G / (float)255;
-                    float bPercent = color.B / (float)255;
-                    byte rValue = (byte)(thePalette[i].R * rPercent);
-                    byte gValue = (byte)(thePalette[i].G * gPercent);
-                    byte bValue = (byte)(thePalette[i].B * bPercent);
-                    thePalette[i] = Color.FromArgb(rValue, gValue, bValue);
-                }
+            return thePalette;
+        }
+
+        static private void InitializeDarkFlameCurve(Color[] thePalette, Color target, float fIntensity = 1.0f)
+        {
+            Color[] blackFlame = PalRealisticFlameCurve.New(Color.Black);
+
+            // Scale the BLACK flame to the specified color.
+            for (int i = 0; i < thePalette.Length; i++)
+            {
+                float rPercent = target.R / (float)255;
+                float gPercent = target.G / (float)255;
+                float bPercent = target.B / (float)255;
+                byte rValue = (byte)(blackFlame[i].R * rPercent);
+                byte gValue = (byte)(blackFlame[i].G * gPercent);
+                byte bValue = (byte)(blackFlame[i].B * bPercent);
+                thePalette[i] = Color.FromArgb(rValue, gValue, bValue);
             }
+        }
+
+        static public new Color[] NewRaw(Color color)
+        {
+            Color[] thePalette = new Color[256];
+
+            InitializeDarkFlameCurve(thePalette, color);
 
             return thePalette;
         }
