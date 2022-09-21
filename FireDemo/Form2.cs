@@ -695,29 +695,11 @@ namespace FireDemo
         }
         private void buttonAwayStatus_Click(object sender, EventArgs e)
         {
-            m_dbSprites.Clear();
-            SimpleCandle();
-
-            m_dbSprite.Magnification = 7;
-            int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
-            int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
-            m_dbSprite.Location = new Point(x: left, y: top);
-            m_dbSprites.Add(m_dbSprite); // Add the candle
-
-            m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
-                density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
-                //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
-                //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
-                //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
-                shift: true, rotate: true);
-
-            ++m_cPresetVariant;
-            bool largerFlame = (m_cPresetVariant % 2) == 1;
-
-            if (largerFlame)
-                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-            else
-                m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+            if (!FNextPresetVariantIsCandle(Color.Yellow))
+            {
+                bool largerFlame = (m_cPresetVariant % 2) == 1;
+                AddSimpleCandle(Color.Transparent, largerFlame, realistic: true);
+            }
 
             TextSprite tsAway = new TextSprite
             {
@@ -734,37 +716,7 @@ namespace FireDemo
 
         private void buttonOofStatus_Click(object sender, EventArgs e)
         {
-            m_dbSprites.Clear();
-
-            ++m_cPresetVariant;
-            bool fUseCandle = (m_cPresetVariant % 3) != 1;
-
-            if (fUseCandle)
-            {
-                SimpleCandle();
-                Color[] palFlame = PalRealisticFlameCurve.New(Color.Black);
-                m_dbSprite.SetPalette(palFlame);
-
-                m_dbSprite.Magnification = 7;
-                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
-                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
-                m_dbSprite.Location = new Point(x: left, y: top);
-                m_dbSprites.Add(m_dbSprite); // Add the candle
-
-                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
-                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
-                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
-                    shift: true, rotate: true);
-
-                bool largerFlame = (m_cPresetVariant % 3) != 0;
-                if (largerFlame)
-                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-                else
-                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
-            }
-            else
+            if (!FNextPresetVariantIsCandle(Color.Black))
             {
                 DemoLightning();
             }
@@ -790,42 +742,9 @@ namespace FireDemo
         // TODO: JRDV: First step in generalizing. Need to lift some stuff out, and consolidate the toggle variables
         private void RedFlameAndBatmanFightingCrime(object sender, EventArgs e, string statusText)
         {
-            m_dbSprites.Clear();
             UpdateVisibleUI();
 
-            ++m_cPresetVariant;
-            bool fUseCandle = (m_cPresetVariant % 3) != 1; // FALSE == Batman
-            bool largerFlame = (m_cPresetVariant % 3) == 0;
-
-            if (fUseCandle)
-            {
-                SimpleCandle();
-                Color[] palFlame = PalRealisticFlameCurve.New(Color.Red);
-                m_dbSprite.SetPalette(palFlame);
-
-                m_dbSprite.Magnification = 7;
-                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
-                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
-                m_dbSprite.Location = new Point(x: left, y: top);
-                m_dbSprites.Add(m_dbSprite); // Add the candle
-
-                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
-                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
-                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
-                    shift: true, rotate: true);
-
-                if (largerFlame)
-                {
-                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
-                }
-                else
-                {
-                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-                }
-            }
-            else
+            if (!FNextPresetVariantIsCandle(Color.Red))
             {
                 DemoBatman(multithreaded: true);
 
@@ -848,45 +767,14 @@ namespace FireDemo
         private void buttonAvailableStatus_Click(object sender, EventArgs e)
         {
             string t = "Available";
-            m_dbSprites.Clear();
 
-            ++m_cPresetVariant;
-            bool fUseCandle = (m_cPresetVariant % 3) != 1; // FALSE == Borg Regeneration
-
-            if (!fUseCandle)
+            if (!FNextPresetVariantIsCandle(Color.Green))
             {
                 DemoBorg();
 
                 m_dbSprites.Add(m_dbSprite);
 
                 t += " (you will be assimilated...\nplease talk to me)";
-            }
-            else
-            {
-                // DemoAwayFlame
-                SimpleCandle();
-                Color[] palFlame = PalRealisticFlameCurve.New(Color.Green);
-                m_dbSprite.SetPalette(palFlame);
-
-                m_dbSprite.Magnification = 7;
-                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
-                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
-                m_dbSprite.Location = new Point(x: left, y: top);
-                m_dbSprites.Add(m_dbSprite); // Add the candle
-
-                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
-                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
-                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
-                    shift: true, rotate: true);
-
-                bool largerFlame = (m_cPresetVariant % 3) != 0;
-
-                if (largerFlame)
-                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-                else
-                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
             }
 
             TextSprite text = new TextSprite
@@ -2333,38 +2221,64 @@ namespace FireDemo
             return dbSprites;
         }
 
-        private void buttonSauron_Click(object sender, EventArgs e)
+        void AddSimpleCandle(Color color, bool largerFlame, bool realistic = false)
+        {
+            SimpleCandle();
+            if (!realistic)
+            {
+                Color[] palFlame = PalRealisticFlameCurve.New(color);
+                m_dbSprite.SetPalette(palFlame);
+            }
+
+            m_dbSprite.Magnification = 7;
+            int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
+            int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
+            m_dbSprite.Location = new Point(x: left, y: top);
+            m_dbSprites.Add(m_dbSprite); // Add the candle
+
+            m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
+                density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
+                //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
+                //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
+                //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
+                shift: true, rotate: true);
+
+            if (largerFlame)
+                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+            else
+                m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+        }
+
+        /// <summary>
+        /// Determine whether we should use the Special Themed Preset Variant, or a colored flame.
+        /// Generalize the TriState:
+        /// 0: Small Flame
+        /// 1: Special Themed Preset Variant
+        /// 2: Large Flame
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        bool FNextPresetVariantIsCandle(Color color)
         {
             ++m_cPresetVariant;
             m_dbSprites.Clear();
             bool fUseCandle = (m_cPresetVariant % 3) != 1;
+            bool largerFlame = (m_cPresetVariant % 3) != 0;
+
+            if (!fUseCandle)
+                return false;
+
+            AddSimpleCandle(color, largerFlame);
+
+            return true;
+        }
+
+        private void buttonSauron_Click(object sender, EventArgs e)
+        {
             Point topLeft;
 
-            if (fUseCandle)
+            if (FNextPresetVariantIsCandle(Color.Orange))
             {
-                SimpleCandle();
-                Color[] palFlame = PalRealisticFlameCurve.New(Color.Orange);
-                m_dbSprite.SetPalette(palFlame);
-
-                m_dbSprite.Magnification = 7;
-                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
-                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
-                m_dbSprite.Location = new Point(x: left, y: top);
-                m_dbSprites.Add(m_dbSprite); // Add the candle
-
-                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
-                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
-                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
-                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
-                    shift: true, rotate: true);
-
-                bool largerFlame = (m_cPresetVariant % 3) != 0;
-                if (largerFlame)
-                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-                else
-                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
-
                 topLeft = new Point(0, 0);
             }
             else
@@ -2748,30 +2662,7 @@ namespace FireDemo
 
         private void buttonLunchStatus_Click(object sender, EventArgs e)
         {
-            m_dbSprites.Clear();
-            SimpleCandle();
-            Color[] palFlame = PalRealisticFlameCurve.New(Color.Indigo);
-            m_dbSprite.SetPalette(palFlame);
-
-            m_dbSprite.Magnification = 7;
-            int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
-            int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
-            m_dbSprite.Location = new Point(x: left, y: top);
-            m_dbSprites.Add(m_dbSprite); // Add the candle
-
-            m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
-                density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
-                                                              //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
-                                                              //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
-                                                              //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
-                shift: true, rotate: true);
-
-            ++m_cPresetVariant;
-            bool largerFlame = (m_cPresetVariant % 2) == 1;
-
-            if (largerFlame)
-                m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-            else
+            if (!FNextPresetVariantIsCandle(Color.Indigo))
             {
                 //m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
                 m_dbSprites.Clear();
