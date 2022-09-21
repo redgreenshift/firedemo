@@ -317,9 +317,10 @@ namespace FireDemo
             // Copied from Seed8BitLightning_Branching_Cheap_LINES()
             int fireWidth = canvas.Width;
             int fireHeight = canvas.Height;
-            List<int> nodes = new List<int>(1);
-
-            nodes.Add(fireWidth / 2);
+            List<int> nodes = new List<int>(1)
+            {
+                fireWidth / 2
+            };
 
             int yBranchMore = fireHeight * 2 / 3;
 
