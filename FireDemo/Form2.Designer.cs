@@ -42,8 +42,8 @@ namespace FireDemo
             this.buttonInMeeting = new System.Windows.Forms.Button();
             this.buttonFrustratedStatus = new System.Windows.Forms.Button();
             this.buttonLunchStatus = new System.Windows.Forms.Button();
-            this.buttonDemoFHL = new System.Windows.Forms.Button();
             this.buttonSauron = new System.Windows.Forms.Button();
+            this.buttonDemoFHL = new System.Windows.Forms.Button();
             this.buttonHistoryOfFire = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
             this.buttonSauronV2 = new System.Windows.Forms.Button();
@@ -54,10 +54,10 @@ namespace FireDemo
             this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonRainbowFire = new System.Windows.Forms.Button();
             this.groupBoxExperiment = new System.Windows.Forms.GroupBox();
+            this.buttonFluxCapacitor = new System.Windows.Forms.Button();
             this.buttonRainbowFireDark = new System.Windows.Forms.Button();
             this.buttonSauronV3 = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
-            this.buttonFluxCapacitor = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
             this.SuspendLayout();
@@ -99,12 +99,13 @@ namespace FireDemo
             // 
             // buttonOofStatus
             // 
-            this.buttonOofStatus.BackColor = System.Drawing.Color.DarkViolet;
-            this.buttonOofStatus.Location = new System.Drawing.Point(360, 309);
+            this.buttonOofStatus.BackColor = System.Drawing.Color.Black;
+            this.buttonOofStatus.ForeColor = System.Drawing.Color.MediumOrchid;
+            this.buttonOofStatus.Location = new System.Drawing.Point(182, 213);
             this.buttonOofStatus.Name = "buttonOofStatus";
             this.buttonOofStatus.Size = new System.Drawing.Size(172, 90);
             this.buttonOofStatus.TabIndex = 7;
-            this.buttonOofStatus.Text = "Sad?";
+            this.buttonOofStatus.Text = "Stuck";
             this.buttonOofStatus.UseVisualStyleBackColor = false;
             this.buttonOofStatus.Click += new System.EventHandler(this.buttonOofStatus_Click);
             // 
@@ -133,7 +134,7 @@ namespace FireDemo
             // buttonDndStatus
             // 
             this.buttonDndStatus.BackColor = System.Drawing.Color.Crimson;
-            this.buttonDndStatus.Location = new System.Drawing.Point(6, 309);
+            this.buttonDndStatus.Location = new System.Drawing.Point(6, 405);
             this.buttonDndStatus.Name = "buttonDndStatus";
             this.buttonDndStatus.Size = new System.Drawing.Size(172, 90);
             this.buttonDndStatus.TabIndex = 5;
@@ -146,10 +147,7 @@ namespace FireDemo
             this.groupBox1.Controls.Add(this.buttonInMeeting);
             this.groupBox1.Controls.Add(this.buttonFrustratedStatus);
             this.groupBox1.Controls.Add(this.buttonLunchStatus);
-            this.groupBox1.Controls.Add(this.buttonDemoFHL);
             this.groupBox1.Controls.Add(this.buttonSauron);
-            this.groupBox1.Controls.Add(this.buttonHistoryOfFire);
-            this.groupBox1.Controls.Add(this.buttonQuit);
             this.groupBox1.Controls.Add(this.buttonAwayStatus);
             this.groupBox1.Controls.Add(this.buttonDndStatus);
             this.groupBox1.Controls.Add(this.buttonOofStatus);
@@ -158,7 +156,7 @@ namespace FireDemo
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(26, 31);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(538, 504);
+            this.groupBox1.Size = new System.Drawing.Size(538, 601);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
@@ -166,7 +164,7 @@ namespace FireDemo
             // buttonInMeeting
             // 
             this.buttonInMeeting.BackColor = System.Drawing.Color.OrangeRed;
-            this.buttonInMeeting.Location = new System.Drawing.Point(183, 213);
+            this.buttonInMeeting.Location = new System.Drawing.Point(6, 309);
             this.buttonInMeeting.Name = "buttonInMeeting";
             this.buttonInMeeting.Size = new System.Drawing.Size(172, 90);
             this.buttonInMeeting.TabIndex = 13;
@@ -178,7 +176,7 @@ namespace FireDemo
             // 
             this.buttonFrustratedStatus.BackColor = System.Drawing.Color.DarkGreen;
             this.buttonFrustratedStatus.ForeColor = System.Drawing.Color.Yellow;
-            this.buttonFrustratedStatus.Location = new System.Drawing.Point(183, 309);
+            this.buttonFrustratedStatus.Location = new System.Drawing.Point(182, 405);
             this.buttonFrustratedStatus.Name = "buttonFrustratedStatus";
             this.buttonFrustratedStatus.Size = new System.Drawing.Size(172, 90);
             this.buttonFrustratedStatus.TabIndex = 12;
@@ -190,7 +188,7 @@ namespace FireDemo
             // 
             this.buttonLunchStatus.BackColor = System.Drawing.Color.Indigo;
             this.buttonLunchStatus.ForeColor = System.Drawing.Color.Lime;
-            this.buttonLunchStatus.Location = new System.Drawing.Point(183, 117);
+            this.buttonLunchStatus.Location = new System.Drawing.Point(182, 117);
             this.buttonLunchStatus.Name = "buttonLunchStatus";
             this.buttonLunchStatus.Size = new System.Drawing.Size(172, 90);
             this.buttonLunchStatus.TabIndex = 11;
@@ -198,20 +196,10 @@ namespace FireDemo
             this.buttonLunchStatus.UseVisualStyleBackColor = false;
             this.buttonLunchStatus.Click += new System.EventHandler(this.buttonLunchStatus_Click);
             // 
-            // buttonDemoFHL
-            // 
-            this.buttonDemoFHL.Location = new System.Drawing.Point(6, 405);
-            this.buttonDemoFHL.Name = "buttonDemoFHL";
-            this.buttonDemoFHL.Size = new System.Drawing.Size(172, 90);
-            this.buttonDemoFHL.TabIndex = 8;
-            this.buttonDemoFHL.Text = "FHL Demo";
-            this.buttonDemoFHL.UseVisualStyleBackColor = true;
-            this.buttonDemoFHL.Click += new System.EventHandler(this.buttonDemoFHL_Click);
-            // 
             // buttonSauron
             // 
             this.buttonSauron.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.buttonSauron.Location = new System.Drawing.Point(183, 21);
+            this.buttonSauron.Location = new System.Drawing.Point(182, 21);
             this.buttonSauron.Name = "buttonSauron";
             this.buttonSauron.Size = new System.Drawing.Size(172, 90);
             this.buttonSauron.TabIndex = 6;
@@ -219,9 +207,19 @@ namespace FireDemo
             this.buttonSauron.UseVisualStyleBackColor = false;
             this.buttonSauron.Click += new System.EventHandler(this.buttonSauron_Click);
             // 
+            // buttonDemoFHL
+            // 
+            this.buttonDemoFHL.Location = new System.Drawing.Point(360, 117);
+            this.buttonDemoFHL.Name = "buttonDemoFHL";
+            this.buttonDemoFHL.Size = new System.Drawing.Size(172, 90);
+            this.buttonDemoFHL.TabIndex = 8;
+            this.buttonDemoFHL.Text = "FHL Demo";
+            this.buttonDemoFHL.UseVisualStyleBackColor = true;
+            this.buttonDemoFHL.Click += new System.EventHandler(this.buttonDemoFHL_Click);
+            // 
             // buttonHistoryOfFire
             // 
-            this.buttonHistoryOfFire.Location = new System.Drawing.Point(183, 405);
+            this.buttonHistoryOfFire.Location = new System.Drawing.Point(6, 501);
             this.buttonHistoryOfFire.Name = "buttonHistoryOfFire";
             this.buttonHistoryOfFire.Size = new System.Drawing.Size(172, 90);
             this.buttonHistoryOfFire.TabIndex = 9;
@@ -231,7 +229,7 @@ namespace FireDemo
             // 
             // buttonQuit
             // 
-            this.buttonQuit.Location = new System.Drawing.Point(360, 405);
+            this.buttonQuit.Location = new System.Drawing.Point(360, 501);
             this.buttonQuit.Name = "buttonQuit";
             this.buttonQuit.Size = new System.Drawing.Size(172, 90);
             this.buttonQuit.TabIndex = 10;
@@ -314,6 +312,9 @@ namespace FireDemo
             this.groupBoxExperiment.Controls.Add(this.buttonFluxCapacitor);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowFireDark);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV3);
+            this.groupBoxExperiment.Controls.Add(this.buttonDemoFHL);
+            this.groupBoxExperiment.Controls.Add(this.buttonQuit);
+            this.groupBoxExperiment.Controls.Add(this.buttonHistoryOfFire);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowBatman);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV2);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowFire);
@@ -325,10 +326,20 @@ namespace FireDemo
             this.groupBoxExperiment.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxExperiment.Location = new System.Drawing.Point(582, 31);
             this.groupBoxExperiment.Name = "groupBoxExperiment";
-            this.groupBoxExperiment.Size = new System.Drawing.Size(538, 504);
+            this.groupBoxExperiment.Size = new System.Drawing.Size(538, 601);
             this.groupBoxExperiment.TabIndex = 8;
             this.groupBoxExperiment.TabStop = false;
             this.groupBoxExperiment.Text = "Demos and Experiments";
+            // 
+            // buttonFluxCapacitor
+            // 
+            this.buttonFluxCapacitor.Location = new System.Drawing.Point(183, 405);
+            this.buttonFluxCapacitor.Name = "buttonFluxCapacitor";
+            this.buttonFluxCapacitor.Size = new System.Drawing.Size(172, 90);
+            this.buttonFluxCapacitor.TabIndex = 32;
+            this.buttonFluxCapacitor.Text = "Flux";
+            this.buttonFluxCapacitor.UseVisualStyleBackColor = true;
+            this.buttonFluxCapacitor.Click += new System.EventHandler(this.buttonFluxCapacitor_Click);
             // 
             // buttonRainbowFireDark
             // 
@@ -359,16 +370,6 @@ namespace FireDemo
             this.buttonRainbowBatman.Text = "RainBAT";
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
             this.buttonRainbowBatman.Click += new System.EventHandler(this.buttonRainbowBatman_Click);
-            // 
-            // buttonFluxCapacitor
-            // 
-            this.buttonFluxCapacitor.Location = new System.Drawing.Point(183, 405);
-            this.buttonFluxCapacitor.Name = "buttonFluxCapacitor";
-            this.buttonFluxCapacitor.Size = new System.Drawing.Size(172, 90);
-            this.buttonFluxCapacitor.TabIndex = 32;
-            this.buttonFluxCapacitor.Text = "Flux";
-            this.buttonFluxCapacitor.UseVisualStyleBackColor = true;
-            this.buttonFluxCapacitor.Click += new System.EventHandler(this.buttonFluxCapacitor_Click);
             // 
             // Form2
             // 

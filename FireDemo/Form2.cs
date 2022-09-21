@@ -716,15 +716,17 @@ namespace FireDemo
 
         private void buttonOofStatus_Click(object sender, EventArgs e)
         {
-            if (!FNextPresetVariantIsCandle(Color.Black))
+            if (!FNextPresetVariantIsCandle(Color.Indigo, darkFlame: true))
             {
                 DemoLightning();
+                Color[] palLightning = PalLightning.New(Color.FromArgb(red: 64, green: 16, blue: 0)); // Color.Maroon or DarkRed.... not MediumOrchid, not FireBrick
+                m_dbSprite.SetPalette(palLightning);
             }
 
             m_dbSprites.Add(m_dbSprite);
             TextSprite text = new TextSprite
             {
-                Text = "I'm Sad",
+                Text = "I'm Stuck",
                 Color = Color.DarkMagenta,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -2221,12 +2223,12 @@ namespace FireDemo
             return dbSprites;
         }
 
-        void AddSimpleCandle(Color color, bool largerFlame, bool realistic = false)
+        void AddSimpleCandle(Color color, bool largerFlame, bool darkFlame = false, bool realistic = false)
         {
             SimpleCandle();
             if (!realistic)
             {
-                Color[] palFlame = PalRealisticFlameCurve.New(color);
+                Color[] palFlame = darkFlame ? PalDarkFlameCurve.New(color) : PalRealisticFlameCurve.New(color);
                 m_dbSprite.SetPalette(palFlame);
             }
 
@@ -2258,7 +2260,7 @@ namespace FireDemo
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        bool FNextPresetVariantIsCandle(Color color)
+        bool FNextPresetVariantIsCandle(Color color, bool darkFlame = false)
         {
             ++m_cPresetVariant;
             m_dbSprites.Clear();
@@ -2268,7 +2270,7 @@ namespace FireDemo
             if (!fUseCandle)
                 return false;
 
-            AddSimpleCandle(color, largerFlame);
+            AddSimpleCandle(color, largerFlame, darkFlame);
 
             return true;
         }
@@ -2284,9 +2286,9 @@ namespace FireDemo
             else
             {
                 LayeredSprite dbSauron = CreateEyeOfSauronV3();
+                m_dbSprites.Add(dbSauron);
 
                 bool addTower = (m_cPresetVariant % 2) == 0;
-                m_dbSprites.Add(dbSauron);
                 if (addTower)
                 {
                     VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
