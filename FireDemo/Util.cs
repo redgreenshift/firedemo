@@ -20,6 +20,11 @@ namespace FireDemo
 
         private static int? RandomSeed = null;
         //private static Random SingletonRNG = new Random();
+
+        /// <summary>
+        /// Simple way to enforce that multiple instances of Random created in rapid succession don't get initialized with the same seed.
+        /// </summary>
+        /// <returns></returns>
         public static Random NewRandom()
         {
             //return SingletonRNG;
