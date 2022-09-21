@@ -622,7 +622,7 @@ namespace FireDemo
             m_dbSprite.InterpolationMode = modes[ii].mode;
         }
 #endif
-        bool m_largerFlame = false; // TODO: Generalize all the various counters into a single counter
+        uint m_cPresetVariant = 0; // keeps track of the times a button has been pressed, so each preset can cycle through various variants
         /// <summary>
         /// Just a proof-of-concept that I can still change things on the fly, even in the refactored form
         /// </summary>
@@ -630,8 +630,9 @@ namespace FireDemo
         /// <param name="e"></param>
         private void buttonChange_Click(object sender, EventArgs e)
         {
-            m_largerFlame = !m_largerFlame;
-            if (m_largerFlame)
+            ++m_cPresetVariant;
+            bool largerFlame = (m_cPresetVariant % 2) == 1;
+            if (largerFlame)
                 m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
             else
                 m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true, f8: true);
@@ -710,9 +711,10 @@ namespace FireDemo
                 //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                 shift: true, rotate: true);
 
-            m_largerFlame = !m_largerFlame;
+            ++m_cPresetVariant;
+            bool largerFlame = (m_cPresetVariant % 2) == 1;
 
-            if (m_largerFlame)
+            if (largerFlame)
                 m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
             else
                 m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
@@ -730,14 +732,14 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
-        uint m_fUseCandleOOF = 0; // TODO: Generalize all the various counters into a single counter
         private void buttonOofStatus_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
 
-            ++m_fUseCandleOOF;
+            ++m_cPresetVariant;
+            bool fUseCandle = (m_cPresetVariant % 3) != 1;
 
-            if (m_fUseCandleOOF % 3 != 1)
+            if (fUseCandle)
             {
                 SimpleCandle();
                 Color[] palFlame = PalRealisticFlameCurve.New(Color.Black);
@@ -756,8 +758,8 @@ namespace FireDemo
                                                                   //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                     shift: true, rotate: true);
 
-                m_largerFlame = m_fUseCandleOOF % 3 != 0;
-                if (m_largerFlame)
+                bool largerFlame = (m_cPresetVariant % 3) != 0;
+                if (largerFlame)
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 else
                     m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
@@ -780,7 +782,6 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
-        uint m_fUseCandle = 0; // TODO: Generalize all the various counters into a single counter
         private void buttonBusyStatus_Click(object sender, EventArgs e)
         {
             RedFlameAndBatmanFightingCrime(sender, e, "I'm Busy");
@@ -791,9 +792,12 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
             UpdateVisibleUI();
-            ++m_fUseCandle;
 
-            if (m_fUseCandle % 3 != 1)
+            ++m_cPresetVariant;
+            bool fUseCandle = (m_cPresetVariant % 3) != 1; // FALSE == Batman
+            bool largerFlame = (m_cPresetVariant % 3) == 0;
+
+            if (fUseCandle)
             {
                 SimpleCandle();
                 Color[] palFlame = PalRealisticFlameCurve.New(Color.Red);
@@ -812,15 +816,13 @@ namespace FireDemo
                                                                   //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                     shift: true, rotate: true);
 
-                if (m_fUseCandle % 3 == 0)
+                if (largerFlame)
                 {
                     m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
-                    m_largerFlame = false;
                 }
                 else
                 {
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
-                    m_largerFlame = true;
                 }
             }
             else
@@ -843,14 +845,15 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
-        uint s_isBorgOrFlame = 0; // TODO: Generalize all the various counters into a single counter
         private void buttonAvailableStatus_Click(object sender, EventArgs e)
         {
             string t = "Available";
-            ++s_isBorgOrFlame;
             m_dbSprites.Clear();
 
-            if (s_isBorgOrFlame % 3 == 1)
+            ++m_cPresetVariant;
+            bool fUseCandle = (m_cPresetVariant % 3) != 1; // FALSE == Borg Regeneration
+
+            if (!fUseCandle)
             {
                 DemoBorg();
 
@@ -878,8 +881,9 @@ namespace FireDemo
                                                                   //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                     shift: true, rotate: true);
 
-                m_largerFlame = s_isBorgOrFlame % 3 != 0;
-                if (m_largerFlame)
+                bool largerFlame = (m_cPresetVariant % 3) != 0;
+
+                if (largerFlame)
                     m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
                 else
                     m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
@@ -2678,14 +2682,13 @@ namespace FireDemo
             dbCauldronFire2.Location = new Point(x: left, y: top);
             //m_dbSprites.Add(dbCauldronFire2); // I like the first fire better for dumpster
 
-
-
-
+            ++m_cPresetVariant;
+            bool okToInterrupt = (m_cPresetVariant % 2) == 0;
             int dangerY = 0;
             TextSprite text = new TextSprite
             {
                 Color = Color.Red,
-                Text = "It's fine, feel free to interrupt.",
+                Text = okToInterrupt ? "It's fine, feel free to interrupt." : "Not now. Putting out fires.",
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
                 SmoothTransition = true,
                 Location = new Point(x: 32, y: dangerY),
@@ -2725,9 +2728,10 @@ namespace FireDemo
                                                               //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
                 shift: true, rotate: true);
 
-            m_largerFlame = !m_largerFlame; // TODO: JRDV: Generalize this, something like a counter, and each button press increments it, and each takes the modulus of the number of options
+            ++m_cPresetVariant;
+            bool largerFlame = (m_cPresetVariant % 2) == 1;
 
-            if (m_largerFlame)
+            if (largerFlame)
                 m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
             else
             {
