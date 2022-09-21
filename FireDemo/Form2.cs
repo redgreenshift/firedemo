@@ -2719,6 +2719,30 @@ namespace FireDemo
             RedFlameAndBatmanFightingCrime(sender, e, "In a Meeting");
         }
 
+        private void buttonBlueTBD_Click(object sender, EventArgs e)
+        {
+            if (!FNextPresetVariantIsCandle(Color.Blue))
+            {
+                DemoBatman(multithreaded: true);
+                Color[] palFire = PalRealisticFlameCurve.New(Color.Blue);
+
+                m_dbSprite.SetPalette(palFire);
+            }
+
+            TextSprite text = new TextSprite
+            {
+                Text = "I'm Blue",
+                Color = Color.DodgerBlue,
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbText = text;
+            m_dbSprites.Add(m_dbSprite); // Add the Flaming Batman logo
+            m_dbSprites.Add(text); // Add the text sprite
+
+            buttonDemo_Click(sender, e);
+        }
+
 #if false // ExtraLargeRainbow (too slow)
 
         private void LargerRainbowFire_Click(object sender, EventArgs e)

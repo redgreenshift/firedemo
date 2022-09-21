@@ -58,6 +58,7 @@ namespace FireDemo
             this.buttonRainbowFireDark = new System.Windows.Forms.Button();
             this.buttonSauronV3 = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
+            this.buttonBlueTBD = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
             this.SuspendLayout();
@@ -144,6 +145,7 @@ namespace FireDemo
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonBlueTBD);
             this.groupBox1.Controls.Add(this.buttonInMeeting);
             this.groupBox1.Controls.Add(this.buttonFrustratedStatus);
             this.groupBox1.Controls.Add(this.buttonLunchStatus);
@@ -371,6 +373,17 @@ namespace FireDemo
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
             this.buttonRainbowBatman.Click += new System.EventHandler(this.buttonRainbowBatman_Click);
             // 
+            // buttonBlueTBD
+            // 
+            this.buttonBlueTBD.BackColor = System.Drawing.Color.DodgerBlue;
+            this.buttonBlueTBD.Location = new System.Drawing.Point(185, 310);
+            this.buttonBlueTBD.Name = "buttonBlueTBD";
+            this.buttonBlueTBD.Size = new System.Drawing.Size(169, 89);
+            this.buttonBlueTBD.TabIndex = 14;
+            this.buttonBlueTBD.Text = "Blue: TBD";
+            this.buttonBlueTBD.UseVisualStyleBackColor = false;
+            this.buttonBlueTBD.Click += new System.EventHandler(this.buttonBlueTBD_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -420,5 +433,6 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonInMeeting;
         private System.Windows.Forms.Button buttonRainbowFireDark;
         private System.Windows.Forms.Button buttonFluxCapacitor;
+        private System.Windows.Forms.Button buttonBlueTBD;
     }
 }
