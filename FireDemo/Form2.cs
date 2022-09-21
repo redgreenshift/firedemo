@@ -2285,9 +2285,13 @@ namespace FireDemo
             {
                 LayeredSprite dbSauron = CreateEyeOfSauronV3();
 
-                //VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
+                bool addTower = (m_cPresetVariant % 2) == 0;
                 m_dbSprites.Add(dbSauron);
-                //m_dbSprites.Add(tower);
+                if (addTower)
+                {
+                    VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
+                    m_dbSprites.Add(tower);
+                }
 
                 //TextSprite "Eye see you, did you bring the ring?"
                 topLeft = new Point(270, 300);
