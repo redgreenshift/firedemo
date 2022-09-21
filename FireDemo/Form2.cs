@@ -2177,13 +2177,13 @@ namespace FireDemo
             return dbCandle;
         }
 
-        bool m_fBigRainbowFire = true;
         private void buttonRainbowFire_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            m_fBigRainbowFire = !m_fBigRainbowFire;
+            ++m_cPresetVariant;
+            bool fBigRainbowFire = (m_cPresetVariant % 2) == 0;
 
-            m_dbSprites.AddRange(CreateRainbowFlames(m_fBigRainbowFire));
+            m_dbSprites.AddRange(CreateRainbowFlames(fBigRainbowFire));
 
             buttonDemo_Click(null, null);
         }
@@ -2191,9 +2191,10 @@ namespace FireDemo
         private void buttonRainbowFireDark_Click(object sender, EventArgs e)
         {
             m_dbSprites.Clear();
-            m_fBigRainbowFire = !m_fBigRainbowFire;
+            ++m_cPresetVariant;
+            bool fBigRainbowFire = (m_cPresetVariant % 2) == 0;
 
-            m_dbSprites.AddRange(CreateRainbowFlames(m_fBigRainbowFire, dark: true));
+            m_dbSprites.AddRange(CreateRainbowFlames(fBigRainbowFire, dark: true));
 
             buttonDemo_Click(null, null);
         }
