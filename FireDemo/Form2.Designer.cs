@@ -225,7 +225,7 @@ namespace FireDemo
             this.buttonHistoryOfFire.Name = "buttonHistoryOfFire";
             this.buttonHistoryOfFire.Size = new System.Drawing.Size(172, 90);
             this.buttonHistoryOfFire.TabIndex = 9;
-            this.buttonHistoryOfFire.Text = "About";
+            this.buttonHistoryOfFire.Text = "About / History";
             this.buttonHistoryOfFire.UseVisualStyleBackColor = true;
             this.buttonHistoryOfFire.Click += new System.EventHandler(this.buttonHistoryOfFire_Click);
             // 

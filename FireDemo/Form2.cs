@@ -1361,7 +1361,7 @@ namespace FireDemo
                     m_dbText.Text =
                     "I want to reiterate that so far in the demo, computational\n" +
                     "cost hasn't increased, proving the algorithm worked.\n" +
-                    "I didn't have a palette to demonstrate it very well.";
+                    "I just didn't have a palette to demonstrate it very well.";
 
                     // 
                     // So far only changed the palette, therefore Smalltalk is fast enough to run the algorithm from 15 years prior.
@@ -1374,7 +1374,7 @@ namespace FireDemo
                 {
                     timer2.Change(historyDemoPeriod, TimeSpan.Zero);
                     m_dbText.Text = "NOW with 15 additional years of processing power,\n" +
-                    "I can use bicubic interpolation, and...";
+                    "I can use BICUBIC INTERPOLATION, and...";
                     if (Util.IsLinux)
                         m_genericFlame.InterpolationMode = InterpolationMode.Bicubic;
                     else
