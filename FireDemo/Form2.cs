@@ -716,7 +716,8 @@ namespace FireDemo
 
         private void buttonOofStatus_Click(object sender, EventArgs e)
         {
-            if (!FNextPresetVariantIsCandle(Color.Indigo, darkFlame: true))
+            bool lighter = (m_cPresetVariant % 6) > 3;
+            if (!FNextPresetVariantIsCandle(lighter ? Color.Violet : Color.Indigo, darkFlame: true))
             {
                 DemoLightning();
                 Color[] palLightning = PalLightning.New(Color.FromArgb(red: 64, green: 16, blue: 0)); // Color.Maroon or DarkRed.... not MediumOrchid, not FireBrick
