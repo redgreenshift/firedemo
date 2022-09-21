@@ -2335,20 +2335,55 @@ namespace FireDemo
 
         private void buttonSauron_Click(object sender, EventArgs e)
         {
+            ++m_cPresetVariant;
             m_dbSprites.Clear();
-            LayeredSprite dbSauron = CreateEyeOfSauronV3();
+            bool fUseCandle = (m_cPresetVariant % 3) != 1;
+            Point topLeft;
 
-            VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
-            m_dbSprites.Add(dbSauron);
-            m_dbSprites.Add(tower);
+            if (fUseCandle)
+            {
+                SimpleCandle();
+                Color[] palFlame = PalRealisticFlameCurve.New(Color.Orange);
+                m_dbSprite.SetPalette(palFlame);
 
-            //TextSprite "Eye see you, did you bring the ring?"
-            Point topLeft = new Point(270, 300);
+                m_dbSprite.Magnification = 7;
+                int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
+                int top = (this.Height - m_dbSprite.Height * m_dbSprite.Magnification);
+                m_dbSprite.Location = new Point(x: left, y: top);
+                m_dbSprites.Add(m_dbSprite); // Add the candle
+
+                m_coolingStrategy.SetMapParameters(width: m_dbSprite.Width, height: m_dbSprite.Height,
+                    density: 0.4f, min: 5, max: 13, smoothing: 5, // values from Original demo, doesn't produce the same results. Something is different in the refactored code (iFrame = 0 fixed it!!!)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 1, // The numbers J liked for the 8bit TORCH2 (lower density, higher cooling, looks bad here)
+                                                                  //density: 0.3f, min: 5, max: 23, smoothing: 5, // lower density, higher cooling, makes more dynamic flames
+                                                                  //density: 0.2f, min: 5, max: 29, smoothing: 5, // best so far for single realistic flame demo (not bad, but no longer necessary)
+                    shift: true, rotate: true);
+
+                bool largerFlame = (m_cPresetVariant % 3) != 0;
+                if (largerFlame)
+                    m_genericFlame.SetPixelMatrix(f5: true, f1: true, f2: true, f3: true);
+                else
+                    m_genericFlame.SetPixelMatrix(f8: true, f5: true, f1: true, f2: true, f3: true);
+
+                topLeft = new Point(0, 0);
+            }
+            else
+            {
+                LayeredSprite dbSauron = CreateEyeOfSauronV3();
+
+                //VectorSauronTowerSprite tower = new VectorSauronTowerSprite();
+                m_dbSprites.Add(dbSauron);
+                //m_dbSprites.Add(tower);
+
+                //TextSprite "Eye see you, did you bring the ring?"
+                topLeft = new Point(270, 300);
+            }
+
             TextSprite text = new TextSprite()
             {
                 Color = Color.PaleGoldenrod, // Color.LightGoldenrodYellow,
                 //Text = "Eye see you,\ngive me the ring.",
-                Text = "Working, but it's OK to\nchat (I miss people :')",
+                Text = "Working, but it's OK to\nchat (I miss people :'-)",
                 Location = topLeft,
                 LocationRange = new Rectangle(topLeft.X, topLeft.Y, 100, 10),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
@@ -2715,6 +2750,8 @@ namespace FireDemo
         {
             m_dbSprites.Clear();
             SimpleCandle();
+            Color[] palFlame = PalRealisticFlameCurve.New(Color.Indigo);
+            m_dbSprite.SetPalette(palFlame);
 
             m_dbSprite.Magnification = 7;
             int left = (this.Width - m_dbSprite.Width * m_dbSprite.Magnification) / 2;
@@ -2743,7 +2780,7 @@ namespace FireDemo
                 TextSprite text = new TextSprite
                 {
                     Text = "At Lunch (back in a few)",
-                    Color = Color.Red,
+                    Color = Color.FromArgb(75, 226, 130), // PalRealisticFlameCurve.New(Color.Indigo) --> palFire[105]
                     LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                     LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
                 };
@@ -2751,8 +2788,8 @@ namespace FireDemo
 
                 Color[] palFire = PalRealisticFlameCurve.New(Color.Indigo);
                 m_dbSprite.SetPalette(palFire);
-                m_dbText.Color = palFire[145];
-                m_dbText.Color = palFire[105];
+                //m_dbText.Color = palFire[145];
+                //m_dbText.Color = palFire[105];
 
                 m_dbSprites.Add(m_dbSprite); // Add the Flaming Batman logo
                 m_dbSprites.Add(text); // Add the text sprite
@@ -2765,7 +2802,7 @@ namespace FireDemo
             {
                 //Text = "Away (if I'm not back in 5 minutes,\njust wait longer)",
                 Text = "At Lunch (I'll be back in a few)",
-                Color = Color.Yellow,
+                Color = Color.FromArgb(75, 226, 130),
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
