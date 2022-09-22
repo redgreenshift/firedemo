@@ -363,7 +363,7 @@ namespace FireDemo
             dbPlasmaDisc.AddShape(lsBorgPlasma);
             dbPlasmaDisc.AddShape(lsBorgRing);
             left = (this.Width - ringWidth * magnification) / 2;
-            top = (this.Height - ringHeight * magnification) / 2;
+            top = (this.Height - ringHeight * magnification) / 2 + 50;
             dbPlasmaDisc.Location = new Point(x: left, y: top);
 
             m_palette = palBorg;
