@@ -314,80 +314,35 @@ namespace FireDemo
 
         protected void DrawOneBolt(IntensityMap canvas)
         {
-            // Copied from Seed8BitLightning_Branching_Cheap_LINES()
+            // Originally copied from Seed8BitLightning_Branching_Cheap_LINES()
+            // Now consolidated into one implementation
             int fireWidth = canvas.Width;
             int fireHeight = canvas.Height;
-            List<int> nodes = new List<int>(1)
-            {
-                fireWidth / 2
-            };
-
-            int yBranchMore = fireHeight * 2 / 3;
-
-            // Randomly seed the lightning path
-            for (int y = 0; y < fireHeight - 1; ++y)
-            {
-                /// FIDDLE WITH THE RARITY!
-                /// Fork the bolt sometimes.
-                /// 
-                if (rng.Next(y > yBranchMore ? 50 : 360) == 0)
-                {
-                    int nodeToFork = rng.Next(nodes.Count);
-
-                    if (nodes[nodeToFork] > 1 && nodes[nodeToFork] < fireWidth - 2)
-                    {
-                        int diff1 = rng.Next(2, 4);
-                        int diff2 = rng.Next(2, 4);
-                        nodes.Add(nodes[nodeToFork] + diff1);
-                        nodes[nodeToFork] -= diff2;
-                    }
-                }
-
-                for (int n = 0; n < nodes.Count; ++n)
-                {
-                    int diff = rng.Next(-2, 3);
-
-                    int x = nodes[n];
-                    x += diff;
-                    if (x < 0)
-                        x = 0;
-                    if (x > fireWidth)
-                        x = fireWidth;
-
-                    //nodes[n] = x;
-
-                    //flameIntensityMatrixFront[x + y * fireWidth] = 255;
-
-                    int delta = x - nodes[n];
-                    int step = 0;
-                    if (delta < 0)
-                        step = -1;
-                    else if (delta > 0)
-                        step = 1;
-
-                    int eachx = nodes[n];
-                    bool isFirstIteration = true;
-                    do
-                    {
-                        if (!isFirstIteration)
-                            eachx += step;
-
-                        isFirstIteration = false;
-
-                        if (pen.FShouldDrawNext())
-                            canvas.SetPixelPrevious(eachx, y, pen.NextValue());
-                    } while (eachx != x);
-
-                    nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
-                }
-            }
+            DrawOneBolt(xCenter: fireWidth / 2, yCenter: 0, rotationAngle: 0, radius: fireHeight - 1, width: 1, canvas: canvas,
+                minDiff: -2, maxDiff: 3, minForkDiff: 2, maxForkDiff: 4, forkingChance1: 360, forkingChance2: 50, yBranchMore: fireHeight * 2 / 3);
         }
 
-        protected void DrawOneBolt(int xCenter, int yCenter, int rotationAngle, int radius, int width, IntensityMap canvas)
+        /// <summary>
+        /// Currently only used for the Borg ring, but want to combine with the above implementation
+        /// </summary>
+        /// <param name="xCenter"></param>
+        /// <param name="yCenter"></param>
+        /// <param name="rotationAngle"></param>
+        /// <param name="radius"></param>
+        /// <param name="width"></param>
+        /// <param name="canvas"></param>
+        /// <param name="minDiff"></param>
+        /// <param name="maxDiff"></param>
+        /// <param name="minForkDiff"></param>
+        /// <param name="maxForkDiff"></param>
+        /// <param name="forkingChance1"></param>
+        /// <param name="forkingChance2"></param>
+        /// <param name="yBranchMore"></param>
+        protected void DrawOneBolt(int xCenter, int yCenter, int rotationAngle, int radius, int width, IntensityMap canvas,
+            int minDiff, int maxDiff, int minForkDiff, int maxForkDiff, int forkingChance1, int forkingChance2 = 0, int yBranchMore = 0)
         {
             int fireWidth = canvas.Width;
-            //int fireHeight = callback.Height;
-            // Copied from Seed8BitLightning_ForkingBorg_RandomRotation_EXPERIMENT
+            // Originally copied from Seed8BitLightning_ForkingBorg_RandomRotation_EXPERIMENT
             List<int> nodes = new List<int>(1)
             {
                 //int xCenter = fireWidth / 2;
@@ -404,14 +359,14 @@ namespace FireDemo
                 /// FIDDLE WITH THE RARITY!
                 /// Fork the bolt sometimes.
                 /// 
-                if (rng.Next(106) == 0)
+                if (rng.Next(yBranchMore > 0 && y > yBranchMore ? forkingChance2 : forkingChance1) == 0)
                 {
                     int nodeToFork = rng.Next(nodes.Count);
 
                     if (nodes[nodeToFork] > 1 && nodes[nodeToFork] < fireWidth - 2)
                     {
-                        int diff1 = rng.Next(1, 4);
-                        int diff2 = rng.Next(1, 4);
+                        int diff1 = rng.Next(minForkDiff, maxForkDiff);
+                        int diff2 = rng.Next(minForkDiff, maxForkDiff);
                         nodes.Add(nodes[nodeToFork] + diff1);
                         nodes[nodeToFork] -= diff2;
                     }
@@ -419,7 +374,7 @@ namespace FireDemo
 
                 for (int n = 0; n < nodes.Count; ++n)
                 {
-                    int diff = rng.Next(-2, 3);
+                    int diff = rng.Next(minDiff, maxDiff);
 
                     int x = nodes[n];
                     x += diff;
@@ -435,7 +390,7 @@ namespace FireDemo
                     else if (delta > 0)
                         step = 1;
 
-                    int eachx = nodes[n];
+                    int eachx = nodes[n]; // Draw every pixel between the last position (nodes[n]) and the new position (x). Then increase the variance (the random diff above) to make more realistic
                     bool isFirstIteration = true;
                     do
                     {
@@ -470,7 +425,7 @@ namespace FireDemo
                         }
                     } while (eachx != x);
 
-                    nodes[n] = x; // TODO: Draw every pixel between the last position and this position! Then increase the variance (the random delta above)
+                    nodes[n] = x;
                 }
             }
         }
@@ -533,7 +488,8 @@ namespace FireDemo
             degrees = rng.Next(0, 360);
             radius = Math.Min(xCenter, yCenter) - 2;
 
-            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: radius, width: rng.Next(-2,6), canvas: canvas);
+            this.DrawOneBolt(xCenter, yCenter, rotationAngle: degrees, radius: radius, width: rng.Next(-2, 6), canvas: canvas,
+                minDiff: -2, maxDiff: 3, minForkDiff: 1, maxForkDiff: 4, forkingChance1: 106);
         }
     }
 
