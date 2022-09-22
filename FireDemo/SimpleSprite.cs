@@ -452,7 +452,10 @@ namespace FireDemo
 				Color.Black // 4
 			};
 
-			pixels = new int[][]
+            // 5 units high
+            // 10 units wide
+            // 8 wide front, 2 deep, 1 high for lid
+            pixels = new int[][]
 			{
 				new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 0, 0},
 				new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 3, 4, 0, 0},

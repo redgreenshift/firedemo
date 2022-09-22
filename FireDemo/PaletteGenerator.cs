@@ -647,6 +647,15 @@ namespace FireDemo
                 secondary = 255;
         }
 
+        /// <summary>
+        /// This is the latest algorithm, even though it was named "old." That's because I was trying a new experimental method that I abandoned, and never renamed the "old"
+        /// </summary>
+        /// <param name="R"></param>
+        /// <param name="G"></param>
+        /// <param name="B"></param>
+        /// <param name="factor1"></param>
+        /// <param name="factor2"></param>
+        /// <param name="factor3"></param>
         static void GetColorForThree_Old(ref int R, ref int G, ref int B, float factor1, int factor2, float factor3)
         {
             bool fRedLeast = false;
@@ -663,6 +672,7 @@ namespace FireDemo
             if (fRedLeast)
                 GetColorForThreeHelper_Old(ref G, ref B, ref R, factor1, factor2, factor3);
             else if (fGreenLeast)
+                // TODO: Question is whether R qand B should be reversed
                 GetColorForThreeHelper_Old(ref R, ref B, ref G, factor1, factor2, factor3);
             else //if (fBlueLeast)
                 GetColorForThreeHelper_Old(ref R, ref G, ref B, factor1, factor2, factor3);
