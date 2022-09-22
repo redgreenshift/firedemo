@@ -388,14 +388,15 @@ namespace FireDemo
             int fireWidth = canvas.Width;
             //int fireHeight = callback.Height;
             // Copied from Seed8BitLightning_ForkingBorg_RandomRotation_EXPERIMENT
-            List<int> nodes = new List<int>(1);
+            List<int> nodes = new List<int>(1)
+            {
+                //int xCenter = fireWidth / 2;
+                //int yCenter = fireHeight / 2;
+                //int radius = Math.Min(xCenter, yCenter) - 2;
+                //int rotationAngle = rng.Next(0, 360);
 
-            //int xCenter = fireWidth / 2;
-            //int yCenter = fireHeight / 2;
-            //int radius = Math.Min(xCenter, yCenter) - 2;
-            //int rotationAngle = rng.Next(0, 360);
-
-            nodes.Add(xCenter);
+                xCenter
+            };
 
             // Randomly seed the lightning path
             for (int y = yCenter; y < yCenter + radius; ++y)
@@ -611,7 +612,7 @@ namespace FireDemo
             DrawLine(47, 16, 49, 16, canvas); DrawLine(47, 17, 50, 17, canvas); DrawLine(47, 18, 50, 18, canvas); DrawLine(46, 19, 51, 19, canvas); DrawLine(46, 20, 51, 20, canvas); DrawLine(46, 21, 51, 21, canvas); DrawLine(45, 22, 52, 22, canvas); DrawLine(45, 23, 52, 23, canvas); DrawLine(45, 24, 52, 24, canvas); DrawLine(45, 25, 52, 25, canvas); DrawLine(44, 26, 53, 26, canvas); DrawLine(44, 27, 53, 27, canvas); DrawLine(44, 28, 53, 28, canvas); DrawLine(44, 29, 53, 29, canvas); DrawLine(44, 30, 53, 30, canvas); DrawLine(43, 31, 54, 31, canvas); DrawLine(43, 32, 54, 32, canvas); DrawLine(43, 33, 54, 33, canvas); DrawLine(43, 34, 54, 34, canvas); DrawLine(43, 35, 54, 35, canvas); DrawLine(42, 36, 55, 36, canvas); DrawLine(42, 37, 55, 37, canvas); DrawLine(42, 38, 55, 38, canvas); DrawLine(42, 39, 55, 39, canvas); DrawLine(42, 40, 55, 40, canvas); DrawLine(42, 41, 55, 41, canvas); DrawLine(42, 42, 55, 42, canvas); DrawLine(42, 43, 55, 43, canvas); DrawLine(42, 44, 55, 44, canvas); DrawLine(42, 45, 55, 45, canvas); DrawLine(42, 46, 55, 46, canvas); DrawLine(42, 47, 55, 47, canvas); DrawLine(42, 48, 55, 48, canvas); DrawLine(42, 49, 55, 49, canvas); DrawLine(41, 50, 40, 50, canvas); DrawLine(42, 51, 55, 51, canvas); DrawLine(42, 52, 55, 52, canvas); DrawLine(42, 53, 55, 53, canvas); DrawLine(42, 54, 55, 54, canvas); DrawLine(42, 55, 55, 55, canvas); DrawLine(42, 56, 55, 56, canvas); DrawLine(42, 57, 55, 57, canvas); DrawLine(42, 58, 55, 58, canvas); DrawLine(42, 59, 55, 59, canvas); DrawLine(42, 60, 55, 60, canvas); DrawLine(42, 61, 55, 61, canvas); DrawLine(42, 62, 55, 62, canvas); DrawLine(42, 63, 55, 63, canvas); DrawLine(43, 64, 54, 64, canvas); DrawLine(43, 65, 54, 65, canvas); DrawLine(43, 66, 54, 66, canvas); DrawLine(43, 67, 54, 67, canvas); DrawLine(43, 68, 54, 68, canvas); DrawLine(44, 69, 53, 69, canvas); DrawLine(44, 70, 53, 70, canvas); DrawLine(44, 71, 53, 71, canvas); DrawLine(44, 72, 53, 72, canvas); DrawLine(44, 73, 53, 73, canvas); DrawLine(45, 74, 52, 74, canvas); DrawLine(45, 75, 52, 75, canvas); DrawLine(45, 76, 52, 76, canvas); DrawLine(45, 77, 52, 77, canvas); DrawLine(46, 78, 51, 78, canvas); DrawLine(46, 79, 51, 79, canvas); DrawLine(46, 80, 51, 80, canvas); DrawLine(47, 81, 50, 81, canvas); DrawLine(47, 82, 50, 82, canvas); DrawLine(47, 83, 50, 83, canvas); DrawLine(48, 84, 49, 84, canvas);
             this.pen = temp;
         }
-        ILightPen temporaryHack = new LightPen(fill: 1.0f, min: 20, max: 20, useFullRange: false);
+        readonly ILightPen temporaryHack = new LightPen(fill: 1.0f, min: 20, max: 20, useFullRange: false);
 
         //private void TemporaryHack_DetectPupilRegion(IntensityMap canvas)
         //{
@@ -654,7 +655,7 @@ namespace FireDemo
 
             int width = canvas.Width;
             int height = canvas.Height;
-            int radius = Math.Min(height, width) / 2;
+            //int radius = Math.Min(height, width) / 2;
 
             /*
              * < () >

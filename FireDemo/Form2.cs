@@ -17,10 +17,10 @@ namespace FireDemo
         Color[] m_palette;
         CoolingStrategyMap m_coolingStrategy;
         ILightPen m_lightPen;
-        List<ILightShape> m_lightShapes = new List<ILightShape>();
+        readonly List<ILightShape> m_lightShapes = new List<ILightShape>();
         DynamicSprite m_dbSprite;
         TextSprite m_dbText;
-        List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
+        readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
         private GenericRealtimeFlame m_genericFlame;
         readonly int m_framesPerSecond = 64;
         readonly int SecondsBeforeMovingTextAround = 15;
@@ -31,7 +31,7 @@ namespace FireDemo
         // but C# doesn't make it easy to figure out the scale factor
         //float m_scaleFactor = 1.0f; // Windows
         readonly float m_scaleFactor = 1.25f; // Linux
-        int Scaled(int i) => (int)(i * m_scaleFactor); // Do we still need this?
+//        int Scaled(int i) => (int)(i * m_scaleFactor); // Do we still need this?
         Action m_callbackToChangeStuff = null;
 
         public Form2()
@@ -1126,7 +1126,8 @@ namespace FireDemo
             public Color fireColor;
             public Color[] firePalette;
         };
-        BatDemoState[] batDemoStates = {
+
+        private static readonly BatDemoState[] batDemoStates = {
                 new BatDemoState
                 {
                     text = "I'm Busy",
@@ -1589,8 +1590,8 @@ namespace FireDemo
             float factor = 4.7f;
             int lightWidth = (int)(size.Width / factor / magnification);
             int lightHeight = (int)(size.Height / factor / magnification);
-            int xCenter = size.Width / 2;
-            int yCenter = size.Height / 2;
+            //int xCenter = size.Width / 2;
+            //int yCenter = size.Height / 2;
             int xOffset; //  = xCenter;
             int yOffset = (size.Height - lightHeight * magnification) / 2;
 
