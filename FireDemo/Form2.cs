@@ -751,7 +751,7 @@ namespace FireDemo
             {
                 DemoBatman(multithreaded: true);
 
-                statusText += " (fighting crime)";
+                //statusText += " (fighting crime)";
             }
 
             m_dbSprites.Add(m_dbSprite);
@@ -2718,7 +2718,7 @@ namespace FireDemo
         private void buttonFluxCapacitor_Click(object sender, EventArgs e)
         {
             // TODO: Prototype the Flux Capacitor
-            RedFlameAndBatmanFightingCrime(sender, e, "In a Meeting");
+            RedFlameAndBatmanFightingCrime(sender, e, "In flux");
         }
 
         private void buttonBlueTBD_Click(object sender, EventArgs e)
