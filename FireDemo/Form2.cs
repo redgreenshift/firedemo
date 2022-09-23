@@ -2862,7 +2862,7 @@ namespace FireDemo
 #endif
                 new SaberState
                 {
-                    text = "DarkViolet",
+                    text = "Violet",
                     textColor = Color.DarkViolet,
                     firePalette = PalRealisticFlameCurve.New(Color.DarkViolet),
                     pen = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true), // Violet / DarkViolet (much better than Purple)
@@ -2870,9 +2870,17 @@ namespace FireDemo
                 new SaberState
                 {
                     text = "Dark",
-                    textColor = Color.Indigo,
+                    textColor = Color.DimGray,
                     firePalette = PalDarkFlameCurve.New(Color.Black),
-                    pen = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true), // Violet / DarkViolet (much better than Purple)
+                    pen = new LightPen(fill: 1.0f, min: 210, max: 255, useFullRange: true),
+                    fDarkSaber = true,
+                },
+                new SaberState
+                {
+                    text = "Dark Red",
+                    textColor = Color.DarkRed,
+                    firePalette = PalDarkFlameCurve.New(Color.Red),
+                    pen = new LightPen(fill: 1.0f, min: 195, max: 255, useFullRange: true),
                     fDarkSaber = true,
                 },
         };
@@ -2890,16 +2898,21 @@ namespace FireDemo
             int top;
             int left;
 
-            Color[] palLightning;
-            palLightning = PalLightning.New(Color.Red); // A way to test the lightning algorithm is to see how it looks in candle form
-            palLightning = PalRealisticFlameCurve.New(Color.DarkViolet);
-
             ICoolingStrategy coolingStrategy;
-            coolingStrategy = new CoolingStrategyConst(1);
+            ILightShape lsSaber;
+            if (saberDemoStates[ii].fDarkSaber)
+            {
+                // Cool the dark saber faster, so when it blends out, it's not as wide.
+                coolingStrategy = new CoolingStrategyConst(11);
+                lsSaber = new LightShapeLine();
+            }
+            else
+            {
+                coolingStrategy = new CoolingStrategyConst(1);
+                lsSaber = new LightShapeLine();
+            }
 
-            ILightShape lsSaber = new LightShapeLine();
-
-            palLightning = saberDemoStates[ii].firePalette;
+            Color[] palLightning = saberDemoStates[ii].firePalette;
             ILightPen lpSaber = saberDemoStates[ii].pen;
             lsSaber.SetPen(lpSaber);
 
