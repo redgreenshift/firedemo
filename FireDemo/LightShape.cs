@@ -208,7 +208,9 @@ namespace FireDemo
     {
         public LightShapeCandle()
         {
-            // need to draw the seed values to both the front and back buffers
+            // need to draw the seed values to both the front and back buffers,
+            // because the seed values are drawn on the edge, and the egde
+            // pixels currently don't get copied between the buffers.
             m_fDrawToBothBuffers = true;
         }
 

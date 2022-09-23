@@ -455,6 +455,7 @@ namespace FireDemo
 				Color.White // 4
 			};
 
+			// This was just a quick prototype for the sword hilt. It doesn't look the way I want
             pixels = new int[][]
             {
                 new int[]{1, 4, 4, 4, 4, 4, 4, 1},
