@@ -2742,23 +2742,36 @@ namespace FireDemo
             ILightShape lsFlux = new LightShapeFluxPath();
             lsFlux.SetPen(lpFlux);
 
-            RealtimeLightEffect dbFlux;
-            dbFlux = new StaticField();
-            dbFlux.Initialize(fireWidth, fireHeight, magnification);
-            dbFlux.SetCoolingStrategy(coolingStrategy);
-            dbFlux.SetPalette(palLightning);
-            dbFlux.AddShape(lsFlux);
+            RealtimeLightEffect dbFluxLeft;
+            dbFluxLeft = new StaticField();
+            dbFluxLeft.Initialize(fireWidth, fireHeight, magnification);
+            dbFluxLeft.SetCoolingStrategy(coolingStrategy);
+            dbFluxLeft.SetPalette(palLightning);
+            dbFluxLeft.AddShape(lsFlux);
             left = (this.Width - fireWidth * magnification) / 2;
             top = (this.Height - fireHeight * magnification) / 2;
-            dbFlux.Location = new Point(x: left, y: top);
+            //dbFluxLeft.Location = new Point(x: left - (fireWidth * magnification / 2), y: top);
+            dbFluxLeft.Location = new Point(x: left + 200, y: top);
 
             m_palette = palLightning;
             m_lightPen = lpFlux;
             m_lightShapes.Clear();
             m_lightShapes.Add(lsFlux);
-            m_dbSprite = dbFlux;
+            m_dbSprite = dbFluxLeft;
 
             m_dbSprites.Add(m_dbSprite);
+
+            RealtimeLightEffect dbFluxRight;
+            dbFluxRight = new StaticField();
+            dbFluxRight.Initialize(fireWidth, fireHeight, magnification);
+            dbFluxRight.SetCoolingStrategy(coolingStrategy);
+            dbFluxRight.SetPalette(palLightning);
+            dbFluxRight.AddShape(lsFlux);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbFluxRight.Location = new Point(x: left + (fireWidth * magnification / 2), y: top);
+            dbFluxRight.Location = new Point(x: left - 200, y: top);
+//            m_dbSprites.Add(dbFluxRight);
 
 
 
