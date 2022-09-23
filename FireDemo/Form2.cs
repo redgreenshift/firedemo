@@ -923,7 +923,7 @@ namespace FireDemo
             dbCauldronFire1.SetPalette(palCauldron1);
             dbCauldronFire1.AddShape(lsBonfire1);
             left = cauldronBase1.Location.X + 1;
-            top = cauldronBase1.Location.Y - (dbCauldronFire1.Height - 1)* dbCauldronFire1.Magnification + 1;
+            top = cauldronBase1.Location.Y - (dbCauldronFire1.Height - 1) * dbCauldronFire1.Magnification + 1;
             dbCauldronFire1.Location = new Point(x: left, y: top);
             m_dbSprites.Add(dbCauldronFire1);
 
@@ -1058,7 +1058,7 @@ namespace FireDemo
                 Font = new Font(family: SystemFonts.DefaultFont.FontFamily, emSize: 30.0f),
                 SmoothTransition = true,
                 Location = new Point(x: 32, y: dangerY),
-                LocationRange = new Rectangle(x: 32, y: dangerY, width: 490-32, height: 0),
+                LocationRange = new Rectangle(x: 32, y: dangerY, width: 490 - 32, height: 0),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
             m_dbSprites.Add(text);
@@ -1189,7 +1189,7 @@ namespace FireDemo
             int ii = ++m_iDemoBatmanState % batDemoStates.Length;
 
             Color textColor = batDemoStates[ii].textColor;
-            Color[] palFire;            
+            Color[] palFire;
             if (batDemoStates[ii].firePalette != null)
                 palFire = batDemoStates[ii].firePalette;
             else
@@ -2190,28 +2190,28 @@ namespace FireDemo
                 }
             }
             else
-            foreach (Color color in colors4Point)
-            {
-                if (color == Color.Transparent)
+                foreach (Color color in colors4Point)
                 {
-                    Color c2 = Color.FromArgb(red: 255, green: 185, blue: 0);
-                    Color c3 = Color.FromArgb(red: 255, green: 255, blue: 127);
-                    Color c4Blue = Color.FromArgb(212, 212, 255);
-                    palCandle = PalFourPointLinear.New(Color.Black, c2, c3, c4Blue);
-                }
-                else
-                    palCandle = PalFourPointLinear.New(color);
-                RealtimeLightEffect dbCandle = GenerateCandle(big: fBigRainbowFire);
-                dbCandle.SetPalette(palCandle);
-                left = (width * magnification + bufferX) * (iCandle % 8);
-                top = (height * magnification + bufferY) * (iCandle / 8);
-                if (!fBigRainbowFire)
-                    top += 100;
-                dbCandle.Location = new Point(x: left, y: top);
+                    if (color == Color.Transparent)
+                    {
+                        Color c2 = Color.FromArgb(red: 255, green: 185, blue: 0);
+                        Color c3 = Color.FromArgb(red: 255, green: 255, blue: 127);
+                        Color c4Blue = Color.FromArgb(212, 212, 255);
+                        palCandle = PalFourPointLinear.New(Color.Black, c2, c3, c4Blue);
+                    }
+                    else
+                        palCandle = PalFourPointLinear.New(color);
+                    RealtimeLightEffect dbCandle = GenerateCandle(big: fBigRainbowFire);
+                    dbCandle.SetPalette(palCandle);
+                    left = (width * magnification + bufferX) * (iCandle % 8);
+                    top = (height * magnification + bufferY) * (iCandle / 8);
+                    if (!fBigRainbowFire)
+                        top += 100;
+                    dbCandle.Location = new Point(x: left, y: top);
 
-                dbSprites.Add(dbCandle);
-                ++iCandle;
-            }
+                    dbSprites.Add(dbCandle);
+                    ++iCandle;
+                }
 
             // Unsure if this actually speeds anything up, it's about the same speed
             // It's HALF the speed on Linux, so abandon this. Detecting Linux so we
@@ -2599,7 +2599,7 @@ namespace FireDemo
             lsBonfire1.SetPen(lpBonfire1);
 
             RealtimeLightEffect dbCauldronFire1 = new RealtimeFire();
-            dbCauldronFire1.Initialize(cauldronFireWidth, cauldronFireHeight, cauldronFireMagnification+2);
+            dbCauldronFire1.Initialize(cauldronFireWidth, cauldronFireHeight, cauldronFireMagnification + 2);
             dbCauldronFire1.InterpolationMode = InterpolationMode.NearestNeighbor;
             dbCauldronFire1.SetCoolingStrategy(csBonfire1);
             dbCauldronFire1.SetPalette(palCauldron1);
