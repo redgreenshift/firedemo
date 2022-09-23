@@ -1714,7 +1714,7 @@ namespace FireDemo
 
         // This is slightly faster than the Quick method, continue this path
         // Removing the lightning runs at 56 FPS on Raspberry-Pi,
-        // so if I can optimizethe lightning, then maybe this path is valid again
+        // so if I can optimize the lightning, then maybe this path is valid again
         void RunSauronFullHiRez()
         {
             m_dbSprites.Clear();
