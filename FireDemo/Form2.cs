@@ -2905,7 +2905,7 @@ namespace FireDemo
 
             RealtimeLightEffect dbSaber;
 
-            if (saberDemoStates[ii].fDarkSaber || true)
+            if (saberDemoStates[ii].fDarkSaber)
             {
                 m_genericFlame = new GenericRealtimeFlame();
                 m_genericFlame.SetPixelMatrix(f2: true, f5: true, f6: true, f7: true, f8: true);
