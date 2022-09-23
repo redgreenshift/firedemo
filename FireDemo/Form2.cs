@@ -622,7 +622,7 @@ namespace FireDemo
             m_dbSprite.InterpolationMode = modes[ii].mode;
         }
 #endif
-        uint m_cPresetVariant = 0; // keeps track of the times a button has been pressed, so each preset can cycle through various variants
+        int m_cPresetVariant = 0; // keeps track of the times a button has been pressed, so each preset can cycle through various variants
         /// <summary>
         /// Just a proof-of-concept that I can still change things on the fly, even in the refactored form
         /// </summary>
@@ -2798,11 +2798,91 @@ namespace FireDemo
             buttonDemo_Click(sender, e);
         }
 
+        struct SaberState
+        {
+            public string text;
+            public Color textColor;
+            public Color fireColor;
+            public Color[] firePalette;
+            public ILightPen pen;
+            public bool fDarkSaber;
+        };
+
+        private static readonly SaberState[] saberDemoStates = {
+                new SaberState
+                {
+                    text = "Red",
+                    textColor = Color.Red,
+                    firePalette = PalRealisticFlameCurve.New(Color.Red),
+                    pen = new LightPen(fill: 1.0f, min: 135, max: 255, useFullRange: true), // Red
+                },
+                new SaberState
+                {
+                    text = "Orange",
+                    textColor = Color.Orange,
+                    firePalette = PalRealisticFlameCurve.New(Color.Orange),
+                    pen = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true), // TBD
+                },
+                new SaberState
+                {
+                    text = "Yellow",
+                    textColor = Color.Yellow,
+                    firePalette = PalRealisticFlameCurve.New(Color.Yellow),
+                    pen = new LightPen(fill: 1.0f, min: 135, max: 255, useFullRange: true), // TBD
+                },
+                new SaberState
+                {
+                    text = "Green",
+                    textColor = Color.Green,
+                    firePalette = PalRealisticFlameCurve.New(Color.Green),
+                    pen = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true), // Green
+                },
+                new SaberState
+                {
+                    text = "Blue",
+                    textColor = Color.Blue,
+                    firePalette = PalRealisticFlameCurve.New(Color.Blue),
+                    pen = new LightPen(fill: 1.0f, min: 240, max: 255, useFullRange: true), // Blue
+                },
+#if false // these are OK, but Violet is much better
+            new SaberState
+                {
+                    text = "Purple",
+                    textColor = Color.Purple,
+                    firePalette = PalRealisticFlameCurve.New(Color.Purple),
+                    pen = new LightPen(fill: 1.0f, min: 244, max: 255, useFullRange: true), // Purple
+                },
+                new SaberState
+                {
+                    text = "BlueViolet",
+                    textColor = Color.BlueViolet,
+                    firePalette = PalRealisticFlameCurve.New(Color.BlueViolet),
+                    pen = new LightPen(fill: 1.0f, min: 245, max: 255, useFullRange: true), // BlueViolet
+                },
+#endif
+                new SaberState
+                {
+                    text = "DarkViolet",
+                    textColor = Color.DarkViolet,
+                    firePalette = PalRealisticFlameCurve.New(Color.DarkViolet),
+                    pen = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true), // Violet / DarkViolet (much better than Purple)
+                },
+                new SaberState
+                {
+                    text = "Dark",
+                    textColor = Color.Indigo,
+                    firePalette = PalDarkFlameCurve.New(Color.Black),
+                    pen = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true), // Violet / DarkViolet (much better than Purple)
+                    fDarkSaber = true,
+                },
+        };
+
         private void buttonLightSaber_Click(object sender, EventArgs e)
         {
+            int ii = (m_cPresetVariant++ + 0) % saberDemoStates.Length;
             m_dbSprites.Clear();
             // TODO: Prototype the Light Saber
-            string statusText = "It's saber time";
+            string statusText = "It's " + saberDemoStates[ii].text + " saber time";
 
             int fireWidth = 21;
             int fireHeight = 55;
@@ -2817,18 +2897,25 @@ namespace FireDemo
             ICoolingStrategy coolingStrategy;
             coolingStrategy = new CoolingStrategyConst(1);
 
-            ILightPen lpSaber = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);
-            lpSaber = new LightPen(fill: 1.0f, min: 135, max: 255, useFullRange: true); // Red
-            lpSaber = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true); // Green
-            lpSaber = new LightPen(fill: 1.0f, min: 240, max: 255, useFullRange: true); // Blue
-            lpSaber = new LightPen(fill: 1.0f, min: 244, max: 255, useFullRange: true); // Purple
-            lpSaber = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true); // Violet / DarkViolet (much better than Purple)
-            //lpSaber = new LightPen(fill: 1.0f, min: 245, max: 255, useFullRange: true); // BlueViolet
             ILightShape lsSaber = new LightShapeLine();
+
+            palLightning = saberDemoStates[ii].firePalette;
+            ILightPen lpSaber = saberDemoStates[ii].pen;
             lsSaber.SetPen(lpSaber);
 
             RealtimeLightEffect dbSaber;
-            dbSaber = new StaticField();
+
+            if (saberDemoStates[ii].fDarkSaber || true)
+            {
+                m_genericFlame = new GenericRealtimeFlame();
+                m_genericFlame.SetPixelMatrix(f2: true, f5: true, f6: true, f7: true, f8: true);
+                dbSaber = m_genericFlame;
+            }
+            else
+            {
+                dbSaber = new StaticField();
+            }
+
             dbSaber.Initialize(fireWidth, fireHeight, magnification);
             dbSaber.SetCoolingStrategy(coolingStrategy);
             dbSaber.SetPalette(palLightning);
@@ -2858,7 +2945,7 @@ namespace FireDemo
             TextSprite text = new TextSprite
             {
                 Text = statusText,
-                Color = Color.Red,
+                Color = saberDemoStates[ii].textColor,
                 LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
                 LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
             };
