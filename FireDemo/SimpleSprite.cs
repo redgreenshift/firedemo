@@ -425,7 +425,76 @@ namespace FireDemo
 		}
 	}
 
-	class Dumpster : SimpleSprite
+    class SaberHilt : SimpleSprite
+    {
+        public SaberHilt()
+        {
+            InitializeBitmap();
+        }
+
+        protected void InitializeBitmap(int heightLimit = -1)
+        {
+            int[][] pixels;
+            Color[] pal;
+
+            Width = 8;
+            Height = 16;
+
+            if (heightLimit != -1 && heightLimit < Height)
+                Height = heightLimit;
+
+            Color lightBrown = Color.LightGray;
+            Color medBrown = Color.Silver;
+            Color darkBrown = Color.DarkGray;
+
+            pal = new Color[]{
+                Color.Transparent, //0 Transparent
+				lightBrown, // "1"
+				medBrown, // "2"
+				darkBrown, // 3
+				Color.White // 4
+			};
+
+            pixels = new int[][]
+            {
+                new int[]{1, 4, 4, 4, 4, 4, 4, 1},
+                new int[]{1, 1, 1, 1, 1, 1, 1, 1},
+                new int[]{0, 3, 3, 3, 3, 3, 3, 0},
+                new int[]{0, 2, 1, 1, 2, 2, 2, 0},
+                new int[]{0, 0, 3, 3, 3, 3, 0, 0},
+                new int[]{0, 0, 0, 3, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+            };
+
+            Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    Color color = Color.Transparent;
+                    int i = pixels[y][x];
+                    if (i > 0)
+                    {
+                        color = pal[i];
+                    }
+
+                    Form.SetPixel(x, y, color);
+                }
+            }
+        }
+    }
+
+    class Dumpster : SimpleSprite
 	{
 		public Dumpster()
 		{

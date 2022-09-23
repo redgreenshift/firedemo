@@ -189,7 +189,6 @@ namespace FireDemo
                     {
                         xrender = (int)(x0 + (dxsigned * (yindex - y0) / dysigned));
                         this.DrawPixel(xrender, yindex, canvas);
-
                     }
                 }
                 else
@@ -223,6 +222,143 @@ namespace FireDemo
         }
     }
 
+    class LightShapeLine : LightShapeBase
+    {
+        override public void DrawOn(IntensityMap canvas)
+        {
+            // Draw the seed coal values for a candle flame
+            // Set the next row of random coals to keep the fire going.
+            int width = canvas.Width;
+            int height = canvas.Height;
+            int saberHeight = Math.Max(height - 4, 1);
+            int saberWidth; // = Math.Max(width, 1);
+            saberWidth = 2;
+            int x0 = (width - saberWidth) / 2;
+            int y0 = (height - saberHeight) / 2;
+            int x1 = x0 + saberWidth;
+            int y1 = y0 + saberHeight;
+            for (int xx = x0; xx < x1; ++xx)
+            {
+                this.DrawLine(xx, y0, xx, y1, canvas);
+            }
+        }
+    }
+
+    class LightShapeFluxPath : LightShapeBase
+    {
+        // start, end, direction, pattern/step/interval
+        override public void DrawOn(IntensityMap canvas)
+        {
+            // Draw the seed coal values for a candle flame
+            // Set the next row of random coals to keep the fire going.
+            int width = canvas.Width;
+            int height = canvas.Height;
+            int saberHeight = Math.Max(height - 4, 1);
+            int saberWidth; // = Math.Max(width, 1);
+            saberWidth = 2;
+            int x0 = (width - saberWidth) / 2;
+            int y0 = (height - saberHeight) / 2;
+            int x1 = x0 + saberWidth;
+            int y1 = y0 + saberHeight;
+            ++m_cIteration;
+            for (int xx = x0; xx < x1; ++xx)
+            {
+                this.DrawLineInterval(xx, y0, xx, y1, canvas);
+                // TODO: JRDV: Either need to dupliucate DrawLine and add a concept of interval, or plumb in something in DrawLine,
+                // either way I want to copy DrawLine to prototype it
+            }
+        }
+
+
+        int m_cIteration = 0;
+        readonly int m_cIntervalLength = 8;
+        int m_iStep = 7;
+        // TODO: JRDV: Move to internal Drawing Method section above, once I'm happy with the effect
+        protected void DrawLineInterval(int x0, int y0, int x1, int y1, IntensityMap canvas)
+        {
+            if (m_cIteration % 2 < 1)
+                return;
+            int offset = (m_cIteration * m_iStep) % m_cIntervalLength;
+            // draw a line from source to destination using the pen
+
+            int /*sx, sy, err, */ dx, dy, dxsigned, dysigned, xrender, yrender;
+
+            if (x0 == x1 && y0 == y1)
+            {
+                this.DrawPixel(x0, y0, canvas);
+                return;
+            }
+
+            //"INITIALIZE"
+
+            dxsigned = x1 - x0;
+            dysigned = y1 - y0;
+            dx = Math.Abs(x1 - x0);
+
+            //if (x0 < x1) sx = 1; else sx = -1;
+            dy = Math.Abs(y1 - y0);
+
+            //if (y0 < y1) sy = 1; else sy = -1;
+            //err = dx + dy;
+
+
+            if (dx > dy)
+            {
+                if (x0 < x1)
+                {
+                    for (int xindex = x0; xindex < x1; ++xindex)
+                    {
+                        bool fDraw = ((offset + xindex - x0) % (m_cIntervalLength)) < (m_cIntervalLength / 2);
+                        if (fDraw)
+                        {
+                            yrender = (int)(y0 + (dysigned * (xindex - x0) / dxsigned));
+                            this.DrawPixel(xindex, yrender, canvas);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int xindex = x1; xindex < x0; ++xindex)
+                    {
+                        bool fDraw = ((offset + xindex - x1) % (m_cIntervalLength)) < (m_cIntervalLength / 2);
+                        if (fDraw)
+                        {
+                            yrender = (int)(y1 + (dysigned * (xindex - x1) / dxsigned));
+                            this.DrawPixel(xindex, yrender, canvas);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (y0 < y1)
+                {
+                    for (int yindex = y0; yindex < y1; ++yindex)
+                    {
+                        bool fDraw = ((offset + yindex - y0) % (m_cIntervalLength)) < (m_cIntervalLength / 2);
+                        if (fDraw)
+                        {
+                            xrender = (int)(x0 + (dxsigned * (yindex - y0) / dysigned));
+                            this.DrawPixel(xrender, yindex, canvas);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int yindex = y1; yindex < y0; ++yindex)
+                    {
+                        bool fDraw = ((offset + yindex - y1) % (m_cIntervalLength)) < (m_cIntervalLength / 2);
+                        if (fDraw)
+                        {
+                            xrender = (int)(x1 + (dxsigned * (yindex - y1) / dysigned));
+                            this.DrawPixel(xrender, yindex, canvas);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
     class LightShapeBatman : LightShapeBase
     {
         override public void DrawOn(IntensityMap canvas)

@@ -2717,8 +2717,61 @@ namespace FireDemo
 
         private void buttonFluxCapacitor_Click(object sender, EventArgs e)
         {
+            m_dbSprites.Clear();
             // TODO: Prototype the Flux Capacitor
-            RedFlameAndBatmanFightingCrime(sender, e, "In flux");
+            string statusText = "Shield eyes from light";
+
+            int fireWidth = 21;
+            int fireHeight = 55;
+            int magnification = 4;
+            int top;
+            int left;
+
+            Color[] palLightning;
+            palLightning = PalLightning.New(Color.White); // A way to test the lightning algorithm is to see how it looks in candle form
+                                                          //            palLightning = PalRealisticFlameCurve.New(Color.DarkViolet);
+            palLightning = PalRealisticFlameCurve.New(Color.Yellow);
+            palLightning = PalRealisticFlameCurve.New(Color.White);
+            palLightning = PalRealisticFlameCurve.New(Color.Transparent); // Gives a pinkish color to the top end of the palette
+
+            ICoolingStrategy coolingStrategy;
+            coolingStrategy = new CoolingStrategyConst(36);
+
+            ILightPen lpFlux = new LightPen(fill: 1.0f, min: 244, max: 255, useFullRange: true); // White
+            //lpFlux = new LightPen(fill: 1.0f, min: 44, max: 255, useFullRange: true); // Yellow?
+            ILightShape lsFlux = new LightShapeFluxPath();
+            lsFlux.SetPen(lpFlux);
+
+            RealtimeLightEffect dbFlux;
+            dbFlux = new StaticField();
+            dbFlux.Initialize(fireWidth, fireHeight, magnification);
+            dbFlux.SetCoolingStrategy(coolingStrategy);
+            dbFlux.SetPalette(palLightning);
+            dbFlux.AddShape(lsFlux);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbFlux.Location = new Point(x: left, y: top);
+
+            m_palette = palLightning;
+            m_lightPen = lpFlux;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsFlux);
+            m_dbSprite = dbFlux;
+
+            m_dbSprites.Add(m_dbSprite);
+
+
+
+            TextSprite text = new TextSprite
+            {
+                Text = statusText,
+                Color = Color.Red,
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbSprites.Add(text);
+
+            buttonDemo_Click(sender, e);
         }
 
         private void buttonBlueTBD_Click(object sender, EventArgs e)
@@ -2741,6 +2794,75 @@ namespace FireDemo
             m_dbText = text;
             m_dbSprites.Add(m_dbSprite); // Add the Flaming Batman logo
             m_dbSprites.Add(text); // Add the text sprite
+
+            buttonDemo_Click(sender, e);
+        }
+
+        private void buttonLightSaber_Click(object sender, EventArgs e)
+        {
+            m_dbSprites.Clear();
+            // TODO: Prototype the Light Saber
+            string statusText = "It's saber time";
+
+            int fireWidth = 21;
+            int fireHeight = 55;
+            int magnification = 4;
+            int top;
+            int left;
+
+            Color[] palLightning;
+            palLightning = PalLightning.New(Color.Red); // A way to test the lightning algorithm is to see how it looks in candle form
+            palLightning = PalRealisticFlameCurve.New(Color.DarkViolet);
+
+            ICoolingStrategy coolingStrategy;
+            coolingStrategy = new CoolingStrategyConst(1);
+
+            ILightPen lpSaber = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true);
+            lpSaber = new LightPen(fill: 1.0f, min: 135, max: 255, useFullRange: true); // Red
+            lpSaber = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true); // Green
+            lpSaber = new LightPen(fill: 1.0f, min: 240, max: 255, useFullRange: true); // Blue
+            lpSaber = new LightPen(fill: 1.0f, min: 244, max: 255, useFullRange: true); // Purple
+            lpSaber = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true); // Violet / DarkViolet (much better than Purple)
+            //lpSaber = new LightPen(fill: 1.0f, min: 245, max: 255, useFullRange: true); // BlueViolet
+            ILightShape lsSaber = new LightShapeLine();
+            lsSaber.SetPen(lpSaber);
+
+            RealtimeLightEffect dbSaber;
+            dbSaber = new StaticField();
+            dbSaber.Initialize(fireWidth, fireHeight, magnification);
+            dbSaber.SetCoolingStrategy(coolingStrategy);
+            dbSaber.SetPalette(palLightning);
+            dbSaber.AddShape(lsSaber);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbSaber.Location = new Point(x: left, y: top);
+
+            m_palette = palLightning;
+            m_lightPen = lpSaber;
+            m_lightShapes.Clear();
+            m_lightShapes.Add(lsSaber);
+            m_dbSprite = dbSaber;
+
+            m_dbSprites.Add(m_dbSprite);
+
+            SaberHilt saberHilt = new SaberHilt
+            {
+                Location = new Point(
+                    dbSaber.Location.X + (dbSaber.Width) + 6,
+                    dbSaber.Location.Y + (dbSaber.Height * dbSaber.Magnification) - 6),
+                Magnification = 3,
+                InterpolationMode = InterpolationMode.NearestNeighbor,
+            };
+            m_dbSprites.Add(saberHilt);
+
+            TextSprite text = new TextSprite
+            {
+                Text = statusText,
+                Color = Color.Red,
+                LocationRange = new Rectangle(x: 0, y: 0, width: 900, height: 50),
+                LocationPeriod = TimeSpan.FromSeconds(SecondsBeforeMovingTextAround),
+            };
+            m_dbSprites.Add(text);
 
             buttonDemo_Click(sender, e);
         }

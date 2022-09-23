@@ -39,6 +39,7 @@ namespace FireDemo
             this.buttonAvailableStatus = new System.Windows.Forms.Button();
             this.buttonDndStatus = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonBlueTBD = new System.Windows.Forms.Button();
             this.buttonInMeeting = new System.Windows.Forms.Button();
             this.buttonFrustratedStatus = new System.Windows.Forms.Button();
             this.buttonLunchStatus = new System.Windows.Forms.Button();
@@ -58,7 +59,7 @@ namespace FireDemo
             this.buttonRainbowFireDark = new System.Windows.Forms.Button();
             this.buttonSauronV3 = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
-            this.buttonBlueTBD = new System.Windows.Forms.Button();
+            this.buttonLightSaber = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
             this.SuspendLayout();
@@ -162,6 +163,17 @@ namespace FireDemo
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Pick your status";
+            // 
+            // buttonBlueTBD
+            // 
+            this.buttonBlueTBD.BackColor = System.Drawing.Color.DodgerBlue;
+            this.buttonBlueTBD.Location = new System.Drawing.Point(185, 310);
+            this.buttonBlueTBD.Name = "buttonBlueTBD";
+            this.buttonBlueTBD.Size = new System.Drawing.Size(169, 89);
+            this.buttonBlueTBD.TabIndex = 14;
+            this.buttonBlueTBD.Text = "Blue: TBD";
+            this.buttonBlueTBD.UseVisualStyleBackColor = false;
+            this.buttonBlueTBD.Click += new System.EventHandler(this.buttonBlueTBD_Click);
             // 
             // buttonInMeeting
             // 
@@ -311,6 +323,7 @@ namespace FireDemo
             // 
             // groupBoxExperiment
             // 
+            this.groupBoxExperiment.Controls.Add(this.buttonLightSaber);
             this.groupBoxExperiment.Controls.Add(this.buttonFluxCapacitor);
             this.groupBoxExperiment.Controls.Add(this.buttonRainbowFireDark);
             this.groupBoxExperiment.Controls.Add(this.buttonSauronV3);
@@ -373,16 +386,15 @@ namespace FireDemo
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
             this.buttonRainbowBatman.Click += new System.EventHandler(this.buttonRainbowBatman_Click);
             // 
-            // buttonBlueTBD
+            // buttonLightSaber
             // 
-            this.buttonBlueTBD.BackColor = System.Drawing.Color.DodgerBlue;
-            this.buttonBlueTBD.Location = new System.Drawing.Point(185, 310);
-            this.buttonBlueTBD.Name = "buttonBlueTBD";
-            this.buttonBlueTBD.Size = new System.Drawing.Size(169, 89);
-            this.buttonBlueTBD.TabIndex = 14;
-            this.buttonBlueTBD.Text = "Blue: TBD";
-            this.buttonBlueTBD.UseVisualStyleBackColor = false;
-            this.buttonBlueTBD.Click += new System.EventHandler(this.buttonBlueTBD_Click);
+            this.buttonLightSaber.Location = new System.Drawing.Point(183, 501);
+            this.buttonLightSaber.Name = "buttonLightSaber";
+            this.buttonLightSaber.Size = new System.Drawing.Size(172, 90);
+            this.buttonLightSaber.TabIndex = 33;
+            this.buttonLightSaber.Text = "Saber";
+            this.buttonLightSaber.UseVisualStyleBackColor = true;
+            this.buttonLightSaber.Click += new System.EventHandler(this.buttonLightSaber_Click);
             // 
             // Form2
             // 
@@ -434,5 +446,6 @@ namespace FireDemo
         private System.Windows.Forms.Button buttonRainbowFireDark;
         private System.Windows.Forms.Button buttonFluxCapacitor;
         private System.Windows.Forms.Button buttonBlueTBD;
+        private System.Windows.Forms.Button buttonLightSaber;
     }
 }

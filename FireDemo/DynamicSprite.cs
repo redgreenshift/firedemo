@@ -469,7 +469,7 @@ namespace FireDemo
         }
     }
 
-    class StasisField : RealtimeLightEffect
+    class StaticField : RealtimeLightEffect
     {
         protected override void RenderStage2And3()
         {
