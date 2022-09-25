@@ -2751,7 +2751,7 @@ namespace FireDemo
             left = (this.Width - fireWidth * magnification) / 2;
             top = (this.Height - fireHeight * magnification) / 2;
             //dbFluxLeft.Location = new Point(x: left - (fireWidth * magnification / 2), y: top);
-            dbFluxLeft.Location = new Point(x: left + 200, y: top);
+            dbFluxLeft.Location = new Point(x: left - 200, y: top - 100);
 
             m_palette = palLightning;
             m_lightPen = lpFlux;
@@ -2761,17 +2761,36 @@ namespace FireDemo
 
             m_dbSprites.Add(m_dbSprite);
 
+            ILightShape lsFluxRight = new LightShapeFluxPath();
+            lsFluxRight.SetPen(lpFlux);
+
             RealtimeLightEffect dbFluxRight;
             dbFluxRight = new StaticField();
             dbFluxRight.Initialize(fireWidth, fireHeight, magnification);
             dbFluxRight.SetCoolingStrategy(coolingStrategy);
             dbFluxRight.SetPalette(palLightning);
-            dbFluxRight.AddShape(lsFlux);
+            dbFluxRight.AddShape(lsFluxRight);
             left = (this.Width - fireWidth * magnification) / 2;
             top = (this.Height - fireHeight * magnification) / 2;
             dbFluxRight.Location = new Point(x: left + (fireWidth * magnification / 2), y: top);
-            dbFluxRight.Location = new Point(x: left - 200, y: top);
-//            m_dbSprites.Add(dbFluxRight);
+            dbFluxRight.Location = new Point(x: dbFluxLeft.Location.X + dbFluxLeft.Width * dbFluxLeft.Magnification + 200, y: dbFluxLeft.Location.Y);
+            m_dbSprites.Add(dbFluxRight);
+
+
+            ILightShape lsFluxInverted = new LightShapeFluxPath(1);
+            lsFluxInverted.SetPen(lpFlux);
+
+            RealtimeLightEffect dbFluxBottom;
+            dbFluxBottom = new StaticField();
+            dbFluxBottom.Initialize(fireWidth, fireHeight, magnification);
+            dbFluxBottom.SetCoolingStrategy(coolingStrategy);
+            dbFluxBottom.SetPalette(palLightning);
+            dbFluxBottom.AddShape(lsFluxInverted);
+            left = (this.Width - fireWidth * magnification) / 2;
+            top = (this.Height - fireHeight * magnification) / 2;
+            dbFluxBottom.Location = new Point(x: left + (fireWidth * magnification / 2), y: top + 300);
+            dbFluxBottom.Location = new Point(x: dbFluxLeft.Location.X + dbFluxLeft.Width * dbFluxLeft.Magnification + 100, y: dbFluxLeft.Location.Y + dbFluxLeft.Height * dbFluxLeft.Magnification);
+            m_dbSprites.Add(dbFluxBottom);
 
 
 

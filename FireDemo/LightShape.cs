@@ -248,6 +248,10 @@ namespace FireDemo
 
     class LightShapeFluxPath : LightShapeBase
     {
+        public LightShapeFluxPath(int step = 7)
+        {
+            m_iStep = step;
+        }
         // start, end, direction, pattern/step/interval
         override public void DrawOn(IntensityMap canvas)
         {
