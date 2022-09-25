@@ -2955,6 +2955,7 @@ namespace FireDemo
                 m_genericFlame = new GenericRealtimeFlame();
                 m_genericFlame.SetPixelMatrix(f2: true, f5: true, f6: true, f7: true, f8: true);
                 dbSaber = m_genericFlame;
+                //dbSaber = new RealtimeLightning(); // Theoretically should be the same, but too uniform. I like how the generic flame is unbalanced slightly... oh! I have a bug, should be 456 not 567, but I like the effect of 567.
             }
             else
             {
