@@ -55,11 +55,11 @@ namespace FireDemo
             this.buttonRainBORG = new System.Windows.Forms.Button();
             this.buttonRainbowFire = new System.Windows.Forms.Button();
             this.groupBoxExperiment = new System.Windows.Forms.GroupBox();
+            this.buttonLightSaber = new System.Windows.Forms.Button();
             this.buttonFluxCapacitor = new System.Windows.Forms.Button();
             this.buttonRainbowFireDark = new System.Windows.Forms.Button();
             this.buttonSauronV3 = new System.Windows.Forms.Button();
             this.buttonRainbowBatman = new System.Windows.Forms.Button();
-            this.buttonLightSaber = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBoxExperiment.SuspendLayout();
             this.SuspendLayout();
@@ -227,7 +227,7 @@ namespace FireDemo
             this.buttonDemoFHL.Name = "buttonDemoFHL";
             this.buttonDemoFHL.Size = new System.Drawing.Size(172, 90);
             this.buttonDemoFHL.TabIndex = 8;
-            this.buttonDemoFHL.Text = "FHL Demo";
+            this.buttonDemoFHL.Text = "FHL #6 Demo";
             this.buttonDemoFHL.UseVisualStyleBackColor = true;
             this.buttonDemoFHL.Click += new System.EventHandler(this.buttonDemoFHL_Click);
             // 
@@ -346,6 +346,16 @@ namespace FireDemo
             this.groupBoxExperiment.TabStop = false;
             this.groupBoxExperiment.Text = "Demos and Experiments";
             // 
+            // buttonLightSaber
+            // 
+            this.buttonLightSaber.Location = new System.Drawing.Point(183, 501);
+            this.buttonLightSaber.Name = "buttonLightSaber";
+            this.buttonLightSaber.Size = new System.Drawing.Size(172, 90);
+            this.buttonLightSaber.TabIndex = 33;
+            this.buttonLightSaber.Text = "Saber";
+            this.buttonLightSaber.UseVisualStyleBackColor = true;
+            this.buttonLightSaber.Click += new System.EventHandler(this.buttonLightSaber_Click);
+            // 
             // buttonFluxCapacitor
             // 
             this.buttonFluxCapacitor.Location = new System.Drawing.Point(183, 405);
@@ -385,16 +395,6 @@ namespace FireDemo
             this.buttonRainbowBatman.Text = "RainBAT";
             this.buttonRainbowBatman.UseVisualStyleBackColor = true;
             this.buttonRainbowBatman.Click += new System.EventHandler(this.buttonRainbowBatman_Click);
-            // 
-            // buttonLightSaber
-            // 
-            this.buttonLightSaber.Location = new System.Drawing.Point(183, 501);
-            this.buttonLightSaber.Name = "buttonLightSaber";
-            this.buttonLightSaber.Size = new System.Drawing.Size(172, 90);
-            this.buttonLightSaber.TabIndex = 33;
-            this.buttonLightSaber.Text = "Saber";
-            this.buttonLightSaber.UseVisualStyleBackColor = true;
-            this.buttonLightSaber.Click += new System.EventHandler(this.buttonLightSaber_Click);
             // 
             // Form2
             // 
