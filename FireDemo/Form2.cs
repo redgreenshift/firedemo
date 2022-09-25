@@ -2845,7 +2845,7 @@ namespace FireDemo
                     text = "Red",
                     textColor = Color.Red,
                     firePalette = PalRealisticFlameCurve.New(Color.Red),
-                    pen = new LightPen(fill: 1.0f, min: 135, max: 255, useFullRange: true), // Red
+                    pen = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true), // Red
                 },
                 new SaberState
                 {
@@ -2859,14 +2859,14 @@ namespace FireDemo
                     text = "Yellow",
                     textColor = Color.Yellow,
                     firePalette = PalRealisticFlameCurve.New(Color.Yellow),
-                    pen = new LightPen(fill: 1.0f, min: 135, max: 255, useFullRange: true), // TBD
+                    pen = new LightPen(fill: 1.0f, min: 235, max: 255, useFullRange: true), // TBD
                 },
                 new SaberState
                 {
                     text = "Green",
                     textColor = Color.Green,
                     firePalette = PalRealisticFlameCurve.New(Color.Green),
-                    pen = new LightPen(fill: 1.0f, min: 54, max: 255, useFullRange: true), // Green
+                    pen = new LightPen(fill: 1.0f, min: 185, max: 255, useFullRange: true), // Green
                 },
                 new SaberState
                 {
