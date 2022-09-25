@@ -2721,7 +2721,7 @@ namespace FireDemo
             // TODO: Prototype the Flux Capacitor
             string statusText = "Shield eyes from light";
 
-            int fireWidth = 21;
+            int fireWidth = 55;
             int fireHeight = 55;
             int magnification = 4;
             int top;
@@ -2739,15 +2739,15 @@ namespace FireDemo
 
             ILightPen lpFlux = new LightPen(fill: 1.0f, min: 244, max: 255, useFullRange: true); // White
             //lpFlux = new LightPen(fill: 1.0f, min: 44, max: 255, useFullRange: true); // Yellow?
-            ILightShape lsFlux = new LightShapeFluxPath();
-            lsFlux.SetPen(lpFlux);
+            ILightShape lsFluxLeft = new LightShapeFluxPath(angle: -45);
+            lsFluxLeft.SetPen(lpFlux);
 
             RealtimeLightEffect dbFluxLeft;
             dbFluxLeft = new StaticField();
             dbFluxLeft.Initialize(fireWidth, fireHeight, magnification);
             dbFluxLeft.SetCoolingStrategy(coolingStrategy);
             dbFluxLeft.SetPalette(palLightning);
-            dbFluxLeft.AddShape(lsFlux);
+            dbFluxLeft.AddShape(lsFluxLeft);
             left = (this.Width - fireWidth * magnification) / 2;
             top = (this.Height - fireHeight * magnification) / 2;
             //dbFluxLeft.Location = new Point(x: left - (fireWidth * magnification / 2), y: top);
@@ -2756,12 +2756,12 @@ namespace FireDemo
             m_palette = palLightning;
             m_lightPen = lpFlux;
             m_lightShapes.Clear();
-            m_lightShapes.Add(lsFlux);
+            m_lightShapes.Add(lsFluxLeft);
             m_dbSprite = dbFluxLeft;
 
             m_dbSprites.Add(m_dbSprite);
 
-            ILightShape lsFluxRight = new LightShapeFluxPath();
+            ILightShape lsFluxRight = new LightShapeFluxPath(angle: 45, step: 1);
             lsFluxRight.SetPen(lpFlux);
 
             RealtimeLightEffect dbFluxRight;
@@ -2773,11 +2773,11 @@ namespace FireDemo
             left = (this.Width - fireWidth * magnification) / 2;
             top = (this.Height - fireHeight * magnification) / 2;
             dbFluxRight.Location = new Point(x: left + (fireWidth * magnification / 2), y: top);
-            dbFluxRight.Location = new Point(x: dbFluxLeft.Location.X + dbFluxLeft.Width * dbFluxLeft.Magnification + 200, y: dbFluxLeft.Location.Y);
+            dbFluxRight.Location = new Point(x: dbFluxLeft.Location.X + dbFluxLeft.Width * dbFluxLeft.Magnification, y: dbFluxLeft.Location.Y);
             m_dbSprites.Add(dbFluxRight);
 
 
-            ILightShape lsFluxInverted = new LightShapeFluxPath(1);
+            ILightShape lsFluxInverted = new LightShapeFluxPath(angle: 0, step: 1);
             lsFluxInverted.SetPen(lpFlux);
 
             RealtimeLightEffect dbFluxBottom;
@@ -2788,8 +2788,7 @@ namespace FireDemo
             dbFluxBottom.AddShape(lsFluxInverted);
             left = (this.Width - fireWidth * magnification) / 2;
             top = (this.Height - fireHeight * magnification) / 2;
-            dbFluxBottom.Location = new Point(x: left + (fireWidth * magnification / 2), y: top + 300);
-            dbFluxBottom.Location = new Point(x: dbFluxLeft.Location.X + dbFluxLeft.Width * dbFluxLeft.Magnification + 100, y: dbFluxLeft.Location.Y + dbFluxLeft.Height * dbFluxLeft.Magnification);
+            dbFluxBottom.Location = new Point(x: dbFluxLeft.Location.X + dbFluxLeft.Width * dbFluxLeft.Magnification / 2, y: dbFluxLeft.Location.Y + dbFluxLeft.Height * dbFluxLeft.Magnification);
             m_dbSprites.Add(dbFluxBottom);
 
 

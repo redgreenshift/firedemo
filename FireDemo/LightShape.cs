@@ -248,8 +248,10 @@ namespace FireDemo
 
     class LightShapeFluxPath : LightShapeBase
     {
-        public LightShapeFluxPath(int step = 7)
+        private int m_angle = 0;
+        public LightShapeFluxPath(int angle = 0, int step = 7)
         {
+            m_angle = angle;
             m_iStep = step;
         }
         // start, end, direction, pattern/step/interval
@@ -262,14 +264,39 @@ namespace FireDemo
             int saberHeight = Math.Max(height - 4, 1);
             int saberWidth; // = Math.Max(width, 1);
             saberWidth = 2;
-            int x0 = (width - saberWidth) / 2;
-            int y0 = (height - saberHeight) / 2;
-            int x1 = x0 + saberWidth;
-            int y1 = y0 + saberHeight;
-            ++m_cIteration;
-            for (int xx = x0; xx < x1; ++xx)
+            int x0, y0, x1, y1;
+            if (m_angle == 0)
             {
-                this.DrawLineInterval(xx, y0, xx, y1, canvas);
+                x0 = (width - saberWidth) / 2;
+                y0 = (height - saberHeight) / 2;
+                x1 = x0;
+                y1 = y0 + saberHeight;
+            }
+            else if (m_angle == 45)
+            {
+                x0 = width - saberWidth - 1;
+                y0 = (height - saberHeight) / 2;
+                x1 = 0;
+                y1 = y0 + saberHeight;
+            }
+            else if (m_angle == -45)
+            {
+                x0 = 0;
+                y0 = (height - saberHeight) / 2;
+                x1 = width - saberWidth - 1;
+                y1 = y0 + saberHeight;
+            }
+            else
+            {
+                x0 = (width - saberWidth) / 2;
+                y0 = (height - saberHeight) / 2;
+                x1 = x0;
+                y1 = y0 + saberHeight;
+            }
+            ++m_cIteration;
+            for (int xx = 0; xx < saberWidth; ++xx)
+            {
+                this.DrawLineInterval(x0 + xx, y0, x1 + xx, y1, canvas);
                 // TODO: JRDV: Either need to dupliucate DrawLine and add a concept of interval, or plumb in something in DrawLine,
                 // either way I want to copy DrawLine to prototype it
             }
