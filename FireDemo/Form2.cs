@@ -2739,7 +2739,7 @@ namespace FireDemo
 
             ILightPen lpFlux = new LightPen(fill: 1.0f, min: 244, max: 255, useFullRange: true); // White
             //lpFlux = new LightPen(fill: 1.0f, min: 44, max: 255, useFullRange: true); // Yellow?
-            ILightShape lsFluxLeft = new LightShapeFluxPath(angle: -45);
+            ILightShape lsFluxLeft = new LightShapeFluxPath(angle: -45, lineWidth: 2);
             lsFluxLeft.SetPen(lpFlux);
 
             RealtimeLightEffect dbFluxLeft;
@@ -2761,7 +2761,7 @@ namespace FireDemo
 
             m_dbSprites.Add(m_dbSprite);
 
-            ILightShape lsFluxRight = new LightShapeFluxPath(angle: 45, step: 1);
+            ILightShape lsFluxRight = new LightShapeFluxPath(angle: 45, step: 1, lineWidth: 2);
             lsFluxRight.SetPen(lpFlux);
 
             RealtimeLightEffect dbFluxRight;
@@ -2777,7 +2777,7 @@ namespace FireDemo
             m_dbSprites.Add(dbFluxRight);
 
 
-            ILightShape lsFluxInverted = new LightShapeFluxPath(angle: 0, step: 1);
+            ILightShape lsFluxInverted = new LightShapeFluxPath(angle: 0, step: 1, lineWidth: 2);
             lsFluxInverted.SetPen(lpFlux);
 
             RealtimeLightEffect dbFluxBottom;
