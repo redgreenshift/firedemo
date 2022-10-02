@@ -248,11 +248,13 @@ namespace FireDemo
 
     class LightShapeFluxPath : LightShapeBase
     {
-        private int m_angle = 0;
-        public LightShapeFluxPath(int angle = 0, int step = 7)
+        private readonly int m_angle = 0;
+        private readonly int m_fluxLineWidth = 1;
+        public LightShapeFluxPath(int angle = 0, int step = 7, int lineWidth = 1)
         {
             m_angle = angle;
             m_iStep = step;
+            m_fluxLineWidth = lineWidth;
         }
         // start, end, direction, pattern/step/interval
         override public void DrawOn(IntensityMap canvas)
@@ -261,40 +263,42 @@ namespace FireDemo
             // Set the next row of random coals to keep the fire going.
             int width = canvas.Width;
             int height = canvas.Height;
-            int saberHeight = Math.Max(height - 4, 1);
-            int saberWidth; // = Math.Max(width, 1);
-            saberWidth = 2;
+            int fluxHeight = Math.Max(height - 4, 1);
+            int lineWidth; // = Math.Max(width, 1);
+            lineWidth = m_fluxLineWidth;
             int x0, y0, x1, y1;
             if (m_angle == 0)
             {
-                x0 = (width - saberWidth) / 2;
-                y0 = (height - saberHeight) / 2;
+                x0 = (width - lineWidth) / 2;
+                y0 = (height - fluxHeight) / 2;
                 x1 = x0;
-                y1 = y0 + saberHeight;
+                y1 = y0 + fluxHeight;
             }
             else if (m_angle == 45)
             {
-                x0 = width - saberWidth - 1;
-                y0 = (height - saberHeight) / 2;
+                // /
+                x0 = width - lineWidth - 1;
+                y0 = (height - fluxHeight) / 2;
                 x1 = 0;
-                y1 = y0 + saberHeight;
+                y1 = y0 + fluxHeight;
             }
             else if (m_angle == -45)
             {
+                // \
                 x0 = 0;
-                y0 = (height - saberHeight) / 2;
-                x1 = width - saberWidth - 1;
-                y1 = y0 + saberHeight;
+                y0 = (height - fluxHeight) / 2;
+                x1 = width - lineWidth - 1;
+                y1 = y0 + fluxHeight;
             }
             else
             {
-                x0 = (width - saberWidth) / 2;
-                y0 = (height - saberHeight) / 2;
+                x0 = (width - lineWidth) / 2;
+                y0 = (height - fluxHeight) / 2;
                 x1 = x0;
-                y1 = y0 + saberHeight;
+                y1 = y0 + fluxHeight;
             }
             ++m_cIteration;
-            for (int xx = 0; xx < saberWidth; ++xx)
+            for (int xx = 0; xx < lineWidth; ++xx)
             {
                 this.DrawLineInterval(x0 + xx, y0, x1 + xx, y1, canvas);
                 // TODO: JRDV: Either need to dupliucate DrawLine and add a concept of interval, or plumb in something in DrawLine,
@@ -303,9 +307,9 @@ namespace FireDemo
         }
 
 
-        int m_cIteration = 0;
-        readonly int m_cIntervalLength = 8;
-        int m_iStep = 7;
+        private int m_cIteration = 0;
+        private readonly int m_cIntervalLength = 8;
+        private readonly int m_iStep = 7;
         // TODO: JRDV: Move to internal Drawing Method section above, once I'm happy with the effect
         protected void DrawLineInterval(int x0, int y0, int x1, int y1, IntensityMap canvas)
         {
@@ -390,8 +394,8 @@ namespace FireDemo
                 }
             }
         }
-
     }
+
     class LightShapeBatman : LightShapeBase
     {
         override public void DrawOn(IntensityMap canvas)
