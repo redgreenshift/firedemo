@@ -2883,7 +2883,7 @@ namespace FireDemo
                     pen = new LightPen(fill: 1.0f, min: 240, max: 255, useFullRange: true), // Blue
                 },
 #if false // these are OK, but Violet is much better
-            new SaberState
+                new SaberState
                 {
                     text = "Purple",
                     textColor = Color.Purple,
@@ -2915,9 +2915,49 @@ namespace FireDemo
                 },
                 new SaberState
                 {
-                    text = "Dark Red",
+                    text = "Red Dark",
                     textColor = Color.DarkRed,
                     firePalette = PalDarkFlameCurve.New(Color.Red),
+                    pen = new LightPen(fill: 1.0f, min: 195, max: 255, useFullRange: true),
+                    fDarkSaber = true,
+                },
+                new SaberState
+                {
+                    text = "Orange Dark",
+                    textColor = Color.DarkOrange,
+                    firePalette = PalDarkFlameCurve.New(Color.DarkOrange),
+                    pen = new LightPen(fill: 1.0f, min: 195, max: 255, useFullRange: true),
+                    fDarkSaber = true,
+                },
+                new SaberState
+                {
+                    text = "Yellow Dark",
+                    textColor = Color.Yellow,
+                    firePalette = PalDarkFlameCurve.New(Color.Yellow),
+                    pen = new LightPen(fill: 1.0f, min: 195, max: 255, useFullRange: true),
+                    fDarkSaber = true,
+                },
+                new SaberState
+                {
+                    text = "Green Dark",
+                    textColor = Color.Green,
+                    firePalette = PalDarkFlameCurve.New(Color.LightGreen),
+                    pen = new LightPen(fill: 1.0f, min: 195, max: 255, useFullRange: true),
+                    fDarkSaber = true,
+                },
+                new SaberState
+                {
+                    text = "Blue Dark",
+                    textColor = Color.Blue,
+                    firePalette = PalDarkFlameCurve.New(Color.Blue),
+                    pen = new LightPen(fill: 1.0f, min: 195, max: 255, useFullRange: true),
+                    fDarkSaber = true,
+                },
+                new SaberState
+                {
+                    text = "Violet Dark",
+                    textColor = Color.Violet,
+                    firePalette = PalDarkFlameCurve.New(Color.Violet),
                     pen = new LightPen(fill: 1.0f, min: 195, max: 255, useFullRange: true),
                     fDarkSaber = true,
                 },
