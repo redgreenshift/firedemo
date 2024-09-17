@@ -2842,6 +2842,13 @@ namespace FireDemo
         private static readonly SaberState[] saberDemoStates = {
                 new SaberState
                 {
+                    text = "White",
+                    textColor = Color.White,
+                    firePalette = PalRealisticFlameCurve.New(Color.White),
+                    pen = new LightPen(fill: 1.0f, min: 185, max: 255, useFullRange: true), // White
+                },
+                new SaberState
+                {
                     text = "Red",
                     textColor = Color.Red,
                     firePalette = PalRealisticFlameCurve.New(Color.Red),
