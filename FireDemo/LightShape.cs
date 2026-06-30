@@ -311,6 +311,15 @@ namespace FireDemo
         private readonly int m_cIntervalLength = 8;
         private readonly int m_iStep = 7;
         // TODO: JRDV: Move to internal Drawing Method section above, once I'm happy with the effect
+
+        /// <summary>
+        /// Draws a line with intervals on the intensity map.
+        /// </summary>
+        /// <param name="x0">The starting x-coordinate of the line.</param>
+        /// <param name="y0">The starting y-coordinate of the line.</param>
+        /// <param name="x1">The ending x-coordinate of the line.</param>
+        /// <param name="y1">The ending y-coordinate of the line.</param>
+        /// <param name="canvas">The intensity map to draw on.</param>
         protected void DrawLineInterval(int x0, int y0, int x1, int y1, IntensityMap canvas)
         {
             if (m_cIteration % 2 < 1)
