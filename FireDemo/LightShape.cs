@@ -313,12 +313,16 @@ namespace FireDemo
         // TODO: JRDV: Move to internal Drawing Method section above, once I'm happy with the effect
 
         /// <summary>
-        /// Draws a line with intervals on the intensity map.
+        /// Draws only every Nth pixel along an otherwise-solid Bresenham line,
+        /// creating short streak marks that together read as "sparkle" or flicker.
+        /// The gate (m_cIteration % 4 < 3) and the per-pixel interval check
+        /// make each call draw roughly half a stroke. Callers iterate until the full
+        /// shape is traced, so individual pixels appear intermittently over time.
         /// </summary>
-        /// <param name="x0">The starting x-coordinate of the line.</param>
-        /// <param name="y0">The starting y-coordinate of the line.</param>
-        /// <param name="x1">The ending x-coordinate of the line.</param>
-        /// <param name="y1">The ending y-coordinate of the line.</param>
+        /// <param name="x0">Starting X-coordinate on whichever axis the algorithm sweeps along.</param>
+        /// <param name="y0">Starting Y-coordinate on whichever axis the algorithm sweeps along.</param>
+        /// <param name="x1">Ending X-coordinate on whichever axis the algorithm sweeps along.</param>
+        /// <param name="y1">Ending Y-coordinate on whichever axis the algorithm sweeps along.</param>
         /// <param name="canvas">The intensity map to draw on.</param>
         protected void DrawLineInterval(int x0, int y0, int x1, int y1, IntensityMap canvas)
         {
