@@ -8,7 +8,7 @@ namespace FireDemo
 {
     // seed, coals, path, shape
     /// <summary>
-    /// Defines a seed pattern (e.g., spark path, streak sequence) whose individual pixels can be drawn with a light pen onto an intensity map.
+    /// Defines a seed pattern (e.g., spark path, streak sequence) whose individual pixels can be drawn with a light pen onto an <see cref="IntensityMap"/>.
     /// </summary>
     interface ILightShape
     {
@@ -53,7 +53,7 @@ namespace FireDemo
         /// </summary>
         protected bool m_fDrawToBothBuffers = false;
         /// <summary>
-        /// Emits a spark/seed at (x, y) onto an intensity map; each call independently
+        /// Emits a spark/seed at (x, y) onto an <see cref="IntensityMap"/>; each call independently
         /// checks whether the current pixel should emit and retrieves its value if it does;
         /// the pen controls fill rate, so not every call produces output. On emission,
         /// always writes to 'previous' buffer; also writes to 'next' when enabled.
@@ -81,7 +81,7 @@ namespace FireDemo
         /// <param name="xCenter">Horizontal coordinate of the center point.</param>
         /// <param name="yCenter">Vertical coordinate of the center point.</param>
         /// <param name="radius">Distance from center along which sparks are emitted.</param>
-        /// <param name="canvas">The intensity map that receives perimeter writes.</param>
+        /// <param name="canvas">The target intensity map that receives perimeter writes.</param>
         protected void DrawCircle(int xCenter, int yCenter, int radius, IntensityMap canvas)
         {
             // draw a circle from source to destination using the pen
@@ -136,7 +136,7 @@ namespace FireDemo
         // TODO: JRDV: Generalize the oval drawing code, with optional fill pattern (NOTE: circle arc segments, NOT oval/elipse, though we may add true elipse drawing code in the future)
 
         /// <summary>
-        /// Draws a vertical curve on the intensity map using the current pen, following an arc segment spanning part of a circle.
+        /// Draws a vertical curve on the <see cref="IntensityMap"/> using the current pen, following an arc segment spanning part of a circle.
         /// </summary>
         /// <param name="xCenter">Horizontal coordinate of the center point of the circle.</param>
         /// <param name="yCenter">Vertical coordinate of the center point of the circle.</param>
@@ -171,6 +171,14 @@ namespace FireDemo
             }
         }
 
+        /// <summary>
+        /// Draws a line segment on the <see cref="IntensityMap"/> using the current pen.
+        /// </summary>
+        /// <param name="x0">The starting x-coordinate (inclusive).</param>
+        /// <param name="y0">The starting y-coordinate (inclusive).</param>
+        /// <param name="x1">The target end-x coordinate (exclusive; the line stops before this point).</param>
+        /// <param name="y1">The target end-y coordinate (exclusive; the line stops before this point).</param>
+        /// <param name="canvas">The target intensity map that receives the writes.</param>
         protected void DrawLine(int x0, int y0, int x1, int y1, IntensityMap canvas)
         {
             // draw a line from source to destination using the pen
@@ -238,12 +246,15 @@ namespace FireDemo
         #endregion // Internal Drawing Methods
     }
 
+    /// <summary>
+    /// Represents a structured coal-seeding pattern for fire effects with a vertical, candle-like profile.
+    /// </summary>
     class LightShapeCandle : LightShapeBase
     {
         public LightShapeCandle()
         {
             // need to draw the seed values to both the front and back buffers,
-            // because the seed values are drawn on the edge, and the egde
+            // because the seed values are drawn on the edge, and the edge
             // pixels currently don't get copied between the buffers.
             m_fDrawToBothBuffers = true;
         }
@@ -258,11 +269,18 @@ namespace FireDemo
         }
     }
 
-    class LightShapeLine : LightShapeBase
+    /// <summary>
+    /// Represents a line-segment shaped light source used for saber-like effects.
+    /// </summary>
+    class LightShapeBlade : LightShapeBase
     {
+        /// <summary>
+        /// Draws the saber-shaped light source on the <see cref="IntensityMap"/>.
+        /// </summary>
+        /// <param name="canvas">The target intensity map to receive the writes.</param>
         override public void DrawOn(IntensityMap canvas)
         {
-            // Draw the seed coal values for a candle flame
+            // Draw the seed coal values for a saber shape
             // Set the next row of random coals to keep the fire going.
             int width = canvas.Width;
             int height = canvas.Height;
@@ -271,11 +289,11 @@ namespace FireDemo
             saberWidth = 2;
             int x0 = (width - saberWidth) / 2;
             int y0 = (height - saberHeight) / 2;
-            int x1 = x0 + saberWidth;
-            int y1 = y0 + saberHeight;
-            for (int xx = x0; xx < x1; ++xx)
+            int x1_limit = x0 + saberWidth;  // This is a boundary; the value itself is not drawn.
+            int y1_limit = y0 + saberHeight; // This is a boundary; the value itself is not drawn.
+            for (int xx = x0; xx < x1_limit; ++xx)
             {
-                this.DrawLine(xx, y0, xx, y1, canvas);
+                this.DrawLine(xx, y0, xx, y1_limit, canvas);
             }
         }
     }
@@ -293,7 +311,7 @@ namespace FireDemo
         // start, end, direction, pattern/step/interval
         override public void DrawOn(IntensityMap canvas)
         {
-            // Draw the seed coal values for a candle flame
+            // Draw the seed coal values for a flux capacitor shape
             // Set the next row of random coals to keep the fire going.
             int width = canvas.Width;
             int height = canvas.Height;
@@ -357,7 +375,7 @@ namespace FireDemo
         /// <param name="y0">Starting Y-coordinate on whichever axis the algorithm sweeps along.</param>
         /// <param name="x1">Ending X-coordinate on whichever axis the algorithm sweeps along.</param>
         /// <param name="y1">Ending Y-coordinate on whichever axis the algorithm sweeps along.</param>
-        /// <param name="canvas">The intensity map to draw on.</param>
+        /// <param name="canvas">The target intensity map to receive the writes.</param>
         protected void DrawLineInterval(int x0, int y0, int x1, int y1, IntensityMap canvas)
         {
             if (m_cIteration % 2 < 1)

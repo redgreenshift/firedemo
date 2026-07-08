@@ -2982,12 +2982,12 @@ namespace FireDemo
             {
                 // Cool the dark saber faster, so when it blends out, it's not as wide.
                 coolingStrategy = new CoolingStrategyConst(11);
-                lsSaber = new LightShapeLine();
+                lsSaber = new LightShapeBlade();
             }
             else
             {
                 coolingStrategy = new CoolingStrategyConst(1);
-                lsSaber = new LightShapeLine();
+                lsSaber = new LightShapeBlade();
             }
 
             Color[] palLightning = saberDemoStates[ii].firePalette;
