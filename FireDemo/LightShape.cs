@@ -7,6 +7,9 @@ using System.Text;
 namespace FireDemo
 {
     // seed, coals, path, shape
+    /// <summary>
+    /// Defines a seed pattern (e.g., spark path, streak sequence) whose individual pixels can be drawn with a light pen onto an intensity map.
+    /// </summary>
     interface ILightShape
     {
         void SetPen(ILightPen pen);
@@ -18,6 +21,9 @@ namespace FireDemo
         void DrawOn(IntensityMap canvas);
     }
 
+    /// <summary>
+    /// Provides shared infrastructure for light patterns -- Bresenham line emission, frame iteration and buffer management
+    /// </summary>
     abstract class LightShapeBase : ILightShape
     {
         protected ILightPen pen; // TODO: Revert back to private after moving the pupil drawing code
@@ -38,7 +44,7 @@ namespace FireDemo
         #region Internal Drawing Methods
         /// <summary>
         /// By default, only render to the previous buffer, so the seed values affect the next frame.
-        /// For some light effects, like candles, we need to set the seed value to both buffers,
+        /// For some light effects, like candles, we need to set the seed value to *BOTH* buffers,
         /// because the last line is not otherwise copied when swapping the buffers.
         /// The old code would copy this last line. Here in the refactored code, we can just draw to both buffers.
         /// This is unnecessary for blending effects that seed in the middle (lightning/batman).
@@ -46,6 +52,15 @@ namespace FireDemo
         /// If we blend the last row of pixels, then this becomes unnecessary.
         /// </summary>
         protected bool m_fDrawToBothBuffers = false;
+        /// <summary>
+        /// Emits a spark/seed at (x, y) onto an intensity map; each call independently
+        /// checks whether the current pixel should emit and retrieves its value if it does;
+        /// the pen controls fill rate, so not every call produces output. On emission,
+        /// always writes to 'previous' buffer; also writes to 'next' when enabled.
+        /// </summary>
+        /// <param name="x">Horizontal coordinate.</param>
+        /// <param name="y">Vertical coordinate.</param>
+        /// <param name="canvas">The target intensity map receiving one or both buffered pixel writes.</param>
         protected void DrawPixel(int x, int y, IntensityMap canvas)
         {
             if (pen.FShouldDrawNext())
@@ -59,6 +74,14 @@ namespace FireDemo
             }
         }
 
+        /// <summary>
+        /// Emits sparks along a circle's perimeter by iterating Y rows and querying each X pair;
+        /// fill rate depends on the pen, so not every position writes per frame iteration.
+        /// </summary>
+        /// <param name="xCenter">Horizontal coordinate of the center point.</param>
+        /// <param name="yCenter">Vertical coordinate of the center point.</param>
+        /// <param name="radius">Distance from center along which sparks are emitted.</param>
+        /// <param name="canvas">The intensity map that receives perimeter writes.</param>
         protected void DrawCircle(int xCenter, int yCenter, int radius, IntensityMap canvas)
         {
             // draw a circle from source to destination using the pen
@@ -110,10 +133,21 @@ namespace FireDemo
         }
 #endif
 
-        // TODO: JRDV: Generalize the oval drawing code, with optional fill pattern
+        // TODO: JRDV: Generalize the oval drawing code, with optional fill pattern (NOTE: circle arc segments, NOT oval/elipse, though we may add true elipse drawing code in the future)
+
+        /// <summary>
+        /// Draws a vertical curve on the intensity map using the current pen, following an arc segment spanning part of a circle.
+        /// </summary>
+        /// <param name="xCenter">Horizontal coordinate of the center point of the circle.</param>
+        /// <param name="yCenter">Vertical coordinate of the center point of the circle.</param>
+        /// <param name="radius">Distance from center defining the circular perimeter; the pen draws arcs along this path.</param>
+        /// <param name="ptStart">Proportion of the circle circumference where drawing begins; values in range 0..1</param>
+        /// <param name="ptEnd">Proportion of the circle circumference where drawing ends; values in range 0..1</param>
+        /// <param name="canvas">The intensity map that receives perimeter writes.</param>
+        /// <param name="xOffset">The horizontal offset to apply to the curve.</param>
         protected void DrawCurveX(int xCenter, int yCenter, int radius, float ptStart, float ptEnd, IntensityMap canvas, int xOffset)
         {
-            // draw a circle from source to destination using the pen
+            // sweep along an arc segment of a circle from start to end using the pen
             int x, y, yy, yLast, height;
 
             height = canvas.Height;
