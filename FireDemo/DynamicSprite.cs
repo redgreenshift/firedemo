@@ -736,6 +736,9 @@ namespace FireDemo
     {
         public bool Inward { get; set; }
 
+        /// <inheritdoc cref="RealtimeSplitFire"/>
+        public RealtimeSplitFire() { }
+
         protected override void RenderStage2And3()
         {
             //{ For flame effect scroll through every pixel and  }

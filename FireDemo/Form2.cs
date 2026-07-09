@@ -111,7 +111,7 @@ namespace FireDemo
             Color[] palBorgRed = PalPlasma.New(Color.Orange);
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(7);
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
-            ILightShape lsBorgRing = new LightShapeBorgRing();
+            ILightShape lsBorgRing = new LightShapeRing();
             ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
             lsBorgRing.SetPen(lpPlasma);
             lsBorgPlasma.SetPen(lpPlasma);
@@ -351,7 +351,7 @@ namespace FireDemo
             //coolingStrategy = m_coolingStrategy;
             coolingStrategy = new CoolingStrategyConst(11); // 11 looks better. Looks faster than 7
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
-            ILightShape lsBorgRing = new LightShapeBorgRing();
+            ILightShape lsBorgRing = new LightShapeRing();
             ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
             lsBorgRing.SetPen(lpPlasma);
             lsBorgPlasma.SetPen(lpPlasma);
@@ -807,7 +807,7 @@ namespace FireDemo
             Color[] palBorg = PalPlasma.New(Color.Red);
             ICoolingStrategy coolingStrategy = new CoolingStrategyConst(11);
             ILightPen lpPlasma = new LightPen(fill: 1.0f, min: 255, max: 255, useFullRange: false);
-            ILightShape lsBorgRing = new LightShapeBorgRing();
+            ILightShape lsBorgRing = new LightShapeRing();
             ILightShape lsBorgPlasma = new LightShapeBorgPlasma();
             lsBorgRing.SetPen(lpPlasma);
             lsBorgPlasma.SetPen(lpPlasma);
@@ -2017,7 +2017,7 @@ namespace FireDemo
             int height = width;
 
             LightPen lpSauronEye = new LightPen(fill: 0.28f, 200, 255, useFullRange: false);
-            ILightShape lsSauron = new LightShapeBorgRing();
+            ILightShape lsSauron = new LightShapeRing();
             ICoolingStrategy csSauron;
             m_coolingStrategy = new CoolingStrategyMap();
             m_coolingStrategy.SetMapParameters(width, height,

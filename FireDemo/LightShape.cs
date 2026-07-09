@@ -274,7 +274,7 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Represents a line-segment shaped light source used for saber-like effects.
+    /// Draws a line-segment shaped light source used for saber-like effects.
     /// </summary>
     class LightShapeBlade : LightShapeBase
     {
@@ -474,7 +474,7 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Represents a Batman logo-shaped light source.
+    /// Draws a Batman logo-shaped light source.
     /// </summary>
     class LightShapeBatman : LightShapeBase
     {
@@ -551,7 +551,7 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Represents an intermittent, probabilistic, and branching lightning strike effect.
+    /// Draws an intermittent, probabilistic, and branching lightning strike effect.
     /// </summary>
     class LightShapeLightning : LightShapeBase
     {
@@ -733,7 +733,7 @@ namespace FireDemo
 
     #region Borg Light Drawing
     /// <summary>
-    /// Represents a Borg plasma-shaped light source, for the inner lighting bolts for a plasma disc.
+    /// Draws a Borg plasma-shaped light source, for the inner lighting bolts of a plasma disc.
     /// </summary>
     class LightShapeBorgPlasma : LightShapeLightning
     {
@@ -753,10 +753,14 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Represents a Borg ring-shaped light source, for the outer ring of a plasma disc.
+    /// Draws a Borg-inspired ring-shaped light source, for the outer perimeter
+    /// of a plasma disc, Borg regeneration disc, or Sauron's eye.
     /// </summary>
-    class LightShapeBorgRing : LightShapeBase
+    class LightShapeRing : LightShapeBase
     {
+        /// <inheritdoc cref="LightShapeRing"/>
+        public LightShapeRing() { }
+
         override public void DrawOn(IntensityMap canvas)
         {
             // Draw the seed coal values for the outer ring of a plasma disc
@@ -795,6 +799,10 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Represents an eye-shaped light source where coal is seeded along the perimeter
+    /// of a narrow, blacked-out pupil, with fire radiating outward.
+    /// </summary>
     class LightShapeSauronV3_PupilNarrow : LightShapeBase
     {
         override public void DrawOn(IntensityMap canvas)
@@ -865,6 +873,12 @@ namespace FireDemo
         //}
     }
 
+    /// <summary>
+    /// Represents an approximation of a Sauron eye-shaped light source with an inward-facing design.
+    /// Deprecated: this was an early experiment, as the "outer" edge of the eye was not defined,
+    /// as I only had straight lines for the entire eye + fire/smoke surrounding the eye.
+    /// This is only preserved for posterity. It's not intended to be used.
+    /// </summary>
     class LightShapeSauronV2_Inward : LightShapeBase
     {
         override public void DrawOn(IntensityMap canvas)
