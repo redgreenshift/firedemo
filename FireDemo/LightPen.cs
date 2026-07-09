@@ -11,8 +11,13 @@ namespace FireDemo
     /// </summary>
     interface ILightPen
     {
-        int NextValue();
-        bool FShouldDrawNext();
+        /// <summary>
+        /// Attempts to emit a random intensity value based on the current fill rate.
+        /// </summary>
+        /// <param name="intensity">The output for the emitted light value.</param>
+        /// <returns><c>true</c> if an emission occurred and <paramref name="intensity"/> is updated;<br/>
+        /// <c>false</c> if the caller should skip drawing the next pixel (and do not use <paramref name="intensity"/>).</returns>
+        bool TryEmit(out int intensity);
     }
 
     /// <summary>
@@ -25,23 +30,22 @@ namespace FireDemo
     {
         readonly Random rng;
         /// <summary>
-        /// Range of 0.0 to 1.0 for probability a given pixel will be drawn on average
+        /// The target fill rate (probability) for emitting a value; [0.0 to 1.0] inclusive.
         /// </summary>
         readonly float percentFill;
 
         /// <summary>
-        /// Range of 0 to 255 for the minimum value to draw
+        /// Lower-bound intensity value for draws; [0..255] inclusive.
         /// </summary>
         readonly int minIntensity;
 
         /// <summary>
-        /// Range of 0 to 255 for the maximum value to draw
+        /// Upper-bound intensity value for draws; [0..255] inclusive.
         /// </summary>
         readonly int maxIntensity;
 
         /// <summary>
-        ///  True if any value between min and max are allowed.
-        ///  False if ONLY the min and max values should be used.
+        /// True if any value between the <paramref name="minIntensity"/> and <paramref name="maxIntensity"/> is allowed; otherwise, only use the boundaries.
         /// </summary>
         readonly bool useFullRange;
 
@@ -50,18 +54,16 @@ namespace FireDemo
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LightPen"/> class with specified parameters.
-        /// </summary>
-        /// <param name="fill">Percent density of pixels that actually render when drawing. Range is 0.0 to 1.0 inclusive.</param>
-        /// <param name="min">Minimum light intensity. Range is 0 to 255 inclusive. MUST be less-or-equal to <paramref name="max"/></param>
-        /// <param name="max">Maximum light intensity. Range is 0 to 255 inclusive. MUST be greater-or-equal to <paramref name="min"/>.</param>
-        /// <param name="useFullRange">If <c>true</c> then any value between <paramref name="min"/>/<paramref name="max"/> may be used when drawing. If <c>false</c> then only the <paramref name="min"/> and <paramref name="max"/> values may be used, nothing in between.</param>
+        /// <inheritdoc cref="LightPen"/>
+        /// <param name="fill"><inheritdoc cref="LightPen.percentFill" path="/summary"/></param>
+        /// <param name="min"><inheritdoc cref="LightPen.minIntensity" path="/summary"/>MUST be less-or-equal to <paramref name="max"/></param>
+        /// <param name="max"><inheritdoc cref="LightPen.maxIntensity" path="/summary"/>MUST be greater-or-equal to <paramref name="min"/>.</param>
+        /// <param name="useFullRange"><inheritdoc cref="LightPen.useFullRange" path="/summary"/></param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public LightPen(float fill, int min, int max, bool useFullRange)
         {
             if (fill < 0 || fill > 1)
-                throw new ArgumentOutOfRangeException("Density percent must be between 0 and 100 inclusive.");
+                throw new ArgumentOutOfRangeException("Density percent must be between 0.0 and 1.0 inclusive.");
             if (min > max)
                 throw new ArgumentOutOfRangeException("Min value must not be larger than max value.");
             if (min < 0 || min > 255)
@@ -77,10 +79,13 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// return a random value between the min and max intensity
+        /// Generates a random intensity value within the defined range; used as the data for one successful draw.
         /// </summary>
-        /// <returns></returns>
-        public int NextValue()
+        /// <remarks>
+        /// This should typically be called only once after each successful call to <see cref="FShouldDrawNext"/>.
+        /// </remarks>
+        /// <returns>The generated intensity value between <see cref="minIntensity"/> and <see cref="maxIntensity"/>.</returns>
+        private int NextValue()
         {
             if (useFullRange)
                 return rng.Next(minIntensity, maxIntensity + 1);
@@ -91,12 +96,28 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// return a boolean value indicating whether or not a new value should be drawn
+        /// Returns true if an emission should occur based on the current fill rate.
         /// </summary>
-        /// <returns></returns>
-        public bool FShouldDrawNext()
+        /// <remarks>
+        /// Caller must call this before each call to <see cref="NextValue"/> to determine if the next value should be drawn or skipped.
+        /// </remarks>
+        /// <returns><c>true</c> if a new value should be emitted; <c>false</c> otherwise.</returns>
+        private bool FShouldDrawNext()
         {
             return rng.NextDouble() < percentFill;
+        }
+
+        /// <inheritdoc cref="ILightPen.TryEmit"/>
+        public bool TryEmit(out int intensity)
+        {
+            if (FShouldDrawNext())
+            {
+                intensity = NextValue();
+                return true;
+            }
+
+            intensity = default;
+            return false;
         }
     }
 }

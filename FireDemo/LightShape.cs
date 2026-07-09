@@ -65,9 +65,8 @@ namespace FireDemo
         /// <param name="canvas">The target intensity map receiving one or both buffered pixel writes.</param>
         protected void DrawPixel(int x, int y, IntensityMap canvas)
         {
-            if (pen.FShouldDrawNext())
+            if (pen.TryEmit(out int nextVal))
             {
-                int nextVal = pen.NextValue();
                 canvas.SetPixelPrevious(x, y, nextVal);
                 if (m_fDrawToBothBuffers)
                 {
@@ -665,9 +664,8 @@ namespace FireDemo
                         int xRender = (int)(xTemp * Math.Cos(rotationAngle) - yTemp * Math.Sin(rotationAngle)) + xCenter;
                         int yRender = (int)(xTemp * Math.Sin(rotationAngle) + yTemp * Math.Cos(rotationAngle)) + yCenter;
 
-                        if (pen.FShouldDrawNext())
+                        if (pen.TryEmit(out int intensity))
                         {
-                            int intensity = pen.NextValue();
                             canvas.SetPixelPrevious(xRender, yRender, intensity);
                             // Hacky prototype of wider bolts. Probably want something nicer.
                             if (width >= 2)
