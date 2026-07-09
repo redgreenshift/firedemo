@@ -753,8 +753,8 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Draws a Borg-inspired ring-shaped light source, for the outer perimeter
-    /// of a plasma disc, Borg regeneration disc, or Sauron's eye.
+    /// Draws a ring-shaped light source; though Borg-inspired, it is suitable for
+    /// various lore-driven visual effects like a plasma disc or Sauron's eye.
     /// </summary>
     class LightShapeRing : LightShapeBase
     {
