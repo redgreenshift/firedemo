@@ -8,7 +8,8 @@ namespace FireDemo
 {
     // seed, coals, path, shape
     /// <summary>
-    /// Defines a seed pattern (e.g., spark path, streak sequence) whose individual pixels can be drawn with a light pen onto an <see cref="IntensityMap"/>.
+    /// Defines a coal-seeding pattern/shape whose individual pixels are drawn
+    /// with a light pen onto an <see cref="IntensityMap"/>.
     /// </summary>
     interface ILightShape
     {
@@ -22,7 +23,8 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Provides shared infrastructure for light patterns -- Bresenham line emission, frame iteration and buffer management
+    /// Provides shared infrastructure for light patterns -- Bresenham line emission,
+    /// frame iteration and buffer management
     /// </summary>
     abstract class LightShapeBase : ILightShape
     {
@@ -53,7 +55,7 @@ namespace FireDemo
         /// </summary>
         protected bool m_fDrawToBothBuffers = false;
         /// <summary>
-        /// Emits a spark/seed at (x, y) onto an <see cref="IntensityMap"/>; each call independently
+        /// Emits a coal-seed at (x, y) onto an <see cref="IntensityMap"/>; each call independently
         /// checks whether the current pixel should emit and retrieves its value if it does;
         /// the pen controls fill rate, so not every call produces output. On emission,
         /// always writes to 'previous' buffer; also writes to 'next' when enabled.
@@ -75,12 +77,12 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Emits sparks along a circle's perimeter by iterating Y rows and querying each X pair;
-        /// fill rate depends on the pen, so not every position writes per frame iteration.
+        /// Emits coal-seeds along a circle's perimeter; fill rate depends on the pen,
+        /// so not every position writes per frame iteration.
         /// </summary>
         /// <param name="xCenter">Horizontal coordinate of the center point.</param>
         /// <param name="yCenter">Vertical coordinate of the center point.</param>
-        /// <param name="radius">Distance from center along which sparks are emitted.</param>
+        /// <param name="radius">Distance from center along which coal-seeds are emitted.</param>
         /// <param name="canvas">The target intensity map that receives perimeter writes.</param>
         protected void DrawCircle(int xCenter, int yCenter, int radius, IntensityMap canvas)
         {
@@ -136,7 +138,8 @@ namespace FireDemo
         // TODO: JRDV: Generalize the oval drawing code, with optional fill pattern (NOTE: circle arc segments, NOT oval/elipse, though we may add true elipse drawing code in the future)
 
         /// <summary>
-        /// Draws a vertical curve on the <see cref="IntensityMap"/> using the current pen, following an arc segment spanning part of a circle.
+        /// Draws a vertical curve on the <see cref="IntensityMap"/> using the current pen,
+        /// following an arc segment spanning part of a circle.
         /// </summary>
         /// <param name="xCenter">Horizontal coordinate of the center point of the circle.</param>
         /// <param name="yCenter">Vertical coordinate of the center point of the circle.</param>
@@ -172,7 +175,8 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Draws a line segment on the <see cref="IntensityMap"/> using the current pen.
+        /// Draws a line segment on the <see cref="IntensityMap"/> using the current pen;
+        /// fill rate depends on the pen, so not every position writes per frame iteration.
         /// </summary>
         /// <param name="x0">The starting x-coordinate (inclusive).</param>
         /// <param name="y0">The starting y-coordinate (inclusive).</param>
@@ -312,6 +316,11 @@ namespace FireDemo
             m_fluxLineWidth = lineWidth;
         }
         // start, end, direction, pattern/step/interval
+
+        /// <summary>
+        /// Draws the flux capacitor path on the <see cref="IntensityMap"/>.
+        /// </summary>
+        /// <param name="canvas">The target intensity map to receive the writes.</param>
         override public void DrawOn(IntensityMap canvas)
         {
             // Draw the seed coal values for a flux capacitor shape
@@ -464,6 +473,9 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Represents a Batman logo-shaped light source.
+    /// </summary>
     class LightShapeBatman : LightShapeBase
     {
         override public void DrawOn(IntensityMap canvas)
@@ -478,8 +490,8 @@ namespace FireDemo
             width = canvas.Width;
             height = canvas.Height;
 
-            //        batArray:= {
-            //                0@0. 17.1@0. 18@2. 20@3.9. 22.5@4. 23.5@3.9. 24@2.8.
+            //       batArray:= {
+            //       0@0. 17.1@0. 18@2. 20@3.9. 22.5@4. 23.5@3.9. 24@2.8.
             //       "Middle"
             //       24.5@0.9. 25@2.5. 27@2.5. 27.5@0.9.
             //       28@2.8. 28.5@3.9. 29.5@4. 32@3.9. 34@2. 34.9@0. 52@0.
