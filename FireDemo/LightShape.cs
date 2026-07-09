@@ -298,6 +298,9 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Represents an intermittent, partitioned-line light source specialized for a flux-capacitor shape.
+    /// </summary>
     class LightShapeFluxPath : LightShapeBase
     {
         private readonly int m_angle = 0;
@@ -535,6 +538,9 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Represents an intermittent, probabilistic, and branching lightning strike effect.
+    /// </summary>
     class LightShapeLightning : LightShapeBase
     {
         protected Random rng;
@@ -714,6 +720,9 @@ namespace FireDemo
 #endif
 
     #region Borg Light Drawing
+    /// <summary>
+    /// Represents a Borg plasma-shaped light source, for the inner lighting bolts for a plasma disc.
+    /// </summary>
     class LightShapeBorgPlasma : LightShapeLightning
     {
         override public void DrawOn(IntensityMap canvas)
@@ -731,6 +740,9 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Represents a Borg ring-shaped light source, for the outer ring of a plasma disc.
+    /// </summary>
     class LightShapeBorgRing : LightShapeBase
     {
         override public void DrawOn(IntensityMap canvas)
