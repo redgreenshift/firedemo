@@ -5,11 +5,22 @@ using System.Text;
 
 namespace FireDemo
 {
+    /// <summary>
+    /// Defines the interface for a light pen that generates random intensities
+    /// and governs pixel visibility for shaped radiation.
+    /// </summary>
     interface ILightPen
     {
         int NextValue();
         bool FShouldDrawNext();
     }
+
+    /// <summary>
+    /// An adaptive-rate light pen that generates random intensities and
+    /// governs pixel visibility for shaped radiation. A variable fill rate
+    /// and intensity range can be specified to control the density and brightness
+    /// of the light pen's output.
+    /// </summary>
     class LightPen : ILightPen
     {
         readonly Random rng;
@@ -34,12 +45,13 @@ namespace FireDemo
         /// </summary>
         readonly bool useFullRange;
 
+        /// <inheritdoc cref="LightPen"/>
         public LightPen() : this(fill: 1.0f, min: 0, max: 255, useFullRange: false)
         {
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="LightPen"/> class with specified parameters.
         /// </summary>
         /// <param name="fill">Percent density of pixels that actually render when drawing. Range is 0.0 to 1.0 inclusive.</param>
         /// <param name="min">Minimum light intensity. Range is 0 to 255 inclusive. MUST be less-or-equal to <paramref name="max"/></param>
