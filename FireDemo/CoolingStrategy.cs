@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FireDemo
 {
@@ -16,17 +13,26 @@ namespace FireDemo
         int at(int x, int y);
 
         /// <summary>
-        /// Advances the cooling map by one frame.
+        /// Advances the cooling map by one frame
         /// </summary>
         void AdvanceFrame();
     }
 
+    /// <summary>
+    /// A constant cooling strategy with a uniform value across all pixels.
+    /// </summary>
     class CoolingStrategyConst : ICoolingStrategy
     {
+        /// <summary>
+        /// The fixed cooling factor used for every pixel.
+        /// </summary>
         private readonly int coolingFactor;
-        public CoolingStrategyConst(int value)
+
+        /// <inheritdoc cref="CoolingStrategyConst"/>
+        /// <param name="coolingFactor"><inheritdoc cref="CoolingStrategyConst.coolingFactor" path="/summary"/></param>
+        public CoolingStrategyConst(int coolingFactor)
         {
-            this.coolingFactor = value;
+            this.coolingFactor = coolingFactor;
         }
 
         /// <inheritdoc cref="ICoolingStrategy.at"/>
@@ -38,16 +44,18 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Advances the cooling map by one frame. For a constant cooling strategy, this does nothing.
+        /// <inheritdoc cref="ICoolingStrategy.AdvanceFrame" path="/summary"/>. For a constant cooling strategy, this does nothing.
         /// </summary>
         public void AdvanceFrame() { /* do nothing*/ }
     };
 
+    /// <summary>
+    /// A dynamic, spatial cooling strategy utilizing a variable intensity map.
+    /// </summary>
     public class CoolingStrategyMap : ICoolingStrategy
     {
-        // map random width height rotate shift density min max smoothing iCoolingOffset iFrame
         /// <summary>
-        /// the map used for the current frame (always the truth)
+        /// The active cooling intensity map (always the truth).
         /// </summary>
         int[] coolingMap = null;
 
@@ -63,11 +71,21 @@ namespace FireDemo
         /// </summary>
         int[] rotatingCoolingMap;
 
+        /// <summary>
+        /// Random number generator used for creating dynamic cooling maps.
+        /// </summary>
         readonly Random rng;
         int iCoolingOffset = 0;
         int iFrame = 0;
 
+        /// <summary>
+        /// The width, in pixels, of the new cooling map.
+        /// </summary>
         int width;
+
+        /// <summary>
+        /// The height, in pixels, of the new cooling map.
+        /// </summary>
         int height;
 
         /// <summary>
@@ -76,12 +94,12 @@ namespace FireDemo
         float density;
 
         /// <summary>
-        /// Minimum cooling intensity. Range is 0 to 255 inclusive. MUST be less-or-equal to <paramref name="maxValue"/>.
+        /// Minimum cooling intensity. Range is 0 to 255 inclusive.
         /// </summary>
         int minValue;
 
         /// <summary>
-        /// Maximum cooling intensity. Range is 0 to 255 inclusive. MUST be greater-or-equal to <paramref name="minValue"/>.
+        /// Maximum cooling intensity. Range is 0 to 255 inclusive.
         /// </summary>
         int maxValue;
 
@@ -91,20 +109,22 @@ namespace FireDemo
         int smoothing;
 
         /// <summary>
-        /// If TRUE, move the map up one row per frame to give the appearance of rising air currents.
+        /// If <c>true</c>, move the map up one row per frame to give the appearance of rising air currents.
         /// </summary>
         bool shift = false;
 
         /// <summary>
-        /// If TRUE, periodically generate an entirely new map, so the flame doesn't look like a video on repeat.
+        /// If <c>true</c>, periodically generate an entirely new map, so the flame doesn't look like a video on repeat.
         /// </summary>
         bool rotate = false;
 
-
+        /// <inheritdoc cref="CoolingStrategyMap"/>
         public CoolingStrategyMap() : this(Util.NewRandom())
         {
         }
 
+        /// <inheritdoc cref="CoolingStrategyMap"/>
+        /// <param name="rng"><inheritdoc cref="CoolingStrategyMap.rng" path="/summary"/></param>
         public CoolingStrategyMap(Random rng)
         {
             this.rng = rng;
@@ -124,7 +144,7 @@ namespace FireDemo
             //    return -1;
             return coolingMap[i];
         }
-           
+
         // TODO: JRDV: I think at() is expensive, so maybe providing a direct atRaw would be faster? Measure and find out.
         //public int atRaw(int iKnowWhatImDoing)
         //{
@@ -135,7 +155,7 @@ namespace FireDemo
         //}
 
         /// <summary>
-        /// Advances the cooling map by one frame, updating the offset and potentially rotating the map.
+        /// <inheritdoc cref="ICoolingStrategy.AdvanceFrame" path="/summary"/>, updating the offset and potentially rotating the map.
         /// </summary>
         public void AdvanceFrame()
         {
@@ -147,8 +167,8 @@ namespace FireDemo
                 if (this.rotate && iFrame > height)
                 {
                     // Wait wait wait, this was the problem I was missing.
-                    // Need to reset the frame back to zero that so we DO
-                    // NOT REGENERATE THE COOLING MAP EVERY FRAME
+                    // Need to reset the frame back to zero that so that
+                    // WE DO NOT REGENERATE THE COOLING MAP EVERY FRAME
                     // after the first loop through (iFrame > height)!
                     iFrame = 0;
                     UpdateRotatingCoolingMap();
@@ -162,16 +182,16 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Probably should rename this, but creating a new "initialize" method to allow changing the values on the fly
+        /// Sets the parameters for the cooling map, including its dimensions, density, value range, smoothing, and behavior. Can change the values "on the fly" to create a different cooling map.
         /// </summary>
-        /// <param name="width">The width, in pixels, of the new cooling map.</param>
-        /// <param name="height">The height, in pixels, of the new cooling map.</param>
-        /// <param name="density">Percent of pixels that should be filled with a cooling value. Range is 0.0 to 1.0 inclusive.</param>
-        /// <param name="min">Minimum cooling intensity. Range is 0 to 255 inclusive. MUST be less-or-equal to <paramref name="max"/>.</param>
-        /// <param name="max">Maximum cooling intensity. Range is 0 to 255 inclusive. MUST be greater-or-equal to <paramref name="min"/>.</param>
-        /// <param name="smoothing">Number of times to smooth out the values to produce a produce a more even distribution.</param>
-        /// <param name="shift">If <c>true</c>, move the map up one row per frame to give the appearance of rising air currents.</param>
-        /// <param name="rotate">If <c>true</c>, periodically generate an entirely new map, so the flame doesn't look like a video on repeat. Only makes sense to set this when <paramref name="shift"/> is also <c>true</c>.</param>
+        /// <param name="width"><inheritdoc cref="CoolingStrategyMap.width" path="/summary"/></param>
+        /// <param name="height"><inheritdoc cref="CoolingStrategyMap.height" path="/summary"/></param>
+        /// <param name="density"><inheritdoc cref="CoolingStrategyMap.density" path="/summary"/></param>
+        /// <param name="min"><inheritdoc cref="CoolingStrategyMap.minValue" path="/summary"/>MUST be less-or-equal to <paramref name="max"/>.</param>
+        /// <param name="max"><inheritdoc cref="CoolingStrategyMap.maxValue" path="/summary"/>MUST be greater-or-equal to <paramref name="min"/>.</param>
+        /// <param name="smoothing"><inheritdoc cref="CoolingStrategyMap.smoothing" path="/summary"/></param>
+        /// <param name="shift"><inheritdoc cref="CoolingStrategyMap.shift" path="/summary"/></param>
+        /// <param name="rotate"><inheritdoc cref="CoolingStrategyMap.rotate" path="/summary"/>Only makes sense to set this when <paramref name="shift"/> is also <c>true</c>.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when any of the parameters are out of their valid range.</exception>
         public void SetMapParameters(int width, int height, float density, int min, int max, int smoothing = 0, bool shift = true, bool rotate = true)
         {
@@ -198,6 +218,11 @@ namespace FireDemo
             InitializeCoolingMap();
         }
 
+        /// <summary>
+        /// Smooths the cooling map using a 5-point averaging kernel.
+        /// </summary>
+        /// <param name="sourceMap">Input buffer containing intensity values.</param>
+        /// <param name="destinationMap">Output buffer for smoothed results.</param>
         private void SmoothCoolingMap(in int[] sourceMap, int[] destinationMap)
         {
             int x, y;
@@ -287,7 +312,13 @@ namespace FireDemo
         }
 
 
-#region Cooling Map
+        #region Cooling Map
+        /// <summary>
+        /// Populates an array segment with random intensity values based on density and range limits.
+        /// </summary>
+        /// <param name="destination">Target buffer to fill with cooling values.</param>
+        /// <param name="start">Starting index (inclusive) in the buffer.</param>
+        /// <param name="end">Ending index (exclusive) in the buffer.</param>
         private void FillCoolingMap(int[] destination, int start, int end)
         {
             for (int i = start; i < end; ++i)
@@ -298,6 +329,10 @@ namespace FireDemo
                     destination[i] = 0;
             }
         }
+
+        /// <summary>
+        /// Refreshes the rotating map through a rolling-buffer shift, blending freshly generated values with existing ones for seamlessness.
+        /// </summary>
         private void UpdateRotatingCoolingMap()
         {
             int fireSize = height * width;
@@ -352,6 +387,9 @@ namespace FireDemo
             }
         }
 
+        /// <summary>
+        /// Creates an initial cooling map with varying intensity and optionally applies smoothing.
+        /// </summary>
         private void InitializeCoolingMap()
         {
             if (rotate && coolingMap != null)
@@ -366,8 +404,16 @@ namespace FireDemo
             SmoothCoolingMapDoubleBuffer(ref this.coolingMap, this.smoothing);
         }
 
+        /// <summary>
+        /// Performs multi-pass kernel-based smoothing.
+        /// </summary>
+        /// <param name="source">The input buffer to be smoothed; will contain the final result after all passes due to ref.</param>
+        /// <param name="cIterations">Number of smoothing passes to perform.</param>
         private void SmoothCoolingMapDoubleBuffer(ref int[] source, int cIterations)
         {
+            if (cIterations <= 0)
+                return; // nothing to do
+
             int[] destinationMap = new int[source.Length];
             for (int i = 0; i < cIterations; ++i)
             {
@@ -378,7 +424,7 @@ namespace FireDemo
                 destinationMap = swapMap;
             }
         }
-#endregion
+        #endregion
 
     }
 }
