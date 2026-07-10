@@ -9,11 +9,23 @@ using System.Threading;
 
 namespace FireDemo
 {
+    /// <summary>
+    /// An abstract base for sprites that periodically select new targets within a specified range and move towards them.
+    /// </summary>
     abstract class DynamicSprite : SimpleSprite
     {
+        /// <summary>
+        /// Random number generator used for creating dynamic behavior.
+        /// </summary>
         protected Random rng;
-        protected BitmapLocker poker; // Optimization for accessing the Form faster
-        protected Color[] thePalette; // array of 256 Colors
+        /// <summary>
+        /// Optimization for accessing the Form faster.
+        /// </summary>
+        protected BitmapLocker poker;
+        /// <summary>
+        /// The color palette used by the sprite. This is an array of 256 Colors.
+        /// </summary>
+        protected Color[] thePalette;
 
         /// <summary>
         /// Region within which to randomly move the text on <see cref="LocationPeriod" />. (overrides <see cref="SimpleSprite.Location" />)
@@ -33,10 +45,13 @@ namespace FireDemo
         public bool SmoothTransition = true;
 
 
+        /// <inheritdoc cref="DynamicSprite"/>
+        /// <param name="r"><inheritdoc cref="DynamicSprite.rng" path="/summary"/></param>
         public DynamicSprite(Random r)
         {
             rng = r;
         }
+        /// <inheritdoc cref="DynamicSprite"/>
         public DynamicSprite() : this(Util.NewRandom())
         {
         }
