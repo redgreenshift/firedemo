@@ -8,6 +8,11 @@ namespace FireDemo
 {
     public class PaletteGenerator
     {
+        /// <summary>
+        /// Sets the first color in the palette to be fully transparent.
+        /// </summary>
+        /// <param name="palette">An array of colors representing the palette to modify.</param>
+        /// <returns>The palette with the first color set to transparent.</returns>
         public static Color[] MakeTransparent(Color[] palette)
         {
             palette[0] = Color.FromArgb(0, palette[0]);
@@ -85,6 +90,9 @@ namespace FireDemo
 
     /// <summary>
     /// Very simplistic, linear gradient from specified color to black.
+    /// The OG Squeak palette generator. This is the original implementation of the flat palette generator,
+    /// which creates a linear gradient from a specified color to black. It provides static methods for
+    /// generating flat color palettes based on the original algorithm I wrote in Smalltalk.
     /// </summary>
     public class PalFlatPalette_OriginalSqueak : PaletteGenerator
     {

@@ -68,12 +68,14 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Handles setting the various location related members in the correct order
+        /// Orchestrates the configuration of spatial and temporal movement parameters,
+        /// ensuring interdependent state members are updated in an order that maintains
+        /// consistency for both manual placement and periodic motion logic.
         /// </summary>
-        /// <param name="newLocation"></param>
-        /// <param name="smoothTransition"></param>
-        /// <param name="period"></param>
-        /// <param name="range"></param>
+        /// <param name="newLocation">The new target position for the sprite. If null, current location remains unchanged.</param>
+        /// <param name="smoothTransition">Whether to smoothly transition toward the new position; if false, the sprite jumps directly to it.</param>
+        /// <param name="period">The interval at which the sprite recalculates its target location or moves towards it.</param>
+        /// <param name="range">The bounds within which a random target is chosen when periodic movement occurs.</param>
         public void SetLocationParameters(
             Point? newLocation = null,
             bool? smoothTransition = null,
