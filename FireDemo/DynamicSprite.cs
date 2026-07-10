@@ -347,8 +347,8 @@ namespace FireDemo
             this.PeriodicallyUpdateLocation();
             this.DrawAndRotate(graph);
 
-            intensityMatrix.ProgressOneFrame();
-            coolingStrategy.ProgressOneFrame();
+            intensityMatrix.AdvanceFrame();
+            coolingStrategy.AdvanceFrame();
         }
 
         private void DrawAndRotate(Graphics graph)

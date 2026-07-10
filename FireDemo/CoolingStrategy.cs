@@ -7,8 +7,18 @@ namespace FireDemo
 {
     interface ICoolingStrategy
     {
+        /// <summary>
+        /// Gets the cooling factor at the specified coordinates.
+        /// </summary>
+        /// <param name="x">Horizontal coordinate of the pixel.</param>
+        /// <param name="y">Vertical coordinate of the pixel.</param>
+        /// <returns>The cooling factor at the specified coordinates.</returns>
         int at(int x, int y);
-        void ProgressOneFrame();
+
+        /// <summary>
+        /// Advances the cooling map by one frame.
+        /// </summary>
+        void AdvanceFrame();
     }
 
     class CoolingStrategyConst : ICoolingStrategy
@@ -19,18 +29,18 @@ namespace FireDemo
             this.coolingFactor = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="ICoolingStrategy.at"/>
+        /// <param name="x"><inheritdoc cref="ICoolingStrategy.at.x" path="/summary"/></param>
+        /// <param name="y"><inheritdoc cref="ICoolingStrategy.at.y" path="/summary"/></param>
         public int at(int x, int y)
         {
             return coolingFactor;
         }
 
-        public void ProgressOneFrame() { /* do nothing*/ }
+        /// <summary>
+        /// Advances the cooling map by one frame. For a constant cooling strategy, this does nothing.
+        /// </summary>
+        public void AdvanceFrame() { /* do nothing*/ }
     };
 
     public class CoolingStrategyMap : ICoolingStrategy
@@ -100,6 +110,9 @@ namespace FireDemo
             this.rng = rng;
         }
 
+        /// <inheritdoc cref="ICoolingStrategy.at"/>
+        /// <param name="x"><inheritdoc cref="ICoolingStrategy.at.x" path="/summary"/></param>
+        /// <param name="y"><inheritdoc cref="ICoolingStrategy.at.y" path="/summary"/></param>
         public int at(int x, int y)
         {
             //if (x > width || y > height)
@@ -121,7 +134,10 @@ namespace FireDemo
         //    return coolingMap[iKnowWhatImDoing];
         //}
 
-        public void ProgressOneFrame()
+        /// <summary>
+        /// Advances the cooling map by one frame, updating the offset and potentially rotating the map.
+        /// </summary>
+        public void AdvanceFrame()
         {
             if (this.shift)
             {
@@ -156,10 +172,11 @@ namespace FireDemo
         /// <param name="smoothing">Number of times to smooth out the values to produce a produce a more even distribution.</param>
         /// <param name="shift">If <c>true</c>, move the map up one row per frame to give the appearance of rising air currents.</param>
         /// <param name="rotate">If <c>true</c>, periodically generate an entirely new map, so the flame doesn't look like a video on repeat. Only makes sense to set this when <paramref name="shift"/> is also <c>true</c>.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when any of the parameters are out of their valid range.</exception>
         public void SetMapParameters(int width, int height, float density, int min, int max, int smoothing = 0, bool shift = true, bool rotate = true)
         {
             if (density < 0 || density > 1)
-                throw new ArgumentOutOfRangeException("Density percent must be between 0 and 1.0 inclusive.");
+                throw new ArgumentOutOfRangeException("Density percent must be between 0.0 and 1.0 inclusive.");
             if (min > max)
                 throw new ArgumentOutOfRangeException("Min value must not be larger than max value.");
             if (min < 0 || min > 255)
