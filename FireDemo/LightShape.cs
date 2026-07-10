@@ -302,7 +302,7 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Represents an intermittent, partitioned-line light source specialized for a flux-capacitor shape.
+    /// Draws an intermittent, partitioned-line light source specialized for a flux-capacitor shape.
     /// </summary>
     class LightShapeFluxPath : LightShapeBase
     {
