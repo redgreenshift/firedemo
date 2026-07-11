@@ -12,16 +12,16 @@ namespace FireDemo
     /// color + range drive how anchors become a smooth gradient.
     /// </summary>
     public struct ColorRange
-	{
+    {
         /// <inheritdoc cref="ColorRange"/>
         /// <param name="color"><inheritdoc cref="ColorRange.color" path="/summary"/></param>
         /// <param name="range"><inheritdoc cref="ColorRange.range" path="/summary"/></param>
         public ColorRange(
             Color color,
             int range)
-		{
-			this.color = color;
-			this.range = range;
+        {
+            this.color = color;
+            this.range = range;
         }
 
         /// <summary>
@@ -35,5 +35,5 @@ namespace FireDemo
         /// The anchored palette color at a given palette index position.
         /// </summary>
         public readonly Color color;
-	}
+    }
 }
