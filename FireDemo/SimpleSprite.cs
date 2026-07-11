@@ -8,6 +8,11 @@ using System.Text;
 
 namespace FireDemo
 {
+	/// <summary>
+	/// An abstract base class for single-frame, pixel-based sprites that
+	/// manages an internal bitmap and provides methods for scaling,
+	/// compositing, pixel access, and rendering on a graphics surface.
+	/// </summary>
 	abstract class SimpleSprite
 	{
 		protected Bitmap Form { get; set; }
