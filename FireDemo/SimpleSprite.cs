@@ -35,7 +35,7 @@ namespace FireDemo
 		}
 
 		public Color GetPixel(int x, int y)
-        {
+		{
 			return Form.GetPixel(x, y);
 		}
 
@@ -95,7 +95,7 @@ namespace FireDemo
 	/// </summary>
 	class LayeredSprite : SimpleSprite
 	{
-        readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
+		readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
 
 		public void Add(SimpleSprite sprite)
 		{
@@ -112,22 +112,22 @@ namespace FireDemo
 		/// <param name="width"></param>
 		/// <param name="height"></param>
 		/// <param name="magnification"></param>
-        public override void Initialize(int width, int height, int magnification)
-        {
-            base.Initialize(width, height, magnification);
+		public override void Initialize(int width, int height, int magnification)
+		{
+			base.Initialize(width, height, magnification);
 			m_internalGraphics = Graphics.FromImage(Form);
 		}
 
 		Graphics m_internalGraphics;
-        public override void RenderOneFrameToScreen(Graphics graph)
+		public override void RenderOneFrameToScreen(Graphics graph)
 		{
 			Graphics g = m_internalGraphics;
 
-            // blank the bitmap before compositing, to clear out the
-            // tansparent areas that never update (i.e. fix stuck pixels)
-            g.Clear(Color.Black);
+			// blank the bitmap before compositing, to clear out the
+			// tansparent areas that never update (i.e. fix stuck pixels)
+			g.Clear(Color.Black);
 
-            foreach (SimpleSprite sprite in m_dbSprites)
+			foreach (SimpleSprite sprite in m_dbSprites)
 			{
 				sprite.RenderOneFrameToScreen(g);
 			}
@@ -137,7 +137,7 @@ namespace FireDemo
 	}
 
 	class HeroHoldingItem : SimpleSprite
-    {
+	{
 		public HeroHoldingItem()
 		{
 			int[][] hero;
@@ -147,7 +147,7 @@ namespace FireDemo
 			Width = 16;
 			Height = 20;
 
-			lightGreen= Color.LightGreen;
+			lightGreen = Color.LightGreen;
 			darkGreen = Color.Green;
 			yellow = Color.Yellow;
 			orangeShoe = Color.Orange;
@@ -201,21 +201,21 @@ namespace FireDemo
 			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 
 			for (int y = 0; y < Height; ++y)
-            {
+			{
 				for (int x = 0; x < Width; ++x)
-                {
+				{
 					Color color = Color.Transparent;
 					int i = hero[y][x];
 					if (i > 0)
-                    {
+					{
 						color = pal[i];
-                    }
+					}
 
 					Form.SetPixel(x, y, color);
-                }
+				}
 
-            }
-        }
+			}
+		}
 	}
 
 
@@ -425,30 +425,30 @@ namespace FireDemo
 		}
 	}
 
-    class SaberHilt : SimpleSprite
-    {
-        public SaberHilt()
-        {
-            InitializeBitmap();
-        }
+	class SaberHilt : SimpleSprite
+	{
+		public SaberHilt()
+		{
+			InitializeBitmap();
+		}
 
-        protected void InitializeBitmap(int heightLimit = -1)
-        {
-            int[][] pixels;
-            Color[] pal;
+		protected void InitializeBitmap(int heightLimit = -1)
+		{
+			int[][] pixels;
+			Color[] pal;
 
-            Width = 8;
-            Height = 16;
+			Width = 8;
+			Height = 16;
 
-            if (heightLimit != -1 && heightLimit < Height)
-                Height = heightLimit;
+			if (heightLimit != -1 && heightLimit < Height)
+				Height = heightLimit;
 
-            Color lightBrown = Color.LightGray;
-            Color medBrown = Color.Silver;
-            Color darkBrown = Color.DarkGray;
+			Color lightBrown = Color.LightGray;
+			Color medBrown = Color.Silver;
+			Color darkBrown = Color.DarkGray;
 
-            pal = new Color[]{
-                Color.Transparent, //0 Transparent
+			pal = new Color[]{
+				Color.Transparent, //0 Transparent
 				lightBrown, // "1"
 				medBrown, // "2"
 				darkBrown, // 3
@@ -456,44 +456,44 @@ namespace FireDemo
 			};
 
 			// This was just a quick prototype for the sword hilt. It doesn't look the way I want
-            pixels = new int[][]
-            {
-                new int[]{1, 4, 4, 4, 4, 4, 4, 1},
-                new int[]{1, 1, 1, 1, 1, 1, 1, 1},
-                new int[]{0, 3, 3, 3, 3, 3, 3, 0},
-                new int[]{0, 2, 1, 1, 2, 2, 2, 0},
-                new int[]{0, 0, 3, 3, 3, 3, 0, 0},
-                new int[]{0, 0, 0, 3, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-                new int[]{0, 0, 0, 2, 3, 0, 0, 0},
-            };
+			pixels = new int[][]
+			{
+				new int[]{1, 4, 4, 4, 4, 4, 4, 1},
+				new int[]{1, 1, 1, 1, 1, 1, 1, 1},
+				new int[]{0, 3, 3, 3, 3, 3, 3, 0},
+				new int[]{0, 2, 1, 1, 2, 2, 2, 0},
+				new int[]{0, 0, 3, 3, 3, 3, 0, 0},
+				new int[]{0, 0, 0, 3, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+				new int[]{0, 0, 0, 2, 3, 0, 0, 0},
+			};
 
-            Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 
-            for (int y = 0; y < Height; ++y)
-            {
-                for (int x = 0; x < Width; ++x)
-                {
-                    Color color = Color.Transparent;
-                    int i = pixels[y][x];
-                    if (i > 0)
-                    {
-                        color = pal[i];
-                    }
+			for (int y = 0; y < Height; ++y)
+			{
+				for (int x = 0; x < Width; ++x)
+				{
+					Color color = Color.Transparent;
+					int i = pixels[y][x];
+					if (i > 0)
+					{
+						color = pal[i];
+					}
 
-                    Form.SetPixel(x, y, color);
-                }
-            }
-        }
-    }
+					Form.SetPixel(x, y, color);
+				}
+			}
+		}
+	}
 
     class Dumpster : SimpleSprite
 	{
@@ -522,10 +522,10 @@ namespace FireDemo
 				Color.Black // 4
 			};
 
-            // 5 units high
-            // 10 units wide
-            // 8 wide front, 2 deep, 1 high for lid
-            pixels = new int[][]
+			// 5 units high
+			// 10 units wide
+			// 8 wide front, 2 deep, 1 high for lid
+			pixels = new int[][]
 			{
 				new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 0, 0},
 				new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 3, 4, 0, 0},
@@ -684,11 +684,11 @@ namespace FireDemo
 				{
 					Color c = Color.Transparent;
 					if (y > Height / 2)
-                    {
+					{
 						if (x == Width / 2
 							|| x == Width / 2 - 1)
 							c = color;
-                    }
+					}
 					else if (x == y || x + y + 1 == Width)
 					{
 						c = color;
@@ -706,7 +706,7 @@ namespace FireDemo
 		public enum RColor {
 			Gold = 0,
 			White = 1,
-        };
+		};
 		public RingSprite(RColor c)
 		{
 			int[][] pixels;
@@ -734,32 +734,32 @@ namespace FireDemo
 					break;
 			}
 
-            //pixels = new int[][]
-            //{
-            //	new int[] { 0, 0, 1, 1, 2, 0, 0, 0, },
-            //	new int[] { 0, 1, 2, 0, 1, 2, 0, 0, },
-            //	new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
-            //	new int[] { 1, 2, 0, 0, 0, 0, 1, 2, },
-            //	new int[] { 1, 2, 0, 0, 0, 0, 1, 2, },
-            //	new int[] { 0, 1, 2, 0, 0, 0, 1, 2, },
-            //	new int[] { 0, 0, 1, 2, 0, 1, 2, 0, },
-            //	new int[] { 0, 0, 0, 1, 1, 2, 0, 0, },
-            //};
-
-            //// better?
-            //pixels = new int[][]
+			//pixels = new int[][]
 			//{
-            //    new int[] { 0, 0, 1, 2, 0, 0, 0, 0, },
-            //    new int[] { 0, 1, 2, 1, 2, 0, 0, 0, },
-            //    new int[] { 1, 2, 0, 0, 1, 2, 0, 0, },
-            //    new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
-            //    new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
-            //    new int[] { 0, 1, 2, 0, 0, 1, 2, 0, },
-            //    new int[] { 0, 0, 1, 2, 1, 2, 0, 0, },
-            //    new int[] { 0, 0, 0, 1, 2, 0, 0, 0, },
+			//	new int[] { 0, 0, 1, 1, 2, 0, 0, 0, },
+			//	new int[] { 0, 1, 2, 0, 1, 2, 0, 0, },
+			//	new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
+			//	new int[] { 1, 2, 0, 0, 0, 0, 1, 2, },
+			//	new int[] { 1, 2, 0, 0, 0, 0, 1, 2, },
+			//	new int[] { 0, 1, 2, 0, 0, 0, 1, 2, },
+			//	new int[] { 0, 0, 1, 2, 0, 1, 2, 0, },
+			//	new int[] { 0, 0, 0, 1, 1, 2, 0, 0, },
 			//};
 
-            pixels = new int[][]
+			//// better?
+			//pixels = new int[][]
+			//{
+			//    new int[] { 0, 0, 1, 2, 0, 0, 0, 0, },
+			//    new int[] { 0, 1, 2, 1, 2, 0, 0, 0, },
+			//    new int[] { 1, 2, 0, 0, 1, 2, 0, 0, },
+			//    new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
+			//    new int[] { 1, 2, 0, 0, 0, 1, 2, 0, },
+			//    new int[] { 0, 1, 2, 0, 0, 1, 2, 0, },
+			//    new int[] { 0, 0, 1, 2, 1, 2, 0, 0, },
+			//    new int[] { 0, 0, 0, 1, 2, 0, 0, 0, },
+			//};
+
+			pixels = new int[][]
 			{
 				new int[] { 0, 0, 1, 2, 0, 0, 0, 0, },
 				new int[] { 0, 1, 2, 1, 2, 0, 0, 0, },
@@ -802,11 +802,11 @@ namespace FireDemo
 	/// Flattens multiple static sprites into a single image which renders a lot faster than multiple smaller sprites
 	/// </summary>
 	class SpriteVideoGameBackground : SimpleSprite
-    {
+	{
 		public SimpleSprite Sprite { get; set; }
 
 		public SpriteVideoGameBackground()
-        {
+		{
 			// TODO: parameterize this. For now I know the Pi device dimensions.
 			Width = 1024;
 			Height = 600;
@@ -814,11 +814,11 @@ namespace FireDemo
 		}
 
 		private void DrawSprite(SimpleSprite source, Bitmap dest, int x, int y, int magnification)
-        {
+		{
 			for (int yy = y; yy < dest.Height && yy < y + source.Height; ++yy)
-            {
+			{
 				for (int xx = x; xx < dest.Width && xx < x + source.Width; ++xx)
-                {
+				{
 					// Starting at
 					int sourceX = xx - x;
 					int sourceY = yy - y;
@@ -836,9 +836,9 @@ namespace FireDemo
 					}
 				}
 			}
-        }
+		}
 		public void Initialize()
-        {
+		{
 			Form = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 
 			int xMax = Width / (Sprite.Width * Sprite.Magnification);
@@ -847,9 +847,9 @@ namespace FireDemo
 			{
 				for (int xx = 0; xx < xMax; ++xx)
 				{
-					if ((xx < 1  || xx > xMax - 2 ) && (yy > 2) 
-						|| yy == 2 
-						|| yy == 3 
+					if ((xx < 1 || xx > xMax - 2) && (yy > 2)
+						|| yy == 2
+						|| yy == 3
 						|| (yy > yMax - 2 && ((xx < xMax / 2 - 3) || (xx > xMax / 2 + 2))))
 					{
 						int x = xx * Sprite.Width * Sprite.Magnification;
@@ -895,7 +895,7 @@ namespace FireDemo
 		}
 
 		//private void NaiveRender(Graphics graph)
-        //{
+		//{
 		//	int xMax = Width / (Sprite.Width * Sprite.Magnification);
 		//	int yMax = Height / (Sprite.Height * Sprite.Magnification);
 		//	for (int yy = 0; yy < yMax; ++yy)
@@ -913,7 +913,7 @@ namespace FireDemo
 
 		int m_iNeedToRender = 0;
 		public override void RenderOneFrameToScreen(Graphics graph)
-        {
+		{
 			// Don't need to spend time redrawing this every time, so we can just render once,
 			// or every once in a while to make sure no artifacts.
 			if (m_iNeedToRender++ % 60 == 5)
@@ -925,7 +925,7 @@ namespace FireDemo
 	}
 
 	class VectorSauronTowerSprite : SimpleSprite
-    {
+	{
 		public override void RenderOneFrameToScreen(Graphics graph)
 		{
 			int offset;
@@ -947,13 +947,13 @@ namespace FireDemo
 			//	new Point(650, 500),
 			//	new Point(1000 - offset, 0),
 			//};
-            //graph.DrawLine(Pens.White, offset, 599, offset, 0);
-            ////graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
-            ////graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
-            ////graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
-            ////graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
-            ////graph.DrawLine(Pens.White, 1000 - offset, 0, 1010 - offset, 0);
-            //graph.DrawLine(Pens.White, 1000 - offset, 0, 1000 - offset, 599);
+			//graph.DrawLine(Pens.White, offset, 599, offset, 0);
+			////graph.DrawLine(Pens.White, offset, 0, offset + 10, 0);
+			////graph.DrawLine(Pens.White, offset + 10, 0, offset + 10, 300);
+			////graph.DrawLine(Pens.White, offset + 10, 300, 1000- offset, 300);
+			////graph.DrawLine(Pens.White, 1000- offset, 300, 1000- offset, 0);
+			////graph.DrawLine(Pens.White, 1000 - offset, 0, 1010 - offset, 0);
+			//graph.DrawLine(Pens.White, 1000 - offset, 0, 1000 - offset, 599);
 
 			//graph.DrawCurve(Pens.White, pointsTowerCurve);
 			float screenWidth = 1024;
@@ -964,7 +964,7 @@ namespace FireDemo
 			float elipseHeight = towerHeight * 2;
 			offset = (int)((screenWidth - elipseWidth) / 2.0f) + Location.X;
 			Pen color = Pens.PaleGoldenrod;
-            graph.DrawArc(color, x: offset, y: Location.Y + towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
+			graph.DrawArc(color, x: offset, y: Location.Y + towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
 
 			// Tower edges
 			int leftTower = offset - 10;
