@@ -44,6 +44,7 @@ namespace FireDemo
 			return Form.GetPixel(x, y);
 		}
 
+		/// <inheritdoc cref="SimpleSprite"/>
 		public SimpleSprite()
 		{
 			this.InterpolationMode = Util.IsLinux ? InterpolationMode.Bicubic : InterpolationMode.HighQualityBicubic; // Default to BEST quality
