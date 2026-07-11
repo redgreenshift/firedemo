@@ -1055,7 +1055,7 @@ namespace FireDemo
 
     // TODO: JRDV: generalize the lighting palette algorithm
     // Wait, I sortof do. It's the Flame Curve code with a value NEAR White!
-    // The difference for the "realistic" lightning is that I mix pink and blue, and then manually whiten a portion of the range\
+    // The difference for the "realistic" lightning is that I mix pink and blue, and then manually whiten a portion of the range
     // so generalize that!
     public class PalLightning : PalRealisticFlameCurve
     {
@@ -1138,9 +1138,9 @@ namespace FireDemo
         /// Mix two palettes to generate a new palette
         /// </summary>
         /// <param name="thePalette">Buffer that receives the mixed palette values.</param>
-        /// <param name="pal1">the primary palette</param>
-        /// <param name="pal2">the secondary palette</param>
-        /// <param name="balance">A floating point value representing how prominent the primary palette. Default is 50%. Valid range is 0.0 to 1.0</param>
+        /// <param name="pal1">The primary palette.</param>
+        /// <param name="pal2">The secondary palette.</param>
+        /// <param name="balance">A floating point value representing how prominent to make the primary palette. Default is 50%. Valid range is 0.0 to 1.0</param>
         /// <param name="switchPoint">Point at which the secondary palette takes over. Default is never</param>
         /// <param name="whitePoint">Point at which both palettes are ignored and <see cref="Color.White"/> is used. Default is never</param>
         public static void MixPalettes(Color[] thePalette, Color[] pal1, Color[] pal2, float balance = 0.5f, int switchPoint = 256, int whitePoint = 256)

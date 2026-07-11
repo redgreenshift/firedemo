@@ -10,7 +10,7 @@ using System.Threading;
 namespace FireDemo
 {
     /// <summary>
-    /// An abstract base for sprites that periodically select new targets within a specified range and move towards them.
+    /// An abstract base for sprites that periodically relocate within a defined area.
     /// </summary>
     abstract class DynamicSprite : SimpleSprite
     {
@@ -28,7 +28,7 @@ namespace FireDemo
         protected Color[] thePalette;
 
         /// <summary>
-        /// Region within which to randomly move the text on <see cref="LocationPeriod" />. (overrides <see cref="SimpleSprite.Location" />)
+        /// Region within which to randomly move the sprite on <see cref="LocationPeriod" />. (overrides <see cref="SimpleSprite.Location" />)
         /// 
         /// This is ignored if <see cref="LocationPeriod" /> is <see cref="TimeSpan.Zero" />
         /// </summary>
