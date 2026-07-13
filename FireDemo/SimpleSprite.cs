@@ -103,6 +103,21 @@ namespace FireDemo
 		// what would that look like? TODO: Consider
 		// 
 		// DrawOn() => { RenderOneFrame(); base.DrawOn(graph); ProgressOneFrame(); }
+
+		/// <summary>
+		/// Renders a single frame of this sprite onto the specified graphics surface.
+		/// </summary>
+		/// <param name="graph">The graphics surface to draw on.</param>
+		/// <remarks>
+		/// This method is a high-level hook for rendering. For simple sprites, it directly
+		/// calls <see cref="DrawOn(Graphics)"/>. Subclasses may override this to include
+		/// additional frame-based logic (e.g., animation or compositing).
+		/// <para>
+		/// Implementation typically involves drawing the sprite's current state to the screen.
+		/// This is intended to be overridden by complex sprites (like <see cref="LayeredSprite"/>)
+		/// to manage internal compositing or animation before calling the base draw logic.
+		/// </para>
+		/// </remarks>
 		public virtual void RenderOneFrameToScreen(Graphics graph)
 		{
 			DrawOn(graph);
