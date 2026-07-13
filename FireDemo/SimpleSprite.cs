@@ -124,41 +124,58 @@ namespace FireDemo
 	/// </remarks>
 	class LayeredSprite : SimpleSprite
 	{
-		readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
+		/// <summary>
+		/// The list of sprite layers held within this compositing stack.
+		/// Lower indices represent base layers; higher indices are rendered on top of lower ones.
+		/// </summary>
+		private readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
+
+		/// <summary>
+		/// The graphics context used to compose all sub-layers onto the sprite's bitmap buffer.
+		/// </summary>
+		private Graphics m_internalGraphics;
 
 		/// <inheritdoc cref="LayeredSprite"/>
 		public LayeredSprite() { }
 
 		/// <summary>
-		/// Adds a single sprite as a new layer to the composition.
+		/// Adds a single sprite as a new layer to the compositing stack.
+		/// New layers are added to the top (rendered after existing layers).
 		/// </summary>
-		/// <param name="sprite">The sprite layer to add.</param>
+		/// <param name="sprite">The sprite component to add to the composition.</param>
 		public void Add(SimpleSprite sprite)
 		{
 			m_dbSprites.Add(sprite);
 		}
+
 		/// <summary>
-		/// Adds a collection of sprites as new layers to the composition.
+		/// Appends a collection of sprites as new layers to the compositing stack.
+		/// The order of addition preserves their relative layering as provided in the collection.
 		/// </summary>
-		/// <param name="sprites">The collection of sprites to add.</param>
+		/// <param name="sprites">The collection of sprites to add as layers.</param>
 		public void AddRange(IEnumerable<SimpleSprite> sprites)
 		{
 			m_dbSprites.AddRange(sprites);
 		}
 
 		/// <summary>
-		/// Temporary override to disgnose issues with overlay
+		/// Initializes the layered sprite by setting its base dimensions and preparing an
+		/// internal compositing surface used to blend child layers.
 		/// </summary>
-		/// <param name="width"></param>
-		/// <param name="height"></param>
-		/// <param name="magnification"></param>
+		/// <param name="width">The width of the sprite's composition buffer.</param>
+		/// <param name="height">The height of the sprite's composition buffer.</param>
+		/// <param name="magnification">The scaling multiplier used during rendering.</param>
 		public override void Initialize(int width, int height, int magnification)
 		{
 			base.Initialize(width, height, magnification);
 			m_internalGraphics = Graphics.FromImage(Form);
 		}
 
-		Graphics m_internalGraphics;
+		/// <summary>
+		/// Renders a single frame of all composited layers to the provided graphics surface,
+		/// while also handling internal layer blending.
+		/// </summary>
+		/// <param name="graph">The target graphics surface to render on.</param>
 		public override void RenderOneFrameToScreen(Graphics graph)
 		{
 			Graphics g = m_internalGraphics;
