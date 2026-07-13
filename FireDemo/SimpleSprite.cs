@@ -23,6 +23,12 @@ namespace FireDemo
 		public InterpolationMode InterpolationMode { get; set; }
 		public CompositingMode CompositingMode { get; set; }
 
+		/// <summary>
+		/// Sets the sprite's base dimensions and magnification.
+		/// </summary>
+		/// <param name="width">The width in pixels for the sprite surface.</param>
+		/// <param name="height">The height in pixels for the sprite surface.</param>
+		/// <param name="magnification">The scaling multiplier used during rendering.</param>
 		public virtual void Initialize(int width, int height, int magnification)
 		{
 			this.Magnification = magnification;
@@ -39,6 +45,13 @@ namespace FireDemo
 			Form = new Bitmap(width, height, PixelFormat.Format32bppArgb);
 		}
 
+		/// <summary>
+		/// Gets the color of the specified pixel.
+		/// </summary>
+		/// <param name="x">Horizontal coordinate of the pixel.</param>
+		/// <param name="y">Vertical coordinate of the pixel.</param>
+		/// <returns>The color of the pixel at the specified coordinates.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">Throws an ArgumentOutOfRangeException if the coordinates are outside the sprite's bounds.</exception>
 		public Color GetPixel(int x, int y)
 		{
 			return Form.GetPixel(x, y);
@@ -57,6 +70,10 @@ namespace FireDemo
 			Magnification = 1;
 		}
 
+		/// <summary>
+		/// Draws the sprite onto the graphics surface, applying the sprite's own compositing and interpolation settings.
+		/// </summary>
+		/// <param name="graph">The graphics surface on which to draw the sprite.</param>
 		protected void DrawOn(Graphics graph)
 		{
 			CompositingMode cm = graph.CompositingMode; // Default SourceOver
@@ -92,21 +109,38 @@ namespace FireDemo
 		}
 	}
 
+	// May want to introduce a GridSprite/SpriteGrid in the future, like for a game board.
+
 	/// <summary>
-	/// Blends multiple sprites together using the CompositingMode, to reduce flicker when rendering every frame
-	/// Generally used to eliminate flicker when drawing multiple DynamicSprites to the same area
-	/// ...as opposed to the other "Background" SpriteCompositor (SpriteVideoGameBackground)
-	/// which generally takes non-overlapping sprites and flattens to a single image which draws faster.
-	/// LayeredSprite vs GridSprite/SpriteGrid?
+	/// Aggregates multiple sprite layers into a single, complex composition.
 	/// </summary>
+	/// <remarks>
+	/// <para>Blends multiple sprites using its assigned <see cref="CompositingMode"/>
+	/// to reduce flicker during rendering.</para>
+	/// <para>Typically used to eliminate flicker when drawing overlapping
+	/// <see cref="DynamicSprite"/>s.<br/>It stands in contrast to the other "Background"
+	/// SpriteCompositor <see cref="SpriteVideoGameBackground"/>, which is intended for
+	/// flattening static images.</para>
+	/// </remarks>
 	class LayeredSprite : SimpleSprite
 	{
 		readonly List<SimpleSprite> m_dbSprites = new List<SimpleSprite>();
 
+		/// <inheritdoc cref="LayeredSprite"/>
+		public LayeredSprite() { }
+
+		/// <summary>
+		/// Adds a single sprite as a new layer to the composition.
+		/// </summary>
+		/// <param name="sprite">The sprite layer to add.</param>
 		public void Add(SimpleSprite sprite)
 		{
 			m_dbSprites.Add(sprite);
 		}
+		/// <summary>
+		/// Adds a collection of sprites as new layers to the composition.
+		/// </summary>
+		/// <param name="sprites">The collection of sprites to add.</param>
 		public void AddRange(IEnumerable<SimpleSprite> sprites)
 		{
 			m_dbSprites.AddRange(sprites);
