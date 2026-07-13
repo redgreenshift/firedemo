@@ -6,10 +6,18 @@ using System.Runtime.InteropServices;
 namespace FireDemo
 {
     /// <summary>
-    /// Encapsulate optimizations for speeding up Bitmap access by temporarily locking the data into system memory
+    /// Encapsulates optimizations for speeding up <see cref="Bitmap"/> access by temporarily locking the data into system memory.
     /// </summary>
+    /// <remarks>
+    /// This class synchronizes a <see cref="System.Drawing.Bitmap"/> into the <see cref="Pixels"/> array to allow
+    /// for high-performance read/write operations compared to traditional <c>GetPixel</c> and <c>SetPixel</c> methods.
+    /// It supports bit depths of 8, 16, 24, and 32 bits per pixel.
+    /// </remarks>
     public class BitmapLocker
     {
+        /// <summary>
+        /// The source Bitmap being locked for pixel access.
+        /// </summary>
         protected readonly Bitmap bitmap = null;
         protected BitmapData bitmapData = null;
         protected IntPtr IptrBitmap = IntPtr.Zero;
@@ -19,6 +27,8 @@ namespace FireDemo
         public readonly int Width;
         public readonly int Height;
 
+        /// <inheritdoc cref="BitmapLocker"/>
+        /// <param name="bitmap"><inheritdoc cref="BitmapLocker.bitmap" path="/summary"/></param>
         public BitmapLocker(Bitmap bitmap)
         {
             this.bitmap = bitmap;
@@ -33,10 +43,14 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Lock bitmap data into system memory to start accessing faster
+        /// Locks the source bitmap data into system memory to facilitate efficient pixel-level access.
         /// </summary>
-        /// <param name="flags">An <see cref="ImageLockMode"/> enumeration that specifies the access level (read/write) for the <see cref="Bitmap"/>.</param>
-        /// <exception cref="InvalidOperationException">If already locked</exception>
+        /// <param name="flags">Specifies the access level (read/write) for the <see cref="Bitmap"/>.</param>
+        /// <remarks>
+        /// This method synchronizes the bitmap's pixel data into the managed <see cref="Pixels"/> array.
+        /// If it is the first time locking, the buffer will be initialized to fit the bitmap dimensions.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown if the bitmap is already locked.</exception>
         public void LockBits(ImageLockMode flags = ImageLockMode.ReadWrite)
         {
             if (lockMode != null)
@@ -65,9 +79,15 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Unlock bitmap data when done
+        /// Releases the lock on the source <see cref="Bitmap"/>, synchronizing any changes
+        /// from the <see cref="Pixels"/> array back to system memory.
         /// </summary>
-        /// <exception cref="InvalidOperationException">If not already locked</exception>
+        /// <remarks>
+        /// If the current mode allows writing (ReadWrite or WriteOnly), the contents of
+        /// the <see cref="Pixels"/> buffer are copied back to the original bitmap data
+        /// before unlocking. The lock state is then reset for future use.
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown if the bitmap was not previously locked.</exception>
         public void UnlockBits()
         {
             if (lockMode == null)
@@ -88,12 +108,14 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Gets the color of the specified pixel in a Bitmap that has been locked
+        /// Retrieves the <see cref="Color"/> of the specified pixel in a
+        /// <see cref="Bitmap"/> that has been locked.
         /// </summary>
-        /// <param name="x">The x-coordinate of the pixel to retrieve.</param>
-        /// <param name="y">The y-coordinate of the pixel to retrieve.</param>
-        /// <returns>A <see cref="Color"/> structure representing the color of the requested pixel.</returns>
-        /// <exception cref="InvalidOperationException">If not locked for Reading.</exception>
+        /// <param name="x">Horizontal coordinate of the pixel.</param>
+        /// <param name="y">Vertical coordinate of the pixel.</param>
+        /// <returns>A <see cref="Color"/> representing the color at the specified position.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the bitmap is not currently locked in a read-capable mode (ReadOnly or ReadWrite).</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the calculated pixel index is out of the bounds of the data buffer.</exception>
         public Color GetPixel(int x, int y)
         {
             if (lockMode != ImageLockMode.ReadOnly && lockMode != ImageLockMode.ReadWrite)
@@ -155,11 +177,25 @@ namespace FireDemo
         }
 
         /// <summary>
-        /// Sets the color of the specified pixel in a Bitmap that has been locked
+        /// Sets the <see cref="Color"/> of the specified pixel in a
+        /// <see cref="Bitmap"/> that has been locked.
         /// </summary>
-        /// <param name="x">The x-coordinate of the pixel to set.</param>
-        /// <param name="y">The y-coordinate of the pixel to set.</param>
-        /// <param name="color">A <see cref="Color"/> structure that represents the color to assign to the specified pixel.</param>
+        /// <param name="x">Horizontal coordinate of the pixel.</param>
+        /// <param name="y">Vertical coordinate of the pixel.</param>
+        /// <param name="color">A <see cref="Color"/> representing the color to write at the specified position.</param>
+        /// <remarks>
+        /// The color is written into the managed <see cref="Pixels"/> array in BGR byte order (B gets the lowest memory address),
+        /// matching the layout used by <see cref="GetPixel(int,int)"/>,
+        /// then propagated back to system memory when <see cref="UnlockBits()"/> is called.
+        /// <para>
+        /// Supported depths:<br/>
+        /// - 8 (palette index),<br/>
+        /// - 16 (BGR565 packed into two bytes),<br/>
+        /// - 24 (unpacked BGR), and<br/>
+        /// - 32 (BGRA) Packed as 0xAARRGGBB; when written to a little-endian byte buffer this results in byte order BGRA (B, G, R, A) at increasing offsets.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="InvalidOperationException">Thrown if the bitmap is not currently locked in a write-capable mode (WriteOnly or ReadWrite).</exception>
         public void SetPixel(int x, int y, Color color)
         {
             //if (lockMode != ImageLockMode.WriteOnly && lockMode != ImageLockMode.ReadWrite)
