@@ -167,9 +167,9 @@ namespace FireDemo
                 //    }
                 //    break;
 
-                case 8: // For 8-bit depth, set the same value to Red, Green, and Blue (could just use one)
+                case 8: // For 8-bit depth, set the palette index value for Blue
                     byte c = Pixels[iPixel];
-                    color = Color.FromArgb(c, c, c);
+                    color = Color.FromArgb(0, 0, c);
                     break;
             }
 
@@ -247,7 +247,7 @@ namespace FireDemo
                 //}
                 //break;
 
-                case 8: // For 8-bit depth, the same value is in Red, Green, and Blue (so we only need to check one)
+                case 8: // For 8-bit depth, the palette index is stored in Blue
                     Pixels[iPixel] = color.B;
                     break;
             }
