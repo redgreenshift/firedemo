@@ -109,14 +109,10 @@ namespace FireDemo
 		/// </summary>
 		/// <param name="graph">The graphics surface to draw on.</param>
 		/// <remarks>
-		/// This method is a high-level hook for rendering. For simple sprites, it directly
-		/// calls <see cref="DrawOn(Graphics)"/>. Subclasses may override this to include
-		/// additional frame-based logic (e.g., animation or compositing).
-		/// <para>
-		/// Implementation typically involves drawing the sprite's current state to the screen.
-		/// This is intended to be overridden by complex sprites (like <see cref="LayeredSprite"/>)
-		/// to manage internal compositing or animation before calling the base draw logic.
-		/// </para>
+		/// This method serves as a high-level rendering hook. While simple sprites
+		/// use it to call <see cref="DrawOn(Graphics)"/>, complex subclasses (such as
+		/// <see cref="LayeredSprite"/>) may override this to manage internal compositing,
+		/// animation, or other frame-based logic before finalizing the render.
 		/// </remarks>
 		public virtual void RenderOneFrameToScreen(Graphics graph)
 		{
