@@ -857,7 +857,7 @@ namespace FireDemo
             m_dbSprites.Add(dbPlasmaDisc);
             m_dbSprites.Add(hero);
 
-            BrickWall brick1 = new BrickWall
+            CaveWall brick1 = new CaveWall
             {
                 InterpolationMode = InterpolationMode.NearestNeighbor,
                 Magnification = 2

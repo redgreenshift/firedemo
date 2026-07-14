@@ -373,13 +373,12 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a brick wall as 16x16 pixel art. Brown pixels form solid masonry blocks
-    /// with dark mortar separating bricks along edges and corners. Dimensions are
-    /// fixed at 16x16.
+    /// A 16x16 pixel-art sprite of an earthy, textured wall with irregular shapes to create a rugged organic cavern surface.
     /// </summary>
-    class BrickWall : SimpleSprite
+    class CaveWall : SimpleSprite
     {
-        public BrickWall()
+        /// <inheritdoc cref="CaveWall"/>
+        public CaveWall()
         {
             int[][] brick;
             Color[] pal;
