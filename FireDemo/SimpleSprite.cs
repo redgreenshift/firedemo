@@ -600,13 +600,8 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a green industrial dumpster as a pixel art sprite (45x21). The front
-    /// face uses medium green for the main body, light green along the top edge where
-    /// ambient lighting would hit darkest green along visible depth edges and corners
-    /// that recede toward viewer. A thin black outline traces exterior silhouettes and
-    /// interior panel joints to give it chunky industrial character. Transparent
-    /// pixels let underlying sprites show through empty regions like ground below
-    /// dumpster or sky above lid.
+    /// A large-scale, fixed-size environmental sprite of a dumpster. Features chunky
+    /// industrial character with dark greens to represent the waste container's form.
     /// </summary>
     class Dumpster : SimpleSprite
     {
@@ -683,14 +678,9 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders an 8x8 blocky heart sprite using two red tones — DarkRed along borders
-    /// and edges where they define the silhouette(left/top lobes and tapering point),
-    /// Red for interior fill in a fully lit state, with both regions collapsing to
-    /// transparent pixels at gaps that let underlying sprites show through. When
-    /// constructed as empty via the constructor parameter, the filled body swaps from
-    /// bright red to black while dark outlines persist along visible borders, giving
-    /// the same shape a "consumed" or deactivated look — useful for health bars
-    /// showing damage levels.
+    /// An 8x8 pixel art heart sprite for UI indicators. The 'empty' parameter toggles
+    /// between a vibrant red fill and a dark-hued silhouette, useful for visualising
+    /// health or life states.
     /// </summary>
     class Heart : SimpleSprite
     {
@@ -741,12 +731,8 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a configurable rectangle sprite with arbitrary width and height rather
-    /// than fixed pixel-art grids like sibling classes, each cell spanning one to any
-    /// number of pixels — when filled (the default), every cell inside the perimeter
-    /// becomes the chosen color; when outlined via fill = false, only border cells
-    /// receive the color while interior remains transparent for compositing layering
-    /// beneath other sprites.
+    /// A dynamically sized, procedurally drawn rectangle sprite that can be rendered
+    /// as a solid fill or an outline.
     /// </summary>
     class RectangleSprite : SimpleSprite
     {
@@ -775,15 +761,8 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders an X-shaped sprite within an arbitrary-width-by-height rectangle, each
-    /// pixel spanning one cell of the canvas rather than being locked to fixed
-    /// dimensions like sibling classes — two diagonals drawn in any chosen Color where
-    /// every crossing line receives the color and all off - diagonal cells remain
-    /// transparent for compositing. Diagonals use exact intersection rules
-    /// (x == y alongside x + y + 1 == Width) so they always cross cleanly even when
-    /// width differs from height, producing an accurate X rather than a distorted
-    /// diagonal pair that would otherwise shear in rectangular bounding boxes where
-    /// aspect ratio isn't one-to-one but visual balance still matters.
+    /// A procedurally rendered 'X' sprite designed with dynamic scaling to ensure an
+    /// accurate intersection regardless of the bounding box dimensions.
     /// </summary>
     class XSprite : SimpleSprite
     {
@@ -812,16 +791,9 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a Y-shaped sprite within an arbitrary-width-by-height rectangle with
-    /// each pixel spanning one cell rather than being locked to fixed dimensions like
-    /// sibling classes — upper diagonals drawn using crossed rules (x == y alongside
-    /// x + y + 1 == Width) creating two arms that meet at the center and widen outward
-    /// while lower half descends as a stem of either one or two pixels wide depending
-    /// on whether width is odd or even. All off-diagonal cells remain transparent for
-    /// compositing so underlying sprites show through gaps between limbs and below
-    /// where only the vertical stroke persists — producing a bold letter-Y whose arms
-    /// can appear thick in narrow bounding boxes but stay proportional to canvas
-    /// rather than quantized into pixel art rows like nearby sprite classes do.
+    /// A procedurally generated Y-shaped sprite with dynamic scaling. Uses
+    /// mathematical rules to create diagonal arms and a centered stem that
+    /// adapt to the provided width and height dimensions.
     /// </summary>
     class YSprite : SimpleSprite
     {
@@ -856,18 +828,9 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a gold-or-white colored ring-shaped emblem as an 8x20 fixed-size pixel
-    /// art sprite with three tones: foreground stroke in either Gold(default) or
-    /// White, highlight fill one shade lighter along the outer arc where ambient
-    /// lighting would land brightest to suggest curvature without gradients — inner
-    /// cells remain transparent so compositing underlying sprites through center holes
-    /// requires no additional alpha channels and mask layers that nearby classes need.
-    /// The RColor enum parameter controls both palette simultaneously rather than
-    /// swapping individual colors: Gold renders in warm Yellow-on-Gold with classic
-    /// metallic contrast, while White switches to cool Gray-as-the-fill color letting
-    /// the same pixel art pattern serve different sprite forms across a UI without
-    /// needing separate shape types where brightness and hue shift matters but
-    /// silhouette stays identical.
+    /// An 8x8 pixel art ring sprite designed for UI elements. Uses a two-tone shading
+    /// effect for depth; serves as either a currency coin icon (Gold) or a zero
+    /// placeholder (White).
     /// </summary>
     class RingSprite : SimpleSprite
     {
@@ -1094,19 +1057,9 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a pale-goldenrod vector tower spanning most of screen height against
-    /// any canvas using continuous DrawArc and DrawLine calls rather than fixed pixel
-    /// grids like sibling classes — a wide elliptical arc sweeps 180 degrees across
-    /// the bottom where its diameter is slightly wider than six - hundred pixels, two
-    /// vertical pillar lines rise from ground to near ceiling with ten - pixel offset
-    /// spacing defining tower edges that enclose interior negative space; between
-    /// those pillars at base level sits a small inverted V pointing upward whose width
-    /// and height derive proportionally from total screen dimensions rather than being
-    /// hardcoded. Location offsets shift the entire composition by its Position
-    /// property so it repositions without recalculating any internal geometry — useful
-    /// as atmospheric background architecture suggesting tower silhouette against
-    /// darker sky or flame foreground where vector rendering avoids raster flicker
-    /// under heavy compositing updates of nearby sprites.
+    /// An atmospheric background sprite depicting a looming, dark-sky silhouette of
+    /// a tower. Uses vector rendering to ensure sharp edges and avoid raster-based
+    /// flickering during heavy compositing updates.
     /// </summary>
     class VectorSauronTowerSprite : SimpleSprite
     {
@@ -1144,11 +1097,11 @@ namespace FireDemo
             float screenHeight = 600;
             float towerWidth = 600.0f; // Sauron sprite width
             float towerHeight = screenHeight - 3;
-            float elipseWidth = towerWidth + 100;
-            float elipseHeight = towerHeight * 2;
-            offset = (int)((screenWidth - elipseWidth) / 2.0f) + Location.X;
+            float ellipseWidth = towerWidth + 100;
+            float ellipseHeight = towerHeight * 2;
+            offset = (int)((screenWidth - ellipseWidth) / 2.0f) + Location.X;
             Pen color = Pens.PaleGoldenrod;
-            graph.DrawArc(color, x: offset, y: Location.Y + towerHeight - elipseHeight, width: elipseWidth, height: elipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
+            graph.DrawArc(color, x: offset, y: Location.Y + towerHeight - ellipseHeight, width: ellipseWidth, height: ellipseHeight, startAngle: 0.0f, sweepAngle: 180.0f);
 
             // Tower edges
             int leftTower = offset - 10;
