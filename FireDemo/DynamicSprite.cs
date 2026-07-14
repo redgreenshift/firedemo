@@ -44,6 +44,9 @@ namespace FireDemo
         /// </summary>
         public int LocationStep = 1;
         public bool SmoothTransition = true;
+        private DateTime lastMove = DateTime.MinValue;
+        protected Point lastLocation = Point.Empty;
+        protected Point FinalLocation = new Point(x: -1, y: -1);
 
 
         /// <inheritdoc cref="DynamicSprite"/>
@@ -52,6 +55,7 @@ namespace FireDemo
         {
             rng = r;
         }
+
         /// <inheritdoc cref="DynamicSprite"/>
         public DynamicSprite() : this(Util.NewRandom())
         {
@@ -63,8 +67,16 @@ namespace FireDemo
             poker = new BitmapLocker(Form);
         }
 
+        /// <summary>
+        /// Sets the color palette for the sprite.
+        /// </summary>
+        /// <param name="pal"><inheritdoc cref="DynamicSprite.thePalette" path="/summary"/></param>
+        /// <exception cref="ArgumentException">Thrown if the provided palette is null or does not contain exactly 256 colors.</exception>
         public void SetPalette(Color[] pal)
         {
+            if (pal == null || pal.Length != 256)
+                throw new ArgumentException("Palette must be an array of 256 Colors.", nameof(pal));
+
             thePalette = pal;
         }
 
@@ -113,16 +125,16 @@ namespace FireDemo
                 LocationPeriod = period.Value;
         }
 
-        private DateTime lastMove = DateTime.MinValue;
-        protected Point lastLocation = Point.Empty;
-        protected Point FinalLocation = new Point(x: -1, y: -1);
         /// <summary>
-        /// After a random amount of time less than <see cref="LocationPeriod" />,
-        /// moves <see cref="SimpleSprite.Location" /> to a random position within <see cref="LocationRange" />.
-        /// 
-        /// If <see cref="FinalLocation" /> was set previously, moves one step closer to the <see cref="FinalLocation" />.
+        /// Performs a periodic update to the sprite's position.
         /// </summary>
-        /// <returns>TRUE if the location changed; FALSE otherwise.</returns>
+        /// <remarks>
+        /// This method either picks a new random destination within
+        /// <see cref="LocationRange"/> based on the <see cref="LocationPeriod"/>, or
+        /// incrementally moves the current <see cref="SimpleSprite.Location"/> toward
+        /// the existing <see cref="FinalLocation"/>.
+        /// </remarks>
+        /// <returns><c>true</c> if the position changed; <c>false</c> otherwise.</returns>
         protected bool PeriodicallyUpdateLocation()
         {
             bool changed = false;
