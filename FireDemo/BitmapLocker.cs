@@ -39,7 +39,7 @@ namespace FireDemo
 
             if (Depth <= 0 || Depth > 32 || Depth % 8 != 0)
             {
-                throw new ArgumentException("Unsupported Bit Depth. Only 8, 16, 24, or 32 (15? 48? 64?)");
+                throw new ArgumentException("Unsupported Bit Depth. Only 8, 16, 24, or 32");
             }
         }
 
@@ -168,7 +168,7 @@ namespace FireDemo
                 //    }
                 //    break;
 
-                case 8: // For 8-bit depth, set the palette index value for Blue
+                case 8: // palette index; read/write via color.B
                     byte c = Pixels[iPixel];
                     color = Color.FromArgb(0, 0, c);
                     break;
@@ -195,8 +195,10 @@ namespace FireDemo
         /// - 24 (unpacked BGR), and<br/>
         /// - 32 (BGRA) Packed as 0xAARRGGBB; when written to a little-endian byte buffer this results in byte order BGRA (B, G, R, A) at increasing offsets.
         /// </para>
+        /// Bounds checking is intentionaly omitted for performance reasons. The caller is responsible for ensuring that the specified coordinates are within the bounds of the bitmap.
+        /// Caller is also responsible for ensuring that the bitmap is currently locked in a write-capable mode (WriteOnly or ReadWrite) before calling this method.
+        /// For 16 bit color, the caller is responsible for scaling to 5/6/5 bits per channel.
         /// </remarks>
-        /// <exception cref="InvalidOperationException">Thrown if the bitmap is not currently locked in a write-capable mode (WriteOnly or ReadWrite).</exception>
         public void SetPixel(int x, int y, Color color)
         {
             //if (lockMode != ImageLockMode.WriteOnly && lockMode != ImageLockMode.ReadWrite)
@@ -248,7 +250,7 @@ namespace FireDemo
                 //}
                 //break;
 
-                case 8: // For 8-bit depth, the palette index is stored in Blue
+                case 8: // palette index; read/write via color.B
                     Pixels[iPixel] = color.B;
                     break;
             }
