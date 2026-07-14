@@ -121,8 +121,6 @@ namespace FireDemo
         }
     }
 
-    // May want to introduce a GridSprite/SpriteGrid in the future, like for a game board.
-
     /// <summary>
     /// Aggregates multiple sprite layers into a single, complex composition.
     /// </summary>
@@ -927,15 +925,25 @@ namespace FireDemo
     }
 
 
-    // Prototyping, not the final implementation. Fast enough, but not written very well.
-    // The idea is that I would like to be able to flatten multiple sprites into a single bitmap for speed,
-    // and eventually generalize that in this class. For now, it's hard coded for the one composite "scene"
-    // I want to create that is reminicient of the "It's dangerous to go alone, take this thing"
-    // TODO: Generalize into a CompoundSprite/GridSprite or something named similar that can repeat sprites in a grid
-    // perhaps use "Using(Graphics g onthe(Form))
     /// <summary>
-    /// Flattens multiple static sprites into a single image which renders a lot faster than multiple smaller sprites
+    /// An efficiency-focused 1024x600 sprite that tiles and flattens static sprites
+    /// to generate scenes for a vintage-style adventure game; reminiscent of the
+    /// "It's dangerous to go alone, take this" trope.
     /// </summary>
+    /// <remarks>
+    /// This serves as a <b>prototype</b> for more advanced grid-based tiling logic,
+    /// with potential applications in video games, board games, or other repeating
+    /// tile-based environments.
+    /// <para>
+    /// <i>TODO: Generalize into a CompoundSprite/CompositingSprite/GridSprite to
+    /// allow for arbitrary scaling and patterns. Perhaps use
+    /// <c>using(Graphics g = Graphics.FromImage(Form))</c></i>
+    /// </para>
+    /// How is this different from <see cref="LayeredSprite"/>?
+    /// Consider whether these should be combined, remain distinct, or share some sort
+    /// of abstraction (inheritance vs. composition).
+    /// Want to introduce a GridSprite/SpriteGrid in the future, like for a game board.
+    /// </remarks>
     class SpriteVideoGameBackground : SimpleSprite
     {
         public SimpleSprite Sprite { get; set; }
@@ -943,7 +951,7 @@ namespace FireDemo
         /// <inheritdoc cref="SpriteVideoGameBackground"/>
         public SpriteVideoGameBackground()
         {
-            // TODO: parameterize this. For now I know the Pi device dimensions.
+            // TODO: parameterize this. For now I know the RaspberryPi device dimensions.
             Width = 1024;
             Height = 600;
             Magnification = 1;
@@ -1051,7 +1059,7 @@ namespace FireDemo
         public override void RenderOneFrameToScreen(Graphics graph)
         {
             // Don't need to spend time redrawing this every time, so we can just render once,
-            // or every once in a while to make sure no artifacts.
+            // or every once in a while to clean up artifacts from sprites that move around.
             if (m_iNeedToRender++ % 60 == 5)
             {
                 base.RenderOneFrameToScreen(graph);
