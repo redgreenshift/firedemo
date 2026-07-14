@@ -206,13 +206,12 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a hero character holding an object as 2D pixel art with two primary
-    /// color groups — skin and clothing tones that form the body, plus highlight
-    /// colors for items held by either hand. Supports transparent background;
-    /// unpainted cells show through underlying sprites. Dimensions are fixed at 16x20.
+    /// Renders a hero character in a classic adventurer pose, with space to
+    /// accommodate various items held overhead. Dimensions are fixed at 16x20.
     /// </summary>
     class HeroHoldingItem : SimpleSprite
     {
+        /// <inheritdoc cref="HeroHoldingItem"/>
         public HeroHoldingItem()
         {
             int[][] hero;
