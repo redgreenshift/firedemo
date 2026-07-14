@@ -434,14 +434,13 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders a handle that grips an object — three brown shades form two parallel
-    /// arms connected by bars across the top, narrowing to a single column along one
-    /// edge where it connects with supporting structures. White pixels fill gaps at
-    /// the head while transparent areas allow underlying sprites through. Dimensions
-    /// are fixed at 8x16; can be cropped vertically via heightLimit parameter.
+    /// An 8x16 pixel art sprite of a torch handle, designed with tapered arms
+    /// to provide a sturdy grip or base for fire-based sprites. Can be cropped
+    /// vertically via heightLimit parameter.
     /// </summary>
     class TorchHandle : SimpleSprite
     {
+        /// <inheritdoc cref="TorchHandle"/>
         public TorchHandle()
         {
             InitializeBitmap();
@@ -510,11 +509,12 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Extends a torch handle to render an oval-shaped cauldron base, by cropping off
-    /// most of the handle. Dimensions are fixed at 8x16.
+    /// An 8x5 pixel-art sprite representing an oval cauldron base, derived from the upper
+    /// portion of a torch handle; cropped vertically via heightLimit parameter.
     /// </summary>
     class CauldronBase : TorchHandle
     {
+        /// <inheritdoc cref="CauldronBase"/>
         public CauldronBase()
         {
             // The "cauldron" is exactly the same as the first 5 lines of the torch handle
@@ -523,14 +523,13 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders the grip of a saber blade in 8x16 pixel art with light gray forming two
-    /// parallel arms connected by bars across the top, narrowing into a single column
-    /// along one edge for connecting to supporting structures. White pixels fill gaps
-    /// at the head while transparent regions allow underlying sprites through;
-    /// dimensions are fixed at 8x16 and can be cropped vertically.
+    /// An 8x16 pixel art sprite representing a saber hilt, featuring two parallel arms
+    /// that taper into a single-column structure to facilitate attachment or grip usage.
+    /// Can be cropped vertically via heightLimit parameter.
     /// </summary>
     class SaberHilt : SimpleSprite
     {
+        /// <inheritdoc cref="SaberHilt"/>
         public SaberHilt()
         {
             InitializeBitmap();
@@ -605,6 +604,7 @@ namespace FireDemo
     /// </summary>
     class Dumpster : SimpleSprite
     {
+        /// <inheritdoc cref="Dumpster"/>
         public Dumpster()
         {
             InitializeBitmap();
@@ -684,6 +684,7 @@ namespace FireDemo
     /// </summary>
     class Heart : SimpleSprite
     {
+        /// <inheritdoc cref="Heart"/>
         public Heart(bool empty = false)
         {
             int[][] pixels;
@@ -736,6 +737,7 @@ namespace FireDemo
     /// </summary>
     class RectangleSprite : SimpleSprite
     {
+        /// <inheritdoc cref="RectangleSprite"/>
         public RectangleSprite(int width, int  height, Color color, bool fill = true)
         {
             Width = width;
@@ -766,6 +768,7 @@ namespace FireDemo
     /// </summary>
     class XSprite : SimpleSprite
     {
+        /// <inheritdoc cref="XSprite"/>
         public XSprite(int width, int height, Color color)
         {
             Width = width;
@@ -797,6 +800,7 @@ namespace FireDemo
     /// </summary>
     class YSprite : SimpleSprite
     {
+        /// <inheritdoc cref="YSprite"/>
         public YSprite(int width, int height, Color color)
         {
             Width = width;
@@ -839,6 +843,8 @@ namespace FireDemo
             Gold = 0,
             White = 1,
         };
+
+        /// <inheritdoc cref="RingSprite"/>
         public RingSprite(RColor c)
         {
             int[][] pixels;
@@ -937,6 +943,7 @@ namespace FireDemo
     {
         public SimpleSprite Sprite { get; set; }
 
+        /// <inheritdoc cref="SpriteVideoGameBackground"/>
         public SpriteVideoGameBackground()
         {
             // TODO: parameterize this. For now I know the Pi device dimensions.
