@@ -294,19 +294,17 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Renders an old man as 16x16 pixel art with skin tones forming facial features
-    /// and brown shades providing clothing layers. Yellow accents highlight the head
-    /// region while white eyes stand out against darker areas. Supports transparent
-    /// background; unpainted cells show through underlying sprites. Dimensions are
-    /// fixed at 16x16.
+    /// An elderly, bearded figure with a dark cloak -- an iconic NPC providing
+    /// guidance in a pixel-art adventure. Dimensions are fixed at 16x16.
     /// </summary>
     class OldMan : SimpleSprite
     {
+        /// <inheritdoc cref="OldMan"/>
         public OldMan()
         {
             int[][] pixels;
             Color[] pal;
-            Color lightBrown, darkBrown, pinkSkin, reddishBrownHat, yellow;
+            Color lightBrown, darkBrown, pinkSkin, reddishBrownCloak, yellow;
 
             Width = 16;
             Height = 16;
@@ -314,7 +312,7 @@ namespace FireDemo
             lightBrown = Color.SandyBrown;
             yellow = Color.Yellow;
             pinkSkin = Color.Salmon;
-            reddishBrownHat = Color.Red;
+            reddishBrownCloak = Color.Red;
             darkBrown = Color.Brown;
 
             lightBrown = Color.FromArgb(red: 236, green: 100, blue: 55);
@@ -328,7 +326,7 @@ namespace FireDemo
                 pinkSkin, // 3
                 lightBrown, // 4
                 darkBrown, // 5
-                reddishBrownHat, // 6
+                reddishBrownCloak, // 6
                 yellow, // 7
             };
 
@@ -373,7 +371,8 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// A 16x16 pixel-art sprite of an earthy, textured wall with irregular shapes to create a rugged organic cavern surface.
+    /// A 16x16 pixel-art sprite of an earthy, textured wall with irregular shapes
+    /// to create a rugged organic cavern surface.
     /// </summary>
     class CaveWall : SimpleSprite
     {
