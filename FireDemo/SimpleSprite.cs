@@ -205,6 +205,12 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a hero character holding an object as 2D pixel art with two primary
+    /// color groups — skin and clothing tones that form the body, plus highlight
+    /// colors for items held by either hand. Supports transparent background;
+    /// unpainted cells show through underlying sprites. Dimensions are fixed at 16x20.
+    /// </summary>
     class HeroHoldingItem : SimpleSprite
     {
         public HeroHoldingItem()
@@ -287,7 +293,13 @@ namespace FireDemo
         }
     }
 
-
+    /// <summary>
+    /// Renders an old man as 16x16 pixel art with skin tones forming facial features
+    /// and brown shades providing clothing layers. Yellow accents highlight the head
+    /// region while white eyes stand out against darker areas. Supports transparent
+    /// background; unpainted cells show through underlying sprites. Dimensions are
+    /// fixed at 16x16.
+    /// </summary>
     class OldMan : SimpleSprite
     {
         public OldMan()
@@ -360,6 +372,11 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a brick wall as 16x16 pixel art. Brown pixels form solid masonry blocks
+    /// with dark mortar separating bricks along edges and corners. Dimensions are
+    /// fixed at 16x16.
+    /// </summary>
     class BrickWall : SimpleSprite
     {
         public BrickWall()
@@ -416,6 +433,13 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a handle that grips an object — three brown shades form two parallel
+    /// arms connected by bars across the top, narrowing to a single column along one
+    /// edge where it connects with supporting structures. White pixels fill gaps at
+    /// the head while transparent areas allow underlying sprites through. Dimensions
+    /// are fixed at 8x16; can be cropped vertically via heightLimit parameter.
+    /// </summary>
     class TorchHandle : SimpleSprite
     {
         public TorchHandle()
@@ -485,15 +509,26 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Extends a torch handle to render an oval-shaped cauldron base, by cropping off
+    /// most of the handle. Dimensions are fixed at 8x16.
+    /// </summary>
     class CauldronBase : TorchHandle
     {
         public CauldronBase()
         {
-            // The "cauldron" is exactly the same as the first 5 lines of the torch
+            // The "cauldron" is exactly the same as the first 5 lines of the torch handle
             InitializeBitmap(heightLimit: 5);
         }
     }
 
+    /// <summary>
+    /// Renders the grip of a saber blade in 8x16 pixel art with light gray forming two
+    /// parallel arms connected by bars across the top, narrowing into a single column
+    /// along one edge for connecting to supporting structures. White pixels fill gaps
+    /// at the head while transparent regions allow underlying sprites through;
+    /// dimensions are fixed at 8x16 and can be cropped vertically.
+    /// </summary>
     class SaberHilt : SimpleSprite
     {
         public SaberHilt()
@@ -564,6 +599,15 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a green industrial dumpster as a pixel art sprite (45x21). The front
+    /// face uses medium green for the main body, light green along the top edge where
+    /// ambient lighting would hit darkest green along visible depth edges and corners
+    /// that recede toward viewer. A thin black outline traces exterior silhouettes and
+    /// interior panel joints to give it chunky industrial character. Transparent
+    /// pixels let underlying sprites show through empty regions like ground below
+    /// dumpster or sky above lid.
+    /// </summary>
     class Dumpster : SimpleSprite
     {
         public Dumpster()
@@ -638,6 +682,16 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders an 8x8 blocky heart sprite using two red tones — DarkRed along borders
+    /// and edges where they define the silhouette(left/top lobes and tapering point),
+    /// Red for interior fill in a fully lit state, with both regions collapsing to
+    /// transparent pixels at gaps that let underlying sprites show through. When
+    /// constructed as empty via the constructor parameter, the filled body swaps from
+    /// bright red to black while dark outlines persist along visible borders, giving
+    /// the same shape a "consumed" or deactivated look — useful for health bars
+    /// showing damage levels.
+    /// </summary>
     class Heart : SimpleSprite
     {
         public Heart(bool empty = false)
@@ -686,6 +740,14 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a configurable rectangle sprite with arbitrary width and height rather
+    /// than fixed pixel-art grids like sibling classes, each cell spanning one to any
+    /// number of pixels — when filled (the default), every cell inside the perimeter
+    /// becomes the chosen color; when outlined via fill = false, only border cells
+    /// receive the color while interior remains transparent for compositing layering
+    /// beneath other sprites.
+    /// </summary>
     class RectangleSprite : SimpleSprite
     {
         public RectangleSprite(int width, int  height, Color color, bool fill = true)
@@ -712,6 +774,17 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders an X-shaped sprite within an arbitrary-width-by-height rectangle, each
+    /// pixel spanning one cell of the canvas rather than being locked to fixed
+    /// dimensions like sibling classes — two diagonals drawn in any chosen Color where
+    /// every crossing line receives the color and all off - diagonal cells remain
+    /// transparent for compositing. Diagonals use exact intersection rules
+    /// (x == y alongside x + y + 1 == Width) so they always cross cleanly even when
+    /// width differs from height, producing an accurate X rather than a distorted
+    /// diagonal pair that would otherwise shear in rectangular bounding boxes where
+    /// aspect ratio isn't one-to-one but visual balance still matters.
+    /// </summary>
     class XSprite : SimpleSprite
     {
         public XSprite(int width, int height, Color color)
@@ -738,6 +811,18 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a Y-shaped sprite within an arbitrary-width-by-height rectangle with
+    /// each pixel spanning one cell rather than being locked to fixed dimensions like
+    /// sibling classes — upper diagonals drawn using crossed rules (x == y alongside
+    /// x + y + 1 == Width) creating two arms that meet at the center and widen outward
+    /// while lower half descends as a stem of either one or two pixels wide depending
+    /// on whether width is odd or even. All off-diagonal cells remain transparent for
+    /// compositing so underlying sprites show through gaps between limbs and below
+    /// where only the vertical stroke persists — producing a bold letter-Y whose arms
+    /// can appear thick in narrow bounding boxes but stay proportional to canvas
+    /// rather than quantized into pixel art rows like nearby sprite classes do.
+    /// </summary>
     class YSprite : SimpleSprite
     {
         public YSprite(int width, int height, Color color)
@@ -770,6 +855,20 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a gold-or-white colored ring-shaped emblem as an 8x20 fixed-size pixel
+    /// art sprite with three tones: foreground stroke in either Gold(default) or
+    /// White, highlight fill one shade lighter along the outer arc where ambient
+    /// lighting would land brightest to suggest curvature without gradients — inner
+    /// cells remain transparent so compositing underlying sprites through center holes
+    /// requires no additional alpha channels and mask layers that nearby classes need.
+    /// The RColor enum parameter controls both palette simultaneously rather than
+    /// swapping individual colors: Gold renders in warm Yellow-on-Gold with classic
+    /// metallic contrast, while White switches to cool Gray-as-the-fill color letting
+    /// the same pixel art pattern serve different sprite forms across a UI without
+    /// needing separate shape types where brightness and hue shift matters but
+    /// silhouette stays identical.
+    /// </summary>
     class RingSprite : SimpleSprite
     {
         public enum RColor
@@ -994,6 +1093,21 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// Renders a pale-goldenrod vector tower spanning most of screen height against
+    /// any canvas using continuous DrawArc and DrawLine calls rather than fixed pixel
+    /// grids like sibling classes — a wide elliptical arc sweeps 180 degrees across
+    /// the bottom where its diameter is slightly wider than six - hundred pixels, two
+    /// vertical pillar lines rise from ground to near ceiling with ten - pixel offset
+    /// spacing defining tower edges that enclose interior negative space; between
+    /// those pillars at base level sits a small inverted V pointing upward whose width
+    /// and height derive proportionally from total screen dimensions rather than being
+    /// hardcoded. Location offsets shift the entire composition by its Position
+    /// property so it repositions without recalculating any internal geometry — useful
+    /// as atmospheric background architecture suggesting tower silhouette against
+    /// darker sky or flame foreground where vector rendering avoids raster flicker
+    /// under heavy compositing updates of nearby sprites.
+    /// </summary>
     class VectorSauronTowerSprite : SimpleSprite
     {
         public override void RenderOneFrameToScreen(Graphics graph)
