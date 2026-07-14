@@ -1,4 +1,5 @@
-﻿//#define PARALLEL_8BIT
+﻿// Copyright © 2016-2026 Jared Ivey.
+//#define PARALLEL_8BIT
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

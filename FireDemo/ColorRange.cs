@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿// Copyright © 2016-2026 Jared Ivey.
+using System.Drawing;
 
 namespace FireDemo
 {

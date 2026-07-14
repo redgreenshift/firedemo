@@ -1,4 +1,5 @@
-﻿namespace FireDemo
+﻿// Copyright © 2016-2026 Jared Ivey.
+namespace FireDemo
 {
     /// <summary>
     /// Provides double-buffered intensity storage for real-time simulation of light radiation effects.
