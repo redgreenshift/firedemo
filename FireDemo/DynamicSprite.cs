@@ -137,8 +137,6 @@ namespace FireDemo
         /// <returns><c>true</c> if the position changed; <c>false</c> otherwise.</returns>
         protected bool PeriodicallyUpdateLocation()
         {
-            bool changed = false;
-
             if (LocationPeriod != TimeSpan.Zero)
             {
                 DateTime thisTime = DateTime.Now;
@@ -152,45 +150,41 @@ namespace FireDemo
                 }
             }
 
-            if (FinalLocation.X < 0)
-                return false; // nothing to do
+            if (FinalLocation.X < 0 || Location == FinalLocation)
+                return false; // nothing to do (nowhere to go, or already there)
 
             if (!SmoothTransition)
             {
-                changed = Location != FinalLocation;
                 Location = FinalLocation;
+                return true; // DONE: Snap to final location
             }
 
-            if (Location != FinalLocation)
+            // Transition Smoothly toward the final location
+            int x = Location.X;
+            int y = Location.Y;
+
+            if (x != FinalLocation.X)
             {
-                int x = Location.X;
-                int y = Location.Y;
-
-                if (x != FinalLocation.X)
-                {
-                    // If the distance is less than step, then DONE! (set to final)
-                    if (Math.Abs(x - FinalLocation.X) <= LocationStep)
-                        x = FinalLocation.X;
-                    else if (x < FinalLocation.X)
-                        x += LocationStep;
-                    else
-                        x -= LocationStep;
-                }
-                if (y != FinalLocation.Y)
-                {
-                    // If the distance is less than step, then DONE! (set to final)
-                    if (Math.Abs(y - FinalLocation.Y) <= LocationStep)
-                        y = FinalLocation.Y;
-                    else if (y < FinalLocation.Y)
-                        y += LocationStep;
-                    else
-                        y -= LocationStep;
-                }
-                Location = new Point(x: x, y: y);
-                changed = true;
+                // If the distance is less than step, then DONE! (set to final)
+                if (Math.Abs(x - FinalLocation.X) <= LocationStep)
+                    x = FinalLocation.X;
+                else if (x < FinalLocation.X)
+                    x += LocationStep;
+                else
+                    x -= LocationStep;
             }
-
-            return changed;
+            if (y != FinalLocation.Y)
+            {
+                // If the distance is less than step, then DONE! (set to final)
+                if (Math.Abs(y - FinalLocation.Y) <= LocationStep)
+                    y = FinalLocation.Y;
+                else if (y < FinalLocation.Y)
+                    y += LocationStep;
+                else
+                    y -= LocationStep;
+            }
+            Location = new Point(x: x, y: y);
+            return true; // DONE: incremental step toward final location
         }
 
         #region EXPERIMENTAL Bicubic Interpolation is too slow
