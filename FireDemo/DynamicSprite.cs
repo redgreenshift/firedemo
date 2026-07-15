@@ -515,6 +515,10 @@ namespace FireDemo
     {
         protected override void RenderStage2And3()
         {
+            // Equivalent to averaging these pixels:
+            // . . .
+            // . 5 .
+            // . . .
             int matrixWidth = intensityMatrix.Width;
             int matrixHeight = intensityMatrix.Height;
             // Copy over the bits without modification
