@@ -400,7 +400,7 @@ namespace FireDemo
                     Form = bmTemp;
                 }
 #else
-                // Instead of crteating a new temporary bitmap, and then rotate that, it seems
+                // Instead of creating a new temporary bitmap, and then rotate that, it seems
                 // to be consistently faster to rotate the bitmap in-place, (**DEBATABLE)
                 // and then rotate/flip it back when done. (stays at 60 instead of sometimes dipping to 50-55)
                 // It seems like this should involve the same number of allocations,
