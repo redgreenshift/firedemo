@@ -1662,7 +1662,9 @@ namespace FireDemo
 #endif
     }
 
-
+    /// <summary>
+    /// Represents a text-based sprite, and uses the provided font and color to draw strings via GDI+.
+    /// </summary>
     class TextSprite : DynamicSprite
     {
         public string Text { get => text; set { text = value; BlankBeforeNextDraw = true; } }
@@ -1673,6 +1675,8 @@ namespace FireDemo
         private Font font;
         private Brush Brush { get; set; }
 
+        private SizeF SizeOfLastDraw;
+        private bool BlankBeforeNextDraw = false;
         public TextSprite()
         {
             this.Brush = Brushes.White;
@@ -1739,9 +1743,6 @@ namespace FireDemo
             else
                 Brush = new SolidBrush(color);
         }
-
-        private SizeF SizeOfLastDraw;
-        private bool BlankBeforeNextDraw = false;
 
         public override void RenderOneFrameToScreen(Graphics graph)
         {
