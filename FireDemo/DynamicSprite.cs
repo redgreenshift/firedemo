@@ -1663,7 +1663,7 @@ namespace FireDemo
     }
 
     /// <summary>
-    /// Represents a text-based sprite, and uses the provided font and color to draw strings via GDI+.
+    /// A sprite that renders text strings with the provided font and color via GDI+ graphics.
     /// </summary>
     class TextSprite : DynamicSprite
     {
