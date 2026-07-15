@@ -323,6 +323,14 @@ namespace FireDemo
         #endregion
     }
 
+    /// <summary>
+    /// An abstract base class for real-time light effects using dynamic sprites,
+    /// supporting rotation, flipping, and customizable cooling strategies.
+    /// </summary>
+    /// <remarks>
+    /// Implements a multi-stage rendering pipeline for light effects, allowing
+    /// extension through custom shape and cooling strategy implementations.
+    /// </remarks>
     abstract class RealtimeLightEffect : DynamicSprite
     {
         protected IntensityMap intensityMatrix;
@@ -493,6 +501,16 @@ namespace FireDemo
         }
     }
 
+    /// <summary>
+    /// An optimized implementation that performs a simple pixel copy from the previous
+    /// frame with the defined cooling strategy.
+    /// </summary>
+    /// <remarks>
+    /// Unlike more complex effects, it does not involve spatial averaging; it
+    /// essentially operates on a single-pixel basis between frames. It is ideal for
+    /// use cases where dynamic motion/physics aren't needed but a variable
+    /// decay/cooling effect is still desired.
+    /// </remarks>
     class StaticField : RealtimeLightEffect
     {
         protected override void RenderStage2And3()
