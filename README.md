@@ -2,6 +2,13 @@
 
 A real-time flame and plasma effect playground built with C# and WinForms (.NET Framework 4.8). Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work just as well in C# over two decades later.
 
+[![License: GPL v2.0](https://img.shields.io/badge/License-GPL%20v2-green)](LICENSE)
+[![C#](https://img.shields.io/badge/language-C%23-68217A.svg)](https://dotnet.microsoft.com/)
+[![.NET 4.8+](https://img.shields.io/badge/.NET-2.0+-green)](https://dotnet.microsoft.com/)
+
+[![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)](https://www.linux.org/)
+[![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+
 ## What it does
 
 FireDemo renders animated flame effects using a 2D grid of intensity values with pixel averaging, producing realistic-looking fire, lightning, and plasma patterns. The core idea is simple: each frame, the brightness of a pixel is the average of neighboring pixels with some cooling applied — but with well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
