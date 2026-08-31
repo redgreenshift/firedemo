@@ -4,7 +4,7 @@ A real-time flame and plasma effect playground built with C# and WinForms (.NET 
 
 [![C#](https://img.shields.io/badge/language-C%23-68217A.svg?logo=csharp&logoColor=white)](https://learn.microsoft.com/en-us/dotnet/csharp/)
 [![.NET Framework](https://img.shields.io/badge/Framework-4.8-512BD4.svg?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework)
-[![License: GPL-2.0](https://img.shields.io/badge/License-GPL--2.0-2D6CDF.svg)](LICENSE)
+[![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-2D6CDF.svg)](LICENSE)
 
 [![Linux](https://img.shields.io/badge/Linux-FCC624.svg?logo=linux&logoColor=black)](https://www.linux.org/)
 [![Windows](https://img.shields.io/badge/Windows-0078D6.svg?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
