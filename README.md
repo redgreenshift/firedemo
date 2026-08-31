@@ -2,12 +2,12 @@
 
 A real-time flame and plasma effect playground built with C# and WinForms (.NET Framework 4.8). Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work just as well in C# over two decades later.
 
-[![License: GPL v2.0](https://img.shields.io/badge/License-GPL%20v2-green)](LICENSE)
-[![C#](https://img.shields.io/badge/language-C%23-68217A.svg)](https://dotnet.microsoft.com/)
-[![.NET 4.8+](https://img.shields.io/badge/.NET-2.0+-green)](https://dotnet.microsoft.com/)
+[![C#](https://img.shields.io/badge/language-C%23-68217A.svg?logo=csharp&logoColor=white)](https://learn.microsoft.com/en-us/dotnet/csharp/)
+[![.NET Framework](https://img.shields.io/badge/Framework-4.8-512BD4?logo=.net&logoColor=white)](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework)
+[![License: GPL-2.0](https://img.shields.io/badge/License-GPL--2.0-2D6CDF.svg)](LICENSE)
 
-[![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)](https://www.linux.org/)
-[![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+[![Linux](https://img.shields.io/badge/Linux-FCC624.svg?logo=linux&logoColor=black)](https://www.linux.org/)
+[![Windows](https://img.shields.io/badge/Windows-0078D6.svg?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 
 ## What it does
 
