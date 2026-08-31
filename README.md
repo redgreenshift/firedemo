@@ -91,6 +91,6 @@ In **Form1** (Advanced UI), explore a wider set of options and palettes.
 
 The project dates back to ~2001, inspired by someone claiming Smalltalk was too slow for real-time fire generation. The creator proved them wrong with a prototype, and has been building on that foundation ever since — adding palettes, cooling maps, flame shapes, lightning, the Borg plasma disc, and the Eye of Sauron.
 
-## About this project's development
+## AI Policy
 
 Contributions from AI agents are welcome so long as they're reviewed by humans before committing — all changes MUST be approved by a real person, not merely accepted by an automated process or another agent.

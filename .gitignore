@@ -1,6 +1,3 @@
-.gitignore.bak
-README.md.bak
-
 # Prerequisites
 *.d
 
@@ -45,6 +42,5 @@ README.md.bak
 *.userosscache
 *.sln.docstates
 
-# Ignore CLAUDE files
-CLAUDE.md
-CLAUDE.md.bak
+# Ignore Backup files
+*.bak
