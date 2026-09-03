@@ -7,20 +7,18 @@
 
   <defs>
     <!-- Red → orange → yellow fire gradient -->
-<linearGradient id="fireGradient"
-                x1="0%"
-                y1="100%"
-                x2="0%"
-                y2="0%">
-  <!-- Bottom: brightest yellow -->
-  <stop offset="0%"   stop-color="#fff000"/>
-  <stop offset="22%"  stop-color="#ffc400"/>
-  <stop offset="45%"  stop-color="#ff8500"/>
-  <stop offset="68%"  stop-color="#ff3d00"/>
-  <stop offset="84%"  stop-color="#d00000"/>
-  <!-- Top: darkest red -->
-  <stop offset="100%" stop-color="#7a0000"/>
-</linearGradient>
+    <linearGradient id="fireGradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="0%">
+      <stop offset="0%"   stop-color="#7a0000"/>
+      <stop offset="18%"  stop-color="#d00000"/>
+      <stop offset="40%"  stop-color="#ff3d00"/>
+      <stop offset="62%"  stop-color="#ff8500"/>
+      <stop offset="82%"  stop-color="#ffc400"/>
+      <stop offset="100%" stop-color="#fff000"/>
+    </linearGradient>
 
     <!-- Lightning gradient -->
     <linearGradient id="lightningGradient"
