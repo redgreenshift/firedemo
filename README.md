@@ -1,4 +1,4 @@
-# ![FireDemo](assets/firedemo2.svg)
+# ![FireDemo](assets/firedemo-logo.svg)
 
 A real-time flame and plasma effect playground built with C# and WinForms (.NET Framework 4.8). Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work just as well in C# over two decades later.
 
