@@ -77,7 +77,7 @@ In **Form2**, you can adjust:
 - **Interpolation mode** — NearestNeighbor (pixelated), Bilinear (smooth), or Bicubic (extra smooth)
 - **Cooldown strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
 
-In **Form1** (Advanced UI), explore a wider set of options and palettes.
+In **Form1** (Advanced UI), explore a wider set of options and palettes. Useful for determining parameters to achieve a particular desired effect without needing to recompile.
 
 ## Architecture highlights
 
@@ -89,7 +89,7 @@ In **Form1** (Advanced UI), explore a wider set of options and palettes.
 - Supports both Windows and Linux (with DPI-aware scaling adjustments)
 - Experimental multithreaded rendering with `RealtimeFireBatLogoOptimizedMT_ThreadPool`
 
-## Project history
+## Project History
 
 The project dates back to ~2001, inspired by someone claiming Smalltalk was too slow for real-time fire generation. The creator proved them wrong with a prototype, and has been building on that foundation ever since — adding palettes, cooling maps, flame shapes, lightning, the Borg plasma disc, and the Eye of Sauron.
 
