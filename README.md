@@ -97,7 +97,7 @@ The project dates back to ~2001, inspired by someone claiming Smalltalk was too 
 
 #### Predecessor Projects
 
-FireDemo grew from [Flames.st](LINK), a Smalltalk-80 project created to
+FireDemo grew directly from [Flames.st](LINK), a Smalltalk-80 project created to
 demonstrate that real-time fire graphics were possible in the language. It
 expanded that idea into a broader real-time lighting-effects playground
 including fire, lightning, and plasma.
