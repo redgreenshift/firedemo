@@ -1,4 +1,4 @@
-[![Previous: Greenshift](https://img.shields.io/badge/←_PREV-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift)
+[![Previous: Greenshift](https://img.shields.io/badge/←_PREV-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
 
 ![FireDemo](assets/firedemo-logo.svg)
 
