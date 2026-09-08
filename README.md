@@ -1,6 +1,4 @@
-# ![FireDemo](assets/firedemo-logo.svg)
-
-A real-time flame and plasma effect playground built with C# and WinForms (.NET Framework 4.8). Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work just as well in C# over two decades later.
+![FireDemo](assets/firedemo-logo.svg)
 
 [![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-A22846.svg?logo=raspberrypi&logoColor=white)](https://www.raspberrypi.com/)
 [![Linux](https://img.shields.io/badge/Linux-FCC624.svg?logo=linux&logoColor=black)](https://www.linux.org/)
@@ -9,6 +7,7 @@ A real-time flame and plasma effect playground built with C# and WinForms (.NET 
 [![.NET Framework 4.8](https://img.shields.io/badge/4.8-512BD4.svg?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework)
 [![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-F58220.svg)](LICENSE)
 
+A real-time flame and plasma effect playground built with C# and WinForms (.NET Framework 4.8). Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work just as well in C# over two decades later.
 
 ## What it does
 
