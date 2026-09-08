@@ -111,3 +111,19 @@ approval by an automated process or another AI agent alone is insufficient.
 AI tools may be used to suggest code ideas or help draft comments, but all
 code is reviewed by the project author before committing. Code that the
 author does not fully understand is not committed.
+
+## License
+
+FireDemo is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 only.
+
+FireDemo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; see [LICENSE](LICENSE).
+
+---
+
+## Contact & Links
+
+* [GitHub Repository](https://github.com/redgreenshift/firedemo)
+* [Website](http://greenshift.net)
+* **Author:** [Jared Ivey](mailto:jared.ivey+greenshift@outlook.com)
