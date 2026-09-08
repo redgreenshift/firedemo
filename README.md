@@ -93,6 +93,18 @@ In **Form1** (Advanced UI), explore a wider set of options and palettes. Useful 
 
 The project dates back to ~2001, inspired by someone claiming Smalltalk was too slow for real-time fire generation. The creator proved them wrong with a prototype, and has been building on that foundation ever since — adding palettes, cooling maps, flame shapes, lightning, the Borg plasma disc, and the Eye of Sauron.
 
+### Related Projects
+
+#### Predecessor Projects
+
+FireDemo grew from [Flames.st](LINK), a Smalltalk-80 project created to
+demonstrate that real-time fire graphics were possible in the language. It
+expanded that idea into a broader real-time lighting-effects playground
+including fire, lightning, and plasma.
+
+[Greenshift](https://github.com/redgreenshift/Greenshift) is a looser ancestor to FireDemo. It carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes, while exploring a broader range of real-time lighting effects.
+
+
 ## AI Policy
 
 <p align="center">
