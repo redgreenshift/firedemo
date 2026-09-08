@@ -37,14 +37,14 @@ The application has two main views:
 
 2. **Advanced UI (Form1)** — Full parameter control: adjust fire dimensions, color palettes (4-point linear, realistic curve, flat), cooling strategies (constant, map-based, with shifting/rotation), seed coal values, and interpolation mode.
 
-3. **Fast Render (Form3)** — An optimized render path that bypasses `OnPaint` for higher framerates.
+3. **Fast Render (Form3)** — An optimized render path that bypasses `OnPaint` for higher framerates. EXPERIMENTAL, and did not work the way I had hoped.
 
 ## How it works
 
 The fire algorithm works by maintaining a 2D grid where each cell holds an intensity value (0–255). Each frame:
 
-1. **Cooling** — Each pixel loses some energy based on a cooling strategy (constant decay or a cooling map with density/smoothing/rotation)
-2. **Averaging** — Each pixel's new intensity is the average of its neighbors (configurable which neighbors — any combination of the 9 pixels in a 3x3 block)
+1. **Averaging** — Each pixel's new intensity is the average of its neighbors (configurable which neighbors — any combination of the 9 pixels in a 3x3 block)
+2. **Cooling** — Each pixel loses some energy based on a cooling strategy (constant decay or a cooling map with density/smoothing/rotation)
 3. **Seeding** — New heat is added along the bottom or at specific shapes (Batman logo, candle, lightning bolts)
 4. **Color mapping** — Intensity values are mapped through a palette (8-bit indexed or 32-bit direct color)
 
