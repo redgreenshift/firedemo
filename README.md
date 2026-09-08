@@ -95,6 +95,15 @@ The project dates back to ~2001, inspired by someone claiming Smalltalk was too 
 
 ## AI Policy
 
+<p align="center">
+  <a href="https://en.wikipedia.org/wiki/Vibe_coding">
+  <img
+    src="assets/no-vibe-coding.jpg"
+    alt="A humorous image summarizing the project's policy against unreviewed vibe coding: “Vibe coding? We don't do that here.”"
+  />
+  </a>
+</p>
+
 Contributions from AI agents are welcome, provided they are reviewed by a
 human before being committed. Every change MUST be approved by a real person;
 approval by an automated process or another AI agent alone is insufficient.
