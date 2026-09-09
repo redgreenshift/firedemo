@@ -102,7 +102,7 @@ demonstrate that real-time fire graphics were possible in the language. It
 expanded that idea into a broader real-time lighting-effects playground
 including fire, lightning, and plasma.
 
-[Greenshift](https://github.com/redgreenshift/Greenshift) is a looser ancestor to FireDemo. It carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes, while exploring a broader range of real-time lighting effects.
+<a href="https://github.com/redgreenshift/Greenshift">`Greenshift`</a> is a looser ancestor to FireDemo. It carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes, while exploring a broader range of real-time lighting effects.
 
 
 ## AI Policy
@@ -130,7 +130,7 @@ FireDemo is free software; you can redistribute it and/or modify it under the te
 
 FireDemo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with this program; see [LICENSE](LICENSE).
+You should have received a copy of the GNU General Public License along with this program; see <a href="LICENSE">`LICENSE`</a>.
 
 ---
 
