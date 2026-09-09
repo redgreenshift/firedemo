@@ -97,10 +97,10 @@ The project dates back to ~2001, inspired by someone claiming Smalltalk was too 
 
 #### Predecessor Projects
 
-FireDemo grew directly from [Flames.st](LINK), a Smalltalk-80 project created to
-demonstrate that real-time fire graphics were possible in the language. It
-expanded that idea into a broader real-time lighting-effects playground
-including fire, lightning, and plasma.
+FireDemo grew directly from <a href="https://github.com/redgreenshift/Flames.st">`Flames.st`</a>,
+a Smalltalk-80 project created to demonstrate that real-time fire graphics
+were possible in the language. It expanded that idea into a broader real-time
+lighting-effects playground including fire, lightning, and plasma.
 
 <a href="https://github.com/redgreenshift/Greenshift">`Greenshift`</a> is a looser ancestor to FireDemo. It carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes, while exploring a broader range of real-time lighting effects.
 
