@@ -43,10 +43,13 @@ namespace FireDemo
             if (Util.IsLinux)
             {
                 this.WindowState = FormWindowState.Maximized;
-                m_scaleFactor = 1.25f;
+                //m_scaleFactor = 1.25f;
             }
             else
-                m_scaleFactor = 1.0f;
+            {
+                this.Size = new Size((int)(1024 * 1.25f), (int)(600 * 1.25f)); // Enlarge to the size of the Raspberry Pi device screen
+                //m_scaleFactor = 1.0f;
+            }
 
             buttonDemo.Hide();
             buttonChange.Hide();

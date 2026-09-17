@@ -44,3 +44,119 @@
 
 # Ignore Backup files
 *.bak
+
+
+# Visual Studio user-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Visual Studio and IDE caches
+.vs/
+.vshistory/
+_ReSharper*/
+*.DotSettings.user
+**/.localhistory/
+**/.ionide/
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+bld/
+out/
+artifacts/
+.artifacts/
+
+# Platform-specific build output
+x64/
+x86/
+ARM/
+ARM64/
+ARM64EC/
+Win32/
+
+# Test results and logs
+[Tt]est[Rr]esult*/
+*.trx
+TestResult.xml
+nunit-*.xml
+[Bb]uild[Ll]og.*
+*.log
+*.binlog
+OpenCover/
+
+# Generated and temporary files
+*.tmp
+*.tmp_proj
+*.cache
+*.ilk
+*.obj
+*.pdb
+*.ipdb
+*.iobj
+*.pch
+*.rsp
+*.tlog
+*.sbr
+*.pidb
+*.svclog
+
+# NuGet
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# ASP.NET and generated code
+ScaffoldingReadMe.txt
+Generated_Code/
+*_wpftmp.csproj
+
+# Publish and deployment files
+publish/
+*.pubxml
+*.publishsettings
+*.Publish.xml
+*.azurePubxml
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+
+# Strong-name/private signing files
+*.pfx
+# *.snk
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.Development.json
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# VS Code, if used alongside Visual Studio
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Miscellaneous
+~$*
+*~
+mono_crash.*
