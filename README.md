@@ -1,4 +1,5 @@
-[![Previous: Greenshift](https://img.shields.io/badge/←_PREV-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
+[![Previous: Flames.st](https://img.shields.io/badge/←_PREV_(Flames.st)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Flames.st/blob/main/README.md)
+[![Previous: Greenshift](https://img.shields.io/badge/←_PREV_(Greenshift)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
 
 ![FireDemo](assets/firedemo-logo.svg)
 
@@ -97,7 +98,7 @@ The project dates back to ~2001, inspired by someone claiming Smalltalk was too 
 
 #### Predecessor Projects
 
-FireDemo grew directly from [`Flames.st`](LINK), a Smalltalk-80 project created to
+FireDemo grew directly from [`Flames.st`](https://github.com/redgreenshift/Flames.st), a Smalltalk-80 project created to
 demonstrate that real-time fire graphics were possible in the language. It
 expanded that idea into a broader real-time lighting-effects playground
 including fire, lightning, and plasma.
