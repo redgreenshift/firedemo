@@ -31,30 +31,93 @@ well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
 |--------|-------------|
 | **Realistic Flame** | Warm, natural-looking fire with multi-point color palettes and cooling maps |
 | **Candle** | Small, gentle candle flame |
-| **Bonfire** | Wide, raging fire |
+| **Bonfire** | Wide, energetic raging fire |
 | **Dumpster Fire** | Playful combination of a static dumpster sprite and bonfire |
 | **Batman Logo** | Bat-symbol outline rendered in fire, with options for single and multithreaded rendering |
-| **Lightning** | Branching lightning bolts that cascade down the flame grid |
-| **Borg Plasma** | A Star Trek inspired Borg Alcove regeneration plasma disc |
-| **Sauron** | The Eye of Sauron, built by layering other effects creatively |
-| **Status Text** | "Available", "Busy", "Away", "In a Meeting", "DND" status screens combining dynamic lighting effects with pixel art and text explaining status in more detail |
-| **RainBORG** | Demonstration of multiple plasma discs in various colors displayed simultaneously |
-| **Rainbow Fire** | Demonstration of multiple independent flames with a gradient palette |
+| **Lightning** | Branching lightning bolts cascading down the flame grid |
+| **Borg Plasma** | A Star Trek-inspired Borg Alcove regeneration plasma disc |
+| **Sauron** | The Eye of Sauron, created by creatively layering other effects |
+| **Status Text** | Availability screens such as `Available`, `Busy`, `Away`, `In a Meeting`, and `DND`, combining dynamic lighting, pixel art, and explanatory text |
+| **RainBORG** | Demonstration of multiple plasma discs displayed simultaneously in different colors |
+| **Rainbow Fire** | Demonstration of multiple independent flames using a gradient palette |
 
-## Modes
 
-The application has two main views:
+## Requirements
 
-1. **Advanced UI FireDemo (Form1)** — ORIGINAL Full parameter control: adjust fire dimensions, color palettes (4-point linear, realistic curve, flat), cooling strategies (constant, map-based, with shifting/rotation), seed coal values, and interpolation mode.
-A parameter exploration tool used to fine-tune the fire engine's behavior. It allows for deep adjustment of fire geometry, palettes, and cooling strategies.
+### Windows
 
-In **Form1** (Advanced UI), explore a wide set of options and palettes. Useful for determining parameters to achieve a particular desired effect without needing to recompile.
+- Windows
+- Visual Studio 2019 or later
+- .NET Framework 4.8
+
+### Linux and Raspberry Pi
+
+The Windows executable can be run on Linux without modification by using
+[Mono](https://www.mono-project.com/).
+
+The status-indicator layout is designed for a 1024×600 display, matching the
+screen used by the Raspberry Pi device for which it was developed.
+
+Linux rendering and performance may differ from Windows depending on the Mono
+version, display configuration, and hardware.
+
+
+## Building and running
+
+The project uses the standard `.csproj` format.
+
+1. Clone the repository.
+1. Open `FireDemo.sln` in Visual Studio.
+1. Select the `FireDemo` project as the startup project.
+1. Build the solution.
+1. Run the project. Form2 starts by default.
+
+The default startup view is **Form2**, the Friendly Availability Neighborhood
+Status Indicator.
+
+To explore the original parameter editor, select the "Original Experiment" button.
+
+## Running on Linux
+
+Build the application on Windows, copy the resulting Windows executable and
+its required files to the Linux system, and run it with Mono:
+
+```bash
+mono FireDemo.exe
+```
+
+The exact executable name may vary depending on the project configuration.
+
+The status-indicator form is designed for a 1024×600 display. On the Raspberry Pi,
+the application window is sized to match that screen.
+
+You may need to edit the dimensions if your device display differs.
+
+I have only tried to run it on Raspian.
+
+## Limitations
+
+- The project targets .NET Framework 4.8 rather than modern .NET.
+- Form3 is experimental and may not improve performance on every system.
+- Rendering performance depends heavily on grid size, magnification, interpolation, and cooling-map settings.
+- Linux support may require a compatible runtime or additional setup, like Mono.
+
+
+## Application modes
+
+### Form1 — Advanced FireDemo
+
+Form1 is the _original_ parameter-exploration interface. It provides detailed
+control over the lighting effects engine and is useful for fine-tuning values
+that can later be used in presets.
+
+It allows for deep adjustment of fire geometry, palettes, and cooling strategies.
 
 You can adjust:
 - **Fire dimensions** — Width and height of the flame grid (affects performance and look)
 - **Magnification** — How much the flame is scaled up on screen
 - **Interpolation mode** — NearestNeighbor (pixelated), Bilinear (smooth), or Bicubic (extra smooth)
-- **Cooldown strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
+- **Cooling strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
 
 
 2. **Friendly Availability Neighborhood Status Indicator (Form2)** — The DEFAULT view with a sequence of preset animated effects. Press any preset status like "Available", "Busy", "Away", "In a Meeting", or "DND" to switch to the corresponding status display.
@@ -81,34 +144,29 @@ The fire algorithm works by maintaining a 2D grid where each cell holds an inten
 - **Flat** — Single-color palette where each intensity level scales RGB channels uniformly.
 - **FourPointLinear** — Four-color gradient interpolated at 0%, 33%, 66%, and 100% intensity.
 - **RealisticFlame** — Tuned seven-stop gradient ordered from hottest region outward: blue → white → yellow → orange → dark fringe. Suggests heat dissipating at flame edges for a natural-looking flame.
-- **RealisticFlameColorized** — Corresponding gradient derived from user-specified base color, allowing flames to render in arbitrary colors.
+- **RealisticFlameColorized** — Corresponding gradient derived from user-specified base color, allowing flames rendered in arbitrary colors.
 - **DarkFlame** — Exploration of what a “black” flame might look like, generalized to support any base color.
 - **Lightning** — High-contrast palette optimized for realistic lightning-bolt effects. Derived from `RealisticFlame`, with default palette generated by mixing pinks and blues.
 - **Plasma** — Optimized for plasma-disc-style effects, derived from `FourPointLinear`.
 
 ### Cooling strategies
 
-- **Off** — The only "decay" is due to integer truncation when averaging pixel values.
-- **Constant** — Uniform decay rate across the entire grid.
-- **Map** — Spatially varying cooling with configurable density, min/max, smoothing, shifting, and rotation (more realistic, produces the characteristic flame movement patterns)
+- **Off** — No explicit decay. Intensity decreases only through integer truncation during averaging.
+- **Constant** — Uniform decay rate across entire grid.
+- **Map** — Spatially varying cooling with configurable density, min/max, smoothing, shifting, and rotation.
 
-## Building
-
-Requirements:
-- Visual Studio 2019+ (or the .NET Framework 4.8 SDK)
-- The project uses the standard `.csproj` format
-
-Open `FireDemo.sln` and build. The default entry point launches **Form2** (Status Indicator).
+The map-based strategy produces more varied movement and helps create the
+characteristic appearance of a flame.
 
 ## Architecture highlights
 
-- **`ILightShape`** — Interface for flame seed patterns (candle, lightning, Batman logo, Borg ring, Sauron eye)
-- **`ILightPen`** — Controls how new heat is seeded (fill density, intensity range, full vs binary range)
-- **`ICoolingStrategy`** — Strategy pattern for cooling behavior
-- **`SimpleSprite`** / **`DynamicSprite`** / **`LayeredSprite`** — Rendering hierarchy for compositing multiple flame layers
-- **`RealtimeLightEffect`** — The core render loop with double-buffered flame computation
-- Supports both Windows and Linux (with DPI-aware scaling adjustments)
-- Experimental multithreaded rendering with `RealtimeFireBatLogoOptimizedMT_ThreadPool`
+- **`ILightShape`** — Defines the flame-seeding patterns (candle, lightning, Batman logo, Borg ring, Sauron eye).
+- **`ILightPen`** — Controls how new heat is seeded (fill density, intensity range, full vs binary range).
+- **`ICoolingStrategy`** — Strategy pattern used to remove energy from flame grid.
+- **`SimpleSprite`** / **`DynamicSprite`** / **`LayeredSprite`** — Rendering hierarchy for compositing multiple flame layers.
+- **`RealtimeLightEffect`** — Implements core render loop with double-buffered flame computation.
+- **`RealtimeFireBatLogoOptimizedMT_ThreadPool`** — Multithreaded rendering path.
+- Supports both Windows and Linux (with DPI-aware scaling adjustments).
 
 ## Project History
 
@@ -120,15 +178,44 @@ flame shapes, lightning, the Borg plasma disc, the Eye of Sauron, static sprites
 
 #### Predecessor Projects
 
-FireDemo grew directly from [`Flames.st`](https://github.com/redgreenshift/Flames.st), a Smalltalk-80 project created to
+`FireDemo` grew directly from [`Flames.st`](https://github.com/redgreenshift/Flames.st), a Smalltalk-80 project created to
 demonstrate that real-time fire graphics were possible in the language. It
 expanded that idea into a broader real-time lighting-effects playground
 including fire, lightning, and plasma.
 
-[`Greenshift`](https://github.com/redgreenshift/Greenshift) is a looser ancestor to FireDemo.
-It carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes,
+[`Greenshift`](https://github.com/redgreenshift/Greenshift) is a looser ancestor.
+`FireDemo` carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes,
 while exploring a broader range of real-time lighting effects.
 
+### Funny Circular Lineage
+
+```text
+Flames.st ───────────────┐
+                         ├──> FireDemo / Form1
+Greenshift ──────────────┘          │
+                                    │
+                                    v
+                              NDADD (Smalltalk)
+                                    │
+                                    v
+              Friendly Neighborhood Status Indicator / FireDemo Form2
+```
+
+The lineage is more of a family hedge than a strict tree:
+
+- `Flames.st` is the original Smalltalk-80 fire experiment. It explored real-time fire generation and demonstrated that the technique was practical in Smalltalk.
+- `Greenshift` introduced ideas such as BitCanvas, and tuned color palettes.
+- `FireDemo Form1` brought ideas from both projects together in a C# parameter-exploration tool.
+- The parameter exploration led to `NDADD`, a Smalltalk **Neighborhood Desktop Availability Display Device**.
+- The ability to run C# on Linux led to the availability-display concept being ported back into C# as `FireDemo Form2`, the **Friendly Neighborhood Status Indicator**.
+
+In short:
+```text
+FireDemo Form1
+    → NDADD
+        → FireDemo Form2
+```
+So this C# project is, in a sense, its own grandparent project.
 
 ## AI Policy
 
