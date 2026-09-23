@@ -36,7 +36,7 @@ FireDemo renders animated flame effects using a 2D grid of intensity values with
 
 The application has two main views:
 
-1. **Demo Mode (Form2)** — The default view with a sequence of animated effects. Click anywhere on the window or press "Start!" to begin the animated demo. Use the "DND", "Busy", "Available", and "Away" buttons to switch to the corresponding status display.
+1. **Status Indicator (Form2)** — The default view with a sequence of animated effects. Click anywhere on the window or press "Start!" to begin the animated demo. Use the "DND", "Busy", "Available", and "Away" buttons to switch to the corresponding status display.
 
 2. **Advanced UI (Form1)** — Full parameter control: adjust fire dimensions, color palettes (4-point linear, realistic curve, flat), cooling strategies (constant, map-based, with shifting/rotation), seed coal values, and interpolation mode.
 
@@ -73,7 +73,7 @@ Requirements:
 - Visual Studio 2019+ (or the .NET Framework 4.8 SDK)
 - The project uses the standard `.csproj` format
 
-Open `FireDemo.sln` and build. The default entry point launches **Form2** (Demo Mode).
+Open `FireDemo.sln` and build. The default entry point launches **Form2** (Status Indicator).
 
 ## Configuration
 
