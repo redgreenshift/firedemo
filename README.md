@@ -30,13 +30,13 @@ well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
 | Effect | Description |
 |--------|-------------|
 | **Realistic Flame** | Warm, natural-looking fire with multi-point color palettes and cooling maps |
-| **Candle** | A small, gentle candle flame |
-| **Bonfire** | A wide, raging fire |
-| **Dumpster Fire** | Playful combination of a static dumpster and bonfire |
+| **Candle** | Small, gentle candle flame |
+| **Bonfire** | Wide, raging fire |
+| **Dumpster Fire** | Playful combination of a static dumpster sprite and bonfire |
 | **Batman Logo** | Bat-symbol outline rendered in fire, with options for single and multithreaded rendering |
 | **Lightning** | Branching lightning bolts that cascade down the flame grid |
-| **Borg Plasma** | A Star Trek inspired Borg Alcove regeneration disc with inner plasma and outer ring |
-| **Sauron** | The Eye of Sauron, built from layers of flame and lightning |
+| **Borg Plasma** | A Star Trek inspired Borg Alcove regeneration plasma disc |
+| **Sauron** | The Eye of Sauron, built by layering other effects creatively |
 | **Status Text** | "Available", "Busy", "Away", "In a Meeting", "DND" status screens combining dynamic lighting effects with pixel art and text explaining status in more detail |
 | **RainBORG** | Demonstration of multiple plasma discs in various colors displayed simultaneously |
 | **Rainbow Fire** | Demonstration of multiple independent flames with a gradient palette |
@@ -58,8 +58,8 @@ You can adjust:
 
 
 2. **Friendly Availability Neighborhood Status Indicator (Form2)** — The DEFAULT view with a sequence of preset animated effects. Press any preset status like "Available", "Busy", "Away", "In a Meeting", or "DND" to switch to the corresponding status display.
-The primary application mode, designed as a desktop status indicator for a Raspberry Pi device. It features easy-to-use buttons to toggle between "Away", "Busy", "Available", and "DND" status displays.
-Designed for use as a desktop status display (e.g. on a Raspberry Pi). Includes preset buttons for "Away", "Busy", "Available", and "DND" status screens.
+The primary application mode, designed as a desktop status indicator for a Raspberry Pi device. It features easy-to-use buttons to toggle between "Available", "Busy", "Away", "In a Meeting", and "DND" status displays.
+Designed for use as a desktop status display (e.g. on a Raspberry Pi). Includes preset buttons for "Available", "Busy", "Away", "In a Meeting", and "DND" status screens.
 
 In **Form2** (Status Indicator), you can select from a set of predefined presets.
 
