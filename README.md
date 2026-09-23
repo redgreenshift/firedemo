@@ -25,6 +25,20 @@ producing realistic-looking fire, lightning, and plasma patterns. The core idea 
 the brightness of a pixel is the average of neighboring pixels with some cooling applied — but with
 well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
 
+TODO ANIMATED GIF: ![FireDemo preview](assets/firedemo-preview.gif)
+
+## Features
+
+- Real-time fire, lightning, and plasma effects
+- Configurable flame dimensions, magnification, interpolation, palettes, and cooling
+- Multiple flame-seeding shapes, including candle, lightning, Batman logo,
+  Borg plasma, and the Eye of Sauron
+- Preset desktop availability-status screens
+- Support for constant and spatially varying cooling strategies
+- Experimental optimized and multithreaded rendering paths
+- Windows execution through .NET Framework 4.8
+- Linux and Raspberry Pi execution through Mono
+
 ## Effects
 
 | Effect | Description |
@@ -120,24 +134,73 @@ You can adjust:
 - **Cooling strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
 
 
-2. **Friendly Availability Neighborhood Status Indicator (Form2)** — The DEFAULT view with a sequence of preset animated effects. Press any preset status like "Available", "Busy", "Away", "In a Meeting", or "DND" to switch to the corresponding status display.
-The primary application mode, designed as a desktop status indicator for a Raspberry Pi device. It features easy-to-use buttons to toggle between "Available", "Busy", "Away", "In a Meeting", and "DND" status displays.
-Designed for use as a desktop status display (e.g. on a Raspberry Pi). Includes preset buttons for "Available", "Busy", "Away", "In a Meeting", and "DND" status screens.
+Configurable parameters include:
 
-In **Form2** (Status Indicator), you can select from a set of predefined presets.
+- Fire-grid width and height
+- On-screen magnification
+- Interpolation mode
+- Palette style
+- Cooling strategy
+- Cooling-map density and smoothing
+- Cooling-map shifting and rotation
+- Seed shapes and heat intensity
+- Neighbor-selection behavior
 
-Using Form1, you can determine values you would like to manually create a preset in the code for Form2.
+Available interpolation modes include:
 
-3. **Fast Render (Form3)** — An optimized render path that bypasses `OnPaint` for higher framerates. EXPERIMENTAL, and did not work the way I had hoped.
+- `NearestNeighbor` — pixelated rendering
+- `Bilinear` — smoother rendering
+- `Bicubic` — extra-smooth rendering
 
-## How it works
+Form1 is primarily a development and experimentation tool rather than the
+default user interface.
 
-The fire algorithm works by maintaining a 2D grid where each cell holds an intensity value (0–255). Each frame:
 
-1. **Averaging** — Each pixel's new intensity is the average of its neighbors (configurable which neighbors — any combination of the 9 pixels in a 3x3 block)
-2. **Cooling** — Each pixel loses some energy based on a cooling strategy (constant decay or a cooling map with density/smoothing/rotation)
-3. **Seeding** — New heat is added along the bottom or at specific shapes (Batman logo, candle, lightning bolts)
-4. **Color mapping** — Intensity values are mapped through a palette (8-bit indexed color)
+### Form2 — Availability Status Indicator
+
+Form2 is the **default startup view**. It is designed as a desktop status indicator,
+including use on a Raspberry Pi device.
+
+A sequence of presets combine animated lighting effects with pixel art and text to make
+the current availability status visible at a glance.
+
+Select one of the preset statuses:
+
+- Available
+- Busy
+- Away
+- In a Meeting
+- DND
+
+Values explored in Form1 can be used to create or refine the presets used by
+Form2.
+
+This mode is intended for desktop use, including Raspberry Pi status-display projects.
+
+
+### Form3 — Fast Render
+
+Form3 is an experimental rendering path that bypasses `OnPaint` in an attempt
+to achieve higher frame rates.
+
+It did not work as well as expected and should be considered deprecated for now.
+
+
+
+### How it works
+
+The fire algorithm works by maintaining a 2D grid where each cell holds an intensity value (0–255).
+Each frame, the brightness of a pixel is the average of neighboring pixels with some cooling applied.
+
+1. **Averaging** — A cell's new intensity is calculated from a configurable subset of the surrounding 3×4 neighborhood.
+1. **Cooling** — Each pixel loses some energy based on a cooling strategy (constant decay or a cooling map with density/smoothing/rotation)
+1. **Seeding** — New heat is added along the bottom of the grid or inside a selected shape such as a candle, Batman logo, or lightning bolt.
+1. **Color mapping** — Intensity values are converted into colors using an 8-bit indexed palette.
+1. **Rendering** — The resulting frame is scaled and displayed using the selected interpolation mode.
+
+The basic algorithm is simple, but the choice of palette, cooling map,
+neighbor configuration, seed shape, and rendering scale produces a wide range
+of visual effects resulting in realistic-looking fire, lightning, and plasma patterns.
 
 ### Palette styles
 
