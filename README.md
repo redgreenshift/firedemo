@@ -36,9 +36,25 @@ FireDemo renders animated flame effects using a 2D grid of intensity values with
 
 The application has two main views:
 
-1. **Status Indicator (Form2)** — The default view with a sequence of animated effects. Click anywhere on the window or press "Start!" to begin the animated demo. Use the "DND", "Busy", "Available", and "Away" buttons to switch to the corresponding status display.
+1. **Advanced UI FireDemo (Form1)** — ORIGINAL Full parameter control: adjust fire dimensions, color palettes (4-point linear, realistic curve, flat), cooling strategies (constant, map-based, with shifting/rotation), seed coal values, and interpolation mode.
+A parameter exploration tool used to fine-tune the fire engine's behavior. It allows for deep adjustment of fire geometry, palettes, and cooling strategies.
 
-2. **Advanced UI (Form1)** — Full parameter control: adjust fire dimensions, color palettes (4-point linear, realistic curve, flat), cooling strategies (constant, map-based, with shifting/rotation), seed coal values, and interpolation mode.
+In **Form1** (Advanced UI), explore a wide set of options and palettes. Useful for determining parameters to achieve a particular desired effect without needing to recompile.
+
+You can adjust:
+- **Fire dimensions** — Width and height of the flame grid (affects performance and look)
+- **Magnification** — How much the flame is scaled up on screen
+- **Interpolation mode** — NearestNeighbor (pixelated), Bilinear (smooth), or Bicubic (extra smooth)
+- **Cooldown strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
+
+
+2. **Friendly Availability Neighborhood Status Indicator (Form2)** — The DEFAULT view with a sequence of preset animated effects. Click anywhere on the window or press "Start!" to begin the animated demo. Use the "DND", "Busy", "Available", and "Away" buttons to switch to the corresponding status display.
+The primary application mode, designed as a desktop status indicator for a Raspberry Pi device. It features easy-to-use buttons to toggle between "Away", "Busy", "Available", and "DND" status displays.
+Designed for use as a desktop status display (e.g. on a Raspberry Pi). Includes preset buttons for "Away", "Busy", "Available", and "DND" status screens.
+
+In **Form2** (Status Indicator), you can select from a set of predefined presets.
+
+Using Form1, you can determine values you would like to manually create a preset in the code for Form2.
 
 3. **Fast Render (Form3)** — An optimized render path that bypasses `OnPaint` for higher framerates. EXPERIMENTAL, and did not work the way I had hoped.
 
@@ -74,16 +90,6 @@ Requirements:
 - The project uses the standard `.csproj` format
 
 Open `FireDemo.sln` and build. The default entry point launches **Form2** (Status Indicator).
-
-## Configuration
-
-In **Form2**, you can adjust:
-- **Fire dimensions** — Width and height of the flame grid (affects performance and look)
-- **Magnification** — How much the flame is scaled up on screen
-- **Interpolation mode** — NearestNeighbor (pixelated), Bilinear (smooth), or Bicubic (extra smooth)
-- **Cooldown strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
-
-In **Form1** (Advanced UI), explore a wider set of options and palettes. Useful for determining parameters to achieve a particular desired effect without needing to recompile.
 
 ## Architecture highlights
 
