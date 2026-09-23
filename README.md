@@ -114,7 +114,7 @@ Open `FireDemo.sln` and build. The default entry point launches **Form2** (Statu
 
 The project dates back to February 2000, inspired by someone claiming Smalltalk was too slow for real-time fire generation.
 I proved them wrong with a prototype, and have been building on that foundation ever since — adding palettes, cooling maps,
-flame shapes, lightning, the Borg plasma disc, and the Eye of Sauron.
+flame shapes, lightning, the Borg plasma disc, the Eye of Sauron, static sprites and text.
 
 ### Related Projects
 
