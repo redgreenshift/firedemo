@@ -49,7 +49,7 @@ The fire algorithm works by maintaining a 2D grid where each cell holds an inten
 1. **Averaging** — Each pixel's new intensity is the average of its neighbors (configurable which neighbors — any combination of the 9 pixels in a 3x3 block)
 2. **Cooling** — Each pixel loses some energy based on a cooling strategy (constant decay or a cooling map with density/smoothing/rotation)
 3. **Seeding** — New heat is added along the bottom or at specific shapes (Batman logo, candle, lightning bolts)
-4. **Color mapping** — Intensity values are mapped through a palette (8-bit indexed or 32-bit direct color)
+4. **Color mapping** — Intensity values are mapped through a palette (8-bit indexed color)
 
 ### Palette styles
 
