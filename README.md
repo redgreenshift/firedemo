@@ -10,13 +10,20 @@
 [![.NET Framework 4.8](https://img.shields.io/badge/4.8-512BD4.svg?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework)
 [![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-F58220.svg)](LICENSE)
 
-A real-time flame animation and plasma effect playground built with C# and WinForms (.NET Framework 4.8). Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work just as well in C# over two decades later.
+A real-time flame animation and plasma effect playground built with C# and WinForms (.NET Framework 4.8).
+Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work
+just as well in C# over two decades later.
 
-While the engine serves as a tool for parameter exploration, it was later designed as a standalone status indicator, used on desktop devices like a Raspberry Pi to communicate my availability at a glance.
+While the engine serves as a tool for parameter exploration for dynamic lighting effects,
+it was later redesigned as a standalone status indicator, used on desktop devices
+like a Raspberry Pi to communicate my availability at a glance.
 
 ## What it does
 
-FireDemo renders animated flame effects using a 2D grid of intensity values with pixel averaging, producing realistic-looking fire, lightning, and plasma patterns. The core idea is simple: each frame, the brightness of a pixel is the average of neighboring pixels with some cooling applied — but with well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
+FireDemo renders animated flame effects using a 2D grid of intensity values with pixel averaging,
+producing realistic-looking fire, lightning, and plasma patterns. The core idea is simple: each frame,
+the brightness of a pixel is the average of neighboring pixels with some cooling applied — but with
+well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
 
 ## Effects
 
@@ -103,7 +110,9 @@ Open `FireDemo.sln` and build. The default entry point launches **Form2** (Statu
 
 ## Project History
 
-The project dates back to February 2000, inspired by someone claiming Smalltalk was too slow for real-time fire generation. I proved them wrong with a prototype, and have been building on that foundation ever since — adding palettes, cooling maps, flame shapes, lightning, the Borg plasma disc, and the Eye of Sauron.
+The project dates back to February 2000, inspired by someone claiming Smalltalk was too slow for real-time fire generation.
+I proved them wrong with a prototype, and have been building on that foundation ever since — adding palettes, cooling maps,
+flame shapes, lightning, the Borg plasma disc, and the Eye of Sauron.
 
 ### Related Projects
 
@@ -114,7 +123,9 @@ demonstrate that real-time fire graphics were possible in the language. It
 expanded that idea into a broader real-time lighting-effects playground
 including fire, lightning, and plasma.
 
-[`Greenshift`](https://github.com/redgreenshift/Greenshift) is a looser ancestor to FireDemo. It carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes, while exploring a broader range of real-time lighting effects.
+[`Greenshift`](https://github.com/redgreenshift/Greenshift) is a looser ancestor to FireDemo.
+It carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes,
+while exploring a broader range of real-time lighting effects.
 
 
 ## AI Policy
