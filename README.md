@@ -1,6 +1,7 @@
 [![Previous: Flames.st](https://img.shields.io/badge/←_PREV_(Flames.st)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Flames.st/blob/main/README.md)
 [![Previous: Greenshift](https://img.shields.io/badge/←_PREV_(Greenshift)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
 
+![FireDemo preview](assets/firedemo-preview.gif)
 ![FireDemo](assets/firedemo-logo.svg)
 
 [![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-A22846.svg?logo=raspberrypi&logoColor=white)](https://www.raspberrypi.com/)
@@ -24,8 +25,6 @@ FireDemo renders animated flame effects using a 2D grid of intensity values with
 producing realistic-looking fire, lightning, and plasma patterns. The core idea is simple: each frame,
 the brightness of a pixel is the average of neighboring pixels with some cooling applied — but with
 well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
-
-TODO ANIMATED GIF: ![FireDemo preview](assets/firedemo-preview.gif)
 
 ## Features
 
