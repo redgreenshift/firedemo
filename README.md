@@ -263,7 +263,7 @@ Greenshift (C++) ────────┘          │
               Friendly Neighborhood Status Indicator — FireDemo Form2 (C#)
 ```
 
-The lineage is more of a family hedge than a strict tree:
+The lineage is more of a family cyclic graph than a strict tree:
 
 - `Flames.st` is the original Smalltalk-80 fire experiment. It explored real-time fire generation and demonstrated that the technique was practical in Smalltalk.
 - `Greenshift` introduced ideas such as BitCanvas, and tuned color palettes.
