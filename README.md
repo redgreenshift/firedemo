@@ -253,15 +253,14 @@ while exploring a broader range of real-time lighting effects.
 ### Funny Circular Lineage
 
 ```text
-Flames.st ───────────────┐
-                         ├──> FireDemo / Form1
-Greenshift ──────────────┘          │
-                                    │
+Flames.st (Smalltalk) ───┐
+                         ├──> FireDemo Form1 (C#)
+Greenshift (C++) ────────┘          │
                                     v
                               NDADD (Smalltalk)
                                     │
                                     v
-              Friendly Neighborhood Status Indicator / FireDemo Form2
+              Friendly Neighborhood Status Indicator — FireDemo Form2 (C#)
 ```
 
 The lineage is more of a family hedge than a strict tree:
@@ -275,10 +274,12 @@ The lineage is more of a family hedge than a strict tree:
 In short:
 ```text
 FireDemo Form1
-    → NDADD
-        → FireDemo Form2
+    ↓
+  NDADD
+    ↓
+FireDemo Form2
 ```
-So this C# project is, in a sense, its own grandparent project.
+So `FireDemo` is, in a sense, its own grandparent project.
 
 ## AI Policy
 
