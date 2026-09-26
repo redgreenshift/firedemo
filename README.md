@@ -1,6 +1,6 @@
 [![Previous: Flames.st](https://img.shields.io/badge/←_PREV_(Flames.st)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Flames.st/blob/main/README.md)
 [![Previous: Greenshift](https://img.shields.io/badge/←_PREV_(Greenshift)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
-[![Previous & Next: Friendly Neighborhood Status Indicator](https://img.shields.io/badge/←_PREV_&_NEXT_→_(Friendly_Neighborhood_Status_Indicator)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/friendly-neighborhood-status-indicator/blob/main/README.md)
+[![Previous & Next: Friendly Neighborhood Status Indicator](https://img.shields.io/badge/←_PREV_&_NEXT_→_(FNSI)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/friendly-neighborhood-status-indicator/blob/main/README.md)
 
 ![FireDemo](assets/firedemo-logo.svg)
 
