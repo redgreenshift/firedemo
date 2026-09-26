@@ -1,7 +1,6 @@
 [![Previous: Flames.st](https://img.shields.io/badge/←_PREV_(Flames.st)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Flames.st/blob/main/README.md)
 [![Previous: Greenshift](https://img.shields.io/badge/←_PREV_(Greenshift)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
 
-![FireDemo preview](assets/firedemo-preview.gif)
 ![FireDemo](assets/firedemo-logo.svg)
 
 [![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-A22846.svg?logo=raspberrypi&logoColor=white)](https://www.raspberrypi.com/)
@@ -11,32 +10,15 @@
 [![.NET Framework 4.8](https://img.shields.io/badge/4.8-512BD4.svg?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework)
 [![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-F58220.svg)](LICENSE)
 
-A real-time flame animation and plasma effect playground built with C# and WinForms (.NET Framework 4.8).
-Originally inspired by the challenge of generating realistic fire in Smalltalk — and proven to work
-just as well in C# over two decades later.
+FireDemo is a technical playground for exploring realtime lighting effects.
 
-While the engine serves as a tool for parameter exploration for dynamic lighting effects,
-it was later redesigned as a standalone status indicator, used on desktop devices
-like a Raspberry Pi to communicate my availability at a glance.
+![FireDemo preview](assets/firedemo-preview.gif)
 
-## What it does
+## Overview
 
-FireDemo renders animated flame effects using a 2D grid of intensity values with pixel averaging,
-producing realistic-looking fire, lightning, and plasma patterns. The core idea is simple: each frame,
-the brightness of a pixel is the average of neighboring pixels with some cooling applied — but with
-well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
-
-## Features
-
-- Real-time fire, lightning, and plasma effects
-- Configurable flame dimensions, magnification, interpolation, palettes, and cooling
-- Multiple flame-seeding shapes, including candle, lightning, Batman logo,
-  Borg plasma, and the Eye of Sauron
-- Preset desktop availability-status screens
-- Support for constant and spatially varying cooling strategies
-- Experimental optimized and multithreaded rendering paths
-- Windows execution through .NET Framework 4.8
-- Linux and Raspberry Pi execution through Mono
+Originally inspired by a Smalltalk fire-generation experiment from 2000,
+FireDemo has evolved into both a procedural lighting-effects playground
+and a desktop status indicator, including use on Raspberry Pi systems.
 
 ## Effects
 
@@ -54,6 +36,18 @@ well-tuned palettes and cooling maps, the result looks surprisingly lifelike.
 | **RainBORG** | Demonstration of multiple plasma discs displayed simultaneously in different colors |
 | **Rainbow Fire** | Demonstration of multiple independent flames using a gradient palette |
 
+
+## Features
+
+- Real-time fire, lightning, and plasma animation
+- Configurable flame dimensions, magnification, interpolation, palettes, and cooling
+- Multiple flame-seeding shapes, including candle, lightning, Batman logo,
+  Borg plasma, and the Eye of Sauron
+- Preset desktop availability-status screens
+- Support for constant and spatially varying cooling strategies
+- Experimental optimized and multithreaded rendering paths
+- Windows execution through .NET Framework 4.8
+- Linux and Raspberry Pi execution through Mono
 
 ## Requirements
 
@@ -75,7 +69,7 @@ Linux rendering and performance may differ from Windows depending on the Mono
 version, display configuration, and hardware.
 
 
-## Building and running
+## Quick Start
 
 The project uses the standard `.csproj` format.
 
@@ -90,7 +84,7 @@ Status Indicator.
 
 To explore the original parameter editor, select the "Original Experiment" button.
 
-## Running on Linux
+### Running on Linux
 
 Build the application on Windows, copy the resulting Windows executable and
 its required files to the Linux system, and run it with Mono:
@@ -106,14 +100,15 @@ the application window is sized to match that screen.
 
 You may need to edit the dimensions if your device display differs.
 
-I have only tried to run it on Raspian.
+Only tested on Raspian with Mono; your results may vary on other Linux flavors
+depending on Mono version, display configuration, and hardware acceleration.
 
-## Limitations
+## Known Issues
 
 - The project targets .NET Framework 4.8 rather than modern .NET.
+- DPI scaling differs between Windows and Linux. A previous attempt to migrate to modern .NET introduced additional scaling issues and prevented Linux execution through Mono, so the project currently remains on .NET Framework 4.8.
 - Form3 is experimental and may not improve performance on every system.
-- Rendering performance depends heavily on grid size, magnification, interpolation, and cooling-map settings.
-- Linux support may require a compatible runtime or additional setup, like Mono.
+- Lightning becomes slow when rendering multiple high-resolution instances simultaneously. Future versions may explore alternative data structures that avoid processing large regions of mostly empty pixels.
 
 
 ## Application modes
@@ -185,11 +180,16 @@ to achieve higher frame rates.
 It did not work as well as expected and should be considered deprecated for now.
 
 
-
-### How it works
-
-The fire algorithm works by maintaining a 2D grid where each cell holds an intensity value (0–255).
-Each frame, the brightness of a pixel is the average of neighboring pixels with some cooling applied.
+## How It Works
+ 
+FireDemo renders animated lighting effects using a 2D grid of intensity values (0–255)
+and pixel averaging. With different palettes, cooling strategies, and seed shapes, the
+same core algorithm can produce realistic-looking fire, lightning, plasma, and other
+effects.
+ 
+The core algorithm is simple: each frame, the brightness of a pixel is calculated as
+the average of neighboring pixels with some cooling applied. With well-tuned palettes
+and cooling maps, that simple process produces surprisingly lifelike results.
 
 1. **Averaging** — A cell's new intensity is calculated from a configurable subset of the surrounding 3×4 neighborhood.
 1. **Cooling** — Each pixel loses some energy based on a cooling strategy (constant decay or a cooling map with density/smoothing/rotation)
@@ -232,9 +232,44 @@ characteristic appearance of a flame.
 
 ## Project History
 
-The project dates back to February 2000, inspired by someone claiming Smalltalk was too slow for real-time fire generation.
-I proved them wrong with a prototype, and have been building on that foundation ever since — adding palettes, cooling maps,
-flame shapes, lightning, the Borg plasma disc, the Eye of Sauron, static sprites and text.
+The project dates back to February 2000, tracing its roots to Flames.st which was
+itself inspired by someone claiming Smalltalk was too slow for real-time fire generation.
+
+I accepted the challenge to prove that realtime fire generation in Smalltalk was practical.
+
+Since the creation of FireDemo in 2015, it has served as a place to experiment with rendering
+techniques, color palettes, cooling algorithms, procedural effects, and occasionally
+whatever lighting-related idea seems interesting enough to investigate — adding
+palettes, cooling maps, flame shapes, lightning, the Borg plasma disc,
+the Eye of Sauron, static sprites and text, and even a lightweight presentation mechanism
+for creating short animated presentations that demonstrate the evolution of various effects.
+
+While the engine serves as a tool for parameter exploration for dynamic lighting effects,
+it was later redesigned as a standalone status indicator, used on desktop devices
+like a Raspberry Pi to communicate my availability at a glance.
+
+Although the project still carries the name "FireDemo", much of the code now serves
+as a general-purpose lighting-effects framework capable of producing far more than fire.
+
+### Design Philosophy
+
+Most features were not planned from the beginning. They emerged gradually while
+exploring previous ideas, improving existing effects, or adapting techniques
+developed elsewhere in the project. In many cases, solving one problem unexpectedly
+made a different idea possible.
+
+The goal has never been to build a commercial graphics engine or a polished product.
+The goal is to explore graphics techniques, learn from the results, and create something
+visually interesting, occasionally sparking new ideas for the next round of experimentation.
+
+Many of the project's more unusual features exist because I found myself asking questions such as:
+
+- What would happen if I tried this?
+- Could I actually make this idea work?
+
+Sometimes the result was useful. Sometimes it was merely interesting. Sometimes it failed completely. Regardless of the outcome, I always _learned_ something along the way.
+
+Some ideas eventually grow into separate projects. Occasionally those ideas find their way back into FireDemo in a new form.
 
 ### Related Projects
 
