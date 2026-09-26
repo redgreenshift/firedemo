@@ -1,5 +1,6 @@
 [![Previous: Flames.st](https://img.shields.io/badge/←_PREV_(Flames.st)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Flames.st/blob/main/README.md)
 [![Previous: Greenshift](https://img.shields.io/badge/←_PREV_(Greenshift)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
+[![Previous & Next: Friendly Neighborhood Status Indicator](https://img.shields.io/badge/←_PREV_&_NEXT_→_(Friendly_Neighborhood_Status_Indicator)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/friendly-neighborhood-status-indicator/blob/main/README.md)
 
 ![FireDemo](assets/firedemo-logo.svg)
 
@@ -121,24 +122,15 @@ that can later be used in presets.
 
 It allows for deep adjustment of fire geometry, palettes, and cooling strategies.
 
-You can adjust:
-- **Fire dimensions** — Width and height of the flame grid (affects performance and look)
-- **Magnification** — How much the flame is scaled up on screen
-- **Interpolation mode** — NearestNeighbor (pixelated), Bilinear (smooth), or Bicubic (extra smooth)
-- **Cooling strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
-
-
 Configurable parameters include:
 
-- Fire-grid width and height
-- On-screen magnification
-- Interpolation mode
-- Palette style
-- Cooling strategy
-- Cooling-map density and smoothing
-- Cooling-map shifting and rotation
-- Seed shapes and heat intensity
-- Neighbor-selection behavior
+- **Fire dimensions** — Width and height of the flame grid (affects performance and look)
+- **Magnification** — How much the flame is scaled up on screen
+- **Neighbor-selection** behavior - any pixels from 3x4 grid
+- **Palette style** - flat, 4-point-linear, 7-point-hand-tuned
+- **Cooling strategy** — Constant vs Map, with tuning for density, smoothing, shifting, and rotation
+- **Seed shapes** (flame, bonfire, lightning, plasma) and heat intensity
+- **Interpolation mode** — NearestNeighbor (pixelated), Bilinear (smooth), or Bicubic (extra smooth)
 
 Available interpolation modes include:
 
@@ -148,7 +140,6 @@ Available interpolation modes include:
 
 Form1 is primarily a development and experimentation tool rather than the
 default user interface.
-
 
 ### Form2 — Availability Status Indicator
 
@@ -170,7 +161,6 @@ Values explored in Form1 can be used to create or refine the presets used by
 Form2.
 
 This mode is intended for desktop use, including Raspberry Pi status-display projects.
-
 
 ### Form3 — Fast Render
 
@@ -232,8 +222,9 @@ characteristic appearance of a flame.
 
 ## Project History
 
-The project dates back to February 2000, tracing its roots to Flames.st which was
-itself inspired by someone claiming Smalltalk was too slow for real-time fire generation.
+The project dates back to February 2000, tracing its roots to [`Flames.st`]
+(https://github.com/redgreenshift/Flames.st) which was itself inspired by
+someone claiming Smalltalk was too slow for real-time fire generation.
 
 I accepted the challenge to prove that realtime fire generation in Smalltalk was practical.
 
@@ -244,7 +235,7 @@ palettes, cooling maps, flame shapes, lightning, the Borg plasma disc,
 the Eye of Sauron, static sprites and text, and even a lightweight presentation mechanism
 for creating short animated presentations that demonstrate the evolution of various effects.
 
-While the engine serves as a tool for parameter exploration for dynamic lighting effects,
+While the engine began as a tool for parameter exploration of dynamic lighting effects,
 it was later redesigned as a standalone status indicator, used on desktop devices
 like a Raspberry Pi to communicate my availability at a glance.
 
@@ -284,6 +275,11 @@ including fire, lightning, and plasma.
 `FireDemo` carried forward ideas including `BitCanvas`, frame-to-frame decay values, and configurable color palettes,
 while exploring a broader range of real-time lighting effects.
 
+#### Successor Projects
+
+The [Friendly Neighborhood Status Indicator](https://github.com/redgreenshift/friendly-neighborhood-status-indicator)
+grew directly from `ForeDemo Form1`, and then was later ported back to C#, creating a cycle in the lineage tree.
+
 ### Funny Circular Lineage
 
 ```text
@@ -291,10 +287,10 @@ Flames.st (Smalltalk) ───┐
                          ├──> FireDemo Form1 (C#)
 Greenshift (C++) ────────┘          │
                                     v
-                              NDADD (Smalltalk)
+                    Friendly Neighborhood Status Indicator (Smalltalk)
                                     │
                                     v
-              Friendly Neighborhood Status Indicator — FireDemo Form2 (C#)
+                FireDemo Form2 + Friendly Neighborhood Status Indicator (C#)
 ```
 
 The lineage is more of a family cyclic graph than a strict tree:
@@ -302,18 +298,30 @@ The lineage is more of a family cyclic graph than a strict tree:
 - `Flames.st` is the original Smalltalk-80 fire experiment. It explored real-time fire generation and demonstrated that the technique was practical in Smalltalk.
 - `Greenshift` introduced ideas such as BitCanvas, and tuned color palettes.
 - `FireDemo Form1` brought ideas from both projects together in a C# parameter-exploration tool.
-- The parameter exploration led to `NDADD`, a Smalltalk **Neighborhood Desktop Availability Display Device**.
+- The parameter exploration led to `FNSI`, a Smalltalk Neighborhood Desktop Availability Display Device or [`Friendly Neighborhood Status Indicator`](https://github.com/redgreenshift/friendly-neighborhood-status-indicator).
 - The ability to run C# on Linux led to the availability-display concept being ported back into C# as `FireDemo Form2`, the **Friendly Neighborhood Status Indicator**.
 
 In short:
 ```text
 FireDemo Form1
     ↓
-  NDADD
+  FNSI
     ↓
 FireDemo Form2
 ```
-So `FireDemo` is, in a sense, its own grandparent project.
+So `FireDemo` is, in a sense, [its own grandparent](https://www.youtube.com/watch?v=nOA4EHbIIYg) project.
+
+## Contributing
+
+FireDemo is not intended to be a reusable graphics engine, production-ready library, or polished end-user application.
+
+It is a playground.
+
+FireDemo is primarily a personal playground I’m sharing publicly. PRs are welcome but may not be accepted unless they align with the project’s direction. All code must be fully understood by the author before merging.
+
+FireDemo is shared publicly because others may find the techniques interesting, useful, or entertaining, but its primary purpose remains the same as when it started in 2000:
+
+> Try an idea and see what happens.
 
 ## AI Policy
 
