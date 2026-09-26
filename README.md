@@ -313,11 +313,13 @@ So `FireDemo` is, in a sense, [its own grandparent](https://www.youtube.com/watc
 
 ## Contributing
 
-FireDemo is not intended to be a reusable graphics engine, production-ready library, or polished end-user application.
-
-It is a playground.
-
-FireDemo is primarily a personal playground I’m sharing publicly. PRs are welcome but may not be accepted unless they align with the project’s direction. All code must be fully understood by the author before merging.
+FireDemo is primarily a personal playground that I share publicly.
+ 
+Pull requests are welcome, but acceptance is not guaranteed. Proposed changes should align with the goals and direction of the project, which often prioritizes exploration, learning, and experimentation over feature completeness.
+ 
+All code must be reviewed and fully understood by the project author before being merged. Contributions that add significant complexity without a corresponding educational, experimental, or practical benefit are unlikely to be accepted.
+ 
+Bug reports, suggestions, performance investigations, and ideas for new lighting effects are always appreciated.
 
 FireDemo is shared publicly because others may find the techniques interesting, useful, or entertaining, but its primary purpose remains the same as when it started in 2000:
 
