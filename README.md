@@ -171,12 +171,12 @@ It did not work as well as expected and should be considered deprecated for now.
 
 
 ## How It Works
- 
+
 FireDemo renders animated lighting effects using a 2D grid of intensity values (0–255)
 and pixel averaging. With different palettes, cooling strategies, and seed shapes, the
 same core algorithm can produce realistic-looking fire, lightning, plasma, and other
 effects.
- 
+
 The core algorithm is simple: each frame, the brightness of a pixel is calculated as
 the average of neighboring pixels with some cooling applied. With well-tuned palettes
 and cooling maps, that simple process produces surprisingly lifelike results.
