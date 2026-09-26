@@ -278,7 +278,7 @@ while exploring a broader range of real-time lighting effects.
 #### Successor Projects
 
 The [Friendly Neighborhood Status Indicator](https://github.com/redgreenshift/friendly-neighborhood-status-indicator)
-grew directly from `FireDemo Form1`, and then was later ported back to C#, creating a cycle in the lineage tree.
+grew directly from `FireDemo Form1`, and then was later ported back to C# as `FireDemo Form2`, creating a cycle in the lineage tree.
 
 ### Funny Circular Lineage
 
