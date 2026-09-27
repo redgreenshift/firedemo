@@ -302,7 +302,7 @@ The lineage is more of a family cyclic graph than a strict tree:
 - The parameter exploration led to the `Neighborhood Desktop Availability Display Device (NDADD)`, a Raspberry Pi touchscreen device running a Smalltalk program to indicate my current availability status to coworkers using fun light-effects, later renamed to [`Friendly Neighborhood Status Indicator`](https://github.com/redgreenshift/friendly-neighborhood-status-indicator).
 - The ability to run C# on Linux led to the availability-display concept being ported back into C# as `FireDemo Form2`, the **Friendly Neighborhood Status Indicator**.
 
-In short:
+Therefore, in a sense:
 ```text
 FireDemo Form1
     ↓
@@ -310,7 +310,7 @@ FireDemo Form1
     ↓
 FireDemo Form2
 ```
-Therefore, in a sense, `FireDemo` [is its own grandparent](https://www.youtube.com/watch?v=rALCtcMoMh8).
+[FireDemo is its own grandparent!](https://www.youtube.com/watch?v=rALCtcMoMh8)
 
 ## Contributing
 
