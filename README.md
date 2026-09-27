@@ -11,13 +11,13 @@
 [![.NET Framework 4.8](https://img.shields.io/badge/4.8-512BD4.svg?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework)
 [![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-F58220.svg)](LICENSE)
 
-FireDemo is a technical playground for exploring realtime lighting effects.
+`FireDemo` is a technical playground for exploring real-time lighting effects.
 
 ![FireDemo preview](assets/firedemo-preview.gif)
 
 ## Overview
 
-Originally inspired by a Smalltalk fire-generation experiment from 2000,
+Originally inspired by a Smalltalk experiment in 2000 to synthesize fire at runtime,
 `FireDemo` has evolved into both a procedural lighting-effects playground
 and a desktop status indicator, including use on Raspberry Pi systems.
 
