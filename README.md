@@ -18,7 +18,7 @@ FireDemo is a technical playground for exploring realtime lighting effects.
 ## Overview
 
 Originally inspired by a Smalltalk fire-generation experiment from 2000,
-FireDemo has evolved into both a procedural lighting-effects playground
+`FireDemo` has evolved into both a procedural lighting-effects playground
 and a desktop status indicator, including use on Raspberry Pi systems.
 
 ## Effects
@@ -172,7 +172,7 @@ It did not work as well as expected and should be considered deprecated for now.
 
 ## How It Works
 
-FireDemo renders animated lighting effects using a 2D grid of intensity values (0–255)
+`FireDemo` renders animated lighting effects using a 2D grid of intensity values (0–255)
 and pixel averaging. With different palettes, cooling strategies, and seed shapes, the
 same core algorithm can produce realistic-looking fire, lightning, plasma, and other
 effects.
@@ -227,7 +227,7 @@ which was itself inspired by someone claiming Smalltalk was too slow for real-ti
 
 I accepted the challenge and set out to prove that real-time procedurally generated fire was practical in Smalltalk.
 
-Since the creation of FireDemo in 2015, it has served as a place to experiment with rendering
+Since the creation of `FireDemo` in 2015, it has served as a place to experiment with rendering
 techniques, color palettes, cooling algorithms, procedural effects, and occasionally
 whatever lighting-related idea seems interesting enough to investigate — adding
 palettes, cooling maps, flame shapes, lightning, the Borg plasma disc,
