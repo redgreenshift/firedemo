@@ -310,7 +310,7 @@ FireDemo Form1
     ↓
 FireDemo Form2
 ```
-[FireDemo is its own grandparent!](https://www.youtube.com/watch?v=rALCtcMoMh8)
+[**FireDemo is its own grandparent!**](https://www.youtube.com/watch?v=rALCtcMoMh8)
 
 ## Contributing
 
