@@ -222,9 +222,8 @@ characteristic appearance of a flame.
 
 ## Project History
 
-The project dates back to February 2000, tracing its roots to [`Flames.st`]
-(https://github.com/redgreenshift/Flames.st) which was itself inspired by
-someone claiming Smalltalk was too slow for real-time fire generation.
+The project dates back to February 2000, tracing its roots to [`Flames.st`](https://github.com/redgreenshift/Flames.st)
+which was itself inspired by someone claiming Smalltalk was too slow for real-time fire generation.
 
 I accepted the challenge to prove that realtime fire generation in Smalltalk was practical.
 
