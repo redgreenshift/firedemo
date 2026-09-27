@@ -309,7 +309,7 @@ FireDemo Form1
     ↓
 FireDemo Form2
 ```
-So `FireDemo` is, in a sense, [its own grandparent](https://www.youtube.com/watch?v=nOA4EHbIIYg) project.
+So `FireDemo` is, in a sense, [its own grandparent](https://www.youtube.com/watch?v=rALCtcMoMh8) project.
 
 ## Contributing
 
