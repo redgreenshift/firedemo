@@ -276,7 +276,7 @@ while exploring a broader range of real-time lighting effects.
 
 #### Successor Projects
 
-The [Friendly Neighborhood Status Indicator](https://github.com/redgreenshift/friendly-neighborhood-status-indicator)
+The [`Friendly Neighborhood Status Indicator`](https://github.com/redgreenshift/friendly-neighborhood-status-indicator)
 grew directly from `FireDemo Form1`, and then was later ported back to C# as `FireDemo Form2`, creating a cycle in the lineage tree.
 
 ### Funny Circular Lineage
@@ -314,7 +314,7 @@ FireDemo Form2
 
 ## Contributing
 
-FireDemo is primarily a personal playground that I share publicly.
+`FireDemo` is primarily a personal playground that I share publicly.
 
 Pull requests are welcome, but acceptance is not guaranteed. Proposed changes should align with the goals and direction of the project, which often prioritizes exploration, learning, and experimentation over feature completeness.
 
@@ -322,7 +322,7 @@ All code must be reviewed and fully understood by the project author before bein
 
 Bug reports, suggestions, performance investigations, and ideas for new lighting effects are always appreciated.
 
-FireDemo is shared publicly because others may find the techniques interesting, useful, or entertaining, but its primary purpose remains the same as when it started in 2000:
+`FireDemo` is shared publicly because others may find the techniques interesting, useful, or entertaining, but its primary purpose remains the same as when it started in 2000:
 
 > Try an idea and see what happens.
 
