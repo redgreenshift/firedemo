@@ -80,8 +80,7 @@ The project uses the standard `.csproj` format.
 1. Build the solution.
 1. Run the project. Form2 starts by default.
 
-The default startup view is **Form2**, the Friendly Availability Neighborhood
-Status Indicator.
+The default startup view is **Form2**, the Friendly Neighborhood Status Indicator.
 
 To explore the original parameter editor, select the "Original Experiment" button.
 
@@ -297,7 +296,7 @@ The lineage is more of a family cyclic graph than a strict tree:
 - `Flames.st` is the original Smalltalk-80 fire experiment. It explored real-time fire generation and demonstrated that the technique was practical in Smalltalk.
 - `Greenshift` introduced ideas such as BitCanvas, and tuned color palettes.
 - `FireDemo Form1` brought ideas from both projects together in a C# parameter-exploration tool.
-- The parameter exploration led to `FNSI`, a Smalltalk Neighborhood Desktop Availability Display Device or [`Friendly Neighborhood Status Indicator`](https://github.com/redgreenshift/friendly-neighborhood-status-indicator).
+- The parameter exploration led to the `NDADD`, a Smalltalk `Neighborhood Desktop Availability Display Device`, later renamed to [`Friendly Neighborhood Status Indicator`](https://github.com/redgreenshift/friendly-neighborhood-status-indicator).
 - The ability to run C# on Linux led to the availability-display concept being ported back into C# as `FireDemo Form2`, the **Friendly Neighborhood Status Indicator**.
 
 In short:
