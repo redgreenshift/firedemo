@@ -60,7 +60,8 @@ and a desktop status indicator, including use on Raspberry Pi systems.
 
 ### Linux and Raspberry Pi
 
-The Windows executable can be run on Linux without modification by using
+The application is built as a Windows .NET Framework executable
+but can also be run on Linux and Raspberry Pi systems using
 [Mono](https://www.mono-project.com/).
 
 The status-indicator layout is designed for a 1024×600 display, matching the
@@ -224,7 +225,7 @@ characteristic appearance of a flame.
 The project dates back to February 2000, tracing its roots to [`Flames.st`](https://github.com/redgreenshift/Flames.st)
 which was itself inspired by someone claiming Smalltalk was too slow for real-time fire generation.
 
-I accepted the challenge to prove that realtime fire generation in Smalltalk was practical.
+I accepted the challenge and set out to prove that real-time procedurally generated fire was practical in Smalltalk.
 
 Since the creation of FireDemo in 2015, it has served as a place to experiment with rendering
 techniques, color palettes, cooling algorithms, procedural effects, and occasionally
@@ -280,6 +281,8 @@ grew directly from `FireDemo Form1`, and then was later ported back to C# as `Fi
 
 ### Funny Circular Lineage
 
+The lineage makes more sense visually than verbally:
+
 ```text
 Flames.st (Smalltalk) ───┐
                          ├──> FireDemo Form1 (C#)
@@ -295,8 +298,8 @@ The lineage is more of a family cyclic graph than a strict tree:
 
 - `Flames.st` is the original Smalltalk-80 fire experiment. It explored real-time fire generation and demonstrated that the technique was practical in Smalltalk.
 - `Greenshift` introduced ideas such as BitCanvas, and tuned color palettes.
-- `FireDemo Form1` brought ideas from both projects together in a C# parameter-exploration tool.
-- The parameter exploration led to the `NDADD`, a Smalltalk `Neighborhood Desktop Availability Display Device`, later renamed to [`Friendly Neighborhood Status Indicator`](https://github.com/redgreenshift/friendly-neighborhood-status-indicator).
+- `FireDemo Form1` brought ideas from both projects together in a C# parameter-exploration tool for more complex light-effects.
+- The parameter exploration led to the `Neighborhood Desktop Availability Display Device (NDADD)`, a Raspberry Pi touchscreen device running a Smalltalk program to indicate my current availability status to coworkers using fun light-effects, later renamed to [`Friendly Neighborhood Status Indicator`](https://github.com/redgreenshift/friendly-neighborhood-status-indicator).
 - The ability to run C# on Linux led to the availability-display concept being ported back into C# as `FireDemo Form2`, the **Friendly Neighborhood Status Indicator**.
 
 In short:
@@ -307,7 +310,7 @@ FireDemo Form1
     ↓
 FireDemo Form2
 ```
-So `FireDemo` is, in a sense, [its own grandparent](https://www.youtube.com/watch?v=rALCtcMoMh8) project.
+Therefore, in a sense, `FireDemo` [is its own grandparent](https://www.youtube.com/watch?v=rALCtcMoMh8).
 
 ## Contributing
 
