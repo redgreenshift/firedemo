@@ -13,8 +13,6 @@
 
 `FireDemo` is a technical playground for exploring real-time lighting effects.
 
-![FireDemo preview](assets/firedemo-preview.gif)
-
 ## Overview
 
 Originally inspired by a Smalltalk experiment in 2000 to synthesize fire at runtime,
@@ -34,8 +32,8 @@ and a desktop status indicator, including use on Raspberry Pi systems.
 | **Borg Plasma** | A Star Trek-inspired Borg Alcove regeneration plasma disc |
 | **Sauron** | The Eye of Sauron, created by creatively layering other effects |
 | **Status Text** | Availability screens such as `Available`, `Busy`, `Away`, `In a Meeting`, and `DND`, combining dynamic lighting, pixel art, and explanatory text |
-| **RainBORG** | Demonstration of multiple plasma discs displayed simultaneously in different colors |
-| **Rainbow Fire** | Demonstration of multiple independent flames using a gradient palette |
+| **RainBORG** | Demonstration of multiple independent plasma discs displayed simultaneously in different colors |
+| **Rainbow Fire** | Demonstration of multiple independently rendered flames spanning a full spectrum of colors |
 
 
 ## Features
@@ -232,13 +230,13 @@ techniques, color palettes, cooling algorithms, procedural effects, and occasion
 whatever lighting-related idea seems interesting enough to investigate — adding
 palettes, cooling maps, flame shapes, lightning, the Borg plasma disc,
 the Eye of Sauron, static sprites and text, and even a lightweight presentation mechanism
-for creating short animated presentations that demonstrate the evolution of various effects.
+for creating short animated presentations that I use to demonstrate the evolution of various effects.
 
 While the engine began as a tool for parameter exploration of dynamic lighting effects,
 it was later redesigned as a standalone status indicator, used on desktop devices
 like a Raspberry Pi to communicate my availability at a glance.
 
-Although the project still carries the name "FireDemo", much of the code now serves
+Although the project still carries the name "FireDemo," much of the code now serves
 as a general-purpose lighting-effects framework capable of producing far more than fire.
 
 ### Design Philosophy
