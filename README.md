@@ -11,7 +11,7 @@
 [![.NET Framework 4.8](https://img.shields.io/badge/4.8-512BD4.svg?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/platform/support/policy/dotnet-framework)
 [![License: GPL-2.0-only](https://img.shields.io/badge/License-GPL--2.0--only-F58220.svg)](LICENSE)
 
-`FireDemo` is a technical playground for exploring real-time lighting effects.
+![FireDemo preview](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/candle-short.gif) `FireDemo` is a technical playground for exploring real-time lighting effects. <img src="https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/lightning.gif" height="45" width="31" />
 
 ## Overview
 
@@ -35,6 +35,22 @@ and a desktop status indicator, including use on Raspberry Pi systems.
 | **RainBORG** | Demonstration of multiple independent plasma discs displayed simultaneously in different colors |
 | **Rainbow Fire** | Demonstration of multiple independently rendered flames spanning a full spectrum of colors |
 
+### Screenshot Gallery
+
+![Short Candle](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/candle-short.gif)
+![Tall Candle](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/candle-tall.gif)
+![Bonfire](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/bonfire.gif)
+<img src="https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/dumpster-fire.gif" alt="Dumpster Fire" width="133" height="162" /> <!-- 267 x 325 -->
+<img src="https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/lightning.gif" alt="Lightning" width="85" height="123" /> <!-- 171 x 246 -->
+![Plasma Disc](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/plasma.gif)
+
+![Batman logo in flames](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/batman-flames.gif)
+
+![The Eye of Sauron](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/the-eye-of-sauron.gif)
+
+<img src="https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/rainbow-fire.jpg" alt="Rainbow Fire" width="617" height="252" /> <!-- 1234 x 504 -->
+
+<img src="https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/DND.gif" alt="Do Not Disturb: It's dangerous to bothe me! GO AWAY! (use email)" width="640" height="372" /> <!-- 1280 x 743 -->
 
 ## Features
 
