@@ -2,7 +2,7 @@
 [![Previous: Greenshift](https://img.shields.io/badge/←_PREV_(Greenshift)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/Greenshift/blob/main/README.md)
 [![Previous & Next: Friendly Neighborhood Status Indicator](https://img.shields.io/badge/←_PREV_&_NEXT_→_(FNSI)-gray.svg?style=for-the-badge)](https://github.com/redgreenshift/friendly-neighborhood-status-indicator/blob/main/README.md)
 
-![FireDemo](assets/firedemo-logo.svg)
+![FireDemo](https://raw.githubusercontent.com/redgreenshift/assets/main/firedemo/firedemo-logo.svg)
 
 [![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-A22846.svg?logo=raspberrypi&logoColor=white)](https://www.raspberrypi.com/)
 [![Linux](https://img.shields.io/badge/Linux-FCC624.svg?logo=linux&logoColor=black)](https://www.linux.org/)
@@ -345,7 +345,7 @@ Bug reports, suggestions, performance investigations, and ideas for new lighting
 <p align="center">
   <a href="https://en.wikipedia.org/wiki/Vibe_coding">
   <img
-    src="assets/no-vibe-coding.jpg"
+    src="https://raw.githubusercontent.com/redgreenshift/assets/main/third-party/no-vibe-coding.jpg"
     alt="A humorous image summarizing the project's policy against unreviewed vibe coding: “Vibe coding? We don't do that here.”"
   />
   </a>
